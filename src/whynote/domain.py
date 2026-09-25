@@ -20,11 +20,10 @@ REASON_CODES = frozenset(
     }
 )
 DISPLAY_MODES = frozenset({"manual_menu", "model_suggestion", "edit_menu"})
-USER_ACTION_MODES = {
-    "reason_selected": "manual_menu",
-    "reason_confirmed": "model_suggestion",
-    "reason_edited": "edit_menu",
-    "attribution_invalidated": "model_suggestion",
+DISPLAY_ACTIONS = {
+    "manual_menu": frozenset({"reason_selected", "reason_declined", "reason_skipped"}),
+    "model_suggestion": frozenset({"reason_confirmed", "attribution_invalidated", "reason_declined", "reason_skipped"}),
+    "edit_menu": frozenset({"reason_edited", "reason_skipped"}),
 }
 
 
@@ -128,8 +127,7 @@ def validate_user_action(
     if state["action_status"] != "active":
         raise ConflictError("cannot attribute a retracted action")
     mode = display["mode"]
-    required_mode = USER_ACTION_MODES.get(user_action)
-    if required_mode and mode != required_mode:
+    if user_action not in DISPLAY_ACTIONS.get(mode, frozenset()):
         raise ConflictError("user action does not match the displayed mode")
     if user_action in {"reason_selected", "reason_confirmed", "reason_edited"}:
         if reason_code not in REASON_CODES or reason_code not in display["shown_reason_codes"]:
@@ -164,7 +162,7 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     """Rebuild the user-visible state from immutable, ordered events."""
 
     state: dict[str, Any] = {
-        "projection_version": "2",
+        "projection_version": "3",
         "action_status": "active",
         "inference_status": "not_requested",
         "attribution_status": "none",
@@ -195,9 +193,10 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 state["attribution_source"] = "model_inferred_unconfirmed"
                 state["reason_code"] = payload["reason_code"]
         elif kind == "attribution_invalidated":
-            state["attribution_status"] = "invalidated"
-            state["attribution_source"] = "none"
-            state["reason_code"] = None
+            if state["attribution_status"] == "model_inferred_unconfirmed":
+                state["attribution_status"] = "invalidated"
+                state["attribution_source"] = "none"
+                state["reason_code"] = None
         elif kind in {"reason_selected", "reason_confirmed", "reason_edited"}:
             state["attribution_status"] = {
                 "reason_selected": "selected",
@@ -211,6 +210,8 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             }[kind]
             state["reason_code"] = payload["reason_code"]
         elif kind in {"reason_declined", "reason_skipped", "reason_unresponded"}:
+            if state["attribution_status"] in {"selected", "confirmed", "edited"}:
+                continue
             state["attribution_status"] = kind.removeprefix("reason_")
             state["attribution_source"] = "none"
             state["reason_code"] = None
