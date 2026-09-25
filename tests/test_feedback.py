@@ -301,7 +301,7 @@ def test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it(client, 
 
     retracted = http.post(f"/v1/feedback-actions/{event_id}/retract", headers=_headers(key="retract"))
     assert retracted.status_code == 200
-    assert retracted.json()["projection_version"] == "2"
+    assert retracted.json()["projection_version"] == "3"
     assert retracted.json()["attribution_status"] == "none"
     assert retracted.json()["attribution_source"] == "none"
     assert retracted.json()["reason_code"] is None
@@ -392,6 +392,31 @@ def test_edit_requires_new_display_and_keeps_user_source(client):
     assert response.json()["reason_code"] == "incomplete"
 
 
+def test_edit_menu_rejects_decline_of_unconfirmed_suggestion(client):
+    http, store = client
+    principal = Principal("tenant-a", "alice")
+    event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
+    with store._transaction() as db:
+        store._append(db, event_id, "model_suggestion_recorded", {"reason_code": "incomplete"}, "model")
+    display_id = _display(store, event_id, "edit_menu", ["style", "incomplete"])
+    endpoint = f"/v1/feedback-actions/{event_id}/attribution-events"
+    declined = http.post(
+        endpoint,
+        json={"user_action": "reason_declined", "display_id": display_id, "explicit_submission": True},
+        headers=_headers(key="decline-edit"),
+    )
+    assert declined.status_code == 409
+    assert not any(event["event_type"] == "reason_declined" for event in store.get_events(principal, event_id))
+    assert store.get_action(principal, event_id)["attribution_status"] == "model_inferred_unconfirmed"
+    skipped = http.post(
+        endpoint,
+        json={"user_action": "reason_skipped", "display_id": display_id, "explicit_submission": True},
+        headers=_headers(key="skip-edit"),
+    )
+    assert skipped.status_code == 200
+    assert skipped.json()["attribution_status"] == "skipped"
+
+
 def test_retract_race_with_selection_has_consistent_projection(client):
     http, store = client
     event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
@@ -460,6 +485,26 @@ def test_legacy_attribution_events_replay_without_display():
     assert state["reason_code"] is None
 
 
+@pytest.mark.parametrize(
+    "late_event", ["reason_declined", "reason_skipped", "reason_unresponded", "attribution_invalidated"]
+)
+def test_legacy_nonresponse_cannot_override_submitted_reason(late_event):
+    events = [
+        {"event_type": "negative_feedback_action_recorded", "payload": {"target_ref": {"object_id": "old"}}},
+        {"event_type": "reason_selected", "payload": {"reason_code": "style"}},
+        {"event_type": late_event, "payload": {}},
+    ]
+    state = project(events)
+    assert state["projection_version"] == "3"
+    assert state["attribution_status"] == "selected"
+    assert state["attribution_source"] == "user_selected"
+    assert state["reason_code"] == "style"
+    events.append({"event_type": "reason_edited", "payload": {"reason_code": "incomplete"}})
+    edited = project(events)
+    assert edited["attribution_status"] == "edited"
+    assert edited["reason_code"] == "incomplete"
+
+
 def test_existing_sqlite_events_replay_after_reopen(tmp_path):
     path = tmp_path / "existing.db"
     principal = Principal("tenant-a", "alice")
@@ -472,12 +517,18 @@ def test_existing_sqlite_events_replay_after_reopen(tmp_path):
     )["event_id"]
     with store._transaction() as db:
         store._append(db, event_id, "reason_selected", {"reason_code": "style"}, "user")
+        store._append(db, event_id, "reason_declined", {}, "user")
     reopened = EventStore(path)
-    assert reopened.get_action(principal, event_id)["attribution_source"] == "user_selected"
+    replayed = reopened.get_action(principal, event_id)
+    assert replayed["projection_version"] == "3"
+    assert replayed["attribution_status"] == "selected"
+    assert replayed["attribution_source"] == "user_selected"
+    assert replayed["reason_code"] == "style"
     state = reopened.retract_action(principal, event_id, "old-retract")
     assert state["attribution_status"] == "none"
     assert state["reason_code"] is None
     assert any(event["event_type"] == "reason_selected" for event in reopened.get_events(principal, event_id))
+    assert any(event["event_type"] == "reason_declined" for event in reopened.get_events(principal, event_id))
 
 
 def test_jev_contract_rejects_unpinned_or_invalid_distribution():
