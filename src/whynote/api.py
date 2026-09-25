@@ -91,6 +91,11 @@ def create_app(
             raise HTTPException(400, "invalid Idempotency-Key")
         return value
 
+    def require_current_target(principal: Principal, event_id: str) -> None:
+        target = store.get_target_ref(principal, event_id)
+        if not authorize_target(principal, target):
+            raise NotFoundError("feedback action not found")
+
     @api.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
@@ -118,6 +123,7 @@ def create_app(
     @api.get("/v1/feedback-actions/{event_id}")
     def get(event_id: str, principal: Principal = Depends(identity)) -> dict:
         try:
+            require_current_target(principal, event_id)
             return store.get_action(principal, event_id)
         except NotFoundError as exc:
             raise HTTPException(404, str(exc)) from exc
@@ -129,6 +135,7 @@ def create_app(
         idempotency_key: str = Depends(key),
     ) -> dict:
         try:
+            require_current_target(principal, event_id)
             return store.retract_action(principal, event_id, idempotency_key)
         except NotFoundError as exc:
             raise HTTPException(404, str(exc)) from exc
@@ -143,6 +150,7 @@ def create_app(
         idempotency_key: str = Depends(key),
     ) -> dict:
         try:
+            require_current_target(principal, event_id)
             return store.record_user_action(
                 principal,
                 event_id,

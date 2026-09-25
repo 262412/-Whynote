@@ -28,6 +28,8 @@ def client(tmp_path):
             return Principal("tenant-a", "alice")
         if token == "Bearer bob":
             return Principal("tenant-a", "bob")
+        if token == "Bearer mallory":
+            return Principal("tenant-b", "mallory")
         raise HTTPException(401, "missing identity")
 
     app = create_app(
@@ -89,6 +91,76 @@ def test_ownership_and_input_boundary(client):
     assert http.post("/v1/feedback-actions", json=body, headers=_headers()).status_code == 422
     event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
     assert http.get(f"/v1/feedback-actions/{event_id}", headers=_headers("bob")).status_code == 404
+    assert http.get(f"/v1/feedback-actions/{event_id}", headers=_headers("mallory")).status_code == 404
+    assert (
+        http.post(f"/v1/feedback-actions/{event_id}/retract", headers=_headers("mallory", "foreign")).status_code == 404
+    )
+    assert (
+        http.post(
+            f"/v1/feedback-actions/{event_id}/attribution-events",
+            json={
+                "user_action": "reason_selected",
+                "reason_code": "style",
+                "display_id": "foreign",
+                "explicit_submission": True,
+            },
+            headers=_headers("mallory", "foreign-attribution"),
+        ).status_code
+        == 404
+    )
+
+
+def test_revoked_target_access_blocks_existing_action_routes(tmp_path, monkeypatch):
+    access = {"allowed": True}
+    target = _action()["target_ref"]
+
+    def authenticate(request):
+        if request.headers.get("Authorization") == "Bearer alice":
+            return Principal("tenant-a", "alice")
+        raise HTTPException(401, "missing identity")
+
+    def authorize_target(principal, stored_target):
+        assert principal == Principal("tenant-a", "alice")
+        assert stored_target == target
+        return access["allowed"]
+
+    app = create_app(tmp_path / "access.db", authenticate, authorize_target)
+    with TestClient(app) as http:
+        store = app.state.store
+        principal = Principal("tenant-a", "alice")
+        event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
+        display_id = _display(store, event_id, "manual_menu", ["style"])
+        endpoint = f"/v1/feedback-actions/{event_id}"
+        selection = {
+            "user_action": "reason_selected",
+            "reason_code": "style",
+            "display_id": display_id,
+            "explicit_submission": True,
+        }
+        events_before = store.get_events(principal, event_id)
+        access["allowed"] = False
+        with monkeypatch.context() as denied:
+
+            def no_event_read(*_):
+                raise AssertionError("denied requests must not read the event stream")
+
+            denied.setattr(store, "_events", no_event_read)
+            assert http.get(endpoint, headers=_headers()).status_code == 404
+            assert (
+                http.post(
+                    f"{endpoint}/attribution-events", json=selection, headers=_headers(key="selection")
+                ).status_code
+                == 404
+            )
+            assert http.post(f"{endpoint}/retract", headers=_headers(key="retract")).status_code == 404
+            assert http.post("/v1/feedback-actions", json=_action(), headers=_headers()).status_code == 403
+        assert store.get_events(principal, event_id) == events_before
+
+        access["allowed"] = True
+        selected = http.post(f"{endpoint}/attribution-events", json=selection, headers=_headers(key="selection"))
+        assert selected.status_code == 200
+        assert selected.json()["reason_code"] == "style"
+        assert http.post(f"{endpoint}/retract", headers=_headers(key="retract")).status_code == 200
 
 
 @pytest.mark.parametrize(

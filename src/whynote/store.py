@@ -233,6 +233,11 @@ class EventStore:
             self._require_owner(db, principal, event_id)
             return self._projection(db, event_id)
 
+    def get_target_ref(self, principal: Principal, event_id: str) -> dict[str, str]:
+        with self._transaction() as db:
+            action = self._require_owner(db, principal, event_id)
+            return json.loads(action["target_ref"])
+
     def get_events(self, principal: Principal, event_id: str) -> list[dict[str, Any]]:
         with self._transaction() as db:
             self._require_owner(db, principal, event_id)

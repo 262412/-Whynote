@@ -11,6 +11,8 @@
 - 四维 Gate 规则及可信的入样概率记账；拒绝时原因保持空。当前允许路径以 `pipeline_unconfigured` 拒识，不读取上下文，也不调用供应商。
 - TypeSafe Jev Choice/Noul 响应解析与概率校验；尚未接入真实 API。
 
+查询、撤销与归因写入会用持久化的目标引用重新检查当前对象权限；撤权后返回 404 且不追加事件。权限边界与宿主待接接口见 [对象归属复核契约](docs/access-boundary.md)。
+
 ## 本地验证
 
 ```powershell
