@@ -1,0 +1,29 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install locked dependencies
+        run: uv sync --extra dev --locked --no-editable
+      - name: Lint
+        run: uv run --no-sync ruff check src tests
+      - name: Format
+        run: uv run --no-sync ruff format --check src tests
+      - name: Test
+        run: uv run --no-sync pytest -q

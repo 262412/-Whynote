@@ -1,16 +1,19 @@
 """HTTP boundary. Authentication and target ownership must be supplied by the host platform."""
 
 import os
+import re
 from collections.abc import Callable, Mapping
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, field_validator
 
 from .domain import ConflictError, NotFoundError, Principal
 from .store import EventStore
+
+_RFC3339 = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$")
 
 
 class TargetRef(BaseModel):
@@ -28,7 +31,19 @@ class CreateAction(BaseModel):
     action_type: Literal["negative_feedback"]
     channel: str = Field(min_length=1)
     locale: str = Field(min_length=1)
-    client_occurred_at: datetime | None = None
+    client_occurred_at: str | None = None
+
+    @field_validator("client_occurred_at", mode="before")
+    @classmethod
+    def require_utc_time(cls, value: object) -> str | None:
+        if value is None:
+            return None
+        if not isinstance(value, str) or not _RFC3339.fullmatch(value):
+            raise ValueError("client_occurred_at must be RFC 3339 with a timezone")
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        if parsed.utcoffset() is None:
+            raise ValueError("client_occurred_at must include a timezone")
+        return parsed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 class AttributionAction(BaseModel):
@@ -43,8 +58,8 @@ class AttributionAction(BaseModel):
         "attribution_invalidated",
     ]
     reason_code: str | None = None
-    display_id: str | None = None
-    explicit_submission: bool
+    display_id: str = Field(min_length=1)
+    explicit_submission: StrictBool
 
 
 Authenticate = Callable[[Request], Principal]
@@ -93,7 +108,7 @@ def create_app(
             "action_type": body.action_type,
             "channel": body.channel,
             "locale": body.locale,
-            "client_occurred_at": body.client_occurred_at.isoformat() if body.client_occurred_at else None,
+            "client_occurred_at": body.client_occurred_at,
         }
         try:
             return store.create_action(principal, target, metadata, idempotency_key)
