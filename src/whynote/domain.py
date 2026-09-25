@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from math import isfinite
 from typing import Any, Iterable, Mapping
 
-
 TAXONOMY_VERSION = "candidate-v1"
 REASON_CODES = frozenset(
     {
@@ -20,6 +19,13 @@ REASON_CODES = frozenset(
         "other_or_unknown",
     }
 )
+DISPLAY_MODES = frozenset({"manual_menu", "model_suggestion", "edit_menu"})
+USER_ACTION_MODES = {
+    "reason_selected": "manual_menu",
+    "reason_confirmed": "model_suggestion",
+    "reason_edited": "edit_menu",
+    "attribution_invalidated": "model_suggestion",
+}
 
 
 class ConflictError(ValueError):
@@ -96,10 +102,69 @@ def decide_gate(signals: GateSignals) -> dict[str, Any]:
     }
 
 
+def validate_display(state: Mapping[str, Any], mode: str, shown_reason_codes: list[str]) -> None:
+    if state["action_status"] != "active":
+        raise ConflictError("cannot display reasons for a retracted action")
+    if mode not in DISPLAY_MODES:
+        raise ConflictError("unsupported display mode")
+    if not shown_reason_codes or len(shown_reason_codes) > len(REASON_CODES):
+        raise ConflictError("display must contain reason codes")
+    if len(set(shown_reason_codes)) != len(shown_reason_codes) or not set(shown_reason_codes) <= REASON_CODES:
+        raise ConflictError("display contains invalid or duplicate reason codes")
+    status = state["attribution_status"]
+    if mode == "manual_menu" and status not in {"none", "model_inferred_unconfirmed", "invalidated"}:
+        raise ConflictError("manual menu cannot replace a submitted response")
+    if mode == "model_suggestion" and (
+        status != "model_inferred_unconfirmed" or shown_reason_codes != [state["reason_code"]]
+    ):
+        raise ConflictError("display does not match the active model suggestion")
+    if mode == "edit_menu" and status not in {"model_inferred_unconfirmed", "selected", "confirmed", "edited"}:
+        raise ConflictError("there is no attribution to edit")
+
+
+def validate_user_action(
+    state: Mapping[str, Any], user_action: str, reason_code: str | None, display: Mapping[str, Any]
+) -> None:
+    if state["action_status"] != "active":
+        raise ConflictError("cannot attribute a retracted action")
+    mode = display["mode"]
+    required_mode = USER_ACTION_MODES.get(user_action)
+    if required_mode and mode != required_mode:
+        raise ConflictError("user action does not match the displayed mode")
+    if user_action in {"reason_selected", "reason_confirmed", "reason_edited"}:
+        if reason_code not in REASON_CODES or reason_code not in display["shown_reason_codes"]:
+            raise ConflictError("reason was not displayed")
+    elif reason_code is not None:
+        raise ConflictError("this action must not include a reason code")
+    status = state["attribution_status"]
+    if user_action == "reason_selected" and status not in {"none", "model_inferred_unconfirmed", "invalidated"}:
+        raise ConflictError("a submitted reason requires an edit action")
+    if user_action == "reason_confirmed" and (
+        status != "model_inferred_unconfirmed" or state["reason_code"] != reason_code
+    ):
+        raise ConflictError("confirmation requires the active model suggestion")
+    if user_action == "reason_edited" and status not in {
+        "model_inferred_unconfirmed",
+        "selected",
+        "confirmed",
+        "edited",
+    }:
+        raise ConflictError("there is no attribution to edit")
+    if user_action in {"reason_declined", "reason_skipped"} and status not in {
+        "none",
+        "model_inferred_unconfirmed",
+        "invalidated",
+    }:
+        raise ConflictError("a submitted user reason cannot be cleared by declining or skipping")
+    if user_action == "attribution_invalidated" and status != "model_inferred_unconfirmed":
+        raise ConflictError("there is no active model suggestion to invalidate")
+
+
 def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     """Rebuild the user-visible state from immutable, ordered events."""
 
     state: dict[str, Any] = {
+        "projection_version": "2",
         "action_status": "active",
         "inference_status": "not_requested",
         "attribution_status": "none",
@@ -110,6 +175,8 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     for event in events:
         kind = event["event_type"]
         payload = event["payload"]
+        if state["action_status"] == "retracted":
+            continue
         if kind == "negative_feedback_action_recorded":
             state["inference_status"] = "gate_pending"
             state["target_ref"] = payload["target_ref"]
@@ -138,7 +205,7 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 "reason_edited": "edited",
             }[kind]
             state["attribution_source"] = {
-                "reason_selected": "user_selected",
+                "reason_selected": payload.get("attribution_source", "user_selected"),
                 "reason_confirmed": "user_confirmed",
                 "reason_edited": "user_edited",
             }[kind]
@@ -151,6 +218,8 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             state["action_status"] = "retracted"
             if state["inference_status"] in {"gate_pending", "queued", "running"}:
                 state["inference_status"] = "cancelled"
+            state["attribution_status"] = "none"
+            state["attribution_source"] = "none"
             state["reason_code"] = None
     return state
 
@@ -177,10 +246,19 @@ def validate_jev_response(response: Mapping[str, Any], pinned_model: str) -> dic
     if abs(sum(probabilities.values()) - 1) > 0.02:
         raise ValueError("probabilities do not sum to approximately one")
     reason = answer.get("choice")
-    if not isinstance(reason, str) or reason not in REASON_CODES or probabilities[reason] < max(probabilities.values()) - 0.02:
+    if (
+        not isinstance(reason, str)
+        or reason not in REASON_CODES
+        or probabilities[reason] < max(probabilities.values()) - 0.02
+    ):
         raise ValueError("choice is inconsistent with probabilities")
     confidence = answer.get("confidence")
-    if isinstance(confidence, bool) or not isinstance(confidence, (int, float)) or not isfinite(confidence) or not 0 <= confidence <= 1:
+    if (
+        isinstance(confidence, bool)
+        or not isinstance(confidence, (int, float))
+        or not isfinite(confidence)
+        or not 0 <= confidence <= 1
+    ):
         raise ValueError("invalid confidence")
     signals: dict[str, float] = {}
     for name in ("factual_error_signal", "instruction_failure_signal"):

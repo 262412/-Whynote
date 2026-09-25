@@ -16,9 +16,10 @@ from .domain import (
     GateSignals,
     NotFoundError,
     Principal,
-    REASON_CODES,
     decide_gate,
     project,
+    validate_display,
+    validate_user_action,
 )
 
 
@@ -105,7 +106,14 @@ class EventStore:
             db.close()
 
     @staticmethod
-    def _append(db: sqlite3.Connection, event_id: str, kind: str, payload: Mapping[str, Any], source: str) -> str:
+    def _append(
+        db: sqlite3.Connection,
+        event_id: str,
+        kind: str,
+        payload: Mapping[str, Any],
+        source: str,
+        event_version: int = 1,
+    ) -> str:
         record_id = str(uuid.uuid4())
         tenant = db.execute("SELECT tenant_ref FROM actions WHERE event_id=?", (event_id,)).fetchone()
         if tenant is None:
@@ -113,19 +121,32 @@ class EventStore:
         timestamp = _now()
         db.execute(
             "INSERT INTO events(record_id,event_id,event_type,event_version,schema_version,source,occurred_at,recorded_at,trace_id,tenant_ref,payload) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-            (record_id, event_id, kind, 1, "1", source, timestamp, timestamp, str(uuid.uuid4()), tenant["tenant_ref"], _json(payload)),
+            (
+                record_id,
+                event_id,
+                kind,
+                event_version,
+                "1",
+                source,
+                timestamp,
+                timestamp,
+                str(uuid.uuid4()),
+                tenant["tenant_ref"],
+                _json(payload),
+            ),
         )
         return record_id
 
     @staticmethod
     def _events(db: sqlite3.Connection, event_id: str) -> list[dict[str, Any]]:
         rows = db.execute(
-            "SELECT record_id,event_type,event_version,schema_version,source,occurred_at,recorded_at,trace_id,tenant_ref,payload FROM events WHERE event_id=? ORDER BY seq",
+            "SELECT record_id,event_id,event_type,event_version,schema_version,source,occurred_at,recorded_at,trace_id,tenant_ref,payload FROM events WHERE event_id=? ORDER BY seq",
             (event_id,),
         ).fetchall()
         return [
             {
                 "record_id": row["record_id"],
+                "event_id": row["event_id"],
                 "event_type": row["event_type"],
                 "event_version": row["event_version"],
                 "schema_version": row["schema_version"],
@@ -230,7 +251,9 @@ class EventStore:
                     "SELECT record_id FROM events WHERE event_id=? AND event_type='action_retracted' ORDER BY seq LIMIT 1",
                     (event_id,),
                 ).fetchone()
-                self._save_idempotency(db, principal, key_hash, "retract", request_hash, event_id, original["record_id"])
+                self._save_idempotency(
+                    db, principal, key_hash, "retract", request_hash, event_id, original["record_id"]
+                )
                 return self._projection(db, event_id)
             record_id = self._append(db, event_id, "action_retracted", {}, "user")
             db.execute(
@@ -240,13 +263,42 @@ class EventStore:
             self._save_idempotency(db, principal, key_hash, "retract", request_hash, event_id, record_id)
             return self._projection(db, event_id)
 
+    def record_display(
+        self,
+        principal: Principal,
+        event_id: str,
+        display_id: str,
+        mode: str,
+        shown_reason_codes: list[str],
+        ui_version: str,
+    ) -> str:
+        if not display_id.strip() or not ui_version.strip():
+            raise ConflictError("display ID and UI version are required")
+        payload = {
+            "display_id": display_id,
+            "mode": mode,
+            "shown_reason_codes": list(shown_reason_codes),
+            "ui_version": ui_version,
+        }
+        with self._transaction() as db:
+            self._require_owner(db, principal, event_id)
+            events = self._events(db, event_id)
+            for event in events:
+                if event["event_type"] == "reason_displayed" and event["payload"]["display_id"] == display_id:
+                    if event["payload"] != payload:
+                        raise ConflictError("display ID reused with different content")
+                    return display_id
+            validate_display(project(events), mode, shown_reason_codes)
+            self._append(db, event_id, "reason_displayed", payload, "ui")
+            return display_id
+
     def record_user_action(
         self,
         principal: Principal,
         event_id: str,
         user_action: str,
         reason_code: str | None,
-        display_id: str | None,
+        display_id: str,
         explicit_submission: bool,
         idempotency_key: str,
     ) -> dict[str, Any]:
@@ -260,11 +312,8 @@ class EventStore:
         }
         if user_action not in allowed or not explicit_submission:
             raise ConflictError("an explicit supported user action is required")
-        if user_action in {"reason_selected", "reason_confirmed", "reason_edited"}:
-            if reason_code not in REASON_CODES:
-                raise ConflictError("invalid reason code")
-        elif reason_code is not None:
-            raise ConflictError("this action must not include a reason code")
+        if not display_id or not display_id.strip():
+            raise ConflictError("a rendered display is required")
         payload = {"reason_code": reason_code, "display_id": display_id, "explicit_submission": True}
         request_hash = _digest(_json({"event_id": event_id, "user_action": user_action, **payload}))
         key_hash = _digest(idempotency_key)
@@ -273,16 +322,21 @@ class EventStore:
             old = self._check_idempotency(db, principal, key_hash, user_action, request_hash)
             if old:
                 return self._projection(db, event_id)
-            state = self._projection(db, event_id)
-            if state["action_status"] != "active":
-                raise ConflictError("cannot attribute a retracted action")
-            if user_action == "reason_confirmed" and (
-                state["attribution_status"] != "model_inferred_unconfirmed" or state["reason_code"] != reason_code
+            events = self._events(db, event_id)
+            displays = [event["payload"] for event in events if event["event_type"] == "reason_displayed"]
+            if not displays or displays[-1]["display_id"] != display_id:
+                raise ConflictError("rendered display not found or stale")
+            if any(
+                event["event_type"] in allowed and event["payload"].get("display_id") == display_id for event in events
             ):
-                raise ConflictError("confirmation requires the currently shown suggestion")
-            if user_action == "attribution_invalidated" and state["attribution_status"] != "model_inferred_unconfirmed":
-                raise ConflictError("there is no active model suggestion to invalidate")
-            record_id = self._append(db, event_id, user_action, payload, "user")
+                raise ConflictError("display already has a response")
+            display = displays[-1]
+            validate_user_action(project(events), user_action, reason_code, display)
+            payload["ui_version"] = display["ui_version"]
+            payload["display_mode"] = display["mode"]
+            if user_action == "reason_selected":
+                payload["attribution_source"] = "user_manual"
+            record_id = self._append(db, event_id, user_action, payload, "user", event_version=2)
             self._save_idempotency(db, principal, key_hash, user_action, request_hash, event_id, record_id)
             return self._projection(db, event_id)
 
@@ -305,7 +359,9 @@ class EventStore:
 
     def finish_gate_message(self, message_id: str, signals: GateSignals | None) -> dict[str, Any]:
         with self._transaction() as db:
-            row = db.execute("SELECT * FROM outbox WHERE message_id=? AND topic='feedback.gate.requested'", (message_id,)).fetchone()
+            row = db.execute(
+                "SELECT * FROM outbox WHERE message_id=? AND topic='feedback.gate.requested'", (message_id,)
+            ).fetchone()
             if row is None:
                 raise NotFoundError("gate message not found")
             event_id = row["event_id"]
