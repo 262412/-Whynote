@@ -282,3 +282,131 @@ def test_openwebui_s0_pipe_only_answers_fixture(monkeypatch, tmp_path):
     assert asyncio.run(pipe.pipe({"messages": [{"role": "user", "content": "real text"}]})) == (
         "S0 只接受固定虚构问题。"
     )
+
+
+@pytest.mark.parametrize(
+    "wall_elapsed,mono_elapsed", [(59.5, 59.5), (59.999, 59.999), (60, 60), (60.001, 60.001), (61, 1), (-5, 61)]
+)
+def test_ticket_fractional_deadline(monkeypatch, tmp_path, wall_elapsed, mono_elapsed):
+    action = s0_action(monkeypatch, tmp_path)
+    chat, body, _ = s0_chat()
+    clock = {"wall": 1000.9, "mono": 2000.0}
+    captured = []
+    action.action.__func__.__globals__["time"] = SimpleNamespace(
+        time=lambda: clock["wall"], monotonic=lambda: clock["mono"]
+    )
+
+    async def owned(*_):
+        return chat
+
+    async def selected(menu):
+        value = selected_value(menu, "事实错误")
+        captured.append(value)
+        clock.update(wall=1000.9 + wall_elapsed, mono=2000.0 + mono_elapsed)
+        return value
+
+    action._owned_chat = owned
+    result = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=selected))
+    expired = wall_elapsed >= 60 or mono_elapsed >= 60
+    assert result["result"] == ("ticket_expired" if expired else "reason_submitted")
+    events = action.store.get_events(Principal("isolated-test-instance", "alice"), result["event_id"])
+    assert len(events) == (1 if expired else 3)
+    assert ".1060.9.factual_error." in captured[0]
+
+
+def test_ticket_wait_timeout_cancels_callback(monkeypatch, tmp_path):
+    action = s0_action(monkeypatch, tmp_path)
+    chat, body, _ = s0_chat()
+    cancelled = False
+
+    async def owned(*_):
+        return chat
+
+    async def waiting(_):
+        nonlocal cancelled
+        try:
+            await asyncio.Event().wait()
+        finally:
+            cancelled = True
+
+    action._owned_chat = owned
+    action.action.__func__.__globals__["TICKET_SECONDS"] = 0.01
+    result = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=waiting))
+    assert cancelled and result["result"] == "ticket_expired"
+    assert len(action.store.get_events(Principal("isolated-test-instance", "alice"), result["event_id"])) == 1
+
+
+@pytest.mark.parametrize("new_reply", ["cancel", "select", "disconnect", "pending"])
+@pytest.mark.parametrize("separate_instance", [False, True])
+def test_new_ticket_supersedes_old_callback(monkeypatch, tmp_path, new_reply, separate_instance):
+    action = s0_action(monkeypatch, tmp_path)
+    newer = s0_action(monkeypatch, tmp_path) if separate_instance else action
+    chat, body, _ = s0_chat()
+    principal = Principal("isolated-test-instance", "alice")
+
+    async def owned(*_):
+        return chat
+
+    action._owned_chat = newer._owned_chat = owned
+
+    async def scenario():
+        opened, release, new_opened, new_release = (asyncio.Event() for _ in range(4))
+
+        async def old(menu):
+            opened.set()
+            await release.wait()
+            return selected_value(menu, "事实错误")
+
+        async def new(menu):
+            new_opened.set()
+            if new_reply == "pending":
+                await new_release.wait()
+            if new_reply == "disconnect":
+                return {"error": "Client session disconnected."}
+            return selected_value(menu, "内容不相关") if new_reply == "select" else False
+
+        pending = asyncio.create_task(action.action(body, __user__={"id": "alice"}, __event_call__=old))
+        await opened.wait()
+        latest = asyncio.create_task(newer.action(body, __user__={"id": "alice"}, __event_call__=new))
+        await new_opened.wait()
+        if new_reply != "pending":
+            await latest
+        event_id = action.store.next_gate_message()["event_id"]
+        before = action.store.get_events(principal, event_id)
+        release.set()
+        with pytest.raises(ValueError, match="superseded"):
+            await pending
+        assert action.store.get_events(principal, event_id) == before
+        new_release.set()
+        await latest
+
+    asyncio.run(scenario())
+
+
+def test_ticket_replaced_between_display_and_reason(monkeypatch, tmp_path):
+    action = s0_action(monkeypatch, tmp_path)
+    newer = s0_action(monkeypatch, tmp_path)
+    chat, body, _ = s0_chat()
+    principal = Principal("isolated-test-instance", "alice")
+    calls = 0
+
+    async def owned(*_):
+        nonlocal calls
+        calls += 1
+        if calls == 3:
+            event_id = newer.store.next_gate_message()["event_id"]
+            newer.store.issue_display_ticket(principal, event_id, "replacement")
+        return chat
+
+    async def selected(menu):
+        return selected_value(menu, "事实错误")
+
+    action._owned_chat = owned
+    with pytest.raises(ValueError, match="superseded"):
+        asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=selected))
+    event_id = action.store.next_gate_message()["event_id"]
+    events = action.store.get_events(principal, event_id)
+    assert [event["event_type"] for event in events] == ["negative_feedback_action_recorded", "reason_displayed"]
+    display = events[-1]["payload"]
+    receipt = action.store.record_display(principal, event_id, **display)
+    assert receipt["receipt_status"] == "historical" and receipt["actionable"] is False

@@ -11,7 +11,7 @@ index 7fb0d17..c49123e 100644
          # Each PRAGMA is skipped when its env var is empty, allowing opt-out.
          if DATABASE_SQLITE_PRAGMA_SYNCHRONOUS:
 diff --git a/backend/open_webui/models/chats.py b/backend/open_webui/models/chats.py
-index 420c414..c905e4d 100644
+index 420c414..a4e92dd 100644
 --- a/backend/open_webui/models/chats.py
 +++ b/backend/open_webui/models/chats.py
 @@ -14,6 +14,7 @@ from open_webui.internal.db import Base, JSONField, get_async_db_context
@@ -42,21 +42,17 @@ index 420c414..c905e4d 100644
                  await session.execute(delete(ChatMessage).filter_by(chat_id=id))
                  await session.execute(delete(Chat).filter_by(id=id, user_id=user_id))
                  await session.commit()
-@@ -2502,7 +2508,12 @@ class ChatTable:
+@@ -2502,7 +2508,8 @@ class ChatTable:
              async with get_async_db_context(db) as session:
                  await self.delete_shared_chats_by_user_id(user_id, db=session)
  
 -                chat_id_subquery = select(Chat.id).filter_by(user_id=user_id).scalar_subquery()
 +                chat_ids = select(Chat.id).filter_by(user_id=user_id)
-+                await session.execute(
-+                    delete(Feedback).where(
-+                        or_(Feedback.user_id == user_id, Feedback.meta['chat_id'].as_string().in_(chat_ids))
-+                    )
-+                )
++                await session.execute(delete(Feedback).where(Feedback.meta['chat_id'].as_string().in_(chat_ids)))
                  await session.execute(
                      update(AutomationRun)
                      .filter(AutomationRun.chat_id.in_(select(Chat.id).filter_by(user_id=user_id)))
-@@ -2527,6 +2538,9 @@ class ChatTable:
+@@ -2527,6 +2534,9 @@ class ChatTable:
                  await session.execute(
                      update(AutomationRun).filter(AutomationRun.chat_id.in_(chat_ids_stmt)).values(chat_id=None)
                  )
@@ -92,8 +88,28 @@ index ca1fe39..f08dbd8 100644
  
  class UserResponse(BaseModel):
      id: str
+diff --git a/backend/open_webui/models/users.py b/backend/open_webui/models/users.py
+index 0235b7d..948a251 100644
+--- a/backend/open_webui/models/users.py
++++ b/backend/open_webui/models/users.py
+@@ -846,6 +846,7 @@ class UsersTable:
+ 
+     async def delete_user_by_id(self, id: str, db: AsyncSession | None = None) -> bool:
+         from open_webui.models.chats import Chats
++        from open_webui.models.feedbacks import Feedback
+         from open_webui.models.groups import Groups
+ 
+         # Remove User from Groups
+@@ -856,6 +857,7 @@ class UsersTable:
+             deleted_chats = await Chats.delete_chats_by_user_id(id, db=session)
+             if not deleted_chats:
+                 return False  # chats deletion failed
++            await session.execute(delete(Feedback).where(Feedback.user_id == id))
+             await session.execute(delete(User).where(User.id == id))
+             await session.commit()
+             return True
 diff --git a/backend/open_webui/routers/evaluations.py b/backend/open_webui/routers/evaluations.py
-index 00c1517..445e0f5 100644
+index 00c1517..c24aed1 100644
 --- a/backend/open_webui/routers/evaluations.py
 +++ b/backend/open_webui/routers/evaluations.py
 @@ -3,6 +3,7 @@ from typing import Optional
@@ -140,14 +156,24 @@ index 00c1517..445e0f5 100644
      limit = PAGE_ITEM_COUNT
  
      page = max(1, page)
-@@ -449,6 +458,7 @@ async def create_feedback(
+@@ -448,7 +457,7 @@ async def create_feedback(
+ 
  @router.get('/feedback/{id}', response_model=FeedbackModel)
  async def get_feedback_by_id(id: str, user=Depends(get_verified_user), db: AsyncSession = Depends(get_async_session)):
-     if user.role == 'admin':
-+        require_feedback_export_enabled()
+-    if user.role == 'admin':
++    if user.role == 'admin' and ENABLE_ADMIN_EXPORT:
          feedback = await Feedbacks.get_feedback_by_id(id=id, db=db)
      else:
          feedback = await Feedbacks.get_feedback_by_id_and_user_id(id=id, user_id=user.id, db=db)
+@@ -467,7 +476,7 @@ async def update_feedback_by_id(
+     user=Depends(get_verified_user),
+     db: AsyncSession = Depends(get_async_session),
+ ):
+-    if user.role == 'admin':
++    if user.role == 'admin' and ENABLE_ADMIN_EXPORT:
+         feedback = await Feedbacks.update_feedback_by_id(id=id, form_data=form_data, db=db)
+     else:
+         feedback = await Feedbacks.update_feedback_by_id_and_user_id(id=id, user_id=user.id, form_data=form_data, db=db)
 diff --git a/src/lib/components/chat/Messages/ResponseMessage.svelte b/src/lib/components/chat/Messages/ResponseMessage.svelte
 index 48af8d0..796767e 100644
 --- a/src/lib/components/chat/Messages/ResponseMessage.svelte

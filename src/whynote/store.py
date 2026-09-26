@@ -87,6 +87,10 @@ class EventStore:
                     processed_at TEXT,
                     UNIQUE (event_id, topic)
                 );
+                CREATE TABLE IF NOT EXISTS display_tickets (
+                    event_id TEXT PRIMARY KEY REFERENCES actions(event_id),
+                    display_id TEXT NOT NULL
+                );
                 """
             )
 
@@ -268,6 +272,25 @@ class EventStore:
             self._save_idempotency(db, principal, key_hash, "retract", request_hash, event_id, record_id)
             return self._projection(db, event_id)
 
+    def issue_display_ticket(self, principal: Principal, event_id: str, display_id: str) -> None:
+        """Supersede pending menus without claiming that a display occurred."""
+        if not display_id.strip():
+            raise ConflictError("display ID is required")
+        with self._transaction() as db:
+            self._require_owner(db, principal, event_id)
+            if self._projection(db, event_id)["action_status"] != "active":
+                raise ConflictError("action is retracted")
+            db.execute(
+                "INSERT INTO display_tickets(event_id,display_id) VALUES(?,?) "
+                "ON CONFLICT(event_id) DO UPDATE SET display_id=excluded.display_id",
+                (event_id, display_id),
+            )
+
+    @staticmethod
+    def _ticket_is_current(db: sqlite3.Connection, event_id: str, display_id: str) -> bool:
+        ticket = db.execute("SELECT display_id FROM display_tickets WHERE event_id=?", (event_id,)).fetchone()
+        return ticket is None or ticket["display_id"] == display_id
+
     def record_display(
         self,
         principal: Principal,
@@ -312,12 +335,15 @@ class EventStore:
                         state["action_status"] == "active"
                         and displays[-1]["display_id"] == display_id
                         and not responded
+                        and self._ticket_is_current(db, event_id, display_id)
                     )
                     return {
                         "display_id": display_id,
                         "receipt_status": "current" if actionable else "historical",
                         "actionable": actionable,
                     }
+            if not self._ticket_is_current(db, event_id, display_id):
+                raise ConflictError("display ticket superseded")
             validate_display(state, mode, shown_reason_codes)
             self._append(db, event_id, "reason_displayed", payload, "ui")
             return {"display_id": display_id, "receipt_status": "current", "actionable": True}
@@ -352,6 +378,8 @@ class EventStore:
             old = self._check_idempotency(db, principal, key_hash, user_action, request_hash)
             if old:
                 return self._projection(db, event_id)
+            if not self._ticket_is_current(db, event_id, display_id):
+                raise ConflictError("display ticket superseded")
             events = self._events(db, event_id)
             displays = [event["payload"] for event in events if event["event_type"] == "reason_displayed"]
             if not displays or displays[-1]["display_id"] != display_id:

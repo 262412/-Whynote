@@ -1,7 +1,7 @@
 """
 title: 知因 S0 点踩
 author: Whynote
-version: 0.1.0
+version: 0.1.1
 required_open_webui_version: 0.11.4
 """
 
@@ -120,8 +120,9 @@ class Action:
             return {"event_id": event_id, "result": "retracted"}
         mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
         display_id = str(uuid.uuid4())
+        self.store.issue_display_ticket(principal, event_id, display_id)
         issued_at = time.monotonic()
-        expires_at = int(time.time()) + TICKET_SECONDS
+        expires_at = time.time() + TICKET_SECONDS
         ticket_context = {
             "tenant_id": self.tenant,
             "user_id": user_id,
@@ -167,7 +168,7 @@ class Action:
             return {"event_id": event_id, "result": "ticket_expired"}
         if isinstance(answer, dict) and answer.get("error"):
             return {"event_id": event_id, "result": "client_unavailable"}
-        if time.monotonic() - issued_at > TICKET_SECONDS or time.time() > expires_at:
+        if time.monotonic() - issued_at >= TICKET_SECONDS or time.time() >= expires_at:
             return {"event_id": event_id, "result": "ticket_expired"}
         reason_code = None
         if isinstance(answer, str):

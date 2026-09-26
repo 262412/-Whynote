@@ -22,8 +22,33 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --extra dev --locked --no-editable
       - name: Lint
-        run: uv run --no-sync ruff check src tests
+        run: uv run --no-sync ruff check src tests integrations
       - name: Format
-        run: uv run --no-sync ruff format --check src tests
+        run: uv run --no-sync ruff format --check src tests integrations
       - name: Test
         run: uv run --no-sync pytest -q
+
+  native-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.11'
+      - name: Check out pinned upstream and apply patch
+        run: |
+          git clone --depth 1 --branch v0.11.4 https://github.com/open-webui/open-webui.git var/openwebui-source
+          test "$(git -C var/openwebui-source rev-parse HEAD)" = 8bd8b4fac5e059578ac0c74b3c18d11139f88b7d
+          git -C var/openwebui-source apply --check "$GITHUB_WORKSPACE/integrations/openwebui/patches/native-v0.11.4-s0.patch"
+          git -C var/openwebui-source apply "$GITHUB_WORKSPACE/integrations/openwebui/patches/native-v0.11.4-s0.patch"
+      - name: Install locked host regression dependencies
+        run: |
+          uv venv --python 3.11 var/native-venv
+          uv pip sync --python var/native-venv/bin/python --torch-backend cpu integrations/openwebui/tests/requirements.txt
+      - name: Test actual feedback routes and database cleanup
+        env:
+          WHYNOTE_OPENWEBUI_SOURCE: ${{ github.workspace }}/var/openwebui-source
+        run: var/native-venv/bin/python -m pytest integrations/openwebui/tests -q
