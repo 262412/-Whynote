@@ -1,0 +1,8 @@
+{
+  "old_rows_preserved": true,
+  "projection_preserved": true,
+  "issue_no_event_or_outbox_write": true,
+  "committed_choice_retry_idempotent": true,
+  "old_receipt_historical": true,
+  "ticket_survives_reopen": true
+}

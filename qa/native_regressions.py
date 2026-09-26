@@ -138,12 +138,34 @@ def main():
                 response = await client.get(prefix + endpoint)
                 check("admin-blocked-" + endpoint, response.status_code, 401)
 
+            # Exercise the documented enabled branch on synthetic data too.
+            export_setting = evaluations.ENABLE_ADMIN_EXPORT
+            evaluations.ENABLE_ADMIN_EXPORT = True
+            try:
+                for who, target, expected in (
+                    ("admin", fid, 200),
+                    ("admin", admin_fid, 200),
+                    ("alice", fid, 200),
+                    ("bob", fid, 404),
+                ):
+                    actor = users[who]
+                    label = who + ("-own" if rows("feedback")[target]["user_id"] == who else "-other")
+                    response = await client.get(prefix + "/feedback/" + target)
+                    check("export-on-" + label + "-GET", response.status_code, expected)
+                    response = await client.post(prefix + "/feedback/" + target, json={"type": "rating"})
+                    check("export-on-" + label + "-POST", response.status_code, expected)
+            finally:
+                evaluations.ENABLE_ADMIN_EXPORT = export_setting
+
             await chat("alice", "a-chat")
             await chat("bob", "b-chat")
             linked = await create("alice", {"chat_id": "a-chat"})
             orphan = await create("alice")
             other_chat = await create("alice", {"chat_id": "b-chat"})
             bob_feedback = await create("bob", {"chat_id": "b-chat"})
+            # H-02 in technical revision 15: a client-supplied foreign reference
+            # is not sufficient authorization for deleting another user's row.
+            untrusted_link = await create("bob", {"chat_id": "a-chat"})
             before = rows("feedback")
             check("unauthorized-single-delete", await Chats.delete_chat_by_id_and_user_id("a-chat", "bob"), False)
             check("unauthorized-single-no-write", rows("feedback"), before)
@@ -152,6 +174,7 @@ def main():
             check("Q14-bulk-orphan-preserved", orphan in rows("feedback"), True)
             check("Q14-other-chat-rating-preserved", other_chat in rows("feedback"), True)
             check("bulk-bob-rating-preserved", bob_feedback in rows("feedback"), True)
+            check("Q16-untrusted-foreign-rating-preserved", untrusted_link in rows("feedback"), True)
             check("bulk-bob-chat-preserved", "b-chat" in rows("chat"), True)
             empty_orphan = await create("empty")
             check("empty-bulk-return", await Chats.delete_chats_by_user_id("empty"), True)

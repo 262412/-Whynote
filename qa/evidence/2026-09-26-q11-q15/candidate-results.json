@@ -1,0 +1,432 @@
+{
+  "status": "PR 14 stable commit verified; Q11-Q15 scoped pass; Q16 fails",
+  "base": "86f21b72c9864e2774c635b386f06c1fb3d3595e",
+  "snapshot_patch_sha256": "20334c87fd93b9e99f8cadaf4f94926e86425bc9847d448a61f1a382f69884a4",
+  "files_sha256": {
+    "integrations/openwebui/s0_action.py": "825255b570335a8768a57934927139d12d7231fc2d01ad7c615ca54b90cda11f",
+    "src/whynote/store.py": "573d630383141bc74d294a1eb3f3e869d91fc174ef46d0f8f29197a1539d8e9d",
+    "integrations/openwebui/patches/native-v0.11.4-s0.patch": "674699c7cb03bc23abcb734b672d0bc32ac334e22f6bb4f397dd4b05f3fb30ff",
+    "tests/test_openwebui_s0.py": "add7d29d9c86967a669506f805cc2e8063c77dc26fe3f20b248bb484b0440b7f",
+    "tests/test_feedback.py": "9922742ced990f8a03cec38ba7ad501b81d19cb54802a194a91735a83b2f99e5",
+    "docs/s0-review-fixes.md": "47bda3632af541b74c062eab2d392f577d7f97726b92e81bf8b7b69216709be2"
+  },
+  "core_pytest_passed": 64,
+  "ticket": {
+    "passed": 9,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "test_full_ticket_lifetime[0]",
+        "pass": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[59.0]",
+        "pass": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[59.5]",
+        "pass": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[59.999]",
+        "pass": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[60.001]",
+        "pass": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[False-cancel]",
+        "pass": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[False-select]",
+        "pass": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[True-cancel]",
+        "pass": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[True-select]",
+        "pass": true
+      }
+    ]
+  },
+  "native": {
+    "admin_other_status_contract": 404,
+    "route_sha256": "3050fb77b3a9b68991cd173c7eef11402d16a22b4debb646c8f3572b16ed43cf",
+    "checks": [
+      {
+        "name": "snapshot-null",
+        "pass": true
+      },
+      {
+        "name": "snapshot-reject-/feedback",
+        "pass": true
+      },
+      {
+        "name": "snapshot-reject-/feedback/e301e92f-c06c-45e3-a5ec-d6c3ab65a7ab",
+        "pass": true
+      },
+      {
+        "name": "snapshot-reject-no-write",
+        "pass": true
+      },
+      {
+        "name": "alice-own-GET",
+        "pass": true
+      },
+      {
+        "name": "alice-own-POST",
+        "pass": true
+      },
+      {
+        "name": "bob-other-GET",
+        "pass": true
+      },
+      {
+        "name": "bob-other-POST",
+        "pass": true
+      },
+      {
+        "name": "bob-other-no-write",
+        "pass": true
+      },
+      {
+        "name": "bob-other-no-disclosure",
+        "pass": true
+      },
+      {
+        "name": "admin-other-GET",
+        "pass": true
+      },
+      {
+        "name": "admin-other-POST",
+        "pass": true
+      },
+      {
+        "name": "admin-other-no-write",
+        "pass": true
+      },
+      {
+        "name": "admin-other-no-disclosure",
+        "pass": true
+      },
+      {
+        "name": "admin-own-GET",
+        "pass": true
+      },
+      {
+        "name": "admin-own-POST",
+        "pass": true
+      },
+      {
+        "name": "alice-other-GET",
+        "pass": true
+      },
+      {
+        "name": "alice-other-POST",
+        "pass": true
+      },
+      {
+        "name": "alice-other-no-write",
+        "pass": true
+      },
+      {
+        "name": "alice-other-no-disclosure",
+        "pass": true
+      },
+      {
+        "name": "Q12-mutation-status",
+        "pass": true
+      },
+      {
+        "name": "Q12-mutation-no-write",
+        "pass": true
+      },
+      {
+        "name": "admin-blocked-/feedbacks/all/export",
+        "pass": true
+      },
+      {
+        "name": "admin-blocked-/feedbacks/list",
+        "pass": true
+      },
+      {
+        "name": "admin-blocked-/feedbacks/all/ids",
+        "pass": true
+      },
+      {
+        "name": "export-on-admin-other-GET",
+        "pass": true
+      },
+      {
+        "name": "export-on-admin-other-POST",
+        "pass": true
+      },
+      {
+        "name": "export-on-admin-own-GET",
+        "pass": true
+      },
+      {
+        "name": "export-on-admin-own-POST",
+        "pass": true
+      },
+      {
+        "name": "export-on-alice-own-GET",
+        "pass": true
+      },
+      {
+        "name": "export-on-alice-own-POST",
+        "pass": true
+      },
+      {
+        "name": "export-on-bob-other-GET",
+        "pass": true
+      },
+      {
+        "name": "export-on-bob-other-POST",
+        "pass": true
+      },
+      {
+        "name": "unauthorized-single-delete",
+        "pass": true
+      },
+      {
+        "name": "unauthorized-single-no-write",
+        "pass": true
+      },
+      {
+        "name": "bulk-delete-return",
+        "pass": true
+      },
+      {
+        "name": "bulk-linked-removed",
+        "pass": true
+      },
+      {
+        "name": "Q14-bulk-orphan-preserved",
+        "pass": true
+      },
+      {
+        "name": "Q14-other-chat-rating-preserved",
+        "pass": true
+      },
+      {
+        "name": "bulk-bob-rating-preserved",
+        "pass": true
+      },
+      {
+        "name": "Q16-untrusted-foreign-rating-preserved",
+        "actual": false,
+        "expected": true,
+        "pass": false
+      },
+      {
+        "name": "bulk-bob-chat-preserved",
+        "pass": true
+      },
+      {
+        "name": "empty-bulk-return",
+        "pass": true
+      },
+      {
+        "name": "Q14-no-chats-orphan-preserved",
+        "pass": true
+      },
+      {
+        "name": "folder-delete-return",
+        "pass": true
+      },
+      {
+        "name": "folder-linked-removed",
+        "pass": true
+      },
+      {
+        "name": "folder-other-preserved",
+        "pass": true
+      },
+      {
+        "name": "folder-orphan-preserved",
+        "pass": true
+      },
+      {
+        "name": "account-delete-return",
+        "pass": true
+      },
+      {
+        "name": "account-user-removed",
+        "pass": true
+      },
+      {
+        "name": "account-chat-removed",
+        "pass": true
+      },
+      {
+        "name": "account-linked-removed",
+        "pass": true
+      },
+      {
+        "name": "account-orphan-removed",
+        "pass": true
+      },
+      {
+        "name": "account-unrelated-preserved",
+        "pass": true
+      },
+      {
+        "name": "secure-delete",
+        "pass": true
+      },
+      {
+        "name": "journal-mode",
+        "pass": true
+      }
+    ],
+    "passed": 55,
+    "failed": 1
+  },
+  "http": {
+    "checks": [
+      {
+        "name": "version",
+        "actual": "0.11.4",
+        "expected": "0.11.4",
+        "pass": true
+      },
+      {
+        "name": "unauthenticated-GET",
+        "actual": 401,
+        "expected": 401,
+        "pass": true
+      },
+      {
+        "name": "alice-GET-alice",
+        "actual": 200,
+        "expected": 200,
+        "pass": true
+      },
+      {
+        "name": "alice-POST-alice",
+        "actual": 200,
+        "expected": 200,
+        "pass": true
+      },
+      {
+        "name": "bob-GET-alice",
+        "actual": 404,
+        "expected": 404,
+        "pass": true
+      },
+      {
+        "name": "bob-POST-alice",
+        "actual": 404,
+        "expected": 404,
+        "pass": true
+      },
+      {
+        "name": "bob-no-disclosure",
+        "actual": false,
+        "expected": false,
+        "pass": true
+      },
+      {
+        "name": "admin-GET-alice",
+        "actual": 404,
+        "expected": 404,
+        "pass": true
+      },
+      {
+        "name": "admin-POST-alice",
+        "actual": 404,
+        "expected": 404,
+        "pass": true
+      },
+      {
+        "name": "admin-no-disclosure",
+        "actual": false,
+        "expected": false,
+        "pass": true
+      },
+      {
+        "name": "admin-GET-admin",
+        "actual": 200,
+        "expected": 200,
+        "pass": true
+      },
+      {
+        "name": "admin-POST-admin",
+        "actual": 200,
+        "expected": 200,
+        "pass": true
+      },
+      {
+        "name": "Q12-mutation-status",
+        "actual": 404,
+        "expected": 404,
+        "pass": true
+      },
+      {
+        "name": "Q12-mutation-no-write",
+        "actual": [
+          "{\"rating\": null, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-http\"}",
+          "null",
+          "null"
+        ],
+        "expected": [
+          "{\"rating\": null, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-http\"}",
+          "null",
+          "null"
+        ],
+        "pass": true
+      },
+      {
+        "name": "empty-chat-fixture",
+        "actual": 0,
+        "expected": 0,
+        "pass": true
+      },
+      {
+        "name": "bulk-delete-status",
+        "actual": 200,
+        "expected": 200,
+        "pass": true
+      },
+      {
+        "name": "Q14-unlinked-feedback-preserved",
+        "actual": true,
+        "expected": true,
+        "pass": true
+      },
+      {
+        "name": "other-user-feedback-preserved",
+        "actual": true,
+        "expected": true,
+        "pass": true
+      }
+    ],
+    "passed": 18,
+    "failed": 0
+  },
+  "upgrade": {
+    "old_rows_preserved": true,
+    "projection_preserved": true,
+    "issue_no_event_or_outbox_write": true,
+    "committed_choice_retry_idempotent": true,
+    "old_receipt_historical": true,
+    "ticket_survives_reopen": true
+  },
+  "verified_commit": "9b990cd77c6907bac326ffeb52ea477f00302eba",
+  "business_files_match_commit_after_newline_normalization": true,
+  "stable_commit_core_pytest_passed": 64,
+  "stable_commit_independent_ticket_passed": 9,
+  "ci_url": "https://github.com/262412/-Whynote/actions/runs/36239016299",
+  "ci_core_passed": 64,
+  "ci_native_passed": 24,
+  "merged_main_verified": "db6d5b19f365e3e739bec7d0fc4bce2c4994e122",
+  "merged_main_business_diff_from_fix_commit": "empty",
+  "merged_main_core_passed": 64,
+  "merged_main_ticket_passed": 9,
+  "merged_main_ci": "https://github.com/262412/-Whynote/actions/runs/36239322146"
+}
