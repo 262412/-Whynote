@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>知因・Whynote｜本地反馈测试</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #172d37; background: #f4f5f2; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 2rem 1rem; }
+    main { max-width: 680px; margin: 0 auto; }
+    .eyebrow { color: #366b64; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: .4rem 0; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.04em; }
+    .intro { color: #52636a; line-height: 1.6; }
+    .card { margin-top: 1.5rem; padding: 1.5rem; background: white; border: 1px solid #dce4e0; border-radius: 18px; box-shadow: 0 12px 36px rgba(19, 55, 50, .07); }
+    .sample { padding: 1rem; background: #f1f5f2; border-left: 3px solid #50897d; border-radius: 6px; line-height: 1.6; }
+    .actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.2rem; }
+    button { border: 1px solid #1c5f55; border-radius: 10px; padding: .7rem 1rem; background: #1c5f55; color: white; font: inherit; font-weight: 650; cursor: pointer; }
+    button.secondary { background: white; color: #1c5f55; }
+    button:disabled { opacity: .48; cursor: not-allowed; }
+    button:focus-visible { outline: 3px solid #d28638; outline-offset: 3px; }
+    #menu { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid #dce4e0; }
+    #menu h2 { font-size: 1.15rem; margin: 0 0 .8rem; }
+    #reasons { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .6rem; }
+    #reasons button { text-align: left; background: #f8faf8; color: #174f46; }
+    #status { min-height: 1.6em; margin-top: 1rem; color: #215a51; line-height: 1.5; }
+    #status.error { color: #a1362f; }
+    .note { margin-top: 1rem; color: #657178; font-size: .85rem; line-height: 1.5; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">仅供本机测试 · 虚构对象</div>
+    <h1>知因・Whynote</h1>
+    <p class="intro">体验点踩、选择原因、更正和撤销的事件流程。这里的原因菜单是未冻结的候选版本，不会调用模型或读取真实聊天。</p>
+    <section class="card" aria-label="虚构回答反馈">
+      <strong>虚构回答 · demo-response</strong>
+      <p class="sample">这是用于验证反馈交互的虚构回答，没有关联真实问题或用户数据。</p>
+      <div class="actions">
+        <button id="dislike" type="button">点踩</button>
+        <button id="edit" class="secondary" type="button" hidden>更正原因</button>
+        <button id="retract" class="secondary" type="button" hidden>撤销点踩</button>
+      </div>
+      <div id="menu" hidden>
+        <h2 id="menu-title">请选择原因</h2>
+        <div id="reasons"></div>
+      </div>
+      <p id="status" role="status" aria-live="polite"></p>
+    </section>
+    <p class="note">本页仅监听本机。测试身份与对象不能用于生产环境；展示回执也不能代替真实宿主的审计证明。</p>
+  </main>
+  <script>
+    const config = __DEMO_CONFIG__;
+    const dislikeButton = document.querySelector("#dislike");
+    const editButton = document.querySelector("#edit");
+    const retractButton = document.querySelector("#retract");
+    const menu = document.querySelector("#menu");
+    const menuTitle = document.querySelector("#menu-title");
+    const reasonsBox = document.querySelector("#reasons");
+    const status = document.querySelector("#status");
+    let eventId = null;
+    let displayId = null;
+    let currentMode = null;
+    let reasonButtons = [];
+
+    function showStatus(message, error = false) {
+      status.textContent = message;
+      status.classList.toggle("error", error);
+    }
+
+    async function post(path, body, idempotencyKey = null) {
+      const headers = { "Content-Type": "application/json", "X-Demo-Session": config.token };
+      if (idempotencyKey) headers["Idempotency-Key"] = idempotencyKey;
+      const response = await fetch(path, { method: "POST", headers, body: JSON.stringify(body) });
+      const result = await response.json();
+      if (!response.ok) throw new Error(typeof result.detail === "string" ? result.detail : `HTTP ${response.status}`);
+      return result;
+    }
+
+    function afterPaint() {
+      return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    }
+
+    async function showMenu(mode) {
+      currentMode = mode;
+      displayId = crypto.randomUUID();
+      menuTitle.textContent = mode === "manual_menu" ? "请选择原因" : "请选择更正后的原因";
+      reasonsBox.replaceChildren();
+      reasonButtons = config.reasons.map(reason => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "secondary";
+        button.textContent = reason.label;
+        button.disabled = true;
+        button.addEventListener("click", () => submitReason(reason.code));
+        reasonsBox.append(button);
+        return button;
+      });
+      menu.hidden = false;
+      await afterPaint();
+      await post("/demo/rendered-displays", {
+        event_id: eventId,
+        display_id: displayId,
+        mode,
+        ui_version: "demo-v1",
+        shown_reason_codes: config.reasons.map(reason => reason.code)
+      });
+      reasonButtons.forEach(button => { button.disabled = false; });
+      showStatus("原因菜单已展示，请选择一项。");
+    }
+
+    async function submitReason(code) {
+      reasonButtons.forEach(button => { button.disabled = true; });
+      try {
+        const action = currentMode === "manual_menu" ? "reason_selected" : "reason_edited";
+        const result = await post(`/v1/feedback-actions/${eventId}/attribution-events`, {
+          user_action: action,
+          reason_code: code,
+          display_id: displayId,
+          explicit_submission: true
+        }, crypto.randomUUID());
+        menu.hidden = true;
+        editButton.hidden = false;
+        editButton.disabled = false;
+        showStatus(`已记录 ${result.attribution_status}：${code}。`);
+      } catch (error) {
+        reasonButtons.forEach(button => { button.disabled = false; });
+        showStatus(`提交失败：${error.message}`, true);
+      }
+    }
+
+    dislikeButton.addEventListener("click", async () => {
+      dislikeButton.disabled = true;
+      try {
+        if (!eventId) {
+          const result = await post("/v1/feedback-actions", {
+            target_ref: config.target,
+            action_type: "negative_feedback",
+            channel: "local-demo",
+            locale: "zh-CN"
+          }, crypto.randomUUID());
+          eventId = result.event_id;
+          retractButton.hidden = false;
+        }
+        await showMenu("manual_menu");
+      } catch (error) {
+        menu.hidden = true;
+        dislikeButton.disabled = false;
+        showStatus(`点踩流程失败：${error.message}`, true);
+      }
+    });
+
+    editButton.addEventListener("click", async () => {
+      editButton.disabled = true;
+      try {
+        await showMenu("edit_menu");
+      } catch (error) {
+        menu.hidden = true;
+        editButton.disabled = false;
+        showStatus(`更正菜单失败：${error.message}`, true);
+      }
+    });
+
+    retractButton.addEventListener("click", async () => {
+      retractButton.disabled = true;
+      try {
+        await post(`/v1/feedback-actions/${eventId}/retract`, {}, crypto.randomUUID());
+        menu.hidden = true;
+        editButton.hidden = true;
+        showStatus("点踩已撤销，当前原因已清空；历史事件仍保留。");
+      } catch (error) {
+        retractButton.disabled = false;
+        showStatus(`撤销失败：${error.message}`, true);
+      }
+    });
+  </script>
+</body>
+</html>
