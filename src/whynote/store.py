@@ -276,7 +276,7 @@ class EventStore:
         mode: str,
         shown_reason_codes: list[str],
         ui_version: str,
-    ) -> str:
+    ) -> dict[str, Any]:
         if not display_id.strip() or not ui_version.strip():
             raise ConflictError("display ID and UI version are required")
         payload = {
@@ -288,14 +288,39 @@ class EventStore:
         with self._transaction() as db:
             self._require_owner(db, principal, event_id)
             events = self._events(db, event_id)
-            for event in events:
-                if event["event_type"] == "reason_displayed" and event["payload"]["display_id"] == display_id:
-                    if event["payload"] != payload:
+            state = project(events)
+            displays = [event["payload"] for event in events if event["event_type"] == "reason_displayed"]
+            for display in displays:
+                if display["display_id"] == display_id:
+                    if display != payload:
                         raise ConflictError("display ID reused with different content")
-                    return display_id
-            validate_display(project(events), mode, shown_reason_codes)
+                    responded = any(
+                        event["event_type"]
+                        in {
+                            "reason_selected",
+                            "reason_confirmed",
+                            "reason_edited",
+                            "reason_declined",
+                            "reason_skipped",
+                            "reason_unresponded",
+                            "attribution_invalidated",
+                        }
+                        and event["payload"].get("display_id") == display_id
+                        for event in events
+                    )
+                    actionable = (
+                        state["action_status"] == "active"
+                        and displays[-1]["display_id"] == display_id
+                        and not responded
+                    )
+                    return {
+                        "display_id": display_id,
+                        "receipt_status": "current" if actionable else "historical",
+                        "actionable": actionable,
+                    }
+            validate_display(state, mode, shown_reason_codes)
             self._append(db, event_id, "reason_displayed", payload, "ui")
-            return display_id
+            return {"display_id": display_id, "receipt_status": "current", "actionable": True}
 
     def record_user_action(
         self,

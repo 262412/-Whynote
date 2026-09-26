@@ -24,7 +24,6 @@ DEMO_REASONS = [
     {"code": "style", "label": "表达方式"},
 ]
 DEMO_CODES = [reason["code"] for reason in DEMO_REASONS]
-_DEMO_PRINCIPAL = Principal("demo-tenant", "demo-user")
 
 
 class RenderedDisplay(BaseModel):
@@ -44,19 +43,21 @@ def _require_loopback(request: Request) -> None:
 
 def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
     token = secrets.token_urlsafe(32)
+    demo_principal = Principal("demo-tenant", f"demo-{secrets.token_hex(16)}")
 
     def authenticate(request: Request) -> Principal:
         _require_loopback(request)
         submitted = request.headers.get("X-Demo-Session", "")
         if not hmac.compare_digest(submitted, token):
             raise HTTPException(401, "invalid local demo session")
-        return _DEMO_PRINCIPAL
+        return demo_principal
 
     def authorize_target(principal: Principal, target: Mapping[str, str]) -> bool:
-        return principal == _DEMO_PRINCIPAL and dict(target) == DEMO_TARGET
+        return principal == demo_principal and dict(target) == DEMO_TARGET
 
     app = create_app(db_path, authenticate, authorize_target)
     app.state.demo_token = token
+    app.state.demo_principal = demo_principal
     store = app.state.store
 
     @app.get("/demo", response_class=HTMLResponse)
@@ -76,7 +77,7 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
         )
 
     @app.post("/demo/rendered-displays")
-    def rendered_display(body: RenderedDisplay, request: Request) -> dict[str, str]:
+    def rendered_display(body: RenderedDisplay, request: Request) -> dict[str, str | bool]:
         principal = authenticate(request)
         if body.shown_reason_codes != DEMO_CODES:
             raise HTTPException(409, "display does not match the local demo menu")
@@ -84,7 +85,7 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
             target = store.get_target_ref(principal, body.event_id)
             if not authorize_target(principal, target):
                 raise NotFoundError("feedback action not found")
-            display_id = store.record_display(
+            receipt = store.record_display(
                 principal,
                 body.event_id,
                 body.display_id,
@@ -96,7 +97,7 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
             raise HTTPException(404, str(exc)) from exc
         except ConflictError as exc:
             raise HTTPException(409, str(exc)) from exc
-        return {"display_id": display_id}
+        return receipt
 
     return app
 

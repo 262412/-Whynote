@@ -416,7 +416,11 @@ def test_display_ack_is_idempotent_and_stale_displays_cannot_submit(client):
     event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
     principal = Principal("tenant-a", "alice")
     first = _display(store, event_id, "manual_menu", ["style"])
-    assert store.record_display(principal, event_id, first, "manual_menu", ["style"], "ui-v1") == first
+    assert store.record_display(principal, event_id, first, "manual_menu", ["style"], "ui-v1") == {
+        "display_id": first,
+        "receipt_status": "current",
+        "actionable": True,
+    }
     with pytest.raises(ConflictError):
         store.record_display(principal, event_id, first, "manual_menu", ["incomplete"], "ui-v1")
     second = _display(store, event_id, "manual_menu", ["style"])
