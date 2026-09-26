@@ -423,5 +423,10 @@
   "stable_commit_independent_ticket_passed": 9,
   "ci_url": "https://github.com/262412/-Whynote/actions/runs/36239016299",
   "ci_core_passed": 64,
-  "ci_native_passed": 24
+  "ci_native_passed": 24,
+  "merged_main_verified": "db6d5b19f365e3e739bec7d0fc4bce2c4994e122",
+  "merged_main_business_diff_from_fix_commit": "empty",
+  "merged_main_core_passed": 64,
+  "merged_main_ticket_passed": 9,
+  "merged_main_ci": "https://github.com/262412/-Whynote/actions/runs/36239322146"
 }

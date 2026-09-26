@@ -1,6 +1,6 @@
 # Q-11～Q-15 独立复验记录
 
-日期：2026-09-26。**main `86f21b7` 的五个问题均复现；PR #14 `9b990cd` 的 Q-11～Q-15 探针通过，但新增 H-02 边界 Q-16 失败。S0 完整验收及生产仍为 NO-GO。** 本轮不修改业务实现，不代替非作者评审或责任人签署。以下保留快照捕获及稳定提交出现的先后证据，最终判定见末节。
+日期：2026-09-26。**最新已核查 main `db6d5b1` 已包含 PR #14：Q-11～Q-15 在指定范围局部通过，新增 H-02 边界 Q-16 失败；S0 完整验收及生产仍为 NO-GO。** 本轮不修改业务实现，不代替非作者评审或责任人签署。以下保留旧 main `86f21b7` 失败、候选快照、稳定提交及合并后的证据，最终判定见末节。
 
 ## 实际基线与证据等级
 
@@ -127,3 +127,11 @@ PR #14 [CI 36239016299](https://github.com/262412/-Whynote/actions/runs/36239016
 main 仍为 `86f21b7`，PR #14 尚未合入。测试 PR #13 不合并该业务实现。结论：**Q-11～Q-15 在 `9b990cd` 指定测试范围局部通过；Q-16/H-02 不通过；完整验收 NO-GO。** 待 Q-16 关联契约及修复、相关前端/浏览器、非作者批准和责任人签署后再复验；main 合并后还须确认实际部署版本。旧快照、备份/导出、物理副本和环境出站审计未关闭。
 
 飞书本轮通过准确修订号追加到 [PRD QA-20260926-R2](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6DaZzx8QmzsAHhi0ugBslth)（76→77）及 [技术文档 QA-20260926-R2](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc6ruKcn7lcLrEHH2vsYL2EXc)（15→16）；读回验证历史前缀完整保留、计数/Q-16/NO-GO 正确。稳定提交信息再追加到 [PRD 修订 78](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6ua8E0FkxnRJIQplUGu052e)和 [技术文档修订 17](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc67tDE0CUiyB6rdpsO2JLBVc)，读回确认提交、55/56、Q-16/H-02 及 NO-GO 均正确。原目录 git status 与开工时一致；本轮 8092 测试服务已停，数据库保留供复核。
+
+## 收尾追加：修复已合入 main，Q-16 仍开放
+
+收尾核查时，其他流程已将 PR #14 合并为 `49e5ff8`，并把测试 PR #13 的首个提交 `67d0eeb` 合并为最新 main **`db6d5b19f365e3e739bec7d0fc4bce2c4994e122`**。本测试任务没有执行这些合并。PR #13 关闭后，后续测试提交 `d78af78` 尚未随其进入 main，因此通过新的独立测试分支 `codex/qa-q16-main-review` 提交补充报告和证据，不把已关闭 PR 当作最新内容已经合入。
+
+已将 main 合入测试分支，确认 main 的 Action、EventStore、原生补丁与 `9b990cd` 完全相同；重新安装本地 Whynote 包后执行 Ruff 全仓检查及核心 **64/64**、独立票据 **9/9**，均通过。原生 **55/56**、真实 HTTP **18/18**、旧库升级六项结果对应相同业务代码。main [CI 36239322146](https://github.com/262412/-Whynote/actions/runs/36239322146) 成功；PR #14 review 仍只见 COMMENTED，合并没有补齐独立批准或责任人签署。
+
+**最终状态：Q-11～Q-15 在合并后 main 的上述范围局部通过；Q-16/H-02 开放，完整验收仍为 NO-GO。** 先前“尚未提交/尚未合并/main 缺陷未关闭”的段落仅描述当时状态，不覆盖本节的收尾事实。
