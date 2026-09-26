@@ -1,0 +1,244 @@
+{
+  "time_utc": "2026-09-26T12:42:59.519577+00:00",
+  "scope": "synthetic S0 SQLite; developer verification only; independent QA pending",
+  "base_main": "63a0c54fb4089bcfecd412c00a6bdc2cdcc668f4",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "prd_revision": 80,
+  "technical_revision": 20,
+  "signature": "User approved the proposed rules and assumed all responsible roles in this conversation on 2026-09-26.",
+  "core": {
+    "passed": 64,
+    "failed": 0
+  },
+  "s0_qa": {
+    "passed": 9,
+    "failed": 0
+  },
+  "native_pytest": {
+    "passed": 46,
+    "failed": 0,
+    "log": "var/q16-tests-final-v2.log"
+  },
+  "native_probe": {
+    "passed": 58,
+    "failed": 0,
+    "results": "var/q16-final-probe/results.json"
+  },
+  "real_http": {
+    "passed": 47,
+    "failed": 0,
+    "results": "var/q16-http-repro-v2/http-results.json",
+    "base_url": "http://127.0.0.1:8095",
+    "checks": [
+      {
+        "name": "version",
+        "pass": true
+      },
+      {
+        "name": "unauthenticated-GET",
+        "pass": true
+      },
+      {
+        "name": "alice-GET-alice",
+        "pass": true
+      },
+      {
+        "name": "alice-POST-alice",
+        "pass": true
+      },
+      {
+        "name": "bob-GET-alice",
+        "pass": true
+      },
+      {
+        "name": "bob-POST-alice",
+        "pass": true
+      },
+      {
+        "name": "bob-no-disclosure",
+        "pass": true
+      },
+      {
+        "name": "admin-GET-alice",
+        "pass": true
+      },
+      {
+        "name": "admin-POST-alice",
+        "pass": true
+      },
+      {
+        "name": "admin-no-disclosure",
+        "pass": true
+      },
+      {
+        "name": "admin-GET-admin",
+        "pass": true
+      },
+      {
+        "name": "admin-POST-admin",
+        "pass": true
+      },
+      {
+        "name": "Q12-mutation-status",
+        "pass": true
+      },
+      {
+        "name": "Q12-mutation-no-write",
+        "pass": true
+      },
+      {
+        "name": "empty-chat-fixture",
+        "pass": true
+      },
+      {
+        "name": "bulk-delete-status",
+        "pass": true
+      },
+      {
+        "name": "Q14-unlinked-feedback-preserved",
+        "pass": true
+      },
+      {
+        "name": "other-user-feedback-preserved",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-bob-18",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-zero-write-19",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-admin-20",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-zero-write-21",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-alice-22",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-zero-write-23",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-alice-24",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-zero-write-25",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-alice-26",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-zero-write-27",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-alice-28",
+        "pass": true
+      },
+      {
+        "name": "Q16-create-zero-write-29",
+        "pass": true
+      },
+      {
+        "name": "Q16-valid-association",
+        "pass": true
+      },
+      {
+        "name": "Q16-rebind",
+        "pass": true
+      },
+      {
+        "name": "Q16-rebind-zero-write",
+        "pass": true
+      },
+      {
+        "name": "Q16-content-update",
+        "pass": true
+      },
+      {
+        "name": "Q16-delete-chat",
+        "pass": true
+      },
+      {
+        "name": "Q16-delete-trusted",
+        "pass": true
+      },
+      {
+        "name": "Q16-preserve-legacy-foreign",
+        "pass": true
+      },
+      {
+        "name": "Q16-legacy-review-task",
+        "pass": true
+      },
+      {
+        "name": "Q16-deleted-target",
+        "pass": true
+      },
+      {
+        "name": "Q16-repeat-delete-preserved",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-linked-created",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-delete",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-linked-removed",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-unlinked-removed",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-foreign-legacy-preserved",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-auth-removed",
+        "pass": true
+      },
+      {
+        "name": "Q16-account-chat-removed",
+        "pass": true
+      }
+    ]
+  },
+  "browser": {
+    "base_url": "http://127.0.0.1:8089",
+    "native_create_status": 200,
+    "native_update_status": 200,
+    "request_snapshot_present": false,
+    "association_version": 1,
+    "chat_owner_and_message_match": true,
+    "snapshot_json_type": "null",
+    "saved_reason": "not_factually_correct",
+    "screenshot": "var/q16-browser-saved-feedback.png",
+    "frontend_index_sha256": "c0de254db70d58c2d05693c86282603a0769a1dd9641a4057c69e99d4ac117b0",
+    "source": "var/q16-upstream/backend",
+    "account_transaction_updated_after_browser_run": true
+  },
+  "files_sha256": {
+    "integrations\\openwebui\\patches\\native-v0.11.4-s0.patch": "f2eedf75e3be42786265c742be7f9701b5717311b9ed34efaee29f5d6881d8e8",
+    "qa\\native_regressions.py": "1d0a4b8b663fca47b93dc569ca5012047637b1129b587e11a91b5c4cdcb1657b",
+    "qa\\http_regressions.py": "773d589a4e2decbf3a9d8197d7b5b38f8dc405eecc6b96b4c54f1100db0600d8",
+    "qa\\serve_openwebui.py": "857ae2de7ff967549ec15edd60b24ca4293b594708052cdc020ff995dfb3df3d"
+  },
+  "gate": "NO-GO for full FR, native rating reuse, real data and production"
+}
