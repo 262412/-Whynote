@@ -58,6 +58,10 @@ def s0_chat():
     return chat, body, fixture
 
 
+def selected_value(menu, label):
+    return next(option["value"] for option in menu["data"]["input"]["options"] if option["label"] == label)
+
+
 def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypatch, tmp_path):
     action = s0_action(monkeypatch, tmp_path)
     chat, body, fixture = s0_chat()
@@ -66,11 +70,14 @@ def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypa
         return chat if chat_id == body["chat_id"] and user_id == "alice" else None
 
     async def selected(menu):
-        assert menu["data"]["input"]["options"] == ["事实错误", "内容不相关", "表达方式"]
-        return "事实错误"
+        options = menu["data"]["input"]["options"]
+        assert [option["label"] for option in options] == ["事实错误", "内容不相关", "表达方式"]
+        assert all(option["value"].startswith("s0t1.") for option in options)
+        assert all(fixture["prompt"] not in option["value"] for option in options)
+        return selected_value(menu, "事实错误")
 
-    async def edited(_):
-        return "内容不相关"
+    async def edited(menu):
+        return selected_value(menu, "内容不相关")
 
     notifications = []
 
@@ -113,6 +120,47 @@ def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypa
     assert b"WHYNOTE_S0_RESPONSE" not in stored
 
 
+def test_openwebui_s0_display_ticket_rejects_tamper_and_replay(monkeypatch, tmp_path):
+    action = s0_action(monkeypatch, tmp_path)
+    chat, body, _ = s0_chat()
+
+    async def owner(chat_id, user_id):
+        return chat if chat_id == body["chat_id"] and user_id == "alice" else None
+
+    action._owned_chat = owner
+    captured = None
+
+    async def capture(menu):
+        nonlocal captured
+        captured = selected_value(menu, "事实错误")
+        return False
+
+    first = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=capture))
+    assert first["result"] == "no_reason_submitted"
+    assert captured is not None
+
+    async def tampered(_):
+        return captured[:-1] + ("0" if captured[-1] != "0" else "1")
+
+    with pytest.raises(ValueError, match="menu response is invalid"):
+        asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=tampered))
+
+    second_session = {**body, "session_id": "browser-session-b"}
+
+    async def replay(_):
+        return captured
+
+    with pytest.raises(ValueError, match="menu response is invalid"):
+        asyncio.run(action.action(second_session, __user__={"id": "alice"}, __event_call__=replay))
+
+    principal = Principal("isolated-test-instance", "alice")
+    assert [event["event_type"] for event in action.store.get_events(principal, first["event_id"])] == [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+    ]
+    assert b"s0t1." not in (tmp_path / "events.db").read_bytes()
+
+
 def test_openwebui_s0_action_rejects_other_user_and_changed_version(monkeypatch, tmp_path):
     action = s0_action(monkeypatch, tmp_path)
     chat, body, _ = s0_chat()
@@ -121,10 +169,10 @@ def test_openwebui_s0_action_rejects_other_user_and_changed_version(monkeypatch,
     async def owned(chat_id, user_id):
         return chat if permitted and chat_id == body["chat_id"] and user_id == "alice" else None
 
-    async def revoked(_):
+    async def revoked(menu):
         nonlocal permitted
         permitted = False
-        return "事实错误"
+        return selected_value(menu, "事实错误")
 
     action._owned_chat = owned
     with pytest.raises(ValueError, match="unavailable"):
@@ -144,9 +192,9 @@ def test_openwebui_s0_action_rejects_other_user_and_changed_version(monkeypatch,
     ]
     permitted = True
 
-    async def changed(_):
+    async def changed(menu):
         chat.chat["history"]["messages"][body["id"]]["content"] = "changed while menu was open"
-        return "事实错误"
+        return selected_value(menu, "事实错误")
 
     with pytest.raises(ValueError, match="displayed version"):
         asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=changed))
@@ -162,8 +210,8 @@ def test_openwebui_s0_action_expired_ticket_has_no_display(monkeypatch, tmp_path
     async def owned(chat_id, user_id):
         return chat if chat_id == body["chat_id"] and user_id == "alice" else None
 
-    async def selected(_):
-        return "事实错误"
+    async def selected(menu):
+        return selected_value(menu, "事实错误")
 
     action._owned_chat = owned
     action.action.__func__.__globals__["TICKET_SECONDS"] = -1
@@ -181,8 +229,8 @@ def test_openwebui_s0_rechecks_permission_before_reason_write(monkeypatch, tmp_p
     async def owned(chat_id, user_id):
         return chat if permitted and chat_id == body["chat_id"] and user_id == "alice" else None
 
-    async def selected(_):
-        return "事实错误"
+    async def selected(menu):
+        return selected_value(menu, "事实错误")
 
     original_record_display = action.store.record_display
 
