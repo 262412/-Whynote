@@ -12,6 +12,7 @@ from whynote.domain import (
     REASON_CODES,
     ConflictError,
     GateSignals,
+    NotFoundError,
     Principal,
     decide_gate,
     project,
@@ -56,6 +57,44 @@ def _display(store, event_id, mode, codes, actor="alice"):
     display_id = str(uuid.uuid4())
     store.record_display(Principal("tenant-a", actor), event_id, display_id, mode, codes, "ui-v1")
     return display_id
+
+
+def test_display_ticket_ownership_retraction_and_replay(client):
+    http, store = client
+    event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
+    alice = Principal("tenant-a", "alice")
+    original = store.get_events(alice, event_id)
+    for other in (Principal("tenant-a", "bob"), Principal("tenant-b", "alice")):
+        with pytest.raises(NotFoundError):
+            store.issue_display_ticket(other, event_id, "forged")
+    store.issue_display_ticket(alice, event_id, "first")
+    reopened = EventStore(store.path)
+    reopened.issue_display_ticket(alice, event_id, "second")
+    assert reopened.get_events(alice, event_id) == original
+    assert project(original) == project(reopened.get_events(alice, event_id))
+    with pytest.raises(ConflictError, match="superseded"):
+        store.record_display(alice, event_id, "first", "manual_menu", ["style"], "ui-v1")
+    store.record_display(alice, event_id, "second", "manual_menu", ["style"], "ui-v1")
+    store.record_user_action(alice, event_id, "reason_selected", "style", "second", True, "choice")
+    store.issue_display_ticket(alice, event_id, "third")
+    before_retry = store.get_events(alice, event_id)
+    store.record_user_action(alice, event_id, "reason_selected", "style", "second", True, "choice")
+    assert store.get_events(alice, event_id) == before_retry
+    store.retract_action(alice, event_id, "retract")
+    with pytest.raises(ConflictError, match="retracted"):
+        reopened.issue_display_ticket(alice, event_id, "fourth")
+
+
+def test_existing_database_adds_ticket_table_without_rewriting_events(client):
+    http, store = client
+    event_id = http.post("/v1/feedback-actions", json=_action(), headers=_headers()).json()["event_id"]
+    alice = Principal("tenant-a", "alice")
+    original = store.get_events(alice, event_id)
+    with sqlite3.connect(store.path) as db:
+        db.execute("DROP TABLE display_tickets")
+    migrated = EventStore(store.path)
+    migrated.issue_display_ticket(alice, event_id, "new")
+    assert migrated.get_events(alice, event_id) == original
 
 
 def test_action_is_durable_before_gate_and_retries_are_idempotent(client):
