@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "name": "version",
+      "actual": "0.11.4",
+      "expected": "0.11.4",
+      "pass": true
+    },
+    {
+      "name": "unauthenticated-GET",
+      "actual": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "name": "alice-GET-alice",
+      "actual": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "name": "alice-POST-alice",
+      "actual": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "name": "bob-GET-alice",
+      "actual": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "name": "bob-POST-alice",
+      "actual": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "name": "bob-no-disclosure",
+      "actual": false,
+      "expected": false,
+      "pass": true
+    },
+    {
+      "name": "admin-GET-alice",
+      "actual": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "name": "admin-POST-alice",
+      "actual": 200,
+      "expected": 401,
+      "pass": false
+    },
+    {
+      "name": "admin-no-disclosure",
+      "actual": true,
+      "expected": false,
+      "pass": false
+    },
+    {
+      "name": "admin-GET-admin",
+      "actual": 401,
+      "expected": 200,
+      "pass": false
+    },
+    {
+      "name": "admin-POST-admin",
+      "actual": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "name": "Q12-mutation-status",
+      "actual": 200,
+      "expected": 401,
+      "pass": false
+    },
+    {
+      "name": "Q12-mutation-no-write",
+      "actual": [
+        "{\"rating\": null, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-http-mutated\"}",
+        "null",
+        "null"
+      ],
+      "expected": [
+        "{\"rating\": null, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-http\"}",
+        "null",
+        "null"
+      ],
+      "pass": false
+    },
+    {
+      "name": "empty-chat-fixture",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "bulk-delete-status",
+      "actual": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "name": "Q14-unlinked-feedback-preserved",
+      "actual": false,
+      "expected": true,
+      "pass": false
+    },
+    {
+      "name": "other-user-feedback-preserved",
+      "actual": true,
+      "expected": true,
+      "pass": true
+    }
+  ],
+  "passed": 12,
+  "failed": 6
+}
