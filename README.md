@@ -24,6 +24,8 @@ uv sync --extra dev --locked --no-editable
 
 `uvicorn whynote.api:app` 可以启动 HTTP 进程并查看 `/health`，但业务接口默认拒绝请求。宿主平台须在 `create_app` 注入经过验证的身份解析和目标对象权限检查后才能处理反馈；不能把客户端传来的身份或目标 ID 直接当成权限凭据。
 
+Open WebUI `v0.11.4` 的固定虚构数据联调使用独立 Action/Pipe；安装边界、事件证据和未完成项见 [S0 宿主联调](docs/openwebui-s0-integration.md)。该联调没有启用原生评分作为知因入口。
+
 ## 本地交互测试
 
 安装开发依赖后运行 `uv run --no-sync python -m whynote.demo`，在本机打开 <http://127.0.0.1:8765/demo>。页面用虚构对象和每次启动独立的临时身份走点踩、常规原因选择、更正及撤销流程；菜单展示回执在渲染帧后登记，只有 `actionable=true` 时才可提交原因。仅监听本机，不读取真实问题/回答，也不调用模型。流程与限制见 [本地反馈闭环测试宿主契约](docs/local-demo-contract.md)。
