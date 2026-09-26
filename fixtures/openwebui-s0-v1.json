@@ -1,0 +1,6 @@
+{
+  "fixture_version": "openwebui-s0-v1",
+  "synthetic": true,
+  "prompt": "【WHYNOTE_S0_PROMPT】虚构的青铜萝卜图书馆只在火星星期二开放。它借出的书都是蓝色云朵。请回答：图书馆何时开放？",
+  "response": "【WHYNOTE_S0_RESPONSE】这座虚构图书馆在地球星期五开放，并借出红色石头。"
+}
