@@ -10,7 +10,7 @@
       "pass": true
     },
     {
-      "name": "snapshot-reject-/feedback/c70dea9b-9b03-441f-830f-e18da993538d",
+      "name": "snapshot-reject-/feedback/102490ee-246f-4ef4-8f99-848b52d76ec9",
       "pass": true
     },
     {
@@ -96,26 +96,26 @@
     {
       "name": "Q12-mutation-no-write",
       "actual": {
-        "id": "c70dea9b-9b03-441f-830f-e18da993538d",
+        "id": "102490ee-246f-4ef4-8f99-848b52d76ec9",
         "user_id": "alice",
         "version": 0,
         "type": "rating",
         "data": "{\"rating\": null, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-unauthorized-change\"}",
         "meta": "{\"chat_id\": \"permission-chat\", \"message_id\": \"synthetic-message\"}",
         "snapshot": "null",
-        "created_at": 1790421147,
-        "updated_at": 1790421147
+        "created_at": 1790422004,
+        "updated_at": 1790422004
       },
       "expected": {
-        "id": "c70dea9b-9b03-441f-830f-e18da993538d",
+        "id": "102490ee-246f-4ef4-8f99-848b52d76ec9",
         "user_id": "alice",
         "version": 0,
         "type": "rating",
         "data": "{\"rating\": -1, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-comment\"}",
         "meta": "{\"chat_id\": \"permission-chat\", \"message_id\": \"synthetic-message\"}",
         "snapshot": "null",
-        "created_at": 1790421147,
-        "updated_at": 1790421147
+        "created_at": 1790422004,
+        "updated_at": 1790422004
       },
       "pass": false
     },
@@ -129,6 +129,38 @@
     },
     {
       "name": "admin-blocked-/feedbacks/all/ids",
+      "pass": true
+    },
+    {
+      "name": "export-on-admin-other-GET",
+      "pass": true
+    },
+    {
+      "name": "export-on-admin-other-POST",
+      "pass": true
+    },
+    {
+      "name": "export-on-admin-own-GET",
+      "pass": true
+    },
+    {
+      "name": "export-on-admin-own-POST",
+      "pass": true
+    },
+    {
+      "name": "export-on-alice-own-GET",
+      "pass": true
+    },
+    {
+      "name": "export-on-alice-own-POST",
+      "pass": true
+    },
+    {
+      "name": "export-on-bob-other-GET",
+      "pass": true
+    },
+    {
+      "name": "export-on-bob-other-POST",
       "pass": true
     },
     {
@@ -162,6 +194,12 @@
     {
       "name": "bulk-bob-rating-preserved",
       "pass": true
+    },
+    {
+      "name": "Q16-untrusted-foreign-rating-preserved",
+      "actual": false,
+      "expected": true,
+      "pass": false
     },
     {
       "name": "bulk-bob-chat-preserved",
@@ -226,8 +264,8 @@
       "pass": true
     }
   ],
-  "passed": 39,
-  "failed": 8,
+  "passed": 47,
+  "failed": 9,
   "baseline": "86f21b72c9864e2774c635b386f06c1fb3d3595e",
   "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
   "patch_sha256": "4633b452bad2babebf8b7fc409e8eff2c7d21d1855839079d2281d67d4fda206",
@@ -239,5 +277,6 @@
     "aiosqlite": "0.22.1",
     "httpx": "0.28.1",
     "pydantic": "2.13.4"
-  }
+  },
+  "admin_other_status_contract": 401
 }
