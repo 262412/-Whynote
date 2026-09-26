@@ -30,6 +30,7 @@
 ## 实测证据
 
 - 专用普通用户在真实浏览器中看到固定 Pipe 回答与单独的“知因 S0 点踩”按钮，未看到原生评分按钮。首次点踩和选择“事实错误”生成 `negative_feedback_action_recorded → reason_displayed → reason_selected`；同会话多次更正，每次追加 `reason_displayed → reason_edited`，仍只有一个动作和一个 Gate Outbox。
+- 2026-09-26 对本次签名选项再次实测：有效测试用户打开其虚构聊天，点击按钮后浏览器发送 `POST /api/chat/actions/whynote_s0_action` 并收到 200；三个可选原因的 DOM 值均符合 `s0t1.<display_id>.<expires_at>.<reason_code>.<HMAC>`。先选“事实错误”，再打开菜单改为“内容不相关”，事件依次为 `negative_feedback_action_recorded → reason_displayed → reason_selected → reason_displayed → reason_edited`，动作与 Outbox 各 1 条；宿主 `feedback` 为 0 行，知因 SQLite 无问答哨兵。此前对已删除用户的旧聊天打开页面会被宿主重定向，不能用那次未发请求判断按钮链路。
 - 第二个真实普通用户访问该聊天返回 401；直接调用同一 Action 返回 404，知因事件数不变。单测覆盖非归属用户、过期浏览器内容、菜单打开期间撤权/换版、超时票据、选择和更正。
 - Open WebUI 的该聊天仍在宿主 `chat` 表，`feedback` 为 0 行；知因 SQLite 只有不透明目标引用、原因码和操作字段，字节扫描没有问题/回答哨兵；本轮服务端日志检索也未发现哨兵。此结论只覆盖固定虚构案例和本机测试配置。
 - 联调入口不调用真实推断，不创建快照，不批准生产上下文、自动附加或自由文本 SLM。HelpSteer2/UltraFeedback 仍待审查，COIG-P 未导入。
