@@ -26,7 +26,7 @@ uv sync --extra dev --locked --no-editable
 
 ## 本地交互测试
 
-安装开发依赖后运行 `uv run --no-sync python -m whynote.demo`，在本机打开 <http://127.0.0.1:8765/demo>。页面用虚构对象和临时测试身份走点踩、常规原因选择、更正及撤销流程；菜单展示回执在渲染帧后登记。仅监听本机，不读取真实问题/回答，也不调用模型。流程与限制见 [本地反馈闭环测试宿主契约](docs/local-demo-contract.md)。
+安装开发依赖后运行 `uv run --no-sync python -m whynote.demo`，在本机打开 <http://127.0.0.1:8765/demo>。页面用虚构对象和每次启动独立的临时身份走点踩、常规原因选择、更正及撤销流程；菜单展示回执在渲染帧后登记，只有 `actionable=true` 时才可提交原因。仅监听本机，不读取真实问题/回答，也不调用模型。流程与限制见 [本地反馈闭环测试宿主契约](docs/local-demo-contract.md)。
 
 本仓库尚未绑定真实产品平台、用户授权、快照与保留策略、预算账本、队列、真实模型调用、校准器或生产前端。具体接口路径是待平台评审的逻辑契约。请参阅 [开发决策与下一步](docs/development-readiness.md)。
 

@@ -99,15 +99,16 @@
       });
       menu.hidden = false;
       await afterPaint();
-      await post("/demo/rendered-displays", {
+      const receipt = await post("/demo/rendered-displays", {
         event_id: eventId,
         display_id: displayId,
         mode,
         ui_version: "demo-v1",
         shown_reason_codes: config.reasons.map(reason => reason.code)
       });
+      if (!receipt.actionable) throw new Error("展示回执已失效，请刷新页面重试");
       reasonButtons.forEach(button => { button.disabled = false; });
-      showStatus("原因菜单已展示，请选择一项。");
+      showStatus("测试回执已记录，请选择一项。");
     }
 
     async function submitReason(code) {
