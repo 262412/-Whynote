@@ -30,4 +30,6 @@ uv sync --extra dev --locked --no-editable
 
 本仓库尚未绑定真实产品平台、用户授权、快照与保留策略、预算账本、队列、真实模型调用、校准器或生产前端。具体接口路径是待平台评审的逻辑契约。请参阅 [开发决策与下一步](docs/development-readiness.md)。
 
+Open WebUI 隔离实例的虚构数据实测与原生评分复用结论见 [S0 数据审计](docs/openwebui-s0-data-audit.md)；这份审计尚不构成知因与宿主的联调验收。
+
 归因状态、展示绑定、UTC 时间及旧事件重放规则见 [归因与展示契约 v3](docs/attribution-contract-v3.md)。当前仅完成 Q-01 至 Q-03 的服务端修复；PRD 的完整链路和产品验收仍未完成。
