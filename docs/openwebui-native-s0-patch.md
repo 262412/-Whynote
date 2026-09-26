@@ -6,6 +6,8 @@
 
 ## 固定构建与数据边界
 
+后续阻断：PRD 80、技术文档 20 的 Q-16/H-02 仍不通过。在 main `63a0c54` 的固定补丁上重新执行独立扩展回归为 **55/56**：Bob 伪造 Alice 的 chat_id 被接受，Alice 删除聊天时 Bob 的评分被误删。当前 24 项 CI 的通过不能关闭此缺口。创建/更新、可信删除范围及旧数据处置待 [关联契约](q16-association-contract-proposal.md)签署与实现；本节以下删除行为是已有实现记录，不是跨主体删除许可。
+
 补丁位于 [`integrations/openwebui/patches/native-v0.11.4-s0.patch`](../integrations/openwebui/patches/native-v0.11.4-s0.patch)，只适用于 Open WebUI `v0.11.4` 标签提交 `8bd8b4fac5e059578ac0c74b3c18d11139f88b7d`。在**全新、专用**的测试实例上应用；不得直接覆盖[原版审计实例](openwebui-s0-data-audit.md)的数据库或导出文件。固定版源代码和补丁分别保留，便于逆向应用与复核。升级版本须重新审计和移植。
 
 补丁只处理本轮复现的原生评分数据路径：

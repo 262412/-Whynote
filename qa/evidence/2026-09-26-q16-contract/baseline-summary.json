@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-26",
+  "status": "expected_failure_Q16_open",
+  "main": "63a0c54fb4089bcfecd412c00a6bdc2cdcc668f4",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "prd_revision": 80,
+  "technical_revision": 20,
+  "patch_sha256": "674699c7cb03bc23abcb734b672d0bc32ac334e22f6bb4f397dd4b05f3fb30ff",
+  "route_sha256": "3050fb77b3a9b68991cd173c7eef11402d16a22b4debb646c8f3572b16ed43cf",
+  "probe_sha256": "0313b846e13f913a46241368c841d88a0ba6a16f22efa1d135e54e638df08b90",
+  "admin_other_status_contract": 404,
+  "passed": 55,
+  "failed": 1,
+  "failed_checks": [
+    {
+      "name": "Q16-untrusted-foreign-rating-preserved",
+      "actual": false,
+      "expected": true,
+      "pass": false
+    }
+  ],
+  "exit_code": 1,
+  "business_patch_changed": false
+}
