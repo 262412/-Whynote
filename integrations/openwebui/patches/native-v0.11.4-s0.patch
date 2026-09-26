@@ -1,0 +1,235 @@
+diff --git a/backend/open_webui/internal/db.py b/backend/open_webui/internal/db.py
+index 7fb0d17..c49123e 100644
+--- a/backend/open_webui/internal/db.py
++++ b/backend/open_webui/internal/db.py
+@@ -378,6 +378,7 @@ elif 'sqlite' in SQLALCHEMY_DATABASE_URL:
+             cursor.execute('PRAGMA journal_mode=WAL')
+         else:
+             cursor.execute('PRAGMA journal_mode=DELETE')
++        cursor.execute('PRAGMA secure_delete=ON')
+ 
+         # Each PRAGMA is skipped when its env var is empty, allowing opt-out.
+         if DATABASE_SQLITE_PRAGMA_SYNCHRONOUS:
+diff --git a/backend/open_webui/models/chats.py b/backend/open_webui/models/chats.py
+index 420c414..c905e4d 100644
+--- a/backend/open_webui/models/chats.py
++++ b/backend/open_webui/models/chats.py
+@@ -14,6 +14,7 @@ from open_webui.internal.db import Base, JSONField, get_async_db_context
+ from open_webui.models.access_grants import AccessGrants
+ from open_webui.models.automations import AutomationRun
+ from open_webui.models.chat_messages import ChatMessage, ChatMessages
++from open_webui.models.feedbacks import Feedback
+ from open_webui.models.folders import Folders
+ from open_webui.models.tags import Tag, TagModel, Tags
+ from open_webui.utils.misc import get_output_text, sanitize_data_for_db, sanitize_text_for_db
+@@ -2477,6 +2478,7 @@ class ChatTable:
+         try:
+             async with get_async_db_context(db) as session:
+                 await session.execute(update(AutomationRun).filter_by(chat_id=id).values(chat_id=None))
++                await session.execute(delete(Feedback).where(Feedback.meta['chat_id'].as_string() == id))
+                 await session.execute(delete(ChatMessage).filter_by(chat_id=id))
+                 await session.execute(delete(Chat).filter_by(id=id))
+                 await session.commit()
+@@ -2488,7 +2490,11 @@ class ChatTable:
+     async def delete_chat_by_id_and_user_id(self, id: str, user_id: str, db: AsyncSession | None = None) -> bool:
+         try:
+             async with get_async_db_context(db) as session:
++                chat_id = await session.scalar(select(Chat.id).filter_by(id=id, user_id=user_id))
++                if chat_id is None:
++                    return False
+                 await session.execute(update(AutomationRun).filter_by(chat_id=id).values(chat_id=None))
++                await session.execute(delete(Feedback).where(Feedback.meta['chat_id'].as_string() == id))
+                 await session.execute(delete(ChatMessage).filter_by(chat_id=id))
+                 await session.execute(delete(Chat).filter_by(id=id, user_id=user_id))
+                 await session.commit()
+@@ -2502,7 +2508,12 @@ class ChatTable:
+             async with get_async_db_context(db) as session:
+                 await self.delete_shared_chats_by_user_id(user_id, db=session)
+ 
+-                chat_id_subquery = select(Chat.id).filter_by(user_id=user_id).scalar_subquery()
++                chat_ids = select(Chat.id).filter_by(user_id=user_id)
++                await session.execute(
++                    delete(Feedback).where(
++                        or_(Feedback.user_id == user_id, Feedback.meta['chat_id'].as_string().in_(chat_ids))
++                    )
++                )
+                 await session.execute(
+                     update(AutomationRun)
+                     .filter(AutomationRun.chat_id.in_(select(Chat.id).filter_by(user_id=user_id)))
+@@ -2527,6 +2538,9 @@ class ChatTable:
+                 await session.execute(
+                     update(AutomationRun).filter(AutomationRun.chat_id.in_(chat_ids_stmt)).values(chat_id=None)
+                 )
++                await session.execute(
++                    delete(Feedback).where(Feedback.meta['chat_id'].as_string().in_(chat_ids_stmt))
++                )
+                 await session.execute(delete(ChatMessage).filter(ChatMessage.chat_id.in_(chat_ids_stmt)))
+                 await session.execute(delete(Chat).filter_by(user_id=user_id, folder_id=folder_id))
+                 await session.commit()
+diff --git a/backend/open_webui/models/feedbacks.py b/backend/open_webui/models/feedbacks.py
+index ca1fe39..f08dbd8 100644
+--- a/backend/open_webui/models/feedbacks.py
++++ b/backend/open_webui/models/feedbacks.py
+@@ -5,7 +5,7 @@ from typing import Optional
+ 
+ from open_webui.internal.db import Base, JSONField, get_async_db_context
+ from open_webui.models.users import User, UserModel
+-from pydantic import BaseModel, ConfigDict
++from pydantic import BaseModel, ConfigDict, model_validator
+ from sqlalchemy import JSON, BigInteger, Boolean, Column, Text, delete, func, select
+ from sqlalchemy.ext.asyncio import AsyncSession
+ 
+@@ -104,6 +104,12 @@ class FeedbackForm(BaseModel):
+     # ignore: drop client-supplied id/user_id/version/timestamps at parse time.
+     model_config = ConfigDict(extra='ignore')
+ 
++    @model_validator(mode='after')
++    def reject_chat_snapshot(self):
++        if self.snapshot is not None:
++            raise ValueError('Native feedback snapshots are disabled in the Whynote S0 test host')
++        return self
++
+ 
+ class UserResponse(BaseModel):
+     id: str
+diff --git a/backend/open_webui/routers/evaluations.py b/backend/open_webui/routers/evaluations.py
+index 00c1517..445e0f5 100644
+--- a/backend/open_webui/routers/evaluations.py
++++ b/backend/open_webui/routers/evaluations.py
+@@ -3,6 +3,7 @@ from typing import Optional
+ 
+ from fastapi import APIRouter, Depends, HTTPException, Request, status
+ from fastapi.concurrency import run_in_threadpool
++from open_webui.config import ENABLE_ADMIN_EXPORT
+ from open_webui.constants import ERROR_MESSAGES
+ from open_webui.env import MPS_INFERENCE_LOCK
+ from open_webui.events import EVENTS, publish_event
+@@ -36,6 +37,11 @@ EVALUATION_CONFIG_KEYS = {
+ }
+ 
+ 
++def require_feedback_export_enabled():
++    if not ENABLE_ADMIN_EXPORT:
++        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail=ERROR_MESSAGES.ACCESS_PROHIBITED)
++
++
+ async def get_config_values(key_map: dict[str, str]) -> dict:
+     values = await Config.get_many(*key_map.values())
+     return {field: values[storage_key] for field, storage_key in key_map.items() if storage_key in values}
+@@ -331,6 +337,7 @@ async def get_feedback_model_ids(user=Depends(get_admin_user), db: AsyncSession
+ 
+ @router.get('/feedbacks/all/ids', response_model=list[FeedbackIdResponse])
+ async def get_all_feedback_ids(user=Depends(get_admin_user), db: AsyncSession = Depends(get_async_session)):
++    require_feedback_export_enabled()
+     return await Feedbacks.get_all_feedback_ids(db=db)
+ 
+ 
+@@ -357,6 +364,7 @@ async def export_all_feedbacks(
+     user=Depends(get_admin_user),
+     db: AsyncSession = Depends(get_async_session),
+ ):
++    require_feedback_export_enabled()
+     feedbacks = await Feedbacks.get_all_feedbacks(db=db)
+     if model_id:
+         feedbacks = [f for f in feedbacks if f.data and f.data.get('model_id') == model_id]
+@@ -405,6 +413,7 @@ async def get_feedbacks(
+     user=Depends(get_admin_user),
+     db: AsyncSession = Depends(get_async_session),
+ ):
++    require_feedback_export_enabled()
+     limit = PAGE_ITEM_COUNT
+ 
+     page = max(1, page)
+@@ -449,6 +458,7 @@ async def create_feedback(
+ @router.get('/feedback/{id}', response_model=FeedbackModel)
+ async def get_feedback_by_id(id: str, user=Depends(get_verified_user), db: AsyncSession = Depends(get_async_session)):
+     if user.role == 'admin':
++        require_feedback_export_enabled()
+         feedback = await Feedbacks.get_feedback_by_id(id=id, db=db)
+     else:
+         feedback = await Feedbacks.get_feedback_by_id_and_user_id(id=id, user_id=user.id, db=db)
+diff --git a/src/lib/components/chat/Messages/ResponseMessage.svelte b/src/lib/components/chat/Messages/ResponseMessage.svelte
+index 48af8d0..796767e 100644
+--- a/src/lib/components/chat/Messages/ResponseMessage.svelte
++++ b/src/lib/components/chat/Messages/ResponseMessage.svelte
+@@ -13,8 +13,6 @@
+ 	const dispatch = createEventDispatcher();
+ 
+ 	import { createNewFeedback, getFeedbackById, updateFeedbackById } from '$lib/apis/evaluations';
+-	import { getChatById } from '$lib/apis/chats';
+-	import { generateTags } from '$lib/apis';
+ 
+ 	import {
+ 		audioQueue,
+@@ -458,8 +456,6 @@
+ 
+ 	const feedbackHandler = async (rating: number | null = null, details: object | null = null) => {
+ 		feedbackLoading = true;
+-		console.log('Feedback', rating, details);
+-
+ 		const updatedMessage = {
+ 			...message,
+ 			annotation: {
+@@ -472,13 +468,6 @@
+ 			}
+ 		};
+ 
+-		const chat = await getChatById(localStorage.token, chatId).catch((error) => {
+-			toast.error(`${error}`);
+-		});
+-		if (!chat) {
+-			return;
+-		}
+-
+ 		const messages = createMessagesList(history, message.id);
+ 
+ 		let feedbackItem = {
+@@ -500,9 +489,6 @@
+ 				message_id: message.id,
+ 				message_index: messages.length,
+ 				chat_id: chatId
+-			},
+-			snapshot: {
+-				chat: chat
+ 			}
+ 		};
+ 
+@@ -543,7 +529,6 @@
+ 			}
+ 		}
+ 
+-		console.log(updatedMessage);
+ 		saveMessage(message.id, updatedMessage);
+ 
+ 		await tick();
+@@ -551,30 +536,6 @@
+ 		if (!details) {
+ 			showRateComment = true;
+ 
+-			if (!updatedMessage.annotation?.tags && (message?.content ?? '') !== '') {
+-				// attempt to generate tags
+-				const tags = await generateTags(localStorage.token, message.model, messages, chatId).catch(
+-					(error) => {
+-						console.error(error);
+-						return [];
+-					}
+-				);
+-				console.log(tags);
+-
+-				if (tags) {
+-					updatedMessage.annotation.tags = tags;
+-					feedbackItem.data.tags = tags;
+-
+-					saveMessage(message.id, updatedMessage);
+-					await updateFeedbackById(
+-						localStorage.token,
+-						updatedMessage.feedbackId,
+-						feedbackItem
+-					).catch((error) => {
+-						toast.error(`${error}`);
+-					});
+-				}
+-			}
+ 		}
+ 
+ 		feedbackLoading = false;
