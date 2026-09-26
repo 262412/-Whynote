@@ -25,6 +25,9 @@ REASONS = {
     "表达方式": "style",
 }
 TICKET_SECONDS = 60
+MENU_TITLE = "知因・Whynote S0 原因"
+MENU_MESSAGE = "请选择一个原因；取消则不提交原因。仅限虚构数据测试。"
+UI_VERSION = "openwebui-s0-select-v1"
 
 
 class Action:
@@ -118,15 +121,43 @@ class Action:
         mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
         display_id = str(uuid.uuid4())
         issued_at = time.monotonic()
+        expires_at = int(time.time()) + TICKET_SECONDS
+        ticket_context = {
+            "tenant_id": self.tenant,
+            "user_id": user_id,
+            "session_id": session_id,
+            "event_id": event_id,
+            "target": target,
+            "display_id": display_id,
+            "mode": mode,
+            "expires_at": expires_at,
+            "ui_version": UI_VERSION,
+            "title": MENU_TITLE,
+            "message": MENU_MESSAGE,
+            "reasons": list(REASONS.items()),
+        }
+        choices = []
+        for label, reason_code in REASONS.items():
+            signed = json.dumps(
+                {**ticket_context, "reason_code": reason_code},
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            signature = hmac.new(self.version_key, signed, hashlib.sha256).hexdigest()
+            choices.append((f"s0t1.{display_id}.{expires_at}.{reason_code}.{signature}", reason_code, label))
         try:
             answer = await asyncio.wait_for(
                 __event_call__(
                     {
                         "type": "input",
                         "data": {
-                            "title": "知因・Whynote S0 原因",
-                            "message": "请选择一个原因；取消则不提交原因。仅限虚构数据测试。",
-                            "input": {"type": "select", "options": list(REASONS)},
+                            "title": MENU_TITLE,
+                            "message": MENU_MESSAGE,
+                            "input": {
+                                "type": "select",
+                                "options": [{"label": label, "value": value} for value, _, label in choices],
+                            },
                         },
                     }
                 ),
@@ -136,9 +167,12 @@ class Action:
             return {"event_id": event_id, "result": "ticket_expired"}
         if isinstance(answer, dict) and answer.get("error"):
             return {"event_id": event_id, "result": "client_unavailable"}
-        if time.monotonic() - issued_at > TICKET_SECONDS:
+        if time.monotonic() - issued_at > TICKET_SECONDS or time.time() > expires_at:
             return {"event_id": event_id, "result": "ticket_expired"}
-        if answer is not False and (not isinstance(answer, str) or answer not in REASONS):
+        reason_code = None
+        if isinstance(answer, str):
+            reason_code = next((code for value, code, _ in choices if hmac.compare_digest(answer, value)), None)
+        if answer is not False and reason_code is None:
             raise ValueError("S0 menu response is invalid")
         current = await self._owned_chat(body["chat_id"], user_id)
         if self._target(current, body) != target:
@@ -149,7 +183,7 @@ class Action:
             display_id,
             mode,
             list(REASONS.values()),
-            "openwebui-s0-select-v1",
+            UI_VERSION,
         )
         if answer is False:
             return {"event_id": event_id, "display": receipt, "result": "no_reason_submitted"}
@@ -160,7 +194,7 @@ class Action:
             principal,
             event_id,
             "reason_edited" if mode == "edit_menu" else "reason_selected",
-            REASONS[answer],
+            reason_code,
             display_id,
             True,
             f"s0-choice:{display_id}",
