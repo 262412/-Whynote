@@ -50,6 +50,24 @@ async def feedback(native, owner, chat_id=None, comment="synthetic-feedback-sent
     return result
 
 
+async def legacy_feedback(native, owner, chat_id=None):
+    """Old client metadata is untrusted; never use the new API to forge fixtures."""
+    async with native.db.get_async_db_context() as session:
+        row = native.feedbacks.Feedback(
+            id=str(uuid.uuid4()),
+            user_id=owner.id,
+            version=0,
+            type="rating",
+            data={"rating": -1},
+            meta={"chat_id": chat_id} if chat_id else {},
+            created_at=1,
+            updated_at=1,
+        )
+        session.add(row)
+        await session.commit()
+        return native.feedbacks.FeedbackModel.model_validate(row)
+
+
 def client(native, identity, monkeypatch):
     app = FastAPI()
     app.include_router(native.evaluations.router)
@@ -127,9 +145,10 @@ def test_deletion_scope_and_unrelated_feedback(native, operation):
         other_alice_chat = await chat(native, alice)
         bob_chat = await chat(native, bob)
         linked = await feedback(native, alice, target)
-        linked_other_author = await feedback(native, bob, target)
+        linked_other_author = await legacy_feedback(native, bob, target)
+        legacy_own = await legacy_feedback(native, alice, target)
         unrelated = await feedback(native, alice)
-        foreign_chat = await feedback(native, alice, bob_chat)
+        foreign_chat = await legacy_feedback(native, alice, bob_chat)
         other_linked = await feedback(native, alice, other_alice_chat)
         bob_unrelated = await feedback(native, bob)
         async with native.db.get_async_db_context() as session:
@@ -153,7 +172,8 @@ def test_deletion_scope_and_unrelated_feedback(native, operation):
         assert result is True
         for row, keep in [
             (linked, False),
-            (linked_other_author, False),
+            (linked_other_author, True),
+            (legacy_own, operation != "account"),
             (unrelated, operation != "account"),
             (foreign_chat, operation != "account"),
             (other_linked, operation not in {"all", "account"}),
@@ -163,6 +183,11 @@ def test_deletion_scope_and_unrelated_feedback(native, operation):
         assert await native.chats.Chats.get_chat_by_id(target) is None
         assert await native.chats.Chats.get_chat_by_id(bob_chat) is not None
         async with native.db.get_async_db_context() as session:
+            assert await session.get(native.feedbacks.FeedbackReview, linked_other_author.id) is not None
+            if operation != "account":
+                assert await session.get(native.feedbacks.FeedbackReview, legacy_own.id) is not None
+            else:
+                assert await session.get(native.feedbacks.FeedbackReview, legacy_own.id) is None
             assert (
                 await session.execute(
                     select(native.chats.ChatMessage).where(native.chats.ChatMessage.chat_id == target)
@@ -178,7 +203,7 @@ def test_delete_all_with_no_chats_preserves_unrelated_feedback(native):
     async def scenario():
         alice, bob = await user(native), await user(native)
         unrelated = await feedback(native, alice)
-        foreign = await feedback(native, alice, await chat(native, bob))
+        foreign = await legacy_feedback(native, alice, await chat(native, bob))
         assert await native.chats.Chats.delete_chats_by_user_id(alice.id)
         for row in (unrelated, foreign):
             assert await native.feedbacks.Feedbacks.get_feedback_by_id(row.id) is not None

@@ -1,8 +1,6 @@
-"""Run with an Open WebUI 0.11.4 Python environment and patched source path.
+"""QA probe updated for the signed Q16 contract; prior 55/56 evidence remains in Git.
 
-Usage: python qa/native_regressions.py --source var/qa-openwebui-v0114 --output var/native-run
-Creates a new synthetic SQLite database; refuses an existing output directory.
-Exits nonzero for unmet acceptance criteria. Does not mock ORM or route branches.
+Developer reruns do not constitute independent QA approval.
 """
 
 import argparse
@@ -99,7 +97,32 @@ def main():
                 )
                 assert result is not None
 
-            fid = await create("alice", {"chat_id": "permission-chat", "message_id": "synthetic-message"})
+            await chat("alice", "permission-chat")
+            fid = await create("alice", {"chat_id": "permission-chat"})
+
+            async def legacy(owner, target):
+                # Reproduce old malicious metadata directly, never as an accepted new API request.
+                import uuid
+
+                from open_webui.models.feedbacks import Feedback
+
+                ident = str(uuid.uuid4())
+                async with get_async_db() as session:
+                    session.add(
+                        Feedback(
+                            id=ident,
+                            user_id=owner,
+                            version=0,
+                            type="rating",
+                            data={},
+                            meta={"chat_id": target},
+                            created_at=1,
+                            updated_at=1,
+                        )
+                    )
+                    await session.commit()
+                return ident
+
             admin_fid = await create("admin")
             check("snapshot-null", json.loads(rows("feedback")[fid]["snapshot"]), None)
             actor = users["alice"]
@@ -161,11 +184,16 @@ def main():
             await chat("bob", "b-chat")
             linked = await create("alice", {"chat_id": "a-chat"})
             orphan = await create("alice")
-            other_chat = await create("alice", {"chat_id": "b-chat"})
+            other_chat = await legacy("alice", "b-chat")
             bob_feedback = await create("bob", {"chat_id": "b-chat"})
             # H-02 in technical revision 15: a client-supplied foreign reference
             # is not sufficient authorization for deleting another user's row.
-            untrusted_link = await create("bob", {"chat_id": "a-chat"})
+            actor = users["bob"]
+            before_reject = rows("feedback")
+            rejected = await client.post(prefix + "/feedback", json={"type": "rating", "meta": {"chat_id": "a-chat"}})
+            check("Q16-foreign-create-rejected", rejected.status_code, 404)
+            check("Q16-foreign-create-no-write", rows("feedback"), before_reject)
+            untrusted_link = await legacy("bob", "a-chat")
             before = rows("feedback")
             check("unauthorized-single-delete", await Chats.delete_chat_by_id_and_user_id("a-chat", "bob"), False)
             check("unauthorized-single-no-write", rows("feedback"), before)

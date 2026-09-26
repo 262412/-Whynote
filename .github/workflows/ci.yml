@@ -22,11 +22,13 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --extra dev --locked --no-editable
       - name: Lint
-        run: uv run --no-sync ruff check src tests integrations
+        run: uv run --no-sync ruff check src tests integrations qa
       - name: Format
-        run: uv run --no-sync ruff format --check src tests integrations
+        run: uv run --no-sync ruff format --check src tests integrations qa
       - name: Test
         run: uv run --no-sync pytest -q
+      - name: Test preserved S0 regressions
+        run: uv run --no-sync pytest qa/test_s0_regressions.py -q
 
   native-regression:
     runs-on: ubuntu-latest
@@ -52,3 +54,8 @@ jobs:
         env:
           WHYNOTE_OPENWEBUI_SOURCE: ${{ github.workspace }}/var/openwebui-source
         run: var/native-venv/bin/python -m pytest integrations/openwebui/tests -q
+      - name: Test signed Q16 contract probe
+        env:
+          STATIC_DIR: ${{ github.workspace }}/var/q16-probe-static
+          USE_SLIM_DOCKER: 'true'
+        run: var/native-venv/bin/python qa/native_regressions.py --source var/openwebui-source --output var/q16-probe --admin-other-status 404
