@@ -211,10 +211,10 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
         payload = event["payload"]
         if payload.get("interaction_contract") == "manual-v1" or payload.get("ui_version") == MANUAL_UI_VERSION:
             state["projection_version"] = "4"
-        if payload.get("response_source") == "user_explicit":
-            state["response_status"] = kind.removeprefix("reason_")
         if state["action_status"] == "retracted":
             continue
+        if payload.get("response_source") == "user_explicit":
+            state["response_status"] = kind.removeprefix("reason_")
         if kind == "negative_feedback_action_recorded":
             state["inference_status"] = "gate_pending"
             state["target_ref"] = payload["target_ref"]

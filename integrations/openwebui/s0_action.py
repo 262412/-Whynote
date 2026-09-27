@@ -118,6 +118,7 @@ class Action:
             return {"event_id": event_id, "result": "retracted"}
         mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
         display_id = str(uuid.uuid4())
+        session_ref = hashlib.sha256(session_id.encode()).hexdigest()
         self.store.issue_display_ticket(principal, event_id, display_id)
         issued_at = time.monotonic()
         expires_at = time.time() + TICKET_SECONDS
@@ -155,6 +156,11 @@ class Action:
                             "message": MENU_MESSAGE,
                             "input": {
                                 "type": "select",
+                                "measurement": {
+                                    "version": "active-v1",
+                                    "display_id": display_id,
+                                    "session_ref": session_ref,
+                                },
                                 "options": [{"label": label, "value": value} for value, _, label in choices],
                             },
                         },
@@ -166,6 +172,12 @@ class Action:
             return {"event_id": event_id, "result": "ticket_expired"}
         if isinstance(answer, dict) and answer.get("error"):
             return {"event_id": event_id, "result": "client_unavailable"}
+        timing = None
+        if isinstance(answer, dict) and "value" in answer:
+            timing = answer.get("timing")
+            if not isinstance(timing, dict):
+                timing = None
+            answer = answer["value"]
         if time.monotonic() - issued_at >= TICKET_SECONDS or time.time() >= expires_at:
             return {"event_id": event_id, "result": "ticket_expired"}
         reason_code = None
@@ -183,6 +195,7 @@ class Action:
             mode,
             list(REASONS.values()),
             UI_VERSION,
+            client_session_ref=session_ref,
         )
         if answer is False:
             reason_code = "reason_menu_closed"
@@ -199,6 +212,7 @@ class Action:
             display_id,
             True,
             f"s0-choice:{display_id}",
+            timing=timing,
         )
         if __event_emitter__ is not None:
             await __event_emitter__(

@@ -46,6 +46,8 @@ jobs:
           test "$(git -C var/openwebui-source rev-parse HEAD)" = 8bd8b4fac5e059578ac0c74b3c18d11139f88b7d
           git -C var/openwebui-source apply --check "$GITHUB_WORKSPACE/integrations/openwebui/patches/native-v0.11.4-s0.patch"
           git -C var/openwebui-source apply "$GITHUB_WORKSPACE/integrations/openwebui/patches/native-v0.11.4-s0.patch"
+          git -C var/openwebui-source apply --check "$GITHUB_WORKSPACE/integrations/openwebui/patches/manual-v0.11.4-timing.patch"
+          git -C var/openwebui-source apply "$GITHUB_WORKSPACE/integrations/openwebui/patches/manual-v0.11.4-timing.patch"
       - name: Install locked host regression dependencies
         run: |
           uv venv --python 3.11 var/native-venv

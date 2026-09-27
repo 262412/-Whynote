@@ -64,6 +64,18 @@
     let currentMode = null;
     let reasonButtons = [];
     let hasReason = false;
+    const sessionRef = crypto.randomUUID();
+    let mountedAt = null;
+    let activeStarted = null;
+    let activeMs = 0;
+    function trackFocus() {
+      const now = performance.now();
+      if (activeStarted !== null) activeMs += now - activeStarted;
+      activeStarted = !menu.hidden && document.hasFocus() && !document.hidden ? now : null;
+    }
+    window.addEventListener("focus", trackFocus);
+    window.addEventListener("blur", trackFocus);
+    document.addEventListener("visibilitychange", trackFocus);
 
     function showStatus(message, error = false) {
       status.textContent = message;
@@ -87,7 +99,7 @@
       currentMode = mode;
       displayId = crypto.randomUUID();
       const display = {event_id: eventId, display_id: displayId, mode,
-        ui_version: "manual-menu-v1", shown_reason_codes: config.reasons.map(reason => reason.code)};
+        ui_version: "manual-menu-v1", shown_reason_codes: config.reasons.map(reason => reason.code), client_session_ref: sessionRef};
       await post("/demo/display-tickets", display);
       menuTitle.textContent = mode === "manual_menu" ? "请选择原因" : "请选择更正后的原因";
       reasonsBox.replaceChildren();
@@ -111,6 +123,10 @@
       }
       menu.hidden = false;
       await afterPaint();
+      mountedAt = performance.now();
+      activeMs = 0;
+      activeStarted = null;
+      trackFocus();
       const receipt = await post("/demo/rendered-displays", display);
       if (!receipt.actionable) throw new Error("展示回执已失效，请刷新页面重试");
       reasonButtons.forEach(button => { button.disabled = false; });
@@ -121,11 +137,16 @@
       reasonButtons.forEach(button => { button.disabled = true; });
       try {
         const action = operation || (currentMode === "manual_menu" ? "reason_selected" : "reason_edited");
+        trackFocus();
+        const timing = {version: "active-v1", display_id: displayId, session_ref: sessionRef,
+          active_ms: activeMs, elapsed_ms: performance.now() - mountedAt};
+        activeStarted = null;
         const result = await post(`/v1/feedback-actions/${eventId}/attribution-events`, {
           user_action: action,
           reason_code: code,
           display_id: displayId,
-          explicit_submission: true
+          explicit_submission: true,
+          timing
         }, crypto.randomUUID());
         menu.hidden = true;
         editButton.hidden = false;

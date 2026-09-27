@@ -112,6 +112,7 @@ def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypa
             "manual_menu",
             [code for code, _ in MANUAL_REASONS],
             MANUAL_UI_VERSION,
+            client_session_ref=events[1]["payload"]["client_session_ref"],
         )["receipt_status"]
         == "historical"
     )
@@ -237,9 +238,9 @@ def test_openwebui_s0_rechecks_permission_before_reason_write(monkeypatch, tmp_p
 
     original_record_display = action.store.record_display
 
-    def revoke_after_display(*args):
+    def revoke_after_display(*args, **kwargs):
         nonlocal permitted
-        receipt = original_record_display(*args)
+        receipt = original_record_display(*args, **kwargs)
         permitted = False
         return receipt
 

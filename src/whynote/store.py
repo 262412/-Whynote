@@ -22,6 +22,7 @@ from .domain import (
     validate_display,
     validate_user_action,
 )
+from .measurement import timing_payload, utc
 
 
 def _now() -> str:
@@ -317,6 +318,7 @@ class EventStore:
         mode: str,
         shown_reason_codes: list[str],
         ui_version: str,
+        client_session_ref: str | None = None,
     ) -> dict[str, Any]:
         if not display_id.strip() or not ui_version.strip():
             raise ConflictError("display ID and UI version are required")
@@ -326,6 +328,10 @@ class EventStore:
             "shown_reason_codes": list(shown_reason_codes),
             "ui_version": ui_version,
         }
+        if client_session_ref is not None:
+            if not client_session_ref or len(client_session_ref) > 100:
+                raise ConflictError("invalid client session reference")
+            payload["client_session_ref"] = client_session_ref
         with self._transaction() as db:
             self._require_owner(db, principal, event_id)
             events = self._events(db, event_id)
@@ -377,6 +383,7 @@ class EventStore:
         display_id: str,
         explicit_submission: bool,
         idempotency_key: str,
+        timing: dict | None = None,
     ) -> dict[str, Any]:
         allowed = {
             "reason_selected",
@@ -393,7 +400,16 @@ class EventStore:
         if not display_id or not display_id.strip():
             raise ConflictError("a rendered display is required")
         payload = {"reason_code": reason_code, "display_id": display_id, "explicit_submission": True}
-        request_hash = _digest(_json({"event_id": event_id, "user_action": user_action, **payload}))
+        request_hash = _digest(
+            _json(
+                {
+                    "event_id": event_id,
+                    "user_action": user_action,
+                    **payload,
+                    **({"timing": timing} if timing is not None else {}),
+                }
+            )
+        )
         key_hash = _digest(idempotency_key)
         with self._transaction() as db:
             self._require_owner(db, principal, event_id)
@@ -417,6 +433,8 @@ class EventStore:
             version = 2
             if display["ui_version"] == MANUAL_UI_VERSION:
                 payload["response_source"] = "user_explicit"
+                total_ms = (utc(_now()) - utc(events[0]["recorded_at"])).total_seconds() * 1000
+                payload["measurement"] = timing_payload(timing, display, total_ms)
                 version = 3
             if user_action == "reason_selected":
                 payload["attribution_source"] = "user_manual"
