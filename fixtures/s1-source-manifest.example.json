@@ -1,0 +1,31 @@
+{
+  "schema_version": "s1-source-review-v1-proposal",
+  "status": "not_admitted",
+  "source_url": null,
+  "repository_revision": null,
+  "source_file": null,
+  "source_file_sha256": null,
+  "license_chain": [],
+  "intended_use": "exploration_only",
+  "approval_ref": null,
+  "controlled_storage_ref": null,
+  "retention_until": null,
+  "screening_version": null,
+  "split_version": null,
+  "counts": {"read": null, "eligible": null, "chinese": null, "excluded": null},
+  "rows": [],
+  "row_template": {
+    "row_id": null,
+    "conversation_group_ref": null,
+    "target_turn_index": null,
+    "target_response_index": null,
+    "controlled_content_ref": null,
+    "content_sha256": null,
+    "feedback_origin": null,
+    "evaluator_role": null,
+    "language": null,
+    "split": null,
+    "exclusion_reasons": [],
+    "review_ref": null
+  }
+}

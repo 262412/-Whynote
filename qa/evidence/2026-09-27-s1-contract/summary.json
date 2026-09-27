@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-27",
+  "baseline": "cdc0673fe933ddb9c0686aa09cdeb7eef7b76eb2",
+  "scope": "S1-1 contract preparation and synthetic provider only; no cloud calls, host/browser integration, dataset import or acceptance claim",
+  "confirmed": {
+    "provider": "deepseek",
+    "budget_currency": "CNY",
+    "budget_total_limit": "100.00"
+  },
+  "tests": {
+    "core": 126,
+    "preserved": 9,
+    "qa_cases_developer_rerun": 31,
+    "total": 166,
+    "new_mock_cases": 13,
+    "loopback_fixture_http": 10,
+    "ruff_lint": "passed",
+    "ruff_format": "passed"
+  },
+  "failures_repaired": [
+    {
+      "stage": "new test collection",
+      "cause": "qa namespace not on pytest executable path",
+      "repair": "use existing repository runpy convention"
+    },
+    {
+      "stage": "full test collection",
+      "cause": "reused noneditable environment held stale whynote package",
+      "repair": "reinstall current project with locked dependencies"
+    }
+  ],
+  "source_sha256": {
+    "qa/s1_mock_provider.py": "e2b760079f0815b70106a0a1a6002800c4baa86b4636677e5fb93e1dbd95f528",
+    "tests/test_s1_mock_provider.py": "f959f7682ddb8c55e1b1eb3b8ba6e357601135ea1ed3da15b6f7c81343c886c3"
+  },
+  "remaining": [
+    "contract confirmation",
+    "provider data terms and local runtime configuration",
+    "S1-2 dynamic target and budget implementation",
+    "independent review and acceptance"
+  ]
+}
