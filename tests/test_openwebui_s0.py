@@ -62,6 +62,43 @@ def selected_value(menu, label):
     return next(option["value"] for option in menu["data"]["input"]["options"] if option["label"] == label)
 
 
+def test_click_ids_separate_new_intent_from_retry_after_retraction(monkeypatch, tmp_path):
+    action = s0_action(monkeypatch, tmp_path)
+    chat, body, _ = s0_chat()
+
+    async def owned(*_):
+        return chat
+
+    async def choose(menu):
+        return selected_value(menu, "事实有误")
+
+    async def unexpected_menu(_):
+        pytest.fail("A retry of the retracted click must not issue another menu")
+
+    action._owned_chat = owned
+    principal = Principal(action.tenant, "alice")
+    body = {**body, "whynote_click_id": str(uuid.uuid4())}
+    first = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=choose))
+    action.store.retract_action(principal, first["event_id"], "undo")
+    before = action.store.get_events(principal, first["event_id"])
+    retry = asyncio.run(
+        action.action({**body, "session_id": "reconnected"}, __user__={"id": "alice"}, __event_call__=unexpected_menu)
+    )
+    assert retry == {"event_id": first["event_id"], "result": "retracted"}
+    assert action.store.get_events(principal, first["event_id"]) == before
+    new_body = {**body, "whynote_click_id": str(uuid.uuid4())}
+    second = asyncio.run(action.action(new_body, __user__={"id": "alice"}, __event_call__=choose))
+    assert second["event_id"] != first["event_id"]
+    third = asyncio.run(
+        action.action(
+            {**new_body, "session_id": "other-session", "whynote_click_id": str(uuid.uuid4())},
+            __user__={"id": "alice"},
+            __event_call__=choose,
+        )
+    )
+    assert third["event_id"] == second["event_id"]
+
+
 def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypatch, tmp_path):
     action = s0_action(monkeypatch, tmp_path)
     chat, body, fixture = s0_chat()

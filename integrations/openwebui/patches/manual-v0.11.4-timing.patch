@@ -1,5 +1,5 @@
 diff --git a/src/lib/components/chat/Chat.svelte b/src/lib/components/chat/Chat.svelte
-index fd0e1bb..8918b40 100644
+index fd0e1bb..0264119 100644
 --- a/src/lib/components/chat/Chat.svelte
 +++ b/src/lib/components/chat/Chat.svelte
 @@ -164,6 +164,7 @@
@@ -18,7 +18,15 @@ index fd0e1bb..8918b40 100644
  				} else if (type === 'request:user_input') {
  					eventCallback = cb;
  					askUserQuestions = data?.questions ?? [];
-@@ -4250,6 +4252,7 @@
+@@ -2572,6 +2574,7 @@
+ 		const messages = createMessagesList(history, responseMessageId);
+ 
+ 		const res = await chatAction(localStorage.token, actionId, {
++			...(actionId === 'whynote_s0_action' ? { whynote_click_id: crypto.randomUUID() } : {}),
+ 			model: modelId,
+ 			messages: messages.map((m) => ({
+ 				id: m.id,
+@@ -4250,6 +4253,7 @@
  	inputValue={eventConfirmationInputValue}
  	inputType={eventConfirmationInputType}
  	inputOptions={eventConfirmationInputOptions}
@@ -26,7 +34,7 @@ index fd0e1bb..8918b40 100644
  	on:confirm={(e) => {
  		if (eventConfirmationInput) {
  			eventCallback(e.detail);
-@@ -4259,8 +4262,8 @@
+@@ -4259,8 +4263,8 @@
  			eventCallback(true);
  		}
  	}}

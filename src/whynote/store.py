@@ -204,12 +204,23 @@ class EventStore:
         return row
 
     def create_action(
-        self, principal: Principal, target_ref: Mapping[str, str], metadata: Mapping[str, Any], idempotency_key: str
+        self,
+        principal: Principal,
+        target_ref: Mapping[str, str],
+        metadata: Mapping[str, Any],
+        idempotency_key: str,
+        *,
+        restart_retracted: bool = False,
     ) -> dict[str, Any]:
         request_hash = _digest(_json({"target_ref": target_ref, "metadata": metadata}))
         key_hash = _digest(idempotency_key)
         with self._transaction() as db:
             old = self._check_idempotency(db, principal, key_hash, "create", request_hash)
+            # Legacy host callbacks carry no click ID. Advance their persistent
+            # generation only after retraction, under the same writer lock.
+            while old and restart_retracted and self._projection(db, old["event_id"])["action_status"] == "retracted":
+                key_hash = _digest(key_hash + ":" + old["event_id"])
+                old = self._check_idempotency(db, principal, key_hash, "create", request_hash)
             if old:
                 return self._projection(db, old["event_id"])
             if metadata.get("interaction_contract") == "manual-v1":
@@ -413,8 +424,21 @@ class EventStore:
         key_hash = _digest(idempotency_key)
         with self._transaction() as db:
             self._require_owner(db, principal, event_id)
-            old = self._check_idempotency(db, principal, key_hash, user_action, request_hash)
+            old = db.execute(
+                "SELECT * FROM idempotency WHERE tenant_ref=? AND actor_ref=? AND key_hash=?",
+                (principal.tenant_ref, principal.actor_ref, key_hash),
+            ).fetchone()
             if old:
+                original = db.execute("SELECT payload FROM events WHERE record_id=?", (old["record_id"],)).fetchone()
+                original_payload = json.loads(original["payload"]) if original else {}
+                if (
+                    old["operation"] != user_action
+                    or old["event_id"] != event_id
+                    or any(original_payload.get(k) != v for k, v in payload.items())
+                ):
+                    raise ConflictError("idempotency key reused with a different request")
+                # Optional telemetry does not define a feedback intent. Keep the
+                # first accepted measurement even if retry telemetry changes.
                 return self._projection(db, event_id)
             if not self._ticket_is_current(db, event_id, display_id):
                 raise ConflictError("display ticket superseded")

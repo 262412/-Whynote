@@ -3,11 +3,38 @@ import sqlite3
 
 import pytest
 
-from whynote.domain import MANUAL_REASONS, MANUAL_UI_VERSION, Principal
+from whynote.domain import MANUAL_REASONS, MANUAL_UI_VERSION, ConflictError, Principal
 from whynote.measurement import report, timing_payload
 from whynote.store import EventStore
 
 OWNER = Principal("synthetic", "alice")
+
+
+def test_corrected_retry_preserves_first_measurement_and_rejects_changed_reason(tmp_path):
+    store = EventStore(tmp_path / "retry.db")
+    eid = store.create_action(OWNER, {"object_id": "fiction"}, {"interaction_contract": "manual-v1"}, "create")[
+        "event_id"
+    ]
+    store.record_display(
+        OWNER, eid, "shown", "manual_menu", [code for code, _ in MANUAL_REASONS], MANUAL_UI_VERSION, "session"
+    )
+    timing = {
+        "version": "active-v1",
+        "display_id": "shown",
+        "session_ref": "session",
+        "active_ms": 10**400,
+        "elapsed_ms": 1,
+    }
+    store.record_user_action(OWNER, eid, "reason_selected", "style", "shown", True, "response", timing=timing)
+    before = store.get_events(OWNER, eid)
+    assert before[-1]["payload"]["measurement"]["timing_status"] == "invalid_duration"
+    store.record_user_action(
+        OWNER, eid, "reason_selected", "style", "shown", True, "response", timing={**timing, "active_ms": 1}
+    )
+    assert store.get_events(OWNER, eid) == before
+    with pytest.raises(ConflictError):
+        store.record_user_action(OWNER, eid, "reason_selected", "irrelevant", "shown", True, "response", timing=timing)
+    assert store.get_events(OWNER, eid) == before
 
 
 def test_window_boundary_late_close_retraction_and_fixed_denominator(tmp_path, monkeypatch):

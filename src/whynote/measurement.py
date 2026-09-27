@@ -54,7 +54,9 @@ def timing_payload(timing: dict | None, display: dict, server_total_ms: float) -
         active, elapsed = timing.get("active_ms"), timing.get("elapsed_ms")
         if (
             any(
-                isinstance(v, bool) or not isinstance(v, (float, int)) or not math.isfinite(v)
+                isinstance(v, bool)
+                or not isinstance(v, (float, int))
+                or (isinstance(v, float) and not math.isfinite(v))
                 for v in (active, elapsed)
             )
             or not 0 <= active <= elapsed <= server_total_ms + 1000
@@ -152,6 +154,7 @@ def report(db_path: str | Path, tenant_ref: str, event_ids: list[str], as_of: st
         "filled_numerator": numerator,
         "fill_rate": numerator / len(rows) if rows else None,
         "window_status_counts": dict(Counter(r["window_status"] for r in rows)),
+        "retracted_action_count": sum(r["current_state"]["action_status"] == "retracted" for r in rows),
         "response_action_counts_in_window": {
             kind: sum(kind in row["response_counts_in_window"] for row in rows) for kind in sorted(RESPONSES)
         },
