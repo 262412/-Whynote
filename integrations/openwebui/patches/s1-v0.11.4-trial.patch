@@ -1,0 +1,108 @@
+--- a/backend/open_webui/main.py
++++ b/backend/open_webui/main.py
+@@ -827,6 +827,10 @@
+ # `open_webui.utils.asgi_middleware` for the rationale.
+ app.add_middleware(AppHTTPMiddleware)
+ 
++if os.environ.get('WHYNOTE_S1_CONFIG'):
++    from whynote.s1_host import TrialBoundary
++    app.add_middleware(TrialBoundary)
++
+ 
+ app.add_middleware(
+     CORSMiddleware,
+--- a/backend/open_webui/routers/chats.py
++++ b/backend/open_webui/routers/chats.py
+@@ -1,3 +1,4 @@
+ from __future__ import annotations
+ 
++import os
+ import logging
+@@ -1362,6 +1363,9 @@
+ ):
+     chat = await Chats.get_chat_by_id_and_user_id(id, user.id, db=db)
+     if chat:
++        if os.environ.get('WHYNOTE_S1_CONFIG'):
++            from whynote.s1_host import invalidate_edit
++            invalidate_edit(chat, form_data.chat)
+         touch = 'history' in form_data.chat or 'messages' in form_data.chat
+         chat = await Chats.update_chat_by_id(id, form_data.chat, db=db, touch=touch)
+         if form_data.variables is not None:
+@@ -1426,6 +1430,9 @@
+             detail=ERROR_MESSAGES.ACCESS_PROHIBITED,
+         )
+ 
++    if os.environ.get('WHYNOTE_S1_CONFIG'):
++        from whynote.s1_host import invalidate_chat
++        invalidate_chat(id)
+     chat = await Chats.upsert_message_to_chat_by_id_and_message_id(
+         id,
+         message_id,
+@@ -1487,6 +1494,9 @@
+             detail=ERROR_MESSAGES.ACCESS_PROHIBITED,
+         )
+ 
++    if os.environ.get('WHYNOTE_S1_CONFIG'):
++        from whynote.s1_host import invalidate_chat
++        invalidate_chat(id)
+     chat = await Chats.delete_message_from_chat_by_id_and_message_id(id, message_id)
+     if not chat:
+         raise HTTPException(
+--- a/backend/open_webui/models/chats.py
++++ b/backend/open_webui/models/chats.py
+@@ -3,3 +3,4 @@
+ from __future__ import annotations
+ 
++import os
+ import logging
+@@ -2486,6 +2487,10 @@
+         if not owners:
+             return False
+         ids = list(owners)
++        if os.environ.get('WHYNOTE_S1_CONFIG'):
++            from whynote.s1_host import invalidate_chat
++            for chat_id in ids:
++                invalidate_chat(chat_id, revoke=True)
+         candidates = (await session.execute(select(
+             Feedback.id, Feedback.user_id, Feedback.meta, Feedback.association_version,
+             Feedback.verified_chat_id, Feedback.verified_message_id,
+--- a/src/lib/components/chat/Chat.svelte
++++ b/src/lib/components/chat/Chat.svelte
+@@ -2574,7 +2574,7 @@
+ 		const messages = createMessagesList(history, responseMessageId);
+ 
+ 		const res = await chatAction(localStorage.token, actionId, {
+-			...(actionId === 'whynote_s0_action' ? { whynote_click_id: crypto.randomUUID() } : {}),
++			...(['whynote_s0_action', 'whynote_s1_action'].includes(actionId) ? { whynote_click_id: crypto.randomUUID() } : {}),
+ 			model: modelId,
+ 			messages: messages.map((m) => ({
+ 				id: m.id,
+--- a/backend/open_webui/events.py
++++ b/backend/open_webui/events.py
+@@ -3,6 +3,7 @@
+ import asyncio
+ import inspect
+ import logging
++import os
+ import time
+ import uuid
+ from types import SimpleNamespace
+@@ -1182,6 +1183,9 @@
+     data: dict | None = None,
+     message: str | None = None,
+ ) -> None:
++    trial = bool(os.environ.get('WHYNOTE_S1_CONFIG'))
++    if trial:
++        data, message = {}, None
+     app = getattr(request_or_app, 'app', request_or_app)
+     request = request_or_app if hasattr(request_or_app, 'app') else None
+     event_payload = build_event(
+@@ -1196,6 +1200,8 @@
+     )
+ 
+     for sink in EVENT_SINKS:
++        if trial and not isinstance(sink, SocketSessionEventSink):
++            continue
+         try:
+             await sink.handle_event(app, event_payload, request=request)
+         except Exception:

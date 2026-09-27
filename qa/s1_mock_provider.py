@@ -60,9 +60,15 @@ def create_app() -> FastAPI:
         allowed = {"model", "messages", "stream", "stream_options", "max_tokens", "temperature"}
         if body.keys() - allowed:
             raise HTTPException(422, "unsupported synthetic request fields")
-        scenario = next(
-            (value for prompt, value in CASES.items() if body.get("messages") == messages_for(prompt)), None
-        )
+        messages = body.get("messages")
+        scenario = None
+        if isinstance(messages, list) and len(messages) in (2, 4, 6, 8, 10):
+            valid = messages[0] == {"role": "system", "content": SYSTEM}
+            for index in range(1, len(messages) - 1, 2):
+                valid &= messages[index] == {"role": "user", "content": "S1 虚构：正常回答"}
+                valid &= messages[index + 1] == {"role": "assistant", "content": ANSWER}
+            if valid and isinstance(messages[-1], dict) and messages[-1].get("role") == "user":
+                scenario = CASES.get(messages[-1].get("content"))
         if scenario is None:
             raise HTTPException(422, "exact synthetic messages required")
         if scenario in {"rate_limit", "server_error"}:
