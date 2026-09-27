@@ -1,0 +1,496 @@
+{
+  "date": "2026-09-27",
+  "tested_main": "e15a0fe64826a8b5f4cc34e3a0be7c58e1a82f96",
+  "fix": "1c2784ae398e6dd7985a6d65d95561a0f4294811",
+  "same_business_tree": true,
+  "document_input": {
+    "prd": 158,
+    "technical": 152
+  },
+  "baseline": {
+    "passed": 126,
+    "failed": 0
+  },
+  "expanded_independent": {
+    "passed": 25,
+    "failed": 2
+  },
+  "native": {
+    "passed": 53,
+    "failed": 0,
+    "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d"
+  },
+  "http": {
+    "checks": [
+      {
+        "name": "create",
+        "actual": 202,
+        "expected": 202,
+        "passed": true
+      },
+      {
+        "name": "new-request-same-active-intent",
+        "actual": "fceadaf3-5eb0-4218-8e08-66141711c509",
+        "expected": "fceadaf3-5eb0-4218-8e08-66141711c509",
+        "passed": true
+      },
+      {
+        "name": "reason_selected-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_selected-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_declined-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-reason",
+        "actual": null,
+        "expected": null,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "oversized-optional-timing-accepted",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "oversized-optional-timing-response-persisted",
+        "actual": 1,
+        "expected": 1,
+        "passed": true
+      },
+      {
+        "name": "valid-retry-after-invalid-timing",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      }
+    ],
+    "passed": 35,
+    "failed": 0,
+    "event_types": [
+      "negative_feedback_action_recorded",
+      "reason_displayed",
+      "reason_selected",
+      "reason_displayed",
+      "reason_skipped",
+      "reason_displayed",
+      "reason_declined",
+      "reason_displayed",
+      "reason_menu_closed",
+      "reason_displayed",
+      "reason_none_matched",
+      "reason_displayed",
+      "reason_selected"
+    ],
+    "db_sha256": "1af334339fdf89e71412ff19986ef6a59e20f9cefc8c1d42ba370c3b267191fd",
+    "scope": "Loopback demo HTTP; scripted client timings; no browser or real host login"
+  },
+  "observations": [
+    {
+      "case": "post_retraction",
+      "same_event": false,
+      "result": "reason_submitted",
+      "actions": 2,
+      "gate_outbox": 2
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "������",
+      "reason_code": null,
+      "notifications": [
+        "�����ѱ��棺�����ǣ���ǰԭ�������"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "��ʱ����",
+      "reason_code": null,
+      "notifications": [
+        "�����ѱ��棺��ʱ��������ǰԭ�򱣳ֲ���"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "��Ը˵��",
+      "reason_code": null,
+      "notifications": [
+        "�����ѱ��棺��Ը˵������ǰԭ�򱣳ֲ���"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "�ر�",
+      "reason_code": null,
+      "notifications": [
+        "ԭ��˵��ѹرգ���ǰԭ�򱣳ֲ���"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": null,
+      "reason_code": null,
+      "notifications": [
+        "ԭ��˵��ѹرգ���ǰԭ�򱣳ֲ���"
+      ]
+    },
+    {
+      "case": "oversized_timing",
+      "field": "active_ms",
+      "status": 200,
+      "events_before": 2,
+      "events_after": 3
+    },
+    {
+      "case": "oversized_timing",
+      "field": "elapsed_ms",
+      "status": 200,
+      "events_before": 2,
+      "events_after": 3
+    },
+    {
+      "case": "late_retraction",
+      "denominator": 1,
+      "window_status": "unresponded",
+      "current": "retracted",
+      "aggregate": {
+        "unresponded": 1
+      }
+    },
+    {
+      "case": "repeat_counts",
+      "per_action_occurrences": {
+        "reason_selected": 1,
+        "reason_edited": 2
+      },
+      "aggregate_unique_actions": {
+        "reason_declined": 0,
+        "reason_edited": 1,
+        "reason_none_matched": 0,
+        "reason_selected": 1,
+        "reason_skipped": 0
+      }
+    },
+    {
+      "case": "completed_click_retry",
+      "reconnect": false,
+      "menus": 1,
+      "before_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ],
+      "after_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ],
+      "first_status": "selected",
+      "retry_status": "selected"
+    },
+    {
+      "case": "completed_click_retry",
+      "reconnect": true,
+      "menus": 1,
+      "before_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ],
+      "after_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ],
+      "first_status": "selected",
+      "retry_status": "selected"
+    },
+    {
+      "case": "sqlite_wait_ticket_lifetime",
+      "explicit": false,
+      "lock_seconds": 0,
+      "measured_before_menu": 0.01600000000325963,
+      "controlled_user_seconds": 59.5,
+      "result": "reason_submitted",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "case": "sqlite_wait_ticket_lifetime",
+      "explicit": true,
+      "lock_seconds": 0,
+      "measured_before_menu": 0.01600000000325963,
+      "controlled_user_seconds": 59.5,
+      "result": "reason_submitted",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "case": "sqlite_wait_ticket_lifetime",
+      "explicit": false,
+      "lock_seconds": 0.75,
+      "measured_before_menu": 0.889999999984866,
+      "controlled_user_seconds": 59.5,
+      "result": "ticket_expired",
+      "event_types": [
+        "negative_feedback_action_recorded"
+      ]
+    },
+    {
+      "case": "sqlite_wait_ticket_lifetime",
+      "explicit": true,
+      "lock_seconds": 0.75,
+      "measured_before_menu": 0.7820000000065193,
+      "controlled_user_seconds": 59.5,
+      "result": "ticket_expired",
+      "event_types": [
+        "negative_feedback_action_recorded"
+      ]
+    },
+    {
+      "case": "sqlite_wait_ticket_lifetime",
+      "explicit": false,
+      "lock_seconds": 0.75,
+      "measured_before_menu": 0.7969999999913853,
+      "controlled_user_seconds": 60.1,
+      "result": "ticket_expired",
+      "event_types": [
+        "negative_feedback_action_recorded"
+      ]
+    },
+    {
+      "case": "sqlite_wait_ticket_lifetime",
+      "explicit": true,
+      "lock_seconds": 0.75,
+      "measured_before_menu": 0.7820000000065193,
+      "controlled_user_seconds": 60.1,
+      "result": "ticket_expired",
+      "event_types": [
+        "negative_feedback_action_recorded"
+      ]
+    },
+    {
+      "case": "completed_retry_all_tables",
+      "reconnect": false,
+      "retries": 8,
+      "identical": true,
+      "response_payload": {
+        "attribution_source": "user_manual",
+        "display_id": "8a59000a-5839-464d-9b0f-19853e863e39",
+        "display_mode": "manual_menu",
+        "explicit_submission": true,
+        "measurement": {
+          "active_ms": 1,
+          "server_total_ms": 17.951,
+          "timing_status": "client_reported"
+        },
+        "reason_code": "factual_error",
+        "response_source": "user_explicit",
+        "ui_version": "manual-menu-v1"
+      }
+    },
+    {
+      "case": "completed_retry_all_tables",
+      "reconnect": true,
+      "retries": 8,
+      "identical": true,
+      "response_payload": {
+        "attribution_source": "user_manual",
+        "display_id": "4ecfef99-0d17-49b7-8f9b-b29dbc136dac",
+        "display_mode": "manual_menu",
+        "explicit_submission": true,
+        "measurement": {
+          "active_ms": 1,
+          "server_total_ms": 18.608,
+          "timing_status": "client_reported"
+        },
+        "reason_code": "factual_error",
+        "response_source": "user_explicit",
+        "ui_version": "manual-menu-v1"
+      }
+    }
+  ],
+  "browser": {
+    "executed": false,
+    "error": "nodeRepl.fetch request failed"
+  },
+  "new_issue": "Q-22/P2: database reservation wait consumes 60 second menu lifetime, both explicit and legacy paths",
+  "limitations": [
+    "Controlled menu callbacks and user elapsed time; actual SQLite lock wait",
+    "No independent browser or frontend build",
+    "No non-author approval or responsible result signature"
+  ]
+}
