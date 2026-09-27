@@ -492,5 +492,30 @@
     "Controlled menu callbacks and user elapsed time; actual SQLite lock wait",
     "No independent browser or frontend build",
     "No non-author approval or responsible result signature"
-  ]
+  ],
+  "document_updates": {
+    "prd": {
+      "before": 158,
+      "after": 171,
+      "history_preserved": true,
+      "block_id": "doxc6Ovwr48jebHDnOnMZXbpdpb"
+    },
+    "tech": {
+      "before": 152,
+      "after": 163,
+      "history_preserved": true,
+      "block_id": "doxc6445joC4pJo86LnrRfKlwVe"
+    }
+  },
+  "pull_request": 23,
+  "ci_first": {
+    "run": 36296438239,
+    "native": "success",
+    "quality": "two Q22 failures; 25 passed"
+  },
+  "cleanup": {
+    "port_8112_stopped": true,
+    "original_changes_preserved": true,
+    "ignored_evidence_retained": true
+  }
 }

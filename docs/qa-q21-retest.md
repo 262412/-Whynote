@@ -52,4 +52,11 @@
 - 当前测试分支及工作树保留供修复、评审和结果签署；旧分支还有历史本地提交/审计依赖，本次不批量删除。原目录和历史失败保留。
 - 真实数据、原生评分复用、模型、auto-attach、自由文本 SLM、训练导出和生产仍 NO-GO；副本期限与环境级出站没有新增通过证据。
 
-飞书正文更新、读回修订和临时服务收尾将在完成后补记。
+## 飞书正文与收尾
+
+- [PRD 修订 171](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6Ovwr48jebHDnOnMZXbpdpb)，从 158 开始逐段更新。
+- [技术文档修订 163](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc6445joC4pJo86LnrRfKlwVe)，从 152 开始逐段更新。
+- 更新原状态、FR 子项、click ID 字段、验收证据、M3/M4、TD-04 和当前缺陷条目；Q-22 加在当前缺陷表之后，没有在文末堆进度。逐次读取目标与 revision-id，写后全文复核；两份历史归档区域逐字保留。
+- [草稿 PR #23](https://github.com/262412/-Whynote/pull/23) 的首轮 CI 36296438239：原生通过，质量检查仅新增 Q-22 两条失败（25/2）。最新 head 的状态以 PR 页面为准。
+- 8112 临时 demo 服务已按进程命令核实并停止；原目录状态与开工一致，测试工作区只含本轮测试/文档/摘要。分支及忽略的虚构证据保留供修复与签署。
+
