@@ -1,0 +1,110 @@
+{
+  "metric_version": "manual-v1",
+  "as_of": "2026-09-27T03:34:14.268904+00:00",
+  "window_seconds": 86400,
+  "window_boundary": "accepted_at <= response_at < window_end",
+  "cohort_kind": "explicit_synthetic",
+  "cohort_event_ids": [
+    "3c5e2e07-b7c0-42b4-9a54-f435c79e20a9"
+  ],
+  "denominator": 1,
+  "matured_action_count": 0,
+  "provisional": true,
+  "filled_numerator": 1,
+  "fill_rate": 1.0,
+  "window_status_counts": {
+    "none_matched": 1
+  },
+  "response_action_counts_in_window": {
+    "reason_declined": 0,
+    "reason_edited": 0,
+    "reason_none_matched": 1,
+    "reason_selected": 1,
+    "reason_skipped": 0
+  },
+  "close_count": 1,
+  "closed_action_count": 1,
+  "active_ms": {
+    "n": 2,
+    "median": 2058.5,
+    "p90": 3885.699999988079,
+    "percentile_method": "nearest_rank",
+    "unit": "explicit_response"
+  },
+  "server_total_ms": {
+    "n": 2,
+    "median": 34679.7535,
+    "p90": 65424.098,
+    "percentile_method": "nearest_rank",
+    "unit": "explicit_response"
+  },
+  "timing_status_counts": {
+    "client_reported": 2
+  },
+  "rows": [
+    {
+      "event_id": "3c5e2e07-b7c0-42b4-9a54-f435c79e20a9",
+      "accepted_at": "2026-09-27T03:32:46.580025Z",
+      "window_end": "2026-09-28T03:32:46.580025+00:00",
+      "window_status": "none_matched",
+      "window_complete": false,
+      "first_response": "reason_selected",
+      "first_response_in_window": "reason_selected",
+      "first_response_at": "2026-09-27T03:32:50.515434Z",
+      "filled_in_window": true,
+      "late_response_count": 0,
+      "close_count": 1,
+      "display_count": 3,
+      "current_state": {
+        "projection_version": "4",
+        "action_status": "active",
+        "inference_status": "gate_pending",
+        "attribution_status": "none_matched",
+        "attribution_source": "none",
+        "reason_code": null,
+        "gate": null,
+        "target_ref": {
+          "object_id": "11921772-8392-47ab-b932-a3984b4969a7/670623a8-6351-4a2f-9521-b166cea12fe9",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s0v1-9d29ea7d4c2ac7f58c8cbcf4405cffd43ce70568452c920e21856dd5d00a1d6d"
+        },
+        "response_status": "none_matched"
+      },
+      "window_state": {
+        "projection_version": "4",
+        "action_status": "active",
+        "inference_status": "gate_pending",
+        "attribution_status": "none_matched",
+        "attribution_source": "none",
+        "reason_code": null,
+        "gate": null,
+        "target_ref": {
+          "object_id": "11921772-8392-47ab-b932-a3984b4969a7/670623a8-6351-4a2f-9521-b166cea12fe9",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s0v1-9d29ea7d4c2ac7f58c8cbcf4405cffd43ce70568452c920e21856dd5d00a1d6d"
+        },
+        "response_status": "none_matched"
+      },
+      "response_counts_in_window": {
+        "reason_selected": 1,
+        "reason_none_matched": 1
+      },
+      "late_response": false,
+      "response_timings": [
+        {
+          "active_ms": 3885.699999988079,
+          "server_total_ms": 3935.409,
+          "timing_status": "client_reported"
+        },
+        {
+          "active_ms": 231.30000001192093,
+          "server_total_ms": 65424.098,
+          "timing_status": "client_reported"
+        }
+      ],
+      "action_events": 1,
+      "gate_outbox": 1,
+      "contract": "manual-v1"
+    }
+  ]
+}

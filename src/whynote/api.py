@@ -32,6 +32,7 @@ class CreateAction(BaseModel):
     channel: str = Field(min_length=1)
     locale: str = Field(min_length=1)
     client_occurred_at: str | None = None
+    interaction_contract: Literal["manual-v1"] | None = None
 
     @field_validator("client_occurred_at", mode="before")
     @classmethod
@@ -56,10 +57,13 @@ class AttributionAction(BaseModel):
         "reason_declined",
         "reason_skipped",
         "attribution_invalidated",
+        "reason_none_matched",
+        "reason_menu_closed",
     ]
     reason_code: str | None = None
     display_id: str = Field(min_length=1)
     explicit_submission: StrictBool
+    timing: dict | None = None
 
 
 Authenticate = Callable[[Request], Principal]
@@ -115,6 +119,8 @@ def create_app(
             "locale": body.locale,
             "client_occurred_at": body.client_occurred_at,
         }
+        if body.interaction_contract is not None:
+            metadata["interaction_contract"] = body.interaction_contract
         try:
             return store.create_action(principal, target, metadata, idempotency_key)
         except ConflictError as exc:
@@ -159,6 +165,7 @@ def create_app(
                 body.display_id,
                 body.explicit_submission,
                 idempotency_key,
+                timing=body.timing,
             )
         except NotFoundError as exc:
             raise HTTPException(404, str(exc)) from exc

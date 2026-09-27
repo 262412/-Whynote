@@ -1,0 +1,70 @@
+[
+  {
+    "url": "http://127.0.0.1:8098/api/chat/completions",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/static/favicon.png",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/pinned",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/pinned",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/_app/version.json",
+    "status": 200
+  },
+  {
+    "url": "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/chat/actions/whynote_s0_action",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/2081bf9a-aa4a-44a9-a17f-37e284f3ddc7",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/chat/actions/whynote_s0_action",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/2081bf9a-aa4a-44a9-a17f-37e284f3ddc7",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:8098/api/v1/chats/?page=1",
+    "status": 200
+  }
+]

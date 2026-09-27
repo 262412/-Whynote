@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from whynote.domain import Principal
+from whynote.domain import MANUAL_OPERATIONS, MANUAL_REASONS, MANUAL_UI_VERSION, Principal
 
 ACTION_PATH = Path(__file__).parents[1] / "integrations" / "openwebui" / "s0_action.py"
 PIPE_PATH = Path(__file__).parents[1] / "integrations" / "openwebui" / "s0_pipe.py"
@@ -71,13 +71,15 @@ def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypa
 
     async def selected(menu):
         options = menu["data"]["input"]["options"]
-        assert [option["label"] for option in options] == ["事实错误", "内容不相关", "表达方式"]
+        assert [option["label"] for option in options] == [label for _, label in MANUAL_REASONS] + list(
+            MANUAL_OPERATIONS.values()
+        )
         assert all(option["value"].startswith("s0t1.") for option in options)
         assert all(fixture["prompt"] not in option["value"] for option in options)
-        return selected_value(menu, "事实错误")
+        return selected_value(menu, "事实有误")
 
     async def edited(menu):
-        return selected_value(menu, "内容不相关")
+        return selected_value(menu, "答非所问")
 
     notifications = []
 
@@ -108,8 +110,9 @@ def test_openwebui_s0_action_select_edit_and_keep_content_out_of_events(monkeypa
             first["event_id"],
             first["display"]["display_id"],
             "manual_menu",
-            ["factual_error", "irrelevant", "style"],
-            "openwebui-s0-select-v1",
+            [code for code, _ in MANUAL_REASONS],
+            MANUAL_UI_VERSION,
+            client_session_ref=events[1]["payload"]["client_session_ref"],
         )["receipt_status"]
         == "historical"
     )
@@ -132,11 +135,11 @@ def test_openwebui_s0_display_ticket_rejects_tamper_and_replay(monkeypatch, tmp_
 
     async def capture(menu):
         nonlocal captured
-        captured = selected_value(menu, "事实错误")
+        captured = selected_value(menu, "事实有误")
         return False
 
     first = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=capture))
-    assert first["result"] == "no_reason_submitted"
+    assert first["result"] == "response_recorded"
     assert captured is not None
 
     async def tampered(_):
@@ -157,6 +160,7 @@ def test_openwebui_s0_display_ticket_rejects_tamper_and_replay(monkeypatch, tmp_
     assert [event["event_type"] for event in action.store.get_events(principal, first["event_id"])] == [
         "negative_feedback_action_recorded",
         "reason_displayed",
+        "reason_menu_closed",
     ]
     assert b"s0t1." not in (tmp_path / "events.db").read_bytes()
 
@@ -172,7 +176,7 @@ def test_openwebui_s0_action_rejects_other_user_and_changed_version(monkeypatch,
     async def revoked(menu):
         nonlocal permitted
         permitted = False
-        return selected_value(menu, "事实错误")
+        return selected_value(menu, "事实有误")
 
     action._owned_chat = owned
     with pytest.raises(ValueError, match="unavailable"):
@@ -194,7 +198,7 @@ def test_openwebui_s0_action_rejects_other_user_and_changed_version(monkeypatch,
 
     async def changed(menu):
         chat.chat["history"]["messages"][body["id"]]["content"] = "changed while menu was open"
-        return selected_value(menu, "事实错误")
+        return selected_value(menu, "事实有误")
 
     with pytest.raises(ValueError, match="displayed version"):
         asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=changed))
@@ -211,7 +215,7 @@ def test_openwebui_s0_action_expired_ticket_has_no_display(monkeypatch, tmp_path
         return chat if chat_id == body["chat_id"] and user_id == "alice" else None
 
     async def selected(menu):
-        return selected_value(menu, "事实错误")
+        return selected_value(menu, "事实有误")
 
     action._owned_chat = owned
     action.action.__func__.__globals__["TICKET_SECONDS"] = -1
@@ -230,13 +234,13 @@ def test_openwebui_s0_rechecks_permission_before_reason_write(monkeypatch, tmp_p
         return chat if permitted and chat_id == body["chat_id"] and user_id == "alice" else None
 
     async def selected(menu):
-        return selected_value(menu, "事实错误")
+        return selected_value(menu, "事实有误")
 
     original_record_display = action.store.record_display
 
-    def revoke_after_display(*args):
+    def revoke_after_display(*args, **kwargs):
         nonlocal permitted
-        receipt = original_record_display(*args)
+        receipt = original_record_display(*args, **kwargs)
         permitted = False
         return receipt
 
@@ -266,10 +270,14 @@ def test_openwebui_s0_cancel_is_not_decline_and_disconnection_is_not_display(mon
     first = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=cancelled))
     second = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=disconnected))
     assert first["event_id"] == second["event_id"]
-    assert first["result"] == "no_reason_submitted"
+    assert first["result"] == "response_recorded"
     assert second["result"] == "client_unavailable"
     events = action.store.get_events(Principal("isolated-test-instance", "alice"), first["event_id"])
-    assert [event["event_type"] for event in events] == ["negative_feedback_action_recorded", "reason_displayed"]
+    assert [event["event_type"] for event in events] == [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_menu_closed",
+    ]
 
 
 def test_openwebui_s0_pipe_only_answers_fixture(monkeypatch, tmp_path):
@@ -300,7 +308,7 @@ def test_ticket_fractional_deadline(monkeypatch, tmp_path, wall_elapsed, mono_el
         return chat
 
     async def selected(menu):
-        value = selected_value(menu, "事实错误")
+        value = selected_value(menu, "事实有误")
         captured.append(value)
         clock.update(wall=1000.9 + wall_elapsed, mono=2000.0 + mono_elapsed)
         return value
@@ -355,7 +363,7 @@ def test_new_ticket_supersedes_old_callback(monkeypatch, tmp_path, new_reply, se
         async def old(menu):
             opened.set()
             await release.wait()
-            return selected_value(menu, "事实错误")
+            return selected_value(menu, "事实有误")
 
         async def new(menu):
             new_opened.set()
@@ -363,7 +371,7 @@ def test_new_ticket_supersedes_old_callback(monkeypatch, tmp_path, new_reply, se
                 await new_release.wait()
             if new_reply == "disconnect":
                 return {"error": "Client session disconnected."}
-            return selected_value(menu, "内容不相关") if new_reply == "select" else False
+            return selected_value(menu, "答非所问") if new_reply == "select" else False
 
         pending = asyncio.create_task(action.action(body, __user__={"id": "alice"}, __event_call__=old))
         await opened.wait()
@@ -399,7 +407,7 @@ def test_ticket_replaced_between_display_and_reason(monkeypatch, tmp_path):
         return chat
 
     async def selected(menu):
-        return selected_value(menu, "事实错误")
+        return selected_value(menu, "事实有误")
 
     action._owned_chat = owned
     with pytest.raises(ValueError, match="superseded"):

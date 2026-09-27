@@ -1,0 +1,28 @@
+{
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "backend": "C:\\Users\\22826\\.codex\\worktrees\\whynote-s0-review-fixes\\jev\u9879\u76ee\\var\\s0-20260927-upstream\\backend",
+  "port": 8098,
+  "patch_sha256": "f2eedf75e3be42786265c742be7f9701b5717311b9ed34efaee29f5d6881d8e8",
+  "frontend_index_sha256": "c0de254db70d58c2d05693c86282603a0769a1dd9641a4057c69e99d4ac117b0",
+  "action_sha256": "825255b570335a8768a57934927139d12d7231fc2d01ad7c615ca54b90cda11f",
+  "pipe_sha256": "0d8eb90d61a53fd583e3e3fea6e858f45f773b9cfaa441b3b3fb9cf71b4152af",
+  "flags": {
+    "OFFLINE_MODE": "true",
+    "HF_HUB_OFFLINE": "1",
+    "USE_SLIM_DOCKER": "true",
+    "ENABLE_OLLAMA_API": "false",
+    "ENABLE_OPENAI_API": "false",
+    "ENABLE_VERSION_UPDATE_CHECK": "false",
+    "ENABLE_ADMIN_EXPORT": "false",
+    "ENABLE_ADMIN_CHAT_ACCESS": "false",
+    "ENABLE_PERSISTENT_CONFIG": "false",
+    "DATABASE_ENABLE_SQLITE_WAL": "false",
+    "ENABLE_SIGNUP": "true",
+    "DEFAULT_USER_ROLE": "user",
+    "USER_PERMISSIONS_CHAT_RATE_RESPONSE": "false",
+    "CORS_ALLOW_ORIGIN": "http://127.0.0.1:8098",
+    "WEBSOCKET_EVENT_CALLER_TIMEOUT": "60"
+  },
+  "python": "3.11.14 (main, Feb 12 2026, 00:37:49) [MSC v.1944 64 bit (AMD64)]",
+  "scope": "synthetic loopback; flags are not network isolation"
+}

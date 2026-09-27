@@ -1,0 +1,62 @@
+{
+  "native": {
+    "chat_count": 0,
+    "ratings": [
+      [
+        "s0-historical-bob",
+        null,
+        "null"
+      ]
+    ],
+    "reviews": [
+      [
+        "s0-historical-bob",
+        "legacy_target_deleted"
+      ]
+    ]
+  },
+  "independent": {
+    "chat_count": 1,
+    "ratings": [],
+    "reviews": []
+  },
+  "backup": {
+    "integrity": "ok",
+    "chats": 1,
+    "ratings": 2
+  },
+  "b2a": {
+    "actions": 1,
+    "outbox": 1,
+    "events": [
+      [
+        "negative_feedback_action_recorded",
+        1
+      ],
+      [
+        "reason_declined",
+        1
+      ],
+      [
+        "reason_displayed",
+        5
+      ],
+      [
+        "reason_menu_closed",
+        1
+      ],
+      [
+        "reason_none_matched",
+        1
+      ],
+      [
+        "reason_selected",
+        1
+      ],
+      [
+        "reason_skipped",
+        1
+      ]
+    ]
+  }
+}

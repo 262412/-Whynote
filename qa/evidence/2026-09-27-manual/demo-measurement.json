@@ -1,0 +1,104 @@
+{
+  "metric_version": "manual-v1",
+  "as_of": "2026-09-27T03:31:01.597952+00:00",
+  "window_seconds": 86400,
+  "window_boundary": "accepted_at <= response_at < window_end",
+  "cohort_kind": "explicit_synthetic",
+  "cohort_event_ids": [
+    "1a20b627-d62e-4282-bcc9-edec2d9b174b"
+  ],
+  "denominator": 1,
+  "matured_action_count": 0,
+  "provisional": true,
+  "filled_numerator": 1,
+  "fill_rate": 1.0,
+  "window_status_counts": {
+    "selected": 1
+  },
+  "response_action_counts_in_window": {
+    "reason_declined": 0,
+    "reason_edited": 0,
+    "reason_none_matched": 0,
+    "reason_selected": 1,
+    "reason_skipped": 0
+  },
+  "close_count": 0,
+  "closed_action_count": 0,
+  "active_ms": {
+    "n": 1,
+    "median": 5822.4000000059605,
+    "p90": 5822.4000000059605,
+    "percentile_method": "nearest_rank",
+    "unit": "explicit_response"
+  },
+  "server_total_ms": {
+    "n": 1,
+    "median": 5860.735,
+    "p90": 5860.735,
+    "percentile_method": "nearest_rank",
+    "unit": "explicit_response"
+  },
+  "timing_status_counts": {
+    "client_reported": 1
+  },
+  "rows": [
+    {
+      "event_id": "1a20b627-d62e-4282-bcc9-edec2d9b174b",
+      "accepted_at": "2026-09-27T03:30:42.221455Z",
+      "window_end": "2026-09-28T03:30:42.221455+00:00",
+      "window_status": "selected",
+      "window_complete": false,
+      "first_response": "reason_selected",
+      "first_response_in_window": "reason_selected",
+      "first_response_at": "2026-09-27T03:30:48.082190Z",
+      "filled_in_window": true,
+      "late_response_count": 0,
+      "close_count": 0,
+      "display_count": 1,
+      "current_state": {
+        "projection_version": "4",
+        "action_status": "active",
+        "inference_status": "gate_pending",
+        "attribution_status": "selected",
+        "attribution_source": "user_manual",
+        "reason_code": "other_or_unknown",
+        "gate": null,
+        "target_ref": {
+          "object_id": "demo-response",
+          "object_type": "assistant_response",
+          "object_version": "v1"
+        },
+        "response_status": "selected"
+      },
+      "window_state": {
+        "projection_version": "4",
+        "action_status": "active",
+        "inference_status": "gate_pending",
+        "attribution_status": "selected",
+        "attribution_source": "user_manual",
+        "reason_code": "other_or_unknown",
+        "gate": null,
+        "target_ref": {
+          "object_id": "demo-response",
+          "object_type": "assistant_response",
+          "object_version": "v1"
+        },
+        "response_status": "selected"
+      },
+      "response_counts_in_window": {
+        "reason_selected": 1
+      },
+      "late_response": false,
+      "response_timings": [
+        {
+          "active_ms": 5822.4000000059605,
+          "server_total_ms": 5860.735,
+          "timing_status": "client_reported"
+        }
+      ],
+      "action_events": 1,
+      "gate_outbox": 1,
+      "contract": "manual-v1"
+    }
+  ]
+}
