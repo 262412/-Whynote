@@ -1,0 +1,999 @@
+{
+  "date": "2026-09-27",
+  "tested_sha": "4d2ba0fdf2730a6a3048e76a391249cd65148c3b",
+  "main": "944c3acdba75e76c9cd69306d660431f865f30fc",
+  "prd_revision": 82,
+  "technical_revision": 22,
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "patches": {
+    "manual-v0.11.4-timing.patch": "e6c201bddfbf4ddfd57a5e4b6dacba17409a5880a818cb016dcdde4e80f17da8",
+    "native-v0.11.4-s0.patch": "f2eedf75e3be42786265c742be7f9701b5717311b9ed34efaee29f5d6881d8e8"
+  },
+  "suites": {
+    "existing": {
+      "passed": 90,
+      "failed": 0,
+      "cases": [
+        {
+          "name": "test_local_demo_click_display_select_edit_and_retract",
+          "status": "passed"
+        },
+        {
+          "name": "test_old_display_receipt_is_historical_after_new_display",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_demo_instance_cannot_access_previous_instance_actions",
+          "status": "passed"
+        },
+        {
+          "name": "test_local_demo_rejects_foreign_or_unshown_display",
+          "status": "passed"
+        },
+        {
+          "name": "test_display_ticket_ownership_retraction_and_replay",
+          "status": "passed"
+        },
+        {
+          "name": "test_existing_database_adds_ticket_table_without_rewriting_events",
+          "status": "passed"
+        },
+        {
+          "name": "test_action_is_durable_before_gate_and_retries_are_idempotent",
+          "status": "passed"
+        },
+        {
+          "name": "test_ownership_and_input_boundary",
+          "status": "passed"
+        },
+        {
+          "name": "test_revoked_target_access_blocks_existing_action_routes",
+          "status": "passed"
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals0-authorization]",
+          "status": "passed"
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals1-scenario]",
+          "status": "passed"
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals2-sampling]",
+          "status": "passed"
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals3-budget]",
+          "status": "passed"
+        },
+        {
+          "name": "test_allowed_gate_abstains_until_pipeline_is_approved",
+          "status": "passed"
+        },
+        {
+          "name": "test_authorization_failure_discards_sampling_metadata",
+          "status": "passed"
+        },
+        {
+          "name": "test_budget_rejection_does_not_claim_a_valid_weight",
+          "status": "passed"
+        },
+        {
+          "name": "test_retract_before_gate_prevents_gate_result",
+          "status": "passed"
+        },
+        {
+          "name": "test_retract_and_attribution_invalidation_are_distinct",
+          "status": "passed"
+        },
+        {
+          "name": "test_only_explicit_user_action_can_become_confirmed",
+          "status": "passed"
+        },
+        {
+          "name": "test_late_model_result_never_overwrites_user_reason",
+          "status": "passed"
+        },
+        {
+          "name": "test_selection_requires_owned_rendered_display_and_shown_reason",
+          "status": "passed"
+        },
+        {
+          "name": "test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it[reason_declined]",
+          "status": "passed"
+        },
+        {
+          "name": "test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it[reason_skipped]",
+          "status": "passed"
+        },
+        {
+          "name": "test_retracted_confirmed_action_has_no_current_attribution",
+          "status": "passed"
+        },
+        {
+          "name": "test_display_ack_is_idempotent_and_stale_displays_cannot_submit",
+          "status": "passed"
+        },
+        {
+          "name": "test_edit_requires_new_display_and_keeps_user_source",
+          "status": "passed"
+        },
+        {
+          "name": "test_edit_menu_rejects_decline_of_unconfirmed_suggestion",
+          "status": "passed"
+        },
+        {
+          "name": "test_retract_race_with_selection_has_consistent_projection",
+          "status": "passed"
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[2026-09-24T06:00:00]",
+          "status": "passed"
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[2026-09-24 06:00:00Z]",
+          "status": "passed"
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[1790230000]",
+          "status": "passed"
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[2026-09-24T06:00:00+25:00]",
+          "status": "passed"
+        },
+        {
+          "name": "test_client_time_is_normalized_to_utc_in_event",
+          "status": "passed"
+        },
+        {
+          "name": "test_legacy_attribution_events_replay_without_display",
+          "status": "passed"
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_declined]",
+          "status": "passed"
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_skipped]",
+          "status": "passed"
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_unresponded]",
+          "status": "passed"
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[attribution_invalidated]",
+          "status": "passed"
+        },
+        {
+          "name": "test_existing_sqlite_events_replay_after_reopen",
+          "status": "passed"
+        },
+        {
+          "name": "test_jev_contract_rejects_unpinned_or_invalid_distribution",
+          "status": "passed"
+        },
+        {
+          "name": "test_unconfigured_http_boundary_fails_closed",
+          "status": "passed"
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_none_matched]",
+          "status": "passed"
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_skipped]",
+          "status": "passed"
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_declined]",
+          "status": "passed"
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_menu_closed]",
+          "status": "passed"
+        },
+        {
+          "name": "test_cross_session_concurrent_intent_and_outbox_then_retraction",
+          "status": "passed"
+        },
+        {
+          "name": "test_legacy_ambiguity_does_not_choose_or_merge_history",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_operations_reject_foreign_stale_legacy_and_retracted",
+          "status": "passed"
+        },
+        {
+          "name": "test_window_boundary_late_close_retraction_and_fixed_denominator",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes0-cross_session]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes1-invalid_binding]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes2-invalid_duration]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes3-invalid_duration]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes4-invalid_duration]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes5-invalid_duration]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes6-invalid_duration]",
+          "status": "passed"
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes7-client_reported]",
+          "status": "passed"
+        },
+        {
+          "name": "test_zero_click_legacy_timeout_does_not_become_explicit_response",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_action_select_edit_and_keep_content_out_of_events",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_display_ticket_rejects_tamper_and_replay",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_action_rejects_other_user_and_changed_version",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_action_expired_ticket_has_no_display",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_rechecks_permission_before_reason_write",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_cancel_is_not_decline_and_disconnection_is_not_display",
+          "status": "passed"
+        },
+        {
+          "name": "test_openwebui_s0_pipe_only_answers_fixture",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_fractional_deadline[59.5-59.5]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_fractional_deadline[59.999-59.999]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_fractional_deadline[60-60]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_fractional_deadline[60.001-60.001]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_fractional_deadline[61-1]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_fractional_deadline[-5-61]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_wait_timeout_cancels_callback",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-cancel]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-select]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-disconnect]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-pending]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-cancel]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-select]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-disconnect]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-pending]",
+          "status": "passed"
+        },
+        {
+          "name": "test_ticket_replaced_between_display_and_reason",
+          "status": "passed"
+        },
+        {
+          "name": "test_full_ticket_lifetime[0]",
+          "status": "passed"
+        },
+        {
+          "name": "test_full_ticket_lifetime[59.0]",
+          "status": "passed"
+        },
+        {
+          "name": "test_full_ticket_lifetime[59.5]",
+          "status": "passed"
+        },
+        {
+          "name": "test_full_ticket_lifetime[59.999]",
+          "status": "passed"
+        },
+        {
+          "name": "test_full_ticket_lifetime[60.001]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[False-cancel]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[False-select]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[True-cancel]",
+          "status": "passed"
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[True-select]",
+          "status": "passed"
+        }
+      ]
+    },
+    "independent": {
+      "passed": 1,
+      "failed": 9,
+      "cases": [
+        {
+          "name": "test_host_new_click_after_retraction",
+          "status": "failed"
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u90fd\\u4e0d\\u662f]",
+          "status": "failed"
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u6682\\u65f6\\u8df3\\u8fc7]",
+          "status": "failed"
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u4e0d\\u613f\\u8bf4\\u660e]",
+          "status": "failed"
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u5173\\u95ed]",
+          "status": "failed"
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[None]",
+          "status": "failed"
+        },
+        {
+          "name": "test_invalid_optional_timing_does_not_block_http_feedback[active_ms]",
+          "status": "failed"
+        },
+        {
+          "name": "test_invalid_optional_timing_does_not_block_http_feedback[elapsed_ms]",
+          "status": "failed"
+        },
+        {
+          "name": "test_late_retraction_is_separately_reported",
+          "status": "failed"
+        },
+        {
+          "name": "test_repeated_operation_counts_reconcile",
+          "status": "passed"
+        }
+      ]
+    },
+    "native": {
+      "passed": 53,
+      "failed": 0,
+      "cases": [
+        {
+          "name": "test_target_matrix_and_immutable_updates[user-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_target_matrix_and_immutable_updates[user-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_target_matrix_and_immutable_updates[admin-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_target_matrix_and_immutable_updates[admin-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_admin_content_update_and_legacy_no_promotion[False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_admin_content_update_and_legacy_no_promotion[True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_delete_rollback_and_retry[single]",
+          "status": "passed"
+        },
+        {
+          "name": "test_delete_rollback_and_retry[all]",
+          "status": "passed"
+        },
+        {
+          "name": "test_delete_rollback_and_retry[folder]",
+          "status": "passed"
+        },
+        {
+          "name": "test_delete_rollback_and_retry[account]",
+          "status": "passed"
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[create-write]",
+          "status": "passed"
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[create-delete]",
+          "status": "passed"
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[create-revoke]",
+          "status": "passed"
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[update-write]",
+          "status": "passed"
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[update-delete]",
+          "status": "passed"
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[update-revoke]",
+          "status": "passed"
+        },
+        {
+          "name": "test_migration_preserves_old_rows_and_downgrade",
+          "status": "passed"
+        },
+        {
+          "name": "test_commit_failure_is_atomic[create]",
+          "status": "passed"
+        },
+        {
+          "name": "test_commit_failure_is_atomic[update]",
+          "status": "passed"
+        },
+        {
+          "name": "test_commit_failure_is_atomic[account]",
+          "status": "passed"
+        },
+        {
+          "name": "test_review_inventory_is_read_only_and_minimal",
+          "status": "passed"
+        },
+        {
+          "name": "test_auth_account_delete_rolls_back_at_credential_failure",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-admin-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-admin-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-user-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-user-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-admin-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-admin-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-user-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-user-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-admin-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-admin-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-user-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-user-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-admin-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-admin-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-user-False]",
+          "status": "passed"
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-user-True]",
+          "status": "passed"
+        },
+        {
+          "name": "test_create_update_snapshot_and_export",
+          "status": "passed"
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[single]",
+          "status": "passed"
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[single_admin]",
+          "status": "passed"
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[all]",
+          "status": "passed"
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[folder]",
+          "status": "passed"
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[account]",
+          "status": "passed"
+        },
+        {
+          "name": "test_delete_all_with_no_chats_preserves_unrelated_feedback",
+          "status": "passed"
+        },
+        {
+          "name": "test_activity_backup_export_and_log_boundaries",
+          "status": "passed"
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[single]",
+          "status": "passed"
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[all]",
+          "status": "passed"
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[folder]",
+          "status": "passed"
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[account]",
+          "status": "passed"
+        },
+        {
+          "name": "test_shared_snapshot_restored_on_account_credential_failure",
+          "status": "passed"
+        },
+        {
+          "name": "test_identifier_length_boundary_and_zero_write[chat_id]",
+          "status": "passed"
+        },
+        {
+          "name": "test_identifier_length_boundary_and_zero_write[message_id]",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "observations": [
+    {
+      "case": "post_retraction",
+      "same_event": true,
+      "result": "retracted",
+      "actions": 1,
+      "gate_outbox": 1
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "都不是",
+      "reason_code": null,
+      "notifications": [
+        "知因 S0 反馈与原因已记录"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "暂时跳过",
+      "reason_code": null,
+      "notifications": [
+        "知因 S0 反馈与原因已记录"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "不愿说明",
+      "reason_code": null,
+      "notifications": [
+        "知因 S0 反馈与原因已记录"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "关闭",
+      "reason_code": null,
+      "notifications": [
+        "知因 S0 反馈与原因已记录"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": null,
+      "reason_code": null,
+      "notifications": [
+        "知因 S0 反馈与原因已记录"
+      ]
+    },
+    {
+      "case": "oversized_timing",
+      "field": "active_ms",
+      "status": 500,
+      "events_before": 2,
+      "events_after": 2
+    },
+    {
+      "case": "oversized_timing",
+      "field": "elapsed_ms",
+      "status": 500,
+      "events_before": 2,
+      "events_after": 2
+    },
+    {
+      "case": "late_retraction",
+      "denominator": 1,
+      "window_status": "unresponded",
+      "current": "retracted",
+      "aggregate": {
+        "unresponded": 1
+      }
+    },
+    {
+      "case": "repeat_counts",
+      "per_action_occurrences": {
+        "reason_selected": 1,
+        "reason_edited": 2
+      },
+      "aggregate_unique_actions": {
+        "reason_declined": 0,
+        "reason_edited": 1,
+        "reason_none_matched": 0,
+        "reason_selected": 1,
+        "reason_skipped": 0
+      }
+    }
+  ],
+  "loopback_http": {
+    "checks": [
+      {
+        "name": "create",
+        "actual": 202,
+        "expected": 202,
+        "passed": true
+      },
+      {
+        "name": "new-request-same-active-intent",
+        "actual": "467eef12-61e5-4d61-99d2-90e2ea8200f1",
+        "expected": "467eef12-61e5-4d61-99d2-90e2ea8200f1",
+        "passed": true
+      },
+      {
+        "name": "reason_selected-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_selected-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_declined-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-reason",
+        "actual": null,
+        "expected": null,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "oversized-optional-timing-accepted",
+        "actual": 500,
+        "expected": 200,
+        "passed": false
+      },
+      {
+        "name": "oversized-optional-timing-response-persisted",
+        "actual": 0,
+        "expected": 1,
+        "passed": false
+      },
+      {
+        "name": "valid-retry-after-invalid-timing",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      }
+    ],
+    "passed": 33,
+    "failed": 2,
+    "event_types": [
+      "negative_feedback_action_recorded",
+      "reason_displayed",
+      "reason_selected",
+      "reason_displayed",
+      "reason_skipped",
+      "reason_displayed",
+      "reason_declined",
+      "reason_displayed",
+      "reason_menu_closed",
+      "reason_displayed",
+      "reason_none_matched",
+      "reason_displayed",
+      "reason_selected"
+    ],
+    "db_sha256": "6425afad781eb2a1ae2c71b1fe4462c2665bbdf9b32a9fa43f4a14201e941ff6",
+    "scope": "Loopback demo HTTP; scripted client timings; no browser or real host login"
+  },
+  "browser": {
+    "executed": false,
+    "error": "nodeRepl.fetch request failed"
+  },
+  "issues": [
+    "Q-17",
+    "Q-18",
+    "Q-19",
+    "Q-20"
+  ],
+  "ci_before_new_tests": {
+    "pr18": 36292597662,
+    "pr19": 36291933646,
+    "main": 36287965797,
+    "all": "success"
+  },
+  "scope": "Synthetic local functional QA; no complete FR, real data or production acceptance",
+  "document_updates": {
+    "prd": {
+      "from": 82,
+      "to": 83,
+      "history_preserved": true,
+      "anchor": "doxc6tkku7tqgxyv11ZpsU5eXZb"
+    },
+    "technical": {
+      "from": 22,
+      "to": 23,
+      "history_preserved": true,
+      "anchor": "doxc6ouoII5tEXhRbAgM7lgk5Jf"
+    }
+  },
+  "cleanup": {
+    "loopback_port": 8106,
+    "stopped": true,
+    "original_status_unchanged": true
+  }
+}
