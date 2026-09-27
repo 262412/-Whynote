@@ -15,7 +15,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from .api import create_app
-from .domain import ConflictError, NotFoundError, Principal
+from .domain import MANUAL_OPERATIONS, MANUAL_REASONS, ConflictError, NotFoundError, Principal
 
 DEMO_TARGET = {"object_type": "assistant_response", "object_id": "demo-response", "object_version": "v1"}
 DEMO_REASONS = [
@@ -32,7 +32,7 @@ class RenderedDisplay(BaseModel):
     event_id: str = Field(min_length=1)
     display_id: str = Field(min_length=1)
     mode: Literal["manual_menu", "edit_menu"]
-    ui_version: Literal["demo-v1"]
+    ui_version: Literal["demo-v1", "manual-menu-v1"]
     shown_reason_codes: list[str]
 
 
@@ -64,7 +64,12 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
     def page(request: Request) -> HTMLResponse:
         _require_loopback(request)
         template = Path(__file__).with_name("demo.html").read_text(encoding="utf-8")
-        config = {"token": token, "target": DEMO_TARGET, "reasons": DEMO_REASONS}
+        config = {
+            "token": token,
+            "target": DEMO_TARGET,
+            "reasons": [{"code": code, "label": label} for code, label in MANUAL_REASONS],
+            "operations": MANUAL_OPERATIONS,
+        }
         html = template.replace("__DEMO_CONFIG__", json.dumps(config, ensure_ascii=False))
         return HTMLResponse(
             html,
@@ -79,7 +84,8 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
     @app.post("/demo/rendered-displays")
     def rendered_display(body: RenderedDisplay, request: Request) -> dict[str, str | bool]:
         principal = authenticate(request)
-        if body.shown_reason_codes != DEMO_CODES:
+        codes = [code for code, _ in MANUAL_REASONS] if body.ui_version == "manual-menu-v1" else DEMO_CODES
+        if body.shown_reason_codes != codes:
             raise HTTPException(409, "display does not match the local demo menu")
         try:
             target = store.get_target_ref(principal, body.event_id)
@@ -98,6 +104,17 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
         except ConflictError as exc:
             raise HTTPException(409, str(exc)) from exc
         return receipt
+
+    @app.post("/demo/display-tickets")
+    def issue_ticket(body: RenderedDisplay, request: Request) -> dict:
+        principal = authenticate(request)
+        try:
+            store.issue_display_ticket(principal, body.event_id, body.display_id)
+            return {"display_id": body.display_id}
+        except NotFoundError as exc:
+            raise HTTPException(404, str(exc)) from exc
+        except ConflictError as exc:
+            raise HTTPException(409, str(exc)) from exc
 
     return app
 

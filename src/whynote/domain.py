@@ -20,6 +20,23 @@ REASON_CODES = frozenset(
     }
 )
 DISPLAY_MODES = frozenset({"manual_menu", "model_suggestion", "edit_menu"})
+MANUAL_UI_VERSION = "manual-menu-v1"
+MANUAL_REASONS = [
+    ("factual_error", "事实有误"),
+    ("instruction_not_followed", "未按指令"),
+    ("incomplete", "回答不完整"),
+    ("irrelevant", "答非所问"),
+    ("style", "表达方式不合适"),
+    ("outdated", "信息过时"),
+    ("unnecessary_refusal", "不必要的拒绝"),
+    ("other_or_unknown", "其他或无法归类"),
+]
+MANUAL_OPERATIONS = {
+    "reason_none_matched": "都不是",
+    "reason_skipped": "暂时跳过",
+    "reason_declined": "不愿说明",
+    "reason_menu_closed": "关闭",
+}
 DISPLAY_ACTIONS = {
     "manual_menu": frozenset({"reason_selected", "reason_declined", "reason_skipped"}),
     "model_suggestion": frozenset({"reason_confirmed", "attribution_invalidated", "reason_declined", "reason_skipped"}),
@@ -101,7 +118,9 @@ def decide_gate(signals: GateSignals) -> dict[str, Any]:
     }
 
 
-def validate_display(state: Mapping[str, Any], mode: str, shown_reason_codes: list[str]) -> None:
+def validate_display(
+    state: Mapping[str, Any], mode: str, shown_reason_codes: list[str], ui_version: str = "legacy"
+) -> None:
     if state["action_status"] != "active":
         raise ConflictError("cannot display reasons for a retracted action")
     if mode not in DISPLAY_MODES:
@@ -111,6 +130,11 @@ def validate_display(state: Mapping[str, Any], mode: str, shown_reason_codes: li
     if len(set(shown_reason_codes)) != len(shown_reason_codes) or not set(shown_reason_codes) <= REASON_CODES:
         raise ConflictError("display contains invalid or duplicate reason codes")
     status = state["attribution_status"]
+    if ui_version == MANUAL_UI_VERSION:
+        if mode not in {"manual_menu", "edit_menu"} or shown_reason_codes != [code for code, _ in MANUAL_REASONS]:
+            raise ConflictError("manual v1 requires the complete ordered menu")
+        if mode == "manual_menu" and status in {"declined", "skipped", "unresponded", "none_matched"}:
+            return
     if mode == "manual_menu" and status not in {"none", "model_inferred_unconfirmed", "invalidated"}:
         raise ConflictError("manual menu cannot replace a submitted response")
     if mode == "model_suggestion" and (
@@ -127,6 +151,18 @@ def validate_user_action(
     if state["action_status"] != "active":
         raise ConflictError("cannot attribute a retracted action")
     mode = display["mode"]
+    if display.get("ui_version") == MANUAL_UI_VERSION:
+        if user_action in MANUAL_OPERATIONS:
+            if reason_code is not None:
+                raise ConflictError("this action must not include a reason code")
+            return
+        if user_action == "reason_selected" and state["attribution_status"] in {
+            "declined",
+            "skipped",
+            "unresponded",
+            "none_matched",
+        }:
+            state = {**state, "attribution_status": "none"}
     if user_action not in DISPLAY_ACTIONS.get(mode, frozenset()):
         raise ConflictError("user action does not match the displayed mode")
     if user_action in {"reason_selected", "reason_confirmed", "reason_edited"}:
@@ -173,6 +209,10 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     for event in events:
         kind = event["event_type"]
         payload = event["payload"]
+        if payload.get("interaction_contract") == "manual-v1" or payload.get("ui_version") == MANUAL_UI_VERSION:
+            state["projection_version"] = "4"
+        if payload.get("response_source") == "user_explicit":
+            state["response_status"] = kind.removeprefix("reason_")
         if state["action_status"] == "retracted":
             continue
         if kind == "negative_feedback_action_recorded":
@@ -209,6 +249,10 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
                 "reason_edited": "user_edited",
             }[kind]
             state["reason_code"] = payload["reason_code"]
+        elif kind == "reason_none_matched":
+            state["attribution_status"] = "none_matched"
+            state["attribution_source"] = "none"
+            state["reason_code"] = None
         elif kind in {"reason_declined", "reason_skipped", "reason_unresponded"}:
             if state["attribution_status"] in {"selected", "confirmed", "edited"}:
                 continue

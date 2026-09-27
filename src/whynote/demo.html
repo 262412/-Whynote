@@ -33,7 +33,7 @@
   <main>
     <div class="eyebrow">仅供本机测试 · 虚构对象</div>
     <h1>知因・Whynote</h1>
-    <p class="intro">体验点踩、选择原因、更正和撤销的事件流程。这里的原因菜单是未冻结的候选版本，不会调用模型或读取真实聊天。</p>
+    <p class="intro">点踩即完成反馈，原因可选。常规菜单 v1 仅用于虚构测试，不会调用模型或读取真实聊天。</p>
     <section class="card" aria-label="虚构回答反馈">
       <strong>虚构回答 · demo-response</strong>
       <p class="sample">这是用于验证反馈交互的虚构回答，没有关联真实问题或用户数据。</p>
@@ -63,6 +63,7 @@
     let displayId = null;
     let currentMode = null;
     let reasonButtons = [];
+    let hasReason = false;
 
     function showStatus(message, error = false) {
       status.textContent = message;
@@ -85,6 +86,9 @@
     async function showMenu(mode) {
       currentMode = mode;
       displayId = crypto.randomUUID();
+      const display = {event_id: eventId, display_id: displayId, mode,
+        ui_version: "manual-menu-v1", shown_reason_codes: config.reasons.map(reason => reason.code)};
+      await post("/demo/display-tickets", display);
       menuTitle.textContent = mode === "manual_menu" ? "请选择原因" : "请选择更正后的原因";
       reasonsBox.replaceChildren();
       reasonButtons = config.reasons.map(reason => {
@@ -97,24 +101,26 @@
         reasonsBox.append(button);
         return button;
       });
+      for (const [action, label] of Object.entries(config.operations)) {
+        const button = document.createElement("button");
+        button.textContent = label;
+        button.disabled = true;
+        button.addEventListener("click", () => submitReason(null, action));
+        reasonsBox.append(button);
+        reasonButtons.push(button);
+      }
       menu.hidden = false;
       await afterPaint();
-      const receipt = await post("/demo/rendered-displays", {
-        event_id: eventId,
-        display_id: displayId,
-        mode,
-        ui_version: "demo-v1",
-        shown_reason_codes: config.reasons.map(reason => reason.code)
-      });
+      const receipt = await post("/demo/rendered-displays", display);
       if (!receipt.actionable) throw new Error("展示回执已失效，请刷新页面重试");
       reasonButtons.forEach(button => { button.disabled = false; });
       showStatus("测试回执已记录，请选择一项。");
     }
 
-    async function submitReason(code) {
+    async function submitReason(code, operation = null) {
       reasonButtons.forEach(button => { button.disabled = true; });
       try {
-        const action = currentMode === "manual_menu" ? "reason_selected" : "reason_edited";
+        const action = operation || (currentMode === "manual_menu" ? "reason_selected" : "reason_edited");
         const result = await post(`/v1/feedback-actions/${eventId}/attribution-events`, {
           user_action: action,
           reason_code: code,
@@ -124,7 +130,9 @@
         menu.hidden = true;
         editButton.hidden = false;
         editButton.disabled = false;
-        showStatus(`已记录 ${result.attribution_status}：${code}。`);
+        hasReason = ["selected", "confirmed", "edited"].includes(result.attribution_status);
+        editButton.textContent = hasReason ? "更正原因" : "重新打开原因菜单";
+        showStatus(`反馈已保存。${operation ? config.operations[operation] : config.reasons.find(r => r.code === code).label}；当前原因：${config.reasons.find(r => r.code === result.reason_code)?.label || "未填写"}。`);
       } catch (error) {
         reasonButtons.forEach(button => { button.disabled = false; });
         showStatus(`提交失败：${error.message}`, true);
@@ -139,12 +147,15 @@
             target_ref: config.target,
             action_type: "negative_feedback",
             channel: "local-demo",
-            locale: "zh-CN"
+            locale: "zh-CN",
+            interaction_contract: "manual-v1"
           }, crypto.randomUUID());
           eventId = result.event_id;
+          hasReason = ["selected", "confirmed", "edited"].includes(result.attribution_status);
           retractButton.hidden = false;
+          retractButton.disabled = false;
         }
-        await showMenu("manual_menu");
+        await showMenu(hasReason ? "edit_menu" : "manual_menu");
       } catch (error) {
         menu.hidden = true;
         dislikeButton.disabled = false;
@@ -155,7 +166,7 @@
     editButton.addEventListener("click", async () => {
       editButton.disabled = true;
       try {
-        await showMenu("edit_menu");
+        await showMenu(hasReason ? "edit_menu" : "manual_menu");
       } catch (error) {
         menu.hidden = true;
         editButton.disabled = false;
@@ -169,6 +180,9 @@
         await post(`/v1/feedback-actions/${eventId}/retract`, {}, crypto.randomUUID());
         menu.hidden = true;
         editButton.hidden = true;
+        eventId = null;
+        hasReason = false;
+        dislikeButton.disabled = false;
         showStatus("点踩已撤销，当前原因已清空；历史事件仍保留。");
       } catch (error) {
         retractButton.disabled = false;

@@ -50,7 +50,7 @@ def test_full_ticket_lifetime(monkeypatch, tmp_path, elapsed):
 
     async def selected(menu):
         clock.update(wall=1000.9 + elapsed, mono=2000.0 + elapsed)
-        return HELPERS["selected_value"](menu, "事实错误")
+        return HELPERS["selected_value"](menu, "事实有误")
 
     result = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=selected))
     events = evidence(action, result)
@@ -76,15 +76,15 @@ def test_new_menu_supersedes_pending_callback(monkeypatch, tmp_path, new_reply, 
         async def old(menu):
             opened.set()
             await release.wait()
-            return HELPERS["selected_value"](menu, "事实错误")
+            return HELPERS["selected_value"](menu, "事实有误")
 
         async def new(menu):
-            return False if new_reply == "cancel" else HELPERS["selected_value"](menu, "内容不相关")
+            return False if new_reply == "cancel" else HELPERS["selected_value"](menu, "答非所问")
 
         pending = asyncio.create_task(action.action(body, __user__={"id": "alice"}, __event_call__=old))
         await opened.wait()
         current = await newer.action(body, __user__={"id": "alice"}, __event_call__=new)
-        assert current["result"] == ("no_reason_submitted" if new_reply == "cancel" else "reason_submitted")
+        assert current["result"] == ("response_recorded" if new_reply == "cancel" else "reason_submitted")
         before = action.store.get_events(Principal("isolated-test-instance", "alice"), current["event_id"])
         release.set()
         try:

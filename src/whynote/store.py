@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterator, Mapping
 
 from .domain import (
+    MANUAL_UI_VERSION,
     ConflictError,
     GateSignals,
     NotFoundError,
@@ -210,6 +211,23 @@ class EventStore:
             old = self._check_idempotency(db, principal, key_hash, "create", request_hash)
             if old:
                 return self._projection(db, old["event_id"])
+            if metadata.get("interaction_contract") == "manual-v1":
+                candidates = db.execute(
+                    "SELECT event_id FROM actions WHERE tenant_ref=? AND actor_ref=? AND target_ref=?",
+                    (principal.tenant_ref, principal.actor_ref, _json(target_ref)),
+                ).fetchall()
+                active = [
+                    row["event_id"]
+                    for row in candidates
+                    if self._projection(db, row["event_id"])["action_status"] == "active"
+                ]
+                if len(active) > 1:
+                    raise ConflictError("multiple legacy active actions require review")
+                if active:
+                    event_id = active[0]
+                    record_id = self._events(db, event_id)[0]["record_id"]
+                    self._save_idempotency(db, principal, key_hash, "create", request_hash, event_id, record_id)
+                    return self._projection(db, event_id)
             event_id = str(uuid.uuid4())
             db.execute(
                 "INSERT INTO actions VALUES(?,?,?,?,?)",
@@ -326,6 +344,8 @@ class EventStore:
                             "reason_declined",
                             "reason_skipped",
                             "reason_unresponded",
+                            "reason_none_matched",
+                            "reason_menu_closed",
                             "attribution_invalidated",
                         }
                         and event["payload"].get("display_id") == display_id
@@ -344,7 +364,7 @@ class EventStore:
                     }
             if not self._ticket_is_current(db, event_id, display_id):
                 raise ConflictError("display ticket superseded")
-            validate_display(state, mode, shown_reason_codes)
+            validate_display(state, mode, shown_reason_codes, ui_version)
             self._append(db, event_id, "reason_displayed", payload, "ui")
             return {"display_id": display_id, "receipt_status": "current", "actionable": True}
 
@@ -365,6 +385,8 @@ class EventStore:
             "reason_declined",
             "reason_skipped",
             "attribution_invalidated",
+            "reason_none_matched",
+            "reason_menu_closed",
         }
         if user_action not in allowed or not explicit_submission:
             raise ConflictError("an explicit supported user action is required")
@@ -392,9 +414,13 @@ class EventStore:
             validate_user_action(project(events), user_action, reason_code, display)
             payload["ui_version"] = display["ui_version"]
             payload["display_mode"] = display["mode"]
+            version = 2
+            if display["ui_version"] == MANUAL_UI_VERSION:
+                payload["response_source"] = "user_explicit"
+                version = 3
             if user_action == "reason_selected":
                 payload["attribution_source"] = "user_manual"
-            record_id = self._append(db, event_id, user_action, payload, "user", event_version=2)
+            record_id = self._append(db, event_id, user_action, payload, "user", event_version=version)
             self._save_idempotency(db, principal, key_hash, user_action, request_hash, event_id, record_id)
             return self._projection(db, event_id)
 

@@ -1,7 +1,7 @@
 """
 title: 知因 S0 点踩
 author: Whynote
-version: 0.1.1
+version: 0.2.0
 required_open_webui_version: 0.11.4
 """
 
@@ -16,18 +16,15 @@ import time
 import uuid
 from pathlib import Path
 
-from whynote.domain import Principal
+from whynote.domain import MANUAL_OPERATIONS, MANUAL_REASONS, MANUAL_UI_VERSION, Principal
 from whynote.store import EventStore
 
-REASONS = {
-    "事实错误": "factual_error",
-    "内容不相关": "irrelevant",
-    "表达方式": "style",
-}
+REASONS = {label: code for code, label in MANUAL_REASONS}
+OPTIONS = {**REASONS, **{label: operation for operation, label in MANUAL_OPERATIONS.items()}}
 TICKET_SECONDS = 60
 MENU_TITLE = "知因・Whynote S0 原因"
-MENU_MESSAGE = "请选择一个原因；取消则不提交原因。仅限虚构数据测试。"
-UI_VERSION = "openwebui-s0-select-v1"
+MENU_MESSAGE = "点踩已受理，原因可选。取消仅记录关闭，保留已有原因。仅限虚构数据测试。"
+UI_VERSION = MANUAL_UI_VERSION
 
 
 class Action:
@@ -112,6 +109,7 @@ class Action:
                 "channel": "openwebui-s0",
                 "locale": "zh-CN",
                 "client_occurred_at": None,
+                "interaction_contract": "manual-v1",
             },
             key,
         )
@@ -138,7 +136,7 @@ class Action:
             "reasons": list(REASONS.items()),
         }
         choices = []
-        for label, reason_code in REASONS.items():
+        for label, reason_code in OPTIONS.items():
             signed = json.dumps(
                 {**ticket_context, "reason_code": reason_code},
                 ensure_ascii=False,
@@ -187,15 +185,17 @@ class Action:
             UI_VERSION,
         )
         if answer is False:
-            return {"event_id": event_id, "display": receipt, "result": "no_reason_submitted"}
+            reason_code = "reason_menu_closed"
         current = await self._owned_chat(body["chat_id"], user_id)
         if self._target(current, body) != target:
             return {"event_id": event_id, "display": receipt, "result": "target_changed"}
         updated = self.store.record_user_action(
             principal,
             event_id,
-            "reason_edited" if mode == "edit_menu" else "reason_selected",
-            reason_code,
+            reason_code
+            if reason_code in MANUAL_OPERATIONS
+            else ("reason_edited" if mode == "edit_menu" else "reason_selected"),
+            None if reason_code in MANUAL_OPERATIONS else reason_code,
             display_id,
             True,
             f"s0-choice:{display_id}",
@@ -207,6 +207,6 @@ class Action:
         return {
             "event_id": event_id,
             "display": receipt,
-            "result": "reason_submitted",
+            "result": "response_recorded" if reason_code in MANUAL_OPERATIONS else "reason_submitted",
             "attribution_status": updated["attribution_status"],
         }
