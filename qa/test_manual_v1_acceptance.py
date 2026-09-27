@@ -337,3 +337,80 @@ def test_completed_click_retries_preserve_all_tables_and_valid_timing(monkeypatc
         identical=True,
         response_payload=events[-1]["payload"],
     )
+
+
+@pytest.mark.parametrize("explicit", [False, True])
+@pytest.mark.parametrize("busy_seconds", [0, 0.75])
+def test_callback_arrival_precedes_event_loop_database_wait(monkeypatch, tmp_path, explicit, busy_seconds):
+    """A callback returned on time must survive a queued synchronous DB wait."""
+    import threading
+    import time
+    from types import SimpleNamespace
+
+    action, body = host(monkeypatch, tmp_path)
+    if explicit:
+        body["whynote_click_id"] = str(uuid.uuid4())
+    principal = Principal(action.tenant, "alice")
+    started, offset = time.monotonic(), [0.0]
+
+    def now():
+        return 1000.9 + time.monotonic() - started + offset[0]
+
+    monkeypatch.setitem(action.action.__func__.__globals__, "time", SimpleNamespace(time=now, monotonic=now))
+    published, locked, returned = (threading.Event() for _ in range(3))
+    publish = action.store.set_host_click_deadline
+
+    def publish_then_signal(*args):
+        publish(*args)
+        published.set()
+
+    monkeypatch.setattr(action.store, "set_host_click_deadline", publish_then_signal)
+
+    def writer():
+        with sqlite3.connect(action.store.path) as db:
+            db.execute("BEGIN IMMEDIATE")
+            locked.set()
+            assert returned.wait(5)
+            time.sleep(busy_seconds)
+
+    worker = threading.Thread(target=writer)
+    observed = {}
+
+    async def respond(menu):
+        if explicit:
+            assert await asyncio.to_thread(published.wait, 5)
+        eid = action.store.next_gate_message()["event_id"]
+        worker.start()
+        assert await asyncio.to_thread(locked.wait, 5)
+        value = HELPERS["selected_value"](menu, "事实有误")
+        deadline = float(value.split(".factual_error.")[0].split(".", 2)[2])
+        offset[0] += 59.5
+        observed["remaining_at_callback_return"] = deadline - now()
+
+        def another_request():
+            action.store.get_events(principal, eid)
+            observed["remaining_after_queued_database_read"] = deadline - now()
+
+        # A concurrent request can synchronously wait for the database on this loop.
+        asyncio.get_running_loop().call_soon(another_request)
+        returned.set()
+        return value
+
+    try:
+        result = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=respond))
+    finally:
+        worker.join(5)
+    events = action.store.get_events(principal, result["event_id"])
+    emit_evidence(
+        "callback_arrival_and_scheduling",
+        explicit=explicit,
+        busy_seconds=busy_seconds,
+        result=result["result"],
+        event_types=[e["event_type"] for e in events],
+        **observed,
+    )
+    assert observed["remaining_at_callback_return"] > 0
+    if busy_seconds:
+        assert observed["remaining_after_queued_database_read"] < 0
+    assert result["result"] == "reason_submitted"
+    assert len(events) == 3
