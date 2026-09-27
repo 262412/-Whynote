@@ -76,7 +76,7 @@ def text_message(message: dict, role: str) -> str:
     return text
 
 
-def generation_input(chat, message_id: str) -> tuple[str, str, list[dict]]:
+def generation_input(chat, message_id: str, store) -> tuple[str, str, list[dict]]:
     """Read only the saved current branch, never the client-provided message list."""
     messages = chat.chat.get("history", {}).get("messages", {})
     answer = messages.get(message_id)
@@ -95,6 +95,7 @@ def generation_input(chat, message_id: str) -> tuple[str, str, list[dict]]:
         seen.add(previous)
         prior_answer = messages.get(previous)
         prior_text = text_message(prior_answer, "assistant")
+        store.qualify(chat, {"chat_id": chat.id, "id": previous, "model": PIPE_ID, "messages": [prior_answer]})
         if prior_answer.get("model") != PIPE_ID or prior_answer.get("done") is not True or prior_answer.get("error"):
             raise NotFoundError("S1 history requires completed trial answers")
         prior_parent_id = prior_answer.get("parentId")
@@ -117,7 +118,7 @@ class TrialStore(EventStore):
         self.guard = None
         super().__init__(config["db_path"])
         with self._transaction() as db:
-            db.executescript("""
+            schema = """
                 CREATE TABLE IF NOT EXISTS s1_instance (id TEXT PRIMARY KEY);
                 CREATE TABLE IF NOT EXISTS s1_chats (
                     chat_id TEXT PRIMARY KEY, user_id TEXT NOT NULL, active INTEGER NOT NULL
@@ -133,7 +134,10 @@ class TrialStore(EventStore):
                     chat_id TEXT NOT NULL, message_id TEXT NOT NULL, attempt_id TEXT NOT NULL,
                     PRIMARY KEY (chat_id, message_id)
                 );
-            """)
+            """
+            for statement in schema.split(";"):
+                if statement.strip():
+                    db.execute(statement)
             # Additive migration from the first S1 development schema. Old rows
             # stay unknown; do not infer past provider identity or token counts.
             columns = {row["name"] for row in db.execute("PRAGMA table_info(s1_generations)")}
@@ -143,6 +147,7 @@ class TrialStore(EventStore):
                 ("pricing_version", "TEXT"),
                 ("prompt_tokens", "INTEGER"),
                 ("completion_tokens", "INTEGER"),
+                ("saved_at", "REAL"),
             ):
                 if name not in columns:
                     db.execute(f"ALTER TABLE s1_generations ADD COLUMN {name} {kind}")
@@ -204,7 +209,7 @@ class TrialStore(EventStore):
 
     @staticmethod
     def _available(db):
-        if db.execute("SELECT 1 FROM s1_generations WHERE status='pending'").fetchone():
+        if db.execute("SELECT 1 FROM s1_generations WHERE status IN ('pending','awaiting_save')").fetchone():
             raise ConflictError("S1 generation is already in flight; interrupted runs require reconciliation")
         spent = db.execute(
             "SELECT COALESCE(SUM(COALESCE(settled_micro,reserved_micro)),0) FROM s1_generations"
@@ -242,7 +247,7 @@ class TrialStore(EventStore):
                 "UPDATE s1_generations SET status=?,answer_hash=?,version=?,settled_micro=?,"
                 "prompt_tokens=?,completion_tokens=? WHERE attempt_id=?",
                 (
-                    "completed" if answer_hash else "incomplete",
+                    "awaiting_save" if answer_hash else "incomplete",
                     answer_hash,
                     version,
                     settled,
@@ -256,7 +261,7 @@ class TrialStore(EventStore):
         self._admitted(db, chat_id, user_id)
         row = db.execute(
             "SELECT g.* FROM s1_generations g JOIN s1_current c ON c.attempt_id=g.attempt_id "
-            "WHERE c.chat_id=? AND c.message_id=? AND g.user_id=? AND g.status='completed'",
+            "WHERE c.chat_id=? AND c.message_id=? AND g.user_id=? AND g.status='completed' AND g.saved_at IS NOT NULL",
             (chat_id, message_id, user_id),
         ).fetchone()
         if (
@@ -266,6 +271,37 @@ class TrialStore(EventStore):
         ):
             raise NotFoundError("S1 response has no completed generation receipt")
         return row
+
+    def confirm_saved(self, chat, message_id):
+        """Only called by the host's successful final-persistence hook, never a route."""
+        if chat is None or chat.user_id != self.config["user_id"]:
+            return
+        messages = chat.chat.get("history", {}).get("messages", {})
+        answer = messages.get(message_id, {})
+        parent = messages.get(answer.get("parentId"), {})
+        with self._transaction() as db:
+            row = db.execute(
+                "SELECT g.* FROM s1_generations g JOIN s1_current c ON c.attempt_id=g.attempt_id "
+                "JOIN s1_chats a ON a.chat_id=g.chat_id AND a.active=1 "
+                "WHERE c.chat_id=? AND c.message_id=? AND g.user_id=? AND g.status='awaiting_save'",
+                (chat.id, message_id, chat.user_id),
+            ).fetchone()
+            key = self.config["version_key"].encode()
+            if (
+                row is not None
+                and answer.get("done") is True
+                and not answer.get("error")
+                and answer.get("role") == "assistant"
+                and answer.get("model") == PIPE_ID
+                and parent.get("role") == "user"
+                and row["parent_id"] == answer.get("parentId")
+                and row["parent_hash"] == digest(key, parent.get("content"))
+                and row["answer_hash"] == digest(key, answer.get("content"))
+            ):
+                db.execute(
+                    "UPDATE s1_generations SET status='completed',saved_at=? WHERE attempt_id=?",
+                    (time.time(), row["attempt_id"]),
+                )
 
     def qualify(self, chat, body: dict) -> dict[str, str]:
         chat_id, message_id = str(uuid.UUID(body["chat_id"])), str(uuid.UUID(body["id"]))

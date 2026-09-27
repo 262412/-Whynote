@@ -81,6 +81,25 @@ async def run(args):
                 await asyncio.sleep(0.1)
             check("saved-complete-answer", answer.get("content"), ANSWER)
             check("saved-without-error", bool(answer.get("error")), False)
+            next_user, next_answer = str(uuid.uuid4()), str(uuid.uuid4())
+            followup = {
+                **request,
+                "chat_id": chat_id,
+                "parent_id": message_id,
+                "id": next_answer,
+                "user_message": dict(id=next_user, role="user", content="S1 虚构：正常回答", parentId=message_id),
+            }
+            response = await api.post("/api/chat/completions", json=followup)
+            check("trusted-history-generation", response.status_code, 200)
+            for _ in range(200):
+                saved = await api.get(f"/api/v1/chats/{chat_id}")
+                saved.raise_for_status()
+                messages = saved.json()["chat"]["history"]["messages"]
+                if messages.get(next_answer, {}).get("done"):
+                    break
+                await asyncio.sleep(0.1)
+            check("trusted-history-answer", messages[next_answer].get("content"), ANSWER)
+            check("trusted-history-no-error", bool(messages[next_answer].get("error")), False)
             action_body = dict(
                 chat_id=chat_id,
                 id=message_id,
@@ -139,9 +158,9 @@ async def run(args):
                     2,
                 )
                 check(
-                    "one-generation-only",
+                    "two-explicit-generations-only",
                     db.execute("SELECT COUNT(*) FROM s1_generations").fetchone()[0] - initial_generations,
-                    1,
+                    2,
                 )
             before = events()
             edited = await api.post(f"/api/v1/chats/{chat_id}/messages/{message_id}", json={"content": "虚构编辑"})

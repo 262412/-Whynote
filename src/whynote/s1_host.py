@@ -20,16 +20,25 @@ def invalidate_chat(chat_id, *, revoke=False):
 def invalidate_edit(chat, incoming):
     if not os.environ.get("WHYNOTE_S1_CONFIG"):
         return
+    if "history" not in incoming:
+        return
     before = chat.chat.get("history", {}).get("messages", {})
     after = incoming.get("history", {}).get("messages", {})
-    fields = ("role", "content", "parentId", "model", "timestamp")
-    if any(
+    fields = ("role", "content", "parentId", "model", "timestamp", "done", "error", "output")
+    if before.keys() - after.keys() or any(
         old is not None and any(old.get(k) != value.get(k) for k in fields)
         for mid, value in after.items()
         if isinstance(value, dict)
         for old in [before.get(mid)]
     ):
         invalidate_chat(chat.id)
+
+
+def confirm_saved_response(chat, message_id):
+    path = os.environ.get("WHYNOTE_S1_CONFIG")
+    if path:
+        config = load_config(path)
+        TrialStore(config).confirm_saved(chat, message_id)
 
 
 class TrialBoundary:

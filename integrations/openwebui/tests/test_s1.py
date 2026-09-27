@@ -89,7 +89,7 @@ def test_provider_validation_and_safe_errors(tmp_path, case):
         assert session.response.closed == (case != "timeout")
         with store._transaction() as db:
             row = db.execute("SELECT * FROM s1_generations").fetchone()
-            assert row["status"] == ("completed" if case == "stop" else "incomplete")
+            assert row["status"] == ("awaiting_save" if case == "stop" else "incomplete")
             if case in ("stop", "length", "no_done"):
                 assert row["settled_micro"] == 60
             else:
@@ -223,12 +223,16 @@ def test_host_pipe_and_feedback(native, provider, tmp_path, monkeypatch, prompt,
         store = TrialStore(config)
         with store._transaction() as db:
             row = db.execute("SELECT * FROM s1_generations").fetchone()
-            assert row["status"] == ("completed" if completed else "incomplete")
+            assert row["status"] == ("awaiting_save" if completed else "incomplete")
             assert row["settled_micro"] is None  # The mock never invents billed tokens.
         assert ("[DONE]" in "".join(output)) == completed
         # Match the host's normal save; failed calls cannot forge eligibility by saving text.
         messages[message_id].update(content=ANSWER, done=True)
-        await native.chats.Chats.update_chat_by_id(chat_id, {"history": {"messages": messages}})
+        saved = await native.chats.Chats.update_chat_by_id(chat_id, {"history": {"messages": messages}})
+        if completed:
+            from whynote.s1_host import confirm_saved_response
+
+            confirm_saved_response(saved, message_id)
         body = dict(
             chat_id=chat_id,
             id=message_id,

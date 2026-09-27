@@ -22,6 +22,18 @@
       "passed": true
     },
     {
+      "name": "trusted-history-generation",
+      "passed": true
+    },
+    {
+      "name": "trusted-history-answer",
+      "passed": true
+    },
+    {
+      "name": "trusted-history-no-error",
+      "passed": true
+    },
+    {
       "name": "feedback-http",
       "passed": true
     },
@@ -138,7 +150,7 @@
       "passed": true
     },
     {
-      "name": "one-generation-only",
+      "name": "two-explicit-generations-only",
       "passed": true
     },
     {
@@ -174,7 +186,7 @@
       "passed": true
     }
   ],
-  "passed": 43,
+  "passed": 46,
   "failed": 0,
   "event_types": [
     "negative_feedback_action_recorded",

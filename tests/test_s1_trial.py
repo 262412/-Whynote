@@ -25,6 +25,67 @@ from whynote.s1_host import TrialBoundary, invalidate_edit
 ROOT = Path(__file__).parents[1]
 
 
+def test_candidate_needs_successful_host_save(trial):
+    attempt = trial.store.reserve(trial.chat.id, "alice", trial.message_id, trial.parent_id, "S1 虚构：正常回答")
+    trial.store.finish(attempt, answer="虚构动态回答", complete=True)
+    # Even an exact client-written body with done=True cannot promote the candidate.
+    with pytest.raises(NotFoundError):
+        trial.store.qualify(trial.chat, trial.body)
+    trial.store.confirm_saved(None, trial.message_id)  # Host save failure.
+    with pytest.raises(NotFoundError):
+        trial.store.qualify(trial.chat, trial.body)
+    trial.store.confirm_saved(trial.chat, trial.message_id)
+    assert trial.store.qualify(trial.chat, trial.body)
+
+
+def test_remove_restore_history_never_revives_receipt(trial):
+    incoming = copy.deepcopy(trial.chat.chat)
+    del incoming["history"]["messages"][trial.message_id]
+    invalidate_edit(trial.chat, incoming)
+    # Original in-memory chat represents restoring the exact content and done flag.
+    with pytest.raises(NotFoundError):
+        trial.store.qualify(trial.chat, trial.body)
+
+
+@pytest.mark.parametrize("mutation", ["edited", "fabricated"])
+def test_history_requires_matching_completed_receipts(trial, mutation):
+    messages = trial.chat.chat["history"]["messages"]
+    user_id, answer_id = str(uuid.uuid4()), str(uuid.uuid4())
+    messages[user_id] = dict(id=user_id, role="user", content="next synthetic question", parentId=trial.message_id)
+    messages[answer_id] = dict(id=answer_id, role="assistant", content="", parentId=user_id, model=PIPE_ID)
+    if mutation == "edited":
+        messages[trial.message_id]["content"] = "fabricated prior answer"
+    else:
+        trial.store.invalidate(trial.chat.id)
+    with pytest.raises(NotFoundError):
+        generation_input(trial.chat, answer_id, trial.store)
+
+
+def test_parallel_first_construction_has_atomic_migration(trial, tmp_path):
+    import threading
+
+    config = {**trial.config, "db_path": str(tmp_path / "parallel-first-use.db")}
+    barrier = threading.Barrier(4)
+
+    def construct(_):
+        barrier.wait(timeout=10)
+        store = TrialStore(config)
+        with store._transaction() as db:
+            return tuple(row["name"] for row in db.execute("PRAGMA table_info(s1_generations)"))
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(construct, range(4)))
+    assert len(set(results)) == 1 and "saved_at" in results[0]
+
+
+def test_pre_hook_legacy_receipt_is_not_promoted(trial):
+    with trial.store._transaction() as db:
+        db.execute("UPDATE s1_generations SET saved_at=NULL")
+    restored = TrialStore(trial.config)
+    with pytest.raises(NotFoundError):
+        restored.qualify(trial.chat, trial.body)
+
+
 def test_only_one_concurrent_reservation(trial):
     def reserve(_):
         try:
@@ -65,17 +126,20 @@ def test_saved_history_four_complete_pairs_only(trial):
         user_id, answer_id = str(uuid.uuid4()), str(uuid.uuid4())
         parent["parentId"] = answer_id
         messages[answer_id] = dict(
-            role="assistant", content=f"answer-{index}", parentId=user_id, done=True, model=PIPE_ID
+            id=answer_id, role="assistant", content=f"answer-{index}", parentId=user_id, done=True, model=PIPE_ID
         )
         messages[user_id] = dict(role="user", content=f"prompt-{index}", parentId=None)
         parent = messages[user_id]
-    _, _, history = generation_input(trial.chat, trial.message_id)
+        attempt = trial.store.reserve(trial.chat.id, "alice", answer_id, user_id, messages[user_id]["content"])
+        trial.store.finish(attempt, answer=messages[answer_id]["content"], complete=True)
+        trial.store.confirm_saved(trial.chat, answer_id)
+    _, _, history = generation_input(trial.chat, trial.message_id, trial.store)
     assert len(history) == 10
     assert history[1]["content"] == "prompt-3"
     assert all("prompt-4" != item["content"] for item in history)
     messages[messages[trial.parent_id]["parentId"]]["done"] = False
     with pytest.raises(NotFoundError):
-        generation_input(trial.chat, trial.message_id)
+        generation_input(trial.chat, trial.message_id, trial.store)
 
 
 @pytest.fixture
@@ -121,6 +185,7 @@ def trial(tmp_path, monkeypatch):
     store.enroll(chat_id, "alice")
     attempt = store.reserve(chat_id, "alice", message_id, parent_id, messages[parent_id]["content"])
     store.finish(attempt, answer=messages[message_id]["content"], complete=True)
+    store.confirm_saved(chat, message_id)
     return SimpleNamespace(
         config=config,
         config_path=config_path,
@@ -209,6 +274,7 @@ def test_regeneration_and_edit_invalidate_old_receipt(trial):
     with pytest.raises(NotFoundError):
         trial.store.qualify(trial.chat, trial.body)
     trial.store.finish(attempt, answer="虚构动态回答", complete=True)
+    trial.store.confirm_saved(trial.chat, trial.message_id)
     assert trial.store.qualify(trial.chat, trial.body)["object_version"] != old["object_version"]
     changed = copy.deepcopy(trial.chat.chat)
     changed["history"]["messages"][trial.parent_id]["content"] = "edit"
@@ -260,7 +326,7 @@ def test_source_text_not_persisted_and_input_limit(trial):
     assert "S1 虚构：正常回答".encode() not in data
     trial.chat.chat["history"]["messages"][trial.parent_id]["content"] = "字" * 8192
     with pytest.raises(ValueError, match="limit"):
-        generation_input(trial.chat, trial.message_id)
+        generation_input(trial.chat, trial.message_id, trial.store)
 
 
 def test_cloud_configuration_requires_review_and_exact_endpoint(trial):

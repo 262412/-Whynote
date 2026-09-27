@@ -93,8 +93,8 @@ async def complete_response(session, config, store, attempt, credential, message
                             ],
                         }
                         yield f"data: {json.dumps(safe, ensure_ascii=False)}\n\n"
-                # The receipt exists before emitting the terminal event. Host save
-                # plus matching content/parent is required again at feedback time.
+                # This candidate cannot authorize feedback. Only the successful
+                # host final-save hook may promote it to a completed receipt.
                 store.finish(attempt, answer=answer, complete=terminal, usage=usage)
                 if not terminal:
                     raise ValueError("generation did not finish naturally")

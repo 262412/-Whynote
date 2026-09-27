@@ -42,7 +42,7 @@ class Pipe:
         chat = await Chats.get_chat_by_id_and_user_id(chat_id, config["user_id"])
         if chat is None or chat.user_id != config["user_id"] or chat.created_at < config["started_at"]:
             raise NotFoundError("S1 requires a new owned trial chat")
-        parent_id, prompt, messages = generation_input(chat, message_id)
+        parent_id, prompt, messages = generation_input(chat, message_id, store)
         store.enroll(chat_id, config["user_id"])
         # Reuse the host's server-side connection and HTTP pool, not a second SDK.
         url, key, _ = await get_openai_connection(0)
