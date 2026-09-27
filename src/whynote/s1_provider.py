@@ -59,6 +59,8 @@ async def complete_response(session, config, store, attempt, credential, message
                     chunk = json.loads(value)
                     if not isinstance(chunk, dict) or chunk.get("error"):
                         raise ValueError("provider stream failed")
+                    if chunk.get("model") != config["provider_model"]:
+                        raise ValueError("provider model does not match the approved configuration")
                     if chunk.get("usage") is not None:
                         usage = chunk["usage"]
                     choices = chunk.get("choices", [])

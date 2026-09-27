@@ -18,7 +18,9 @@ from whynote.s1 import PIPE_ID, TrialStore
 ROOT = Path(__file__).parents[3]
 
 
-@pytest.mark.parametrize("case", ["stop", "length", "no_done", "invalid_json", "tools", "timeout", "redirect"])
+@pytest.mark.parametrize(
+    "case", ["stop", "length", "no_done", "invalid_json", "tools", "timeout", "redirect", "wrong_model"]
+)
 def test_provider_validation_and_safe_errors(tmp_path, case):
     from whynote.s1_provider import complete_response
 
@@ -48,6 +50,7 @@ def test_provider_validation_and_safe_errors(tmp_path, case):
                 {"choices": [{"delta": {}, "finish_reason": "length" if case == "length" else "stop"}]},
                 {"choices": [], "usage": {"prompt_tokens": 10, "completion_tokens": 5}},
             ):
+                chunk["model"] = "unapproved-model" if case == "wrong_model" else "deepseek-flash"
                 yield ("data: " + json.dumps(chunk) + "\n").encode()
             if case != "no_done":
                 yield b"data: [DONE]\n"

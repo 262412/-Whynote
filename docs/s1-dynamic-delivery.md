@@ -5,7 +5,7 @@
 ## 1. 基线、授权与范围
 
 - 用户于 2026-09-27 明确确认 [S1-1 契约 v1](s1-cloud-contract.md)，要求推进 S1-2；DeepSeek、100 CNY 总限额及 v1 参数沿用该确认。
-- 分支 `codex/s1-dynamic-feedback` 依赖 PR #25 的 `1475e2c3c727b25610ff84caf8e9e7e1dd8b9d35`。合并顺序为 #25 → 本片；不能把依赖视为已合并或已获独立批准。底层 main 基线为 `cdc0673fe933ddb9c0686aa09cdeb7eef7b76eb2`。
+- [PR #26](https://github.com/262412/-Whynote/pull/26)，分支 `codex/s1-dynamic-feedback` 依赖 PR #25 的 `1475e2c3c727b25610ff84caf8e9e7e1dd8b9d35`。合并顺序为 #25 → 本片；不能把依赖视为已合并或已获独立批准。底层 main 基线为 `cdc0673fe933ddb9c0686aa09cdeb7eef7b76eb2`。
 - 映射 FR-01/02/11/13/14、TD-01/04/05/06/10/15、D-13/15/17、Q-09/21/22。此片只接单人文本生成与已有常规菜单，不做原因推断、auto-attach、来源指标或研究结论。
 - 固定 Open WebUI 0.11.4，SHA `8bd8b4fac5e059578ac0c74b3c18d11139f88b7d`，顺序应用 native、manual timing、S1 三份补丁。测试检查整个补丁栈与磁盘实际源码一致。
 
@@ -14,7 +14,7 @@
 | 行为 | 实现 |
 | --- | --- |
 | 受控动态生成 | `integrations/openwebui/s1_pipe.py`：宿主认证用户、指定实例用户、新建自有会话，读取服务端保存的当前分支；最多4个已完成文本历史轮次。复用宿主 OpenAI 连接配置和 aiohttp pool |
-| 固定请求 | `src/whynote/s1_provider.py`：唯一批准端点、禁重定向、非思考、1024输出token、10/20/60秒连接/读取/总超时；单请求，无自动重试。输入正文合计最多8192 UTF-8字节 |
+| 固定请求 | `src/whynote/s1_provider.py`：唯一批准端点、禁重定向、非思考、1024输出token、10/20/60秒连接/读取/总超时；单请求，无自动重试；每帧供应商模型名须匹配批准配置。输入正文合计最多8192 UTF-8字节 |
 | 回答资格 | `src/whynote/s1.py`：自然 stop + DONE + 非空正文才产生可信完成回执。反馈再检查宿主 done、归属、父消息与回答 HMAC、模型、客户端显示内容和当前回执；length、断流、中止和错误均不合格 |
 | 菜单复用 | `s1_action.py` 复用原常规操作与 Q-21/Q-22 逻辑；S0 只增加标题、提示、渠道及存储获取扩展点。前端为 S1 点踩生成 click UUID；重试和重连不重开已完成菜单 |
 | 撤回 | `s1_retract_action.py`：独立撤回当前对象版本的点踩；重复撤回幂等，再点踩产生新动作 |

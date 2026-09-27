@@ -68,7 +68,9 @@ def create_app() -> FastAPI:
                 valid &= messages[index] == {"role": "user", "content": "S1 虚构：正常回答"}
                 valid &= messages[index + 1] == {"role": "assistant", "content": ANSWER}
             if valid and isinstance(messages[-1], dict) and messages[-1].get("role") == "user":
-                scenario = CASES.get(messages[-1].get("content"))
+                prompt = messages[-1].get("content")
+                if isinstance(prompt, str) and messages[-1] == {"role": "user", "content": prompt}:
+                    scenario = CASES.get(prompt)
         if scenario is None:
             raise HTTPException(422, "exact synthetic messages required")
         if scenario in {"rate_limit", "server_error"}:

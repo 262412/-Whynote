@@ -8,7 +8,7 @@
     "failed": 0
   },
   "native": {
-    "passed": 68,
+    "passed": 69,
     "failed": 0
   },
   "native_q16_probe": {
@@ -30,10 +30,11 @@
   "files": {
     "src/whynote/s1.py": "bc69a23f4e9312913863843c1e435ea6be44aa7feec5dabe316116528c4d0869",
     "src/whynote/s1_host.py": "c90530c7c7f3bb99c13a5857cd720b60eaaa7675e19522e5f44df196395f6e32",
-    "src/whynote/s1_provider.py": "1983d7dee7effc886e3f210c5821feecc5714dfefa3b7dd151e2c27558eb7222",
+    "src/whynote/s1_provider.py": "8f252f5471e3fc3c2c297c0a0353a6be29561f847496b398308832c0c199e6be",
     "integrations/openwebui/s1_pipe.py": "0926d29df37388a838628728ac2a9929146575203a373b71041037170b997a3a",
     "integrations/openwebui/s1_action.py": "31b332fbb1c0eb6415585128877295c28b1e15175db7a50fc3c008c0f5616fb8",
     "integrations/openwebui/s1_retract_action.py": "baa0c48e5587490046ad2b46bbe8824386bb58974be8b7e9506a921bf85b6a1c",
     "integrations/openwebui/patches/s1-v0.11.4-trial.patch": "a56cd88ffdd6fb7c6ed6c56728936c77874c1fda33c4b6fcfd00300661ce09d7"
-  }
+  },
+  "followup": "Provider model mismatch now fails closed; targeted core40 and native69 rerun, fresh login HTTP/WebSocket43 passed."
 }
