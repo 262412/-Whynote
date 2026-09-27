@@ -1,16 +1,27 @@
 {
   "contract_version": "s1-cloud-v1-proposal",
-  "status": "awaiting_contract_confirmation",
+  "status": "contract_confirmed_runtime_pending",
   "cloud_enabled": false,
   "provider": "deepseek",
   "proposed_model": "deepseek-flash",
   "proposed_base_url": "https://api.deepseek.com",
-  "proposed_extra_body": {"thinking": {"type": "disabled"}},
-  "confirmed_budget": {"currency": "CNY", "total_limit": "100.00"},
+  "proposed_extra_body": {
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "confirmed_budget": {
+    "currency": "CNY",
+    "total_limit": "100.00"
+  },
   "proposed_history_pairs": 4,
   "proposed_input_utf8_bytes": 8192,
   "proposed_max_output_tokens": 1024,
-  "proposed_timeouts_seconds": {"connect": 10, "read_idle": 20, "total": 60},
+  "proposed_timeouts_seconds": {
+    "connect": 10,
+    "read_idle": 20,
+    "total": 60
+  },
   "proposed_max_concurrent_requests": 1,
   "proposed_automatic_retries": 0,
   "instance_id": null,
@@ -20,6 +31,6 @@
   "provider_retention": null,
   "provider_training_use": null,
   "local_retention_approval_ref": null,
-  "contract_approval_ref": null,
+  "contract_approval_ref": "user-confirmation-2026-09-27-s1-v1",
   "runtime_validation_ref": null
 }
