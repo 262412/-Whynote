@@ -106,28 +106,29 @@ class Action:
             f"{user_id}:{target['object_id']}:{target['object_version']}:{click_id or 'legacy:' + session_id}".encode(),
             hashlib.sha256,
         ).hexdigest()
-        state = self.store.create_action(
-            principal,
-            target,
-            {
-                "action_type": "negative_feedback",
-                "channel": "openwebui-s0",
-                "locale": "zh-CN",
-                "client_occurred_at": None,
-                "interaction_contract": "manual-v1",
-            },
-            key,
-            restart_retracted=click_id is None,
-        )
-        event_id = state["event_id"]
-        if state["action_status"] != "active":
-            return {"event_id": event_id, "result": "retracted"}
-        mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
+        metadata = {
+            "action_type": "negative_feedback",
+            "channel": "openwebui-s0",
+            "locale": "zh-CN",
+            "client_occurred_at": None,
+            "interaction_contract": "manual-v1",
+        }
         display_id = str(uuid.uuid4())
-        session_ref = hashlib.sha256(session_id.encode()).hexdigest()
-        self.store.issue_display_ticket(principal, event_id, display_id)
         issued_at = time.monotonic()
-        expires_at = time.time() + TICKET_SECONDS
+        now = time.time()
+        expires_at = now + TICKET_SECONDS
+        if click_id is not None:
+            state, replay = self.store.begin_host_click(principal, target, metadata, key, display_id, now, expires_at)
+            if replay is not None:
+                return replay
+        else:
+            state = self.store.create_action(principal, target, metadata, key, restart_retracted=True)
+            if state["action_status"] != "active":
+                return {"event_id": state["event_id"], "result": "retracted"}
+            self.store.issue_display_ticket(principal, state["event_id"], display_id)
+        event_id = state["event_id"]
+        mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
+        session_ref = hashlib.sha256(session_id.encode()).hexdigest()
         ticket_context = {
             "tenant_id": self.tenant,
             "user_id": user_id,

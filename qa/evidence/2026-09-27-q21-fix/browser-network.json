@@ -1,0 +1,32 @@
+{
+  "requests": [
+    {
+      "click_id": "d1bb4c08-5c19-4c19-b05a-5d69799f44da",
+      "result": {
+        "event_id": "2e5ec3db-cc2f-4d04-abd3-51b379f988a5",
+        "display": {
+          "display_id": "1eaac2f2-bcef-4a90-ac4c-b800d0925cfb",
+          "receipt_status": "current",
+          "actionable": true
+        },
+        "result": "reason_submitted",
+        "attribution_status": "selected"
+      }
+    },
+    {
+      "click_id": "eeee6340-fb24-4180-a1f6-64ab69c29661",
+      "result": {
+        "event_id": "2e5ec3db-cc2f-4d04-abd3-51b379f988a5",
+        "display": {
+          "display_id": "7f9aca28-5ecc-4eb6-8778-c6bbfcea14fc",
+          "receipt_status": "current",
+          "actionable": true
+        },
+        "result": "reason_submitted",
+        "attribution_status": "edited"
+      }
+    }
+  ],
+  "session_changed": true,
+  "scope": "Two deliberate browser clicks; same-ID retries submitted by authenticated CLI HTTP"
+}
