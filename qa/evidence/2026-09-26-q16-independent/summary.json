@@ -1,0 +1,1597 @@
+{
+  "date": "2026-09-26",
+  "tested_main": "57f09ceef114609770807fb6470ae4462da3e241",
+  "fix": "22f6de30f979bb16ed48a84b98e15029e3a5a19e",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "patch_sha256": "f2eedf75e3be42786265c742be7f9701b5717311b9ed34efaee29f5d6881d8e8",
+  "document_baseline": {
+    "prd": 80,
+    "technical": 20
+  },
+  "suites": {
+    "core": [
+      {
+        "name": "test_local_demo_click_display_select_edit_and_retract",
+        "class": "tests.test_demo",
+        "passed": true
+      },
+      {
+        "name": "test_old_display_receipt_is_historical_after_new_display",
+        "class": "tests.test_demo",
+        "passed": true
+      },
+      {
+        "name": "test_new_demo_instance_cannot_access_previous_instance_actions",
+        "class": "tests.test_demo",
+        "passed": true
+      },
+      {
+        "name": "test_local_demo_rejects_foreign_or_unshown_display",
+        "class": "tests.test_demo",
+        "passed": true
+      },
+      {
+        "name": "test_display_ticket_ownership_retraction_and_replay",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_existing_database_adds_ticket_table_without_rewriting_events",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_action_is_durable_before_gate_and_retries_are_idempotent",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_ownership_and_input_boundary",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_revoked_target_access_blocks_existing_action_routes",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_each_gate_rejection_preserves_action_without_reason[signals0-authorization]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_each_gate_rejection_preserves_action_without_reason[signals1-scenario]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_each_gate_rejection_preserves_action_without_reason[signals2-sampling]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_each_gate_rejection_preserves_action_without_reason[signals3-budget]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_allowed_gate_abstains_until_pipeline_is_approved",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_authorization_failure_discards_sampling_metadata",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_budget_rejection_does_not_claim_a_valid_weight",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_retract_before_gate_prevents_gate_result",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_retract_and_attribution_invalidation_are_distinct",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_only_explicit_user_action_can_become_confirmed",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_late_model_result_never_overwrites_user_reason",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_selection_requires_owned_rendered_display_and_shown_reason",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it[reason_declined]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it[reason_skipped]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_retracted_confirmed_action_has_no_current_attribution",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_display_ack_is_idempotent_and_stale_displays_cannot_submit",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_edit_requires_new_display_and_keeps_user_source",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_edit_menu_rejects_decline_of_unconfirmed_suggestion",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_retract_race_with_selection_has_consistent_projection",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_client_time_requires_rfc3339_timezone[2026-09-24T06:00:00]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_client_time_requires_rfc3339_timezone[2026-09-24 06:00:00Z]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_client_time_requires_rfc3339_timezone[1790230000]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_client_time_requires_rfc3339_timezone[2026-09-24T06:00:00+25:00]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_client_time_is_normalized_to_utc_in_event",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_legacy_attribution_events_replay_without_display",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_declined]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_skipped]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_unresponded]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_legacy_nonresponse_cannot_override_submitted_reason[attribution_invalidated]",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_existing_sqlite_events_replay_after_reopen",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_jev_contract_rejects_unpinned_or_invalid_distribution",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_unconfigured_http_boundary_fails_closed",
+        "class": "tests.test_feedback",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_action_select_edit_and_keep_content_out_of_events",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_display_ticket_rejects_tamper_and_replay",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_action_rejects_other_user_and_changed_version",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_action_expired_ticket_has_no_display",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_rechecks_permission_before_reason_write",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_cancel_is_not_decline_and_disconnection_is_not_display",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_openwebui_s0_pipe_only_answers_fixture",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_fractional_deadline[59.5-59.5]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_fractional_deadline[59.999-59.999]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_fractional_deadline[60-60]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_fractional_deadline[60.001-60.001]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_fractional_deadline[61-1]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_fractional_deadline[-5-61]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_wait_timeout_cancels_callback",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[False-cancel]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[False-select]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[False-disconnect]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[False-pending]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[True-cancel]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[True-select]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[True-disconnect]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_new_ticket_supersedes_old_callback[True-pending]",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      },
+      {
+        "name": "test_ticket_replaced_between_display_and_reason",
+        "class": "tests.test_openwebui_s0",
+        "passed": true
+      }
+    ],
+    "tickets": [
+      {
+        "name": "test_full_ticket_lifetime[0]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[59.0]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[59.5]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[59.999]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_full_ticket_lifetime[60.001]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[False-cancel]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[False-select]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[True-cancel]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      },
+      {
+        "name": "test_new_menu_supersedes_pending_callback[True-select]",
+        "class": "qa.test_s0_regressions",
+        "passed": true
+      }
+    ],
+    "native": [
+      {
+        "name": "test_target_matrix_and_immutable_updates[user-False]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_target_matrix_and_immutable_updates[user-True]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_target_matrix_and_immutable_updates[admin-False]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_target_matrix_and_immutable_updates[admin-True]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_admin_content_update_and_legacy_no_promotion[False]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_admin_content_update_and_legacy_no_promotion[True]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_delete_rollback_and_retry[single]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_delete_rollback_and_retry[all]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_delete_rollback_and_retry[folder]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_delete_rollback_and_retry[account]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_sqlite_writer_interleaving[create-write]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_sqlite_writer_interleaving[create-delete]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_sqlite_writer_interleaving[create-revoke]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_sqlite_writer_interleaving[update-write]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_sqlite_writer_interleaving[update-delete]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_sqlite_writer_interleaving[update-revoke]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_migration_preserves_old_rows_and_downgrade",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_commit_failure_is_atomic[create]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_commit_failure_is_atomic[update]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_commit_failure_is_atomic[account]",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_review_inventory_is_read_only_and_minimal",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_auth_account_delete_rolls_back_at_credential_failure",
+        "class": "integrations.openwebui.tests.test_association",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-False-admin-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-False-admin-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-False-user-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-False-user-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-True-admin-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-True-admin-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-True-user-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[GET-True-user-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-False-admin-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-False-admin-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-False-user-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-False-user-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-True-admin-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-True-admin-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-True-user-False]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_feedback_access_matrix[POST-True-user-True]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_create_update_snapshot_and_export",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_deletion_scope_and_unrelated_feedback[single]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_deletion_scope_and_unrelated_feedback[single_admin]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_deletion_scope_and_unrelated_feedback[all]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_deletion_scope_and_unrelated_feedback[folder]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_deletion_scope_and_unrelated_feedback[account]",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_delete_all_with_no_chats_preserves_unrelated_feedback",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_activity_backup_export_and_log_boundaries",
+        "class": "integrations.openwebui.tests.test_native",
+        "passed": true
+      },
+      {
+        "name": "test_shared_snapshot_cleanup_and_unrelated_share[single]",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      },
+      {
+        "name": "test_shared_snapshot_cleanup_and_unrelated_share[all]",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      },
+      {
+        "name": "test_shared_snapshot_cleanup_and_unrelated_share[folder]",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      },
+      {
+        "name": "test_shared_snapshot_cleanup_and_unrelated_share[account]",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      },
+      {
+        "name": "test_shared_snapshot_restored_on_account_credential_failure",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      },
+      {
+        "name": "test_identifier_length_boundary_and_zero_write[chat_id]",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      },
+      {
+        "name": "test_identifier_length_boundary_and_zero_write[message_id]",
+        "class": "integrations.openwebui.tests.test_qa_q16",
+        "passed": true
+      }
+    ]
+  },
+  "native_probe": {
+    "passed": 58,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "snapshot-null",
+        "passed": true,
+        "actual": null,
+        "expected": null
+      },
+      {
+        "name": "snapshot-reject-/feedback",
+        "passed": true,
+        "actual": 422,
+        "expected": 422
+      },
+      {
+        "name": "snapshot-reject-/feedback/08011180-bdb6-497f-bbe3-11cc40eb27b6",
+        "passed": true,
+        "actual": 422,
+        "expected": 422
+      },
+      {
+        "name": "snapshot-reject-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "alice-own-GET",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "alice-own-POST",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "bob-other-GET",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "bob-other-POST",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "bob-other-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "bob-other-no-disclosure",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "admin-other-GET",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "admin-other-POST",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "admin-other-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "admin-other-no-disclosure",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "admin-own-GET",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "admin-own-POST",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "alice-other-GET",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "alice-other-POST",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "alice-other-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "alice-other-no-disclosure",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "Q12-mutation-status",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q12-mutation-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "admin-blocked-/feedbacks/all/export",
+        "passed": true,
+        "actual": 401,
+        "expected": 401
+      },
+      {
+        "name": "admin-blocked-/feedbacks/list",
+        "passed": true,
+        "actual": 401,
+        "expected": 401
+      },
+      {
+        "name": "admin-blocked-/feedbacks/all/ids",
+        "passed": true,
+        "actual": 401,
+        "expected": 401
+      },
+      {
+        "name": "export-on-admin-other-GET",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "export-on-admin-other-POST",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "export-on-admin-own-GET",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "export-on-admin-own-POST",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "export-on-alice-own-GET",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "export-on-alice-own-POST",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "export-on-bob-other-GET",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "export-on-bob-other-POST",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-foreign-create-rejected",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-foreign-create-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "unauthorized-single-delete",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "unauthorized-single-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "bulk-delete-return",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "bulk-linked-removed",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "Q14-bulk-orphan-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q14-other-chat-rating-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "bulk-bob-rating-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q16-untrusted-foreign-rating-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "bulk-bob-chat-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "empty-bulk-return",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q14-no-chats-orphan-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "folder-delete-return",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "folder-linked-removed",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "folder-other-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "folder-orphan-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "account-delete-return",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "account-user-removed",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "account-chat-removed",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "account-linked-removed",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "account-orphan-removed",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "account-unrelated-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "secure-delete",
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "name": "journal-mode",
+        "passed": true,
+        "actual": "delete",
+        "expected": "delete"
+      }
+    ]
+  },
+  "http_probe": {
+    "passed": 47,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "version",
+        "passed": true,
+        "actual": "0.11.4",
+        "expected": "0.11.4"
+      },
+      {
+        "name": "unauthenticated-GET",
+        "passed": true,
+        "actual": 401,
+        "expected": 401
+      },
+      {
+        "name": "alice-GET-alice",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "alice-POST-alice",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "bob-GET-alice",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "bob-POST-alice",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "bob-no-disclosure",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "admin-GET-alice",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "admin-POST-alice",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "admin-no-disclosure",
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "name": "admin-GET-admin",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "admin-POST-admin",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q12-mutation-status",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q12-mutation-no-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "empty-chat-fixture",
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "name": "bulk-delete-status",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q14-unlinked-feedback-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "other-user-feedback-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q16-create-bob-18",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-create-zero-write-19",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-create-admin-20",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-create-zero-write-21",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-create-alice-22",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-create-zero-write-23",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-create-alice-24",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-create-zero-write-25",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-create-alice-26",
+        "passed": true,
+        "actual": 422,
+        "expected": 422
+      },
+      {
+        "name": "Q16-create-zero-write-27",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-create-alice-28",
+        "passed": true,
+        "actual": 422,
+        "expected": 422
+      },
+      {
+        "name": "Q16-create-zero-write-29",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-valid-association",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q16-rebind",
+        "passed": true,
+        "actual": 409,
+        "expected": 409
+      },
+      {
+        "name": "Q16-rebind-zero-write",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-content-update",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q16-delete-chat",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q16-delete-trusted",
+        "passed": true,
+        "actual": null,
+        "expected": null
+      },
+      {
+        "name": "Q16-preserve-legacy-foreign",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q16-legacy-review-task",
+        "passed": true,
+        "database_or_payload_equal": true
+      },
+      {
+        "name": "Q16-deleted-target",
+        "passed": true,
+        "actual": 404,
+        "expected": 404
+      },
+      {
+        "name": "Q16-repeat-delete-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q16-account-linked-created",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q16-account-delete",
+        "passed": true,
+        "actual": 200,
+        "expected": 200
+      },
+      {
+        "name": "Q16-account-linked-removed",
+        "passed": true,
+        "actual": null,
+        "expected": null
+      },
+      {
+        "name": "Q16-account-unlinked-removed",
+        "passed": true,
+        "actual": null,
+        "expected": null
+      },
+      {
+        "name": "Q16-account-foreign-legacy-preserved",
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "name": "Q16-account-auth-removed",
+        "passed": true,
+        "actual": null,
+        "expected": null
+      },
+      {
+        "name": "Q16-account-chat-removed",
+        "passed": true,
+        "actual": null,
+        "expected": null
+      }
+    ]
+  },
+  "ticket_events": [
+    {
+      "result": "reason_submitted",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "result": "reason_submitted",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "result": "reason_submitted",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "result": "reason_submitted",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "result": "ticket_expired",
+      "event_types": [
+        "negative_feedback_action_recorded"
+      ]
+    },
+    {
+      "result": "ConflictError",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed"
+      ]
+    },
+    {
+      "result": "ConflictError",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    },
+    {
+      "result": "ConflictError",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed"
+      ]
+    },
+    {
+      "result": "ConflictError",
+      "event_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ]
+    }
+  ],
+  "browser": {
+    "executed": false,
+    "error": "nodeRepl.fetch request failed"
+  },
+  "scope": "Synthetic SQLite only; no complete FR or production acceptance",
+  "main_ci": {
+    "conclusion": "success",
+    "headSha": "57f09ceef114609770807fb6470ae4462da3e241",
+    "jobs": [
+      {
+        "completedAt": "2026-09-26T13:41:01Z",
+        "conclusion": "success",
+        "databaseId": 108415095791,
+        "name": "quality",
+        "startedAt": "2026-09-26T13:40:46Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-09-26T13:40:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-09-26T13:40:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:49Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "startedAt": "2026-09-26T13:40:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:52Z",
+            "conclusion": "success",
+            "name": "Run astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4",
+            "number": 3,
+            "startedAt": "2026-09-26T13:40:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:52Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "number": 4,
+            "startedAt": "2026-09-26T13:40:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:53Z",
+            "conclusion": "success",
+            "name": "Install locked dependencies",
+            "number": 5,
+            "startedAt": "2026-09-26T13:40:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:53Z",
+            "conclusion": "success",
+            "name": "Lint",
+            "number": 6,
+            "startedAt": "2026-09-26T13:40:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:53Z",
+            "conclusion": "success",
+            "name": "Format",
+            "number": 7,
+            "startedAt": "2026-09-26T13:40:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:57Z",
+            "conclusion": "success",
+            "name": "Test",
+            "number": 8,
+            "startedAt": "2026-09-26T13:40:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:58Z",
+            "conclusion": "success",
+            "name": "Test preserved S0 regressions",
+            "number": 9,
+            "startedAt": "2026-09-26T13:40:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:58Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "number": 16,
+            "startedAt": "2026-09-26T13:40:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:58Z",
+            "conclusion": "success",
+            "name": "Post Run astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4",
+            "number": 17,
+            "startedAt": "2026-09-26T13:40:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:58Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 18,
+            "startedAt": "2026-09-26T13:40:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:58Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-09-26T13:40:58Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/262412/-Whynote/actions/runs/36245964667/job/108415095791"
+      },
+      {
+        "completedAt": "2026-09-26T13:41:40Z",
+        "conclusion": "success",
+        "databaseId": 108415095906,
+        "name": "native-regression",
+        "startedAt": "2026-09-26T13:40:45Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-09-26T13:40:47Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-09-26T13:40:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:48Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "startedAt": "2026-09-26T13:40:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:49Z",
+            "conclusion": "success",
+            "name": "Run astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4",
+            "number": 3,
+            "startedAt": "2026-09-26T13:40:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:49Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "number": 4,
+            "startedAt": "2026-09-26T13:40:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:40:52Z",
+            "conclusion": "success",
+            "name": "Check out pinned upstream and apply patch",
+            "number": 5,
+            "startedAt": "2026-09-26T13:40:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:00Z",
+            "conclusion": "success",
+            "name": "Install locked host regression dependencies",
+            "number": 6,
+            "startedAt": "2026-09-26T13:40:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:27Z",
+            "conclusion": "success",
+            "name": "Test actual feedback routes and database cleanup",
+            "number": 7,
+            "startedAt": "2026-09-26T13:41:00Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:38Z",
+            "conclusion": "success",
+            "name": "Test signed Q16 contract probe",
+            "number": 8,
+            "startedAt": "2026-09-26T13:41:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:38Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+            "number": 14,
+            "startedAt": "2026-09-26T13:41:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:38Z",
+            "conclusion": "success",
+            "name": "Post Run astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4",
+            "number": 15,
+            "startedAt": "2026-09-26T13:41:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:38Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 16,
+            "startedAt": "2026-09-26T13:41:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-09-26T13:41:38Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 17,
+            "startedAt": "2026-09-26T13:41:38Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/262412/-Whynote/actions/runs/36245964667/job/108415095906"
+      }
+    ]
+  },
+  "document_updates": {
+    "prd": {
+      "before": 80,
+      "after": 81,
+      "history_preserved": true,
+      "url": "https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6swwn0bw1LwsaSoqMQzkKSw"
+    },
+    "technical": {
+      "before": 20,
+      "after": 21,
+      "history_preserved": true,
+      "url": "https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc6TBb5HvCnMqHL7Q1RRA0JtA"
+    }
+  },
+  "cleanup": {
+    "qa_http_port": 8096,
+    "listener_stopped": true,
+    "original_workspace_status_unchanged": true
+  }
+}
