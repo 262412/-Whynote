@@ -551,5 +551,32 @@
     "executed": false,
     "reason": "nodeRepl.fetch request failed"
   },
-  "conclusion": "Q22 specified technical regression independently passed; formal closure and full acceptance await approval/signature"
+  "conclusion": "Q22 specified technical regression independently passed; formal closure and full acceptance await approval/signature",
+  "document_updates": {
+    "prd": {
+      "before": 205,
+      "after": 216,
+      "history_preserved": true,
+      "links_preserved": true,
+      "block_id": "doxc6IU6NAG5pFFVHOduRQc9SJf"
+    },
+    "tech": {
+      "before": 191,
+      "after": 200,
+      "history_preserved": true,
+      "links_preserved": true,
+      "block_id": "doxc6UVGvp2e62a3iktXX4Iu7ob"
+    }
+  },
+  "qa_pr": 24,
+  "ci_first": {
+    "run": 36299423348,
+    "quality": "success",
+    "native": "success"
+  },
+  "cleanup": {
+    "port_8116_stopped": true,
+    "original_workspace_preserved": true,
+    "audit_data_retained": true
+  }
 }

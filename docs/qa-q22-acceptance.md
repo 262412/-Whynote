@@ -38,4 +38,10 @@
 
 PR #23评审仅COMMENTED，无非作者APPROVED；责任人本轮结果签署仍缺失。本QA报告不追认既有合并的程序门槛，也不代表独立浏览器、完整D/FR、原生评分复用、真实数据、模型、auto-attach、自由文本SLM、训练导出或生产放行。
 
-保留当前报告分支、QA工作树及忽略证据，供非作者评审/签署；旧分支有历史工作与审计依赖，本轮未批量清理。飞书读回和临时服务收尾完成后补记。
+保留当前报告分支、QA工作树及忽略证据，供非作者评审/签署；旧分支有历史工作与审计依赖，本轮未批量清理。8116临时服务已按进程命令核验并停止，原目录状态与开工一致。
+
+## 飞书与报告交付
+
+- [PRD修订216](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6IU6NAG5pFFVHOduRQc9SJf)，输入205；[技术文档修订200](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc6UVGvp2e62a3iktXX4Iu7ob)，输入191。
+- 在原状态、FR子项、click ID字段、M3/M4、TD-04及Q-22条目局部维护；每次写前比对目标文本及准确revision-id。写后全文读回确认历史归档逐字保留、既有链接保留。Q-22只标指定技术范围通过，正式关闭待批准/签署。
+- [独立报告PR #24](https://github.com/262412/-Whynote/pull/24)首轮CI 36299423348两项成功；最后文档提交的CI状态见PR当前head。PR #23已合并，故不再往其关闭的评审追加提交；本PR只交付文档/证据。无非作者APPROVED，报告PR保持待评审，不自行合并。
