@@ -1,0 +1,21 @@
+{
+  "baseline": "b3093329d54d7fb7f4b423a2685a40d73d8296c6",
+  "before": {
+    "passed": 17,
+    "failed": 2
+  },
+  "independent_cases_developer_rerun": {
+    "passed": 19,
+    "failed": 0
+  },
+  "new_developer_lifecycle_cases": 14,
+  "native": 53,
+  "loopback_http": 35,
+  "scope": "Developer verification; independent acceptance and non-author approval pending",
+  "source_sha256": {
+    "src/whynote/store.py": "b1940b76f96b764d8c8a7cf7cae1f37c8854aef29bb4ca6c11e33beacf4fda6f",
+    "integrations/openwebui/s0_action.py": "5edcdc63918ac31129a52acc6612cb1d4985d3678c5903f738e840354973fbf9",
+    "tests/test_host_clicks.py": "d549eada3a9abd00aedcade9bfddb7bf0a263fe232379645ac50ee34baea4a9e",
+    "qa/test_manual_v1_acceptance.py": "78ee7f738be2205bfd8fa6f4abddef2433686d12db97e91d61c51734439e143e"
+  }
+}

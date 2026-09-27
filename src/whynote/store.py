@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterator, Mapping
 
 from .domain import (
+    MANUAL_OPERATIONS,
     MANUAL_UI_VERSION,
     ConflictError,
     GateSignals,
@@ -88,6 +89,15 @@ class EventStore:
                     created_at TEXT NOT NULL,
                     processed_at TEXT,
                     UNIQUE (event_id, topic)
+                );
+                CREATE TABLE IF NOT EXISTS host_clicks (
+                    tenant_ref TEXT NOT NULL,
+                    actor_ref TEXT NOT NULL,
+                    key_hash TEXT NOT NULL,
+                    event_id TEXT NOT NULL REFERENCES actions(event_id),
+                    display_id TEXT NOT NULL,
+                    expires_at REAL NOT NULL,
+                    PRIMARY KEY (tenant_ref, actor_ref, key_hash)
                 );
                 CREATE TABLE IF NOT EXISTS display_tickets (
                     event_id TEXT PRIMARY KEY REFERENCES actions(event_id),
@@ -212,52 +222,123 @@ class EventStore:
         *,
         restart_retracted: bool = False,
     ) -> dict[str, Any]:
+        with self._transaction() as db:
+            state, _ = self._create_action(db, principal, target_ref, metadata, idempotency_key, restart_retracted)
+            return state
+
+    def _create_action(
+        self,
+        db: sqlite3.Connection,
+        principal: Principal,
+        target_ref: Mapping[str, str],
+        metadata: Mapping[str, Any],
+        idempotency_key: str,
+        restart_retracted: bool = False,
+    ) -> tuple[dict[str, Any], bool]:
         request_hash = _digest(_json({"target_ref": target_ref, "metadata": metadata}))
         key_hash = _digest(idempotency_key)
-        with self._transaction() as db:
+        old = self._check_idempotency(db, principal, key_hash, "create", request_hash)
+        # Legacy host callbacks carry no click ID. Advance their persistent
+        # generation only after retraction, under the same writer lock.
+        while old and restart_retracted and self._projection(db, old["event_id"])["action_status"] == "retracted":
+            key_hash = _digest(key_hash + ":" + old["event_id"])
             old = self._check_idempotency(db, principal, key_hash, "create", request_hash)
-            # Legacy host callbacks carry no click ID. Advance their persistent
-            # generation only after retraction, under the same writer lock.
-            while old and restart_retracted and self._projection(db, old["event_id"])["action_status"] == "retracted":
-                key_hash = _digest(key_hash + ":" + old["event_id"])
-                old = self._check_idempotency(db, principal, key_hash, "create", request_hash)
-            if old:
-                return self._projection(db, old["event_id"])
-            if metadata.get("interaction_contract") == "manual-v1":
-                candidates = db.execute(
-                    "SELECT event_id FROM actions WHERE tenant_ref=? AND actor_ref=? AND target_ref=?",
-                    (principal.tenant_ref, principal.actor_ref, _json(target_ref)),
-                ).fetchall()
-                active = [
-                    row["event_id"]
-                    for row in candidates
-                    if self._projection(db, row["event_id"])["action_status"] == "active"
-                ]
-                if len(active) > 1:
-                    raise ConflictError("multiple legacy active actions require review")
-                if active:
-                    event_id = active[0]
-                    record_id = self._events(db, event_id)[0]["record_id"]
-                    self._save_idempotency(db, principal, key_hash, "create", request_hash, event_id, record_id)
-                    return self._projection(db, event_id)
-            event_id = str(uuid.uuid4())
-            db.execute(
-                "INSERT INTO actions VALUES(?,?,?,?,?)",
-                (event_id, principal.tenant_ref, principal.actor_ref, _json(target_ref), _now()),
-            )
-            record_id = self._append(
-                db,
-                event_id,
-                "negative_feedback_action_recorded",
-                {"target_ref": dict(target_ref), **metadata},
-                "user",
-            )
-            db.execute(
-                "INSERT INTO outbox(message_id,event_id,topic,payload,created_at) VALUES(?,?,?,?,?)",
-                (str(uuid.uuid4()), event_id, "feedback.gate.requested", _json({"event_id": event_id}), _now()),
-            )
-            self._save_idempotency(db, principal, key_hash, "create", request_hash, event_id, record_id)
-            return self._projection(db, event_id)
+        if old:
+            return self._projection(db, old["event_id"]), False
+        if metadata.get("interaction_contract") == "manual-v1":
+            candidates = db.execute(
+                "SELECT event_id FROM actions WHERE tenant_ref=? AND actor_ref=? AND target_ref=?",
+                (principal.tenant_ref, principal.actor_ref, _json(target_ref)),
+            ).fetchall()
+            active = [
+                row["event_id"]
+                for row in candidates
+                if self._projection(db, row["event_id"])["action_status"] == "active"
+            ]
+            if len(active) > 1:
+                raise ConflictError("multiple legacy active actions require review")
+            if active:
+                event_id = active[0]
+                record_id = self._events(db, event_id)[0]["record_id"]
+                self._save_idempotency(db, principal, key_hash, "create", request_hash, event_id, record_id)
+                return self._projection(db, event_id), True
+        event_id = str(uuid.uuid4())
+        db.execute(
+            "INSERT INTO actions VALUES(?,?,?,?,?)",
+            (event_id, principal.tenant_ref, principal.actor_ref, _json(target_ref), _now()),
+        )
+        record_id = self._append(
+            db,
+            event_id,
+            "negative_feedback_action_recorded",
+            {"target_ref": dict(target_ref), **metadata},
+            "user",
+        )
+        db.execute(
+            "INSERT INTO outbox(message_id,event_id,topic,payload,created_at) VALUES(?,?,?,?,?)",
+            (str(uuid.uuid4()), event_id, "feedback.gate.requested", _json({"event_id": event_id}), _now()),
+        )
+        self._save_idempotency(db, principal, key_hash, "create", request_hash, event_id, record_id)
+        return self._projection(db, event_id), True
+
+    def begin_host_click(
+        self,
+        principal: Principal,
+        target_ref: Mapping[str, str],
+        metadata: Mapping[str, Any],
+        idempotency_key: str,
+        display_id: str,
+        now: float,
+        expires_at: float,
+    ) -> tuple[dict[str, Any], dict[str, Any] | None]:
+        """Reserve one menu per explicit click; replay without changing any ticket."""
+        with self._transaction() as db:
+            state, new_key = self._create_action(db, principal, target_ref, metadata, idempotency_key)
+            event_id = state["event_id"]
+            if state["action_status"] != "active":
+                return state, {"event_id": event_id, "result": "retracted"}
+            key_hash = _digest(idempotency_key)
+            if new_key:
+                db.execute(
+                    "INSERT INTO host_clicks VALUES(?,?,?,?,?,?)",
+                    (principal.tenant_ref, principal.actor_ref, key_hash, event_id, display_id, expires_at),
+                )
+                db.execute(
+                    "INSERT INTO display_tickets VALUES(?,?) "
+                    "ON CONFLICT(event_id) DO UPDATE SET display_id=excluded.display_id",
+                    (event_id, display_id),
+                )
+                return state, None
+            click = db.execute(
+                "SELECT * FROM host_clicks WHERE tenant_ref=? AND actor_ref=? AND key_hash=?",
+                (principal.tenant_ref, principal.actor_ref, key_hash),
+            ).fetchone()
+            if click is None:
+                # Pre-upgrade create keys have no provable display association.
+                return state, {"event_id": event_id, "result": "legacy_click_unavailable"}
+            events = self._events(db, event_id)
+            for index, event in enumerate(events):
+                if event["payload"].get("display_id") == click["display_id"] and event["event_type"] in {
+                    "reason_selected",
+                    "reason_edited",
+                    *MANUAL_OPERATIONS,
+                }:
+                    # The response event and its first measurement committed atomically.
+                    # Replay the original projection, even after a later deliberate edit.
+                    return state, {
+                        "event_id": event_id,
+                        "display": {"display_id": click["display_id"], "receipt_status": "current", "actionable": True},
+                        "result": "response_recorded"
+                        if event["event_type"] in MANUAL_OPERATIONS
+                        else "reason_submitted",
+                        "attribution_status": project(events[: index + 1])["attribution_status"],
+                    }
+            result = "click_pending"
+            if not self._ticket_is_current(db, event_id, click["display_id"]):
+                result = "click_superseded"
+            elif now >= click["expires_at"]:
+                result = "ticket_expired"
+            return state, {"event_id": event_id, "result": result}
 
     def _projection(self, db: sqlite3.Connection, event_id: str) -> dict[str, Any]:
         return {"event_id": event_id, **project(self._events(db, event_id))}

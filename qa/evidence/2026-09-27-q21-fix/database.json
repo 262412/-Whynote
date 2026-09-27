@@ -1,0 +1,19 @@
+{
+  "event_types": [
+    "negative_feedback_action_recorded",
+    "reason_displayed",
+    "reason_selected",
+    "reason_displayed",
+    "reason_edited"
+  ],
+  "counts": {
+    "actions": 1,
+    "events": 5,
+    "outbox": 1,
+    "idempotency": 4,
+    "host_clicks": 2,
+    "display_tickets": 1
+  },
+  "old_code_replay_equal": true,
+  "db_sha256": "09b65f4a0f18d63c7ddb7ac098ce056c6fb1c6548f581c98e059a9e30db9fb0f"
+}
