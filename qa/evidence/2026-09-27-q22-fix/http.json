@@ -1,0 +1,233 @@
+{
+  "checks": [
+    {
+      "name": "create",
+      "actual": 202,
+      "expected": 202,
+      "passed": true
+    },
+    {
+      "name": "new-request-same-active-intent",
+      "actual": "e4202bc0-383e-44c3-bb08-2d08d3dfb38b",
+      "expected": "e4202bc0-383e-44c3-bb08-2d08d3dfb38b",
+      "passed": true
+    },
+    {
+      "name": "reason_selected-ticket",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_selected-rendered",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_selected-status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_selected-reason",
+      "actual": "style",
+      "expected": "style",
+      "passed": true
+    },
+    {
+      "name": "reason_selected-retry",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_selected-retry-no-append",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "reason_skipped-ticket",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_skipped-rendered",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_skipped-status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_skipped-reason",
+      "actual": "style",
+      "expected": "style",
+      "passed": true
+    },
+    {
+      "name": "reason_skipped-retry",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_skipped-retry-no-append",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "reason_declined-ticket",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_declined-rendered",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_declined-status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_declined-reason",
+      "actual": "style",
+      "expected": "style",
+      "passed": true
+    },
+    {
+      "name": "reason_declined-retry",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_declined-retry-no-append",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "reason_menu_closed-ticket",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_menu_closed-rendered",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_menu_closed-status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_menu_closed-reason",
+      "actual": "style",
+      "expected": "style",
+      "passed": true
+    },
+    {
+      "name": "reason_menu_closed-retry",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_menu_closed-retry-no-append",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "reason_none_matched-ticket",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_none_matched-rendered",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_none_matched-status",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_none_matched-reason",
+      "actual": null,
+      "expected": null,
+      "passed": true
+    },
+    {
+      "name": "reason_none_matched-retry",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "reason_none_matched-retry-no-append",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "oversized-optional-timing-accepted",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    },
+    {
+      "name": "oversized-optional-timing-response-persisted",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "name": "valid-retry-after-invalid-timing",
+      "actual": 200,
+      "expected": 200,
+      "passed": true
+    }
+  ],
+  "passed": 35,
+  "failed": 0,
+  "event_types": [
+    "negative_feedback_action_recorded",
+    "reason_displayed",
+    "reason_selected",
+    "reason_displayed",
+    "reason_skipped",
+    "reason_displayed",
+    "reason_declined",
+    "reason_displayed",
+    "reason_menu_closed",
+    "reason_displayed",
+    "reason_none_matched",
+    "reason_displayed",
+    "reason_selected"
+  ],
+  "db_sha256": "4c8cfa0ad4fbcbc85f366eb1bec648d79a3156d78c83005d4d9391e7e8c40a93",
+  "scope": "Loopback demo HTTP; scripted client timings; no browser or real host login"
+}

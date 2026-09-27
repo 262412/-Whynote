@@ -288,8 +288,7 @@ class EventStore:
         metadata: Mapping[str, Any],
         idempotency_key: str,
         display_id: str,
-        now: float,
-        expires_at: float,
+        clock: Callable[[], float],
     ) -> tuple[dict[str, Any], dict[str, Any] | None]:
         """Reserve one menu per explicit click; replay without changing any ticket."""
         with self._transaction() as db:
@@ -301,7 +300,7 @@ class EventStore:
             if new_key:
                 db.execute(
                     "INSERT INTO host_clicks VALUES(?,?,?,?,?,?)",
-                    (principal.tenant_ref, principal.actor_ref, key_hash, event_id, display_id, expires_at),
+                    (principal.tenant_ref, principal.actor_ref, key_hash, event_id, display_id, 0),
                 )
                 db.execute(
                     "INSERT INTO display_tickets VALUES(?,?) "
@@ -336,9 +335,33 @@ class EventStore:
             result = "click_pending"
             if not self._ticket_is_current(db, event_id, click["display_id"]):
                 result = "click_superseded"
-            elif now >= click["expires_at"]:
+            elif click["expires_at"] > 0 and clock() >= click["expires_at"]:
                 result = "ticket_expired"
             return state, {"event_id": event_id, "result": result}
+
+    def set_host_click_deadline(
+        self, principal: Principal, event_id: str, idempotency_key: str, display_id: str, expires_at: float
+    ) -> None:
+        """Publish the dispatch deadline once; never renew a retry or change its ticket."""
+        with self._transaction() as db:
+            self._require_owner(db, principal, event_id)
+            click = db.execute(
+                "SELECT * FROM host_clicks WHERE tenant_ref=? AND actor_ref=? AND key_hash=?",
+                (principal.tenant_ref, principal.actor_ref, _digest(idempotency_key)),
+            ).fetchone()
+            if (
+                click is None
+                or click["event_id"] != event_id
+                or click["display_id"] != display_id
+                or expires_at <= 0
+                or click["expires_at"] not in (0, expires_at)
+            ):
+                raise ConflictError("host click deadline does not match its reservation")
+            if click["expires_at"] == 0:
+                db.execute(
+                    "UPDATE host_clicks SET expires_at=? WHERE tenant_ref=? AND actor_ref=? AND key_hash=?",
+                    (expires_at, principal.tenant_ref, principal.actor_ref, _digest(idempotency_key)),
+                )
 
     def _projection(self, db: sqlite3.Connection, event_id: str) -> dict[str, Any]:
         return {"event_id": event_id, **project(self._events(db, event_id))}
