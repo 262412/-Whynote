@@ -202,7 +202,7 @@ def test_concurrent_writers_reserve_once_and_rollback_together(tmp_path):
     metadata = {"interaction_contract": "manual-v1"}
 
     def reserve(_):
-        return EventStore(path).begin_host_click(OWNER, target, metadata, "click", str(uuid.uuid4()), 1000, 1060)
+        return EventStore(path).begin_host_click(OWNER, target, metadata, "click", str(uuid.uuid4()), lambda: 1000)
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         results = list(pool.map(reserve, range(8)))
@@ -213,7 +213,7 @@ def test_concurrent_writers_reserve_once_and_rollback_together(tmp_path):
             assert db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] == 1
         db.execute("CREATE TRIGGER reject_click BEFORE INSERT ON host_clicks BEGIN SELECT RAISE(ABORT, 'test'); END;")
     with pytest.raises(sqlite3.IntegrityError):
-        store.begin_host_click(Principal("other", "bob"), target, metadata, "new", "new", 1000, 1060)
+        store.begin_host_click(Principal("other", "bob"), target, metadata, "new", "new", lambda: 1000)
     with sqlite3.connect(path) as db:
         for table in ("actions", "events", "outbox", "idempotency", "host_clicks", "display_tickets"):
             assert db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] == 1

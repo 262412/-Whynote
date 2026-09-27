@@ -114,11 +114,8 @@ class Action:
             "interaction_contract": "manual-v1",
         }
         display_id = str(uuid.uuid4())
-        issued_at = time.monotonic()
-        now = time.time()
-        expires_at = now + TICKET_SECONDS
         if click_id is not None:
-            state, replay = self.store.begin_host_click(principal, target, metadata, key, display_id, now, expires_at)
+            state, replay = self.store.begin_host_click(principal, target, metadata, key, display_id, time.time)
             if replay is not None:
                 return replay
         else:
@@ -129,6 +126,9 @@ class Action:
         event_id = state["event_id"]
         mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
         session_ref = hashlib.sha256(session_id.encode()).hexdigest()
+        # Database reservation/commit waits precede the menu's response interval.
+        issued_at = time.monotonic()
+        expires_at = time.time() + TICKET_SECONDS
         ticket_context = {
             "tenant_id": self.tenant,
             "user_id": user_id,
@@ -153,6 +153,12 @@ class Action:
             ).encode("utf-8")
             signature = hmac.new(self.version_key, signed, hashlib.sha256).hexdigest()
             choices.append((f"s0t1.{display_id}.{expires_at}.{reason_code}.{signature}", reason_code, label))
+        deadline_task = None
+        if click_id is not None:
+            # Persist alongside the callback, without a database lock around UI work.
+            deadline_task = asyncio.create_task(
+                asyncio.to_thread(self.store.set_host_click_deadline, principal, event_id, key, display_id, expires_at)
+            )
         try:
             answer = await asyncio.wait_for(
                 __event_call__(
@@ -175,8 +181,12 @@ class Action:
                 ),
                 timeout=TICKET_SECONDS,
             )
+            expired = time.monotonic() - issued_at >= TICKET_SECONDS or time.time() >= expires_at
         except TimeoutError:
             return {"event_id": event_id, "result": "ticket_expired"}
+        finally:
+            if deadline_task is not None:
+                await deadline_task
         if isinstance(answer, dict) and answer.get("error"):
             return {"event_id": event_id, "result": "client_unavailable"}
         timing = None
@@ -185,7 +195,7 @@ class Action:
             if not isinstance(timing, dict):
                 timing = None
             answer = answer["value"]
-        if time.monotonic() - issued_at >= TICKET_SECONDS or time.time() >= expires_at:
+        if expired:
             return {"event_id": event_id, "result": "ticket_expired"}
         reason_code = None
         if isinstance(answer, str):

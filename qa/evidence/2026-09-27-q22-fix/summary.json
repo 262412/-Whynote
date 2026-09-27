@@ -1,0 +1,122 @@
+{
+  "baseline": "9e001e930badcecc82b2adf490d6014a2db0ef55",
+  "before": {
+    "passed": 25,
+    "failed": 2,
+    "cases": [
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": false,
+        "lock_seconds": 0.75,
+        "measured_before_menu": 0.7820000000065193,
+        "controlled_user_seconds": 59.5,
+        "result": "ticket_expired",
+        "event_types": [
+          "negative_feedback_action_recorded"
+        ]
+      },
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": true,
+        "lock_seconds": 0.75,
+        "measured_before_menu": 0.7809999999881256,
+        "controlled_user_seconds": 59.5,
+        "result": "ticket_expired",
+        "event_types": [
+          "negative_feedback_action_recorded"
+        ]
+      }
+    ]
+  },
+  "after": {
+    "local_total": 143,
+    "core": 107,
+    "preserved_ticket_cases": 9,
+    "independent_cases_developer_rerun": 27,
+    "new_database_timing_cases": 9,
+    "loopback_http": 35,
+    "lock_and_user_time_cases": [
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": false,
+        "lock_seconds": 0,
+        "measured_before_menu": 0.01600000000325963,
+        "controlled_user_seconds": 59.5,
+        "result": "reason_submitted",
+        "event_types": [
+          "negative_feedback_action_recorded",
+          "reason_displayed",
+          "reason_selected"
+        ]
+      },
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": true,
+        "lock_seconds": 0,
+        "measured_before_menu": 0.01600000000325963,
+        "controlled_user_seconds": 59.5,
+        "result": "reason_submitted",
+        "event_types": [
+          "negative_feedback_action_recorded",
+          "reason_displayed",
+          "reason_selected"
+        ]
+      },
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": false,
+        "lock_seconds": 0.75,
+        "measured_before_menu": 0.7969999999913853,
+        "controlled_user_seconds": 59.5,
+        "result": "reason_submitted",
+        "event_types": [
+          "negative_feedback_action_recorded",
+          "reason_displayed",
+          "reason_selected"
+        ]
+      },
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": true,
+        "lock_seconds": 0.75,
+        "measured_before_menu": 0.7809999999881256,
+        "controlled_user_seconds": 59.5,
+        "result": "reason_submitted",
+        "event_types": [
+          "negative_feedback_action_recorded",
+          "reason_displayed",
+          "reason_selected"
+        ]
+      },
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": false,
+        "lock_seconds": 0.75,
+        "measured_before_menu": 0.7969999999913853,
+        "controlled_user_seconds": 60.1,
+        "result": "ticket_expired",
+        "event_types": [
+          "negative_feedback_action_recorded"
+        ]
+      },
+      {
+        "case": "sqlite_wait_ticket_lifetime",
+        "explicit": true,
+        "lock_seconds": 0.75,
+        "measured_before_menu": 0.7660000000032596,
+        "controlled_user_seconds": 60.1,
+        "result": "ticket_expired",
+        "event_types": [
+          "negative_feedback_action_recorded"
+        ]
+      }
+    ]
+  },
+  "scope": "Developer verification; actual SQLite waits and controlled user clocks; no new browser or independent acceptance claim",
+  "source_sha256": {
+    "src/whynote/store.py": "0f1c0231b1381772d2d7458e665885e7ee2a991f48f968f02c18ebb04713b592",
+    "integrations/openwebui/s0_action.py": "f8dc4cbc97aed5fac7134ccf4baf54e52144fda06cf1bb9c090176492d33dbe1",
+    "tests/test_ticket_database_wait.py": "dca8507ae7e95c13c36e4ede63537ac7936d8936542057c8a3e52114e20f5181",
+    "qa/test_manual_v1_acceptance.py": "34ea11ef82e3879b07e816c7f0037b898e0f69da42ca0a2f043b2cc53801c405"
+  }
+}
