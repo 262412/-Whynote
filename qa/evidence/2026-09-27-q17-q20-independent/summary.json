@@ -1111,5 +1111,14 @@
     "temporary_port_8106_stopped": true,
     "original_workspace_changes_preserved": true,
     "audit_databases_retained": true
+  },
+  "handoff": {
+    "pull_request": 22,
+    "branch": "codex/qa-click-retry",
+    "previous_pr_20": "merged into old feature branch; reuse and retarget failed; no force push",
+    "prd_correction_write_revision": 101,
+    "prd_readback_revision": 104,
+    "technical_correction_and_readback_revision": 26,
+    "concurrent_prd_editor_changes_preserved": true
   }
 }

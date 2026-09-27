@@ -75,3 +75,5 @@ attribution_status: selected → edited
 - [PRD 修订 85](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6M6lEkRK9rFoqDDJ3i6rrAe)：以修订 84 追加。
 - [技术文档修订 25](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc6XWF7H0V8h8g2FVwp9odeRh)：以修订 24 追加。
 - 两份均已读回，确认历史全文前缀保留且本轮 QA-20260927-R2 章节存在；只标记已验证子项，Q-21 与完整验收保持开放。
+
+补充读回：交付更正追加后，PRD 因其他编辑并行更新已到 **104**，技术文档到 **26**。已对照相关 FR/D/Q 条目：正文将实现、开发复测、独立验证和完整验收分开，M4 已记录 Q-17～Q-20 指定独立技术复验通过及 Q-21 待修；本轮测试契约未改变。PRD 104 的其他正文改写不是本 QA 执行。更正章节与原 QA 章节均在读回中保留。实际交付为 [草稿 PR #22](https://github.com/262412/-Whynote/pull/22)，此前 PR #20 复用计划已在两份飞书中明确撤回。
