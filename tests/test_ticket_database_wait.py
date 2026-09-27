@@ -166,3 +166,75 @@ def test_explicit_ticket_keeps_both_clock_boundaries(monkeypatch, tmp_path, wall
 
     result = HELPERS["run"](action, body, choose)
     assert result["result"] == ("reason_submitted" if wall < 60 and mono < 60 else "ticket_expired")
+
+
+@pytest.mark.parametrize("explicit", [False, True])
+@pytest.mark.parametrize("late", [False, True])
+def test_callback_result_survives_real_wait_for_deadline(monkeypatch, tmp_path, explicit, late):
+    """Real clocks and SQLite blocking cross wait_for's own timer, not just a fake offset."""
+    action, body, _ = HELPERS["host"](monkeypatch, tmp_path)
+    if not explicit:
+        body.pop("whynote_click_id")
+    monkeypatch.setitem(action.action.__func__.__globals__, "TICKET_SECONDS", 1.0)
+    published, locked, returned = (threading.Event() for _ in range(3))
+    publish = action.store.set_host_click_deadline
+
+    def publish_then_signal(*args):
+        publish(*args)
+        published.set()
+
+    monkeypatch.setattr(action.store, "set_host_click_deadline", publish_then_signal)
+
+    def writer():
+        with sqlite3.connect(action.store.path) as db:
+            db.execute("BEGIN IMMEDIATE")
+            locked.set()
+            assert returned.wait(5)
+            time.sleep(1.1)
+
+    worker = threading.Thread(target=writer)
+    remaining = []
+
+    async def choose(menu):
+        if explicit:
+            assert await asyncio.to_thread(published.wait, 5)
+        eid = action.store.next_gate_message()["event_id"]
+        worker.start()
+        assert await asyncio.to_thread(locked.wait, 5)
+        value = await HELPERS["choose"](menu)
+        deadline = float(value.split(".factual_error.")[0].split(".", 2)[2])
+        asyncio.get_running_loop().call_soon(action.store.get_events, OWNER, eid)
+        returned.set()
+        if late:
+            await asyncio.sleep(0)  # Block before the callback returns, so it really is late.
+        remaining.append(deadline - time.time())
+        return value
+
+    try:
+        result = HELPERS["run"](action, body, choose)
+    finally:
+        if worker.ident is not None:
+            worker.join(5)
+    assert (remaining[0] < 0) == late
+    assert result["result"] == ("ticket_expired" if late else "reason_submitted")
+    assert len(action.store.get_events(OWNER, result["event_id"])) == (1 if late else 3)
+
+
+@pytest.mark.parametrize("explicit", [False, True])
+def test_silent_callback_is_still_cancelled(monkeypatch, tmp_path, explicit):
+    action, body, _ = HELPERS["host"](monkeypatch, tmp_path)
+    if not explicit:
+        body.pop("whynote_click_id")
+    monkeypatch.setitem(action.action.__func__.__globals__, "TICKET_SECONDS", 0.02)
+    cancelled = []
+
+    async def silent(_):
+        try:
+            await asyncio.Event().wait()
+        finally:
+            cancelled.append(True)
+
+    result = HELPERS["run"](action, body, silent)
+    assert cancelled == [True]
+    assert result["result"] == "ticket_expired"
+    assert len(action.store.get_events(OWNER, result["event_id"])) == 1

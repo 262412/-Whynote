@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-27",
+  "baseline": "590a79ee39d3dedff3ca679812a833acfaa7f07f",
+  "main": "e15a0fe64826a8b5f4cc34e3a0be7c58e1a82f96",
+  "before": {
+    "independent_cases_developer_rerun": {
+      "passed": 29,
+      "failed": 2
+    },
+    "failures": [
+      "test_callback_arrival_precedes_event_loop_database_wait[0.75-False]",
+      "test_callback_arrival_precedes_event_loop_database_wait[0.75-True]"
+    ]
+  },
+  "after": {
+    "local_total": 153,
+    "core": 113,
+    "preserved_ticket_cases": 9,
+    "independent_cases_developer_rerun": 31,
+    "new_real_clock_cases": 6,
+    "ruff_lint": "passed",
+    "ruff_format": "passed"
+  },
+  "new_cases": {
+    "paths": [
+      "explicit",
+      "legacy"
+    ],
+    "deadline_seconds": 1.0,
+    "sqlite_lock_seconds": 1.1,
+    "checks": [
+      "on-time callback accepted despite subsequent event-loop stall beyond wait_for timer",
+      "late callback rejected",
+      "silent callback cancelled"
+    ]
+  },
+  "scope": "Developer verification only. Existing independent cases use controlled user time and actual SQLite. New cases use shortened real clocks and actual SQLite. No new browser, HTTP or local native run; independent acceptance, non-author approval and sign-off pending.",
+  "source_sha256": {
+    "integrations/openwebui/s0_action.py": "bc3523f5cdbdacdcb35c7bd9bfe4c8f1a9a0034a948df2e6cae1258925b1aff6",
+    "tests/test_ticket_database_wait.py": "697c6afbc0610a585b01bd51acaf18d92b3639acb5022595cbf83501c83e4628",
+    "qa/test_manual_v1_acceptance.py": "ecd12fb57893effcd21378774e82fe7f1d83c34ecd9c842561b703f71862e421"
+  }
+}

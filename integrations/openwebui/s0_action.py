@@ -159,29 +159,33 @@ class Action:
             deadline_task = asyncio.create_task(
                 asyncio.to_thread(self.store.set_host_click_deadline, principal, event_id, key, display_id, expires_at)
             )
-        try:
-            answer = await asyncio.wait_for(
-                __event_call__(
-                    {
-                        "type": "input",
-                        "data": {
-                            "title": MENU_TITLE,
-                            "message": MENU_MESSAGE,
-                            "input": {
-                                "type": "select",
-                                "measurement": {
-                                    "version": "active-v1",
-                                    "display_id": display_id,
-                                    "session_ref": session_ref,
-                                },
-                                "options": [{"label": label, "value": value} for value, _, label in choices],
+
+        async def receive_answer():
+            answer = await __event_call__(
+                {
+                    "type": "input",
+                    "data": {
+                        "title": MENU_TITLE,
+                        "message": MENU_MESSAGE,
+                        "input": {
+                            "type": "select",
+                            "measurement": {
+                                "version": "active-v1",
+                                "display_id": display_id,
+                                "session_ref": session_ref,
                             },
+                            "options": [{"label": label, "value": value} for value, _, label in choices],
                         },
-                    }
-                ),
-                timeout=TICKET_SECONDS,
+                    },
+                }
             )
+            # Capture in the callback task, before wait_for resumes its caller.
+            # Other requests may block that caller's next turn on the event loop.
             expired = time.monotonic() - issued_at >= TICKET_SECONDS or time.time() >= expires_at
+            return answer, expired
+
+        try:
+            answer, expired = await asyncio.wait_for(receive_answer(), timeout=TICKET_SECONDS)
         except TimeoutError:
             return {"event_id": event_id, "result": "ticket_expired"}
         finally:
