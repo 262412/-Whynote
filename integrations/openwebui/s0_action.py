@@ -96,11 +96,8 @@ class Action:
         principal = Principal(self.tenant, user_id)
         owned = await self._owned_chat(body.get("chat_id", ""), user_id)
         target = self._target(owned, body)
-        key = hmac.new(
-            self.version_key,
-            f"{user_id}:{session_id}:{target['object_id']}:{target['object_version']}".encode(),
-            hashlib.sha256,
-        ).hexdigest()
+        # Each click is a new request; manual-v1 atomically reuses any active intent.
+        key = f"s0-click:{uuid.uuid4()}"
         state = self.store.create_action(
             principal,
             target,
@@ -215,9 +212,8 @@ class Action:
             timing=timing,
         )
         if __event_emitter__ is not None:
-            await __event_emitter__(
-                {"type": "notification", "data": {"type": "success", "content": "知因 S0 反馈与原因已记录"}}
-            )
+            content = "知因 S0 反馈操作已记录" if reason_code in MANUAL_OPERATIONS else "知因 S0 反馈与原因已记录"
+            await __event_emitter__({"type": "notification", "data": {"type": "success", "content": content}})
         return {
             "event_id": event_id,
             "display": receipt,
