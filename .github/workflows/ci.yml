@@ -29,6 +29,8 @@ jobs:
         run: uv run --no-sync pytest -q
       - name: Test preserved S0 regressions
         run: uv run --no-sync pytest qa/test_s0_regressions.py -q
+      - name: Test independent manual contract acceptance
+        run: uv run --no-sync pytest qa/test_manual_v1_acceptance.py -q
 
   native-regression:
     runs-on: ubuntu-latest

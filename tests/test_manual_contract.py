@@ -11,6 +11,27 @@ TARGET = {"object_type": "answer", "object_id": "fiction", "object_version": "1"
 METADATA = {"interaction_contract": "manual-v1"}
 
 
+def test_legacy_click_generation_is_atomic_across_workers(tmp_path):
+    path = tmp_path / "legacy-click.db"
+    store = EventStore(path)
+    old = store.create_action(ALICE, TARGET, METADATA, "legacy")["event_id"]
+    store.retract_action(ALICE, old, "undo")
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        ids = list(
+            pool.map(
+                lambda _: EventStore(path).create_action(ALICE, TARGET, METADATA, "legacy", restart_retracted=True)[
+                    "event_id"
+                ],
+                range(8),
+            )
+        )
+    assert len(set(ids)) == 1 and ids[0] != old
+    assert store.create_action(ALICE, TARGET, METADATA, "legacy")["event_id"] == old
+    with sqlite3.connect(path) as db:
+        assert db.execute("SELECT COUNT(*) FROM actions").fetchone()[0] == 2
+        assert db.execute("SELECT COUNT(*) FROM outbox WHERE topic='feedback.gate.requested'").fetchone()[0] == 2
+
+
 def respond(store, event_id, action, code=None, display="display", mode="manual_menu", principal=ALICE):
     store.issue_display_ticket(principal, event_id, display)
     store.record_display(principal, event_id, display, mode, [code for code, _ in MANUAL_REASONS], MANUAL_UI_VERSION)

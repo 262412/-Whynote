@@ -1,0 +1,62 @@
+{
+  "base_main": "4313f8d",
+  "qa_source": "ab2259e54029c50517c62bb7cff508ea23b87dd6",
+  "before": {
+    "passed": 1,
+    "failed": 9
+  },
+  "http": {
+    "passed": 35,
+    "failed": 0
+  },
+  "browser": {
+    "same_session": true,
+    "distinct_click_ids": true,
+    "action_http_statuses": [
+      200,
+      200
+    ],
+    "actions": 2,
+    "gate_outbox": 2,
+    "states": [
+      {
+        "event_id": "64d35c1f-42e5-48d9-859f-27266ebd5ebe",
+        "projection_version": "4",
+        "action_status": "retracted",
+        "inference_status": "cancelled",
+        "attribution_status": "none",
+        "attribution_source": "none",
+        "reason_code": null,
+        "gate": null,
+        "target_ref": {
+          "object_id": "d134158b-878b-42a1-9751-3fc27741d745/caed222d-c3f7-470e-9d1b-e9de4ad9a896",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s0v1-c6485c9f9862ac451966c3b8b792940ec68b85c834fa8b499e252e843692b9ba"
+        },
+        "response_status": "skipped"
+      },
+      {
+        "event_id": "6bc33f14-2d55-4ed9-a1ce-f9ea44b3176d",
+        "projection_version": "4",
+        "action_status": "active",
+        "inference_status": "gate_pending",
+        "attribution_status": "none_matched",
+        "attribution_source": "none",
+        "reason_code": null,
+        "gate": null,
+        "target_ref": {
+          "object_id": "d134158b-878b-42a1-9751-3fc27741d745/caed222d-c3f7-470e-9d1b-e9de4ad9a896",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s0v1-c6485c9f9862ac451966c3b8b792940ec68b85c834fa8b499e252e843692b9ba"
+        },
+        "response_status": "none_matched"
+      }
+    ],
+    "retraction_setup": "EventStore.retract_action in this new synthetic database; subsequent click through real browser",
+    "notifications": [
+      "反馈已保存：暂时跳过，当前原因保持不变",
+      "反馈已保存：都不是，当前原因已清空"
+    ]
+  },
+  "scope": "developer retest; not independent acceptance"
+}

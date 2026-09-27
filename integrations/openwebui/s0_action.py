@@ -96,9 +96,14 @@ class Action:
         principal = Principal(self.tenant, user_id)
         owned = await self._owned_chat(body.get("chat_id", ""), user_id)
         target = self._target(owned, body)
+        click_id = body.get("whynote_click_id")
+        if click_id is not None:
+            if not isinstance(click_id, str):
+                raise ValueError("S0 click ID must be a UUID string")
+            click_id = str(uuid.UUID(click_id))
         key = hmac.new(
             self.version_key,
-            f"{user_id}:{session_id}:{target['object_id']}:{target['object_version']}".encode(),
+            f"{user_id}:{target['object_id']}:{target['object_version']}:{click_id or 'legacy:' + session_id}".encode(),
             hashlib.sha256,
         ).hexdigest()
         state = self.store.create_action(
@@ -112,6 +117,7 @@ class Action:
                 "interaction_contract": "manual-v1",
             },
             key,
+            restart_retracted=click_id is None,
         )
         event_id = state["event_id"]
         if state["action_status"] != "active":
@@ -215,9 +221,15 @@ class Action:
             timing=timing,
         )
         if __event_emitter__ is not None:
-            await __event_emitter__(
-                {"type": "notification", "data": {"type": "success", "content": "知因 S0 反馈与原因已记录"}}
-            )
+            message = "知因 S0 反馈与原因已记录"
+            if reason_code in MANUAL_OPERATIONS:
+                message = {
+                    "reason_none_matched": "反馈已保存：都不是，当前原因已清空",
+                    "reason_skipped": "反馈已保存：暂时跳过，当前原因保持不变",
+                    "reason_declined": "反馈已保存：不愿说明，当前原因保持不变",
+                    "reason_menu_closed": "原因菜单已关闭，当前原因保持不变",
+                }[reason_code]
+            await __event_emitter__({"type": "notification", "data": {"type": "success", "content": message}})
         return {
             "event_id": event_id,
             "display": receipt,

@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "request",
+    "click_id": "67211ac1-1cce-4b5a-84b0-41800af320a9"
+  },
+  {
+    "kind": "response",
+    "status": 200
+  },
+  {
+    "kind": "request",
+    "click_id": "a99fb9d6-b026-43fc-9ec8-026f4d439ffa"
+  },
+  {
+    "kind": "response",
+    "status": 200
+  }
+]
