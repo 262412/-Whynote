@@ -34,6 +34,7 @@ class RenderedDisplay(BaseModel):
     mode: Literal["manual_menu", "edit_menu"]
     ui_version: Literal["demo-v1", "manual-menu-v1"]
     shown_reason_codes: list[str]
+    client_session_ref: str | None = Field(default=None, min_length=1, max_length=100)
 
 
 def _require_loopback(request: Request) -> None:
@@ -98,6 +99,7 @@ def create_demo_app(db_path: str | Path = "var/whynote-demo.db") -> FastAPI:
                 body.mode,
                 body.shown_reason_codes,
                 body.ui_version,
+                body.client_session_ref,
             )
         except NotFoundError as exc:
             raise HTTPException(404, str(exc)) from exc

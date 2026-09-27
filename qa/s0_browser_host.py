@@ -22,6 +22,8 @@ def serve(args):
     assert subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip() == UPSTREAM
     patch = ROOT / "integrations/openwebui/patches/native-v0.11.4-s0.patch"
     subprocess.run(["git", "-C", str(source), "apply", "--reverse", "--check", str(patch)], check=True)
+    timing_patch = ROOT / "integrations/openwebui/patches/manual-v0.11.4-timing.patch"
+    subprocess.run(["git", "-C", str(source), "apply", "--reverse", "--check", str(timing_patch)], check=True)
     assert (source / "build/index.html").is_file(), "Build the pinned patched frontend first"
     data.mkdir(parents=True, exist_ok=False)
     (data / "static").mkdir()
@@ -62,6 +64,7 @@ def serve(args):
         "backend": str(source / "backend"),
         "port": args.port,
         "patch_sha256": digest(patch),
+        "timing_patch_sha256": digest(timing_patch),
         "frontend_index_sha256": digest(source / "build/index.html"),
         "action_sha256": digest(ROOT / "integrations/openwebui/s0_action.py"),
         "pipe_sha256": digest(ROOT / "integrations/openwebui/s0_pipe.py"),

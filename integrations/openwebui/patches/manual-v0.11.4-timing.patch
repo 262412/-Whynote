@@ -1,0 +1,111 @@
+diff --git a/src/lib/components/chat/Chat.svelte b/src/lib/components/chat/Chat.svelte
+index fd0e1bb..8918b40 100644
+--- a/src/lib/components/chat/Chat.svelte
++++ b/src/lib/components/chat/Chat.svelte
+@@ -164,6 +164,7 @@
+ 	let showEventConfirmation = false;
+ 	let eventConfirmationTitle = '';
+ 	let eventConfirmationMessage = '';
++	let eventMeasurement = null;
+ 	let eventConfirmationInput = false;
+ 	let eventConfirmationInputPlaceholder = '';
+ 	let eventConfirmationInputValue = '';
+@@ -1399,6 +1400,7 @@
+ 					eventConfirmationInputValue = data?.value ?? '';
+ 					eventConfirmationInputType = data?.input?.type ?? data?.type ?? '';
+ 					eventConfirmationInputOptions = data?.input?.options ?? data?.options ?? [];
++					eventMeasurement = data?.input?.measurement ?? null;
+ 				} else if (type === 'request:user_input') {
+ 					eventCallback = cb;
+ 					askUserQuestions = data?.questions ?? [];
+@@ -4250,6 +4252,7 @@
+ 	inputValue={eventConfirmationInputValue}
+ 	inputType={eventConfirmationInputType}
+ 	inputOptions={eventConfirmationInputOptions}
++	measurement={eventConfirmationInput ? eventMeasurement : null}
+ 	on:confirm={(e) => {
+ 		if (eventConfirmationInput) {
+ 			eventCallback(e.detail);
+@@ -4259,8 +4262,8 @@
+ 			eventCallback(true);
+ 		}
+ 	}}
+-	on:cancel={() => {
+-		eventCallback(false);
++	on:cancel={(e) => {
++		eventCallback(e.detail ?? false);
+ 	}}
+ />
+ 
+diff --git a/src/lib/components/common/ConfirmDialog.svelte b/src/lib/components/common/ConfirmDialog.svelte
+index c1d2a5e..9bed8d0 100644
+--- a/src/lib/components/common/ConfirmDialog.svelte
++++ b/src/lib/components/common/ConfirmDialog.svelte
+@@ -27,6 +27,7 @@
+ 	export let inputPlaceholder = '';
+ 	export let inputValue = '';
+ 	export let inputType = '';
++	export let measurement: { version: string; display_id: string; session_ref: string } | null = null;
+ 	export let inputOptions: ({ label?: string; value: string } | string)[] = [];
+ 
+ 	let _inputValue = inputValue;
+@@ -67,20 +68,47 @@
+ 		}
+ 	};
+ 
++	let measuredDisplay = '';
++	let mountedAt = 0;
++	let activeStarted: number | null = null;
++	let activeMs = 0;
++	const trackFocus = () => {
++		const now = performance.now();
++		if (activeStarted !== null) activeMs += now - activeStarted;
++		activeStarted = show && document.hasFocus() && !document.hidden ? now : null;
++	};
++	$: if (mounted && show && modalElement && measurement?.version === 'active-v1' && measuredDisplay !== measurement.display_id) {
++		measuredDisplay = measurement.display_id;
++		mountedAt = performance.now();
++		activeMs = 0;
++		activeStarted = null;
++		trackFocus();
++	}
++	const measuredResponse = (value: string | boolean) => {
++		if (!measurement || measurement.version !== 'active-v1') return value;
++		trackFocus();
++		activeStarted = null;
++		return { value, timing: { ...measurement, active_ms: activeMs, elapsed_ms: performance.now() - mountedAt } };
++	};
+ 	const confirmHandler = async () => {
++		const response = measuredResponse(_inputValue);
+ 		show = false;
+ 		await tick();
+ 		await onConfirm();
+-		dispatch('confirm', _inputValue);
++		dispatch('confirm', response);
+ 	};
+ 
+ 	const cancelHandler = () => {
++		const response = measuredResponse(false);
+ 		show = false;
+-		dispatch('cancel');
++		dispatch('cancel', response);
+ 	};
+ 
+ 	onMount(() => {
+ 		mounted = true;
++		window.addEventListener('focus', trackFocus);
++		window.addEventListener('blur', trackFocus);
++		document.addEventListener('visibilitychange', trackFocus);
+ 	});
+ 
+ 	$: if (mounted) {
+@@ -102,6 +130,9 @@
+ 	}
+ 
+ 	onDestroy(() => {
++		window.removeEventListener('focus', trackFocus);
++		window.removeEventListener('blur', trackFocus);
++		document.removeEventListener('visibilitychange', trackFocus);
+ 		show = false;
+ 		window.removeEventListener('keydown', handleKeyDown);
+ 		if (focusTrap) {

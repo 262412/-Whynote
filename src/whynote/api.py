@@ -63,6 +63,7 @@ class AttributionAction(BaseModel):
     reason_code: str | None = None
     display_id: str = Field(min_length=1)
     explicit_submission: StrictBool
+    timing: dict | None = None
 
 
 Authenticate = Callable[[Request], Principal]
@@ -164,6 +165,7 @@ def create_app(
                 body.display_id,
                 body.explicit_submission,
                 idempotency_key,
+                timing=body.timing,
             )
         except NotFoundError as exc:
             raise HTTPException(404, str(exc)) from exc

@@ -33,6 +33,29 @@
 
 处置建议待用户按数据/隐私角色签署具体期限：测试证据限制本机项目人员访问；历史审计保留，不自动清理；备份/导出单独登记和删除，删除结果需逐副本复验。留存时长、恢复权限、审计保留例外均 `[待决策]`。未知残留及环境出站控制继续阻断真实数据。
 
+## B2b 未响应与测量
+
+在 B2a 之上提供依赖 PR；合并顺序为 B2a → B2b，当前均未合并。`whynote.measurement` 使用 SQLite `mode=ro` 和一致读取事务，不创建 EventStore，不迁移或追加事件。输入为明确给定的虚构 cohort ID、tenant 和带时区 as_of。窗口采用 `[accepted_at, accepted_at+86400s)`，恰好到期的响应单列为迟到。
+
+输出首次响应、窗内首次响应、窗末投影、当前投影、显式操作数、关闭次数/唯一动作数、无展示、撤销、迟到及动作/Outbox 对账。分母固定，不因撤销缩减；未满窗报告 `provisional=true` 和成熟动作数，不能当作完整观察结果。历史 reason_unresponded 不计为明确用户响应。
+
+新增可选测量字段：展示 `client_session_ref`；响应 `timing={version:active-v1, display_id, session_ref, active_ms, elapsed_ms}`。仅归一化后的 `measurement` 持久化。主动时长使用客户端 performance.now，失焦/不可见暂停；服务端总时长按受理至提交独立计算。时钟缺失、会话不符、绑定错误、非法时长或服务端倒退都标原因和空主动值，反馈本身仍可受理。客户端报告不等于可信注意力或真实看见。p90 用 nearest-rank，并输出有效样本数；关闭另计，不进入明确填写响应耗时样本。
+
+宿主计时是独立补丁 `integrations/openwebui/patches/manual-v0.11.4-timing.patch`，在 native 补丁后应用。只对 opt-in active-v1 的输入返回带计时对象，普通确认继续返回原值。Action 接受旧字符串回调，耗时为 missing；取消仍记录关闭。部署顺序：核心/Action 与两个补丁配套构建；回滚计时前端不会伪造历史测量，后续记录标 missing。不得降级到不能读取 B2a 新事件的核心。
+
+本地验证：81 核心 + 9 票据回归共 **90/90**；Ruff lint/format 通过。新增覆盖整 24h 边界、迟到后历史 as_of 不变、固定分母含撤销、unknown 显式选择、无展示、旧超时、无效/跨会话耗时及报告前后数据库 SHA256 不变。Node 22 完整宿主前端构建成功。失焦/可见性暂停已接入事件处理，但本轮未取得真实操作系统切窗的独立计时对账，不把它列为完整验收。
+
+实际浏览器：8102 demo 选择“其他或无法归类”，动作 202、票据/回执/响应 200；主动耗时约 5822ms、服务器总时长约 5861ms。8101 新宿主选择成功；两标签页不同会话复用 1 动作 / 1 Outbox。新菜单签发后旧菜单提交 400，数据库仍为原 3 事件；新菜单取消后原因保留，再开菜单选“都不是”清空。最终 3 展示、选择/关闭/都不是各 1，两种会话引用；选择和都不是均有有效客户端时长。详见 `qa/evidence/2026-09-27-manual/host-measurement.json`、`demo-measurement.json` 与版本/网络摘要。原始截图与新虚构数据库保留在 var，不上传凭据或原始 DB。
+
+报告复现（PowerShell，先从审定的虚构 cohort 写入 ID 数组）：
+
+```powershell
+$env:PYTHONPATH='src'
+.venv/Scripts/python.exe -m whynote.measurement --db var/b2b-browser.db --tenant demo-tenant --cohort var/cohort.json --as-of 2026-09-28T04:00:00Z
+```
+
+报告 as_of 不是等待 24 小时的实际用户实验；时钟边界由受控测试验证。真实数据或跨平台数据库未在范围内。
+
 ## 后续与准入
 
-B2b 继续实现只读 24 小时报告、迟到及耗时。B3 可准备研究脚本；真实目标群体、处理者、同意、样本量、阈值及保留期限待决策，不招募或收集实际对话。完整 FR、原生评分作为知因事实源、真实数据、模型与生产保持 NO-GO。业务角色签署不代替非作者代码审查。
+B2a/B2b 已实现并做开发复测，待独立验收。B3 研究脚本见 `manual-research-preparation.md`；真实目标群体、处理者、同意、样本量、阈值及保留期限待决策，不招募或收集实际对话。完整 FR、原生评分作为知因事实源、真实数据、模型与生产保持 NO-GO。业务角色签署不代替非作者代码审查。
