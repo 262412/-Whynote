@@ -538,5 +538,30 @@
   "ruff": "passed: 30 files format checked",
   "browser": "not executed: nodeRepl.fetch request failed",
   "conclusion": "Q22 original reservation wait fixed; callback return before deadline followed by queued DB wait still expires in both paths",
-  "evidence_boundary": "Actual Action/EventStore and SQLite lock; controlled fixture, callback, user elapsed time and event loop scheduling; not real host HTTP or browser"
+  "evidence_boundary": "Actual Action/EventStore and SQLite lock; controlled fixture, callback, user elapsed time and event loop scheduling; not real host HTTP or browser",
+  "document_updates": {
+    "prd": {
+      "before": 183,
+      "after": 194,
+      "history_preserved": true,
+      "links_preserved": true,
+      "block_id": "doxc6F3irOj8OLmcaTNO06XWxgc"
+    },
+    "tech": {
+      "before": 173,
+      "after": 182,
+      "history_preserved": true,
+      "links_preserved": true,
+      "block_id": "doxc60MhFv8clu5X0J2VFa4q0vb"
+    }
+  },
+  "ci_first": {
+    "run": 36297911316,
+    "native": "success",
+    "quality": "Q22 scheduling: 29 passed, 2 failed"
+  },
+  "cleanup": {
+    "port_8114_stopped": true,
+    "old_audit_and_original_changes_preserved": true
+  }
 }

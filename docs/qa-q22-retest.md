@@ -47,4 +47,9 @@
 - 继续 PR #23，只有测试、文档与摘要变更。评审仅 COMMENTED，无非作者 APPROVED，责任人结果签署缺失；保持待修复/待评审，不合并或代签。
 - 原目录和历史失败保留；分支/工作树及忽略审计数据供实现者复验，未做批量清理。生产、完整 FR、真实数据、原生评分复用、模型/auto-attach/自由文本 SLM/训练导出继续 NO-GO。
 
-飞书局部回写与服务收尾将在完成后补记。
+## 文档与收尾
+
+- [PRD 194](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg#doxc6F3irOj8OLmcaTNO06XWxgc)，输入183；[技术文档182](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh#doxc60MhFv8clu5X0J2VFa4q0vb)，输入173。
+- 原状态、FR、click ID期限字段、M3/M4、TD-04及Q-22条目局部更新；每次写前复核目标文本和准确revision-id，全文读回确认历史归档逐字相同、既有链接保留。没有文末追加进度清单。
+- 首轮QA CI [36297911316](https://github.com/262412/-Whynote/actions/runs/36297911316)：原生通过，quality两条回调调度失败（29/2），与本地一致。最终提交CI另见PR #23当前head。
+- 8114临时服务按进程命令核验后停止；原工作区未变。保留当前分支/工作树及虚构库供修复复验，未执行合并或删除。
