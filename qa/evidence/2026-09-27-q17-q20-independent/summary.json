@@ -1,0 +1,1115 @@
+{
+  "date": "2026-09-27",
+  "tested_main": "f560c4abe03a6c8579eae95e433766825c50f230",
+  "fix": "a40c401f7adc3ab603c06349cecb75b41febcbfc",
+  "document_baseline": {
+    "prd": 84,
+    "technical": 24
+  },
+  "suites": {
+    "unchanged_suite": {
+      "passed": 103,
+      "failed": 0,
+      "cases": [
+        {
+          "name": "test_local_demo_click_display_select_edit_and_retract",
+          "passed": true
+        },
+        {
+          "name": "test_old_display_receipt_is_historical_after_new_display",
+          "passed": true
+        },
+        {
+          "name": "test_new_demo_instance_cannot_access_previous_instance_actions",
+          "passed": true
+        },
+        {
+          "name": "test_local_demo_rejects_foreign_or_unshown_display",
+          "passed": true
+        },
+        {
+          "name": "test_display_ticket_ownership_retraction_and_replay",
+          "passed": true
+        },
+        {
+          "name": "test_existing_database_adds_ticket_table_without_rewriting_events",
+          "passed": true
+        },
+        {
+          "name": "test_action_is_durable_before_gate_and_retries_are_idempotent",
+          "passed": true
+        },
+        {
+          "name": "test_ownership_and_input_boundary",
+          "passed": true
+        },
+        {
+          "name": "test_revoked_target_access_blocks_existing_action_routes",
+          "passed": true
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals0-authorization]",
+          "passed": true
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals1-scenario]",
+          "passed": true
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals2-sampling]",
+          "passed": true
+        },
+        {
+          "name": "test_each_gate_rejection_preserves_action_without_reason[signals3-budget]",
+          "passed": true
+        },
+        {
+          "name": "test_allowed_gate_abstains_until_pipeline_is_approved",
+          "passed": true
+        },
+        {
+          "name": "test_authorization_failure_discards_sampling_metadata",
+          "passed": true
+        },
+        {
+          "name": "test_budget_rejection_does_not_claim_a_valid_weight",
+          "passed": true
+        },
+        {
+          "name": "test_retract_before_gate_prevents_gate_result",
+          "passed": true
+        },
+        {
+          "name": "test_retract_and_attribution_invalidation_are_distinct",
+          "passed": true
+        },
+        {
+          "name": "test_only_explicit_user_action_can_become_confirmed",
+          "passed": true
+        },
+        {
+          "name": "test_late_model_result_never_overwrites_user_reason",
+          "passed": true
+        },
+        {
+          "name": "test_selection_requires_owned_rendered_display_and_shown_reason",
+          "passed": true
+        },
+        {
+          "name": "test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it[reason_declined]",
+          "passed": true
+        },
+        {
+          "name": "test_nonresponse_cannot_erase_submitted_reason_and_retract_masks_it[reason_skipped]",
+          "passed": true
+        },
+        {
+          "name": "test_retracted_confirmed_action_has_no_current_attribution",
+          "passed": true
+        },
+        {
+          "name": "test_display_ack_is_idempotent_and_stale_displays_cannot_submit",
+          "passed": true
+        },
+        {
+          "name": "test_edit_requires_new_display_and_keeps_user_source",
+          "passed": true
+        },
+        {
+          "name": "test_edit_menu_rejects_decline_of_unconfirmed_suggestion",
+          "passed": true
+        },
+        {
+          "name": "test_retract_race_with_selection_has_consistent_projection",
+          "passed": true
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[2026-09-24T06:00:00]",
+          "passed": true
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[2026-09-24 06:00:00Z]",
+          "passed": true
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[1790230000]",
+          "passed": true
+        },
+        {
+          "name": "test_client_time_requires_rfc3339_timezone[2026-09-24T06:00:00+25:00]",
+          "passed": true
+        },
+        {
+          "name": "test_client_time_is_normalized_to_utc_in_event",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_attribution_events_replay_without_display",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_declined]",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_skipped]",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[reason_unresponded]",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_nonresponse_cannot_override_submitted_reason[attribution_invalidated]",
+          "passed": true
+        },
+        {
+          "name": "test_existing_sqlite_events_replay_after_reopen",
+          "passed": true
+        },
+        {
+          "name": "test_jev_contract_rejects_unpinned_or_invalid_distribution",
+          "passed": true
+        },
+        {
+          "name": "test_unconfigured_http_boundary_fails_closed",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_click_generation_is_atomic_across_workers",
+          "passed": true
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_none_matched]",
+          "passed": true
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_skipped]",
+          "passed": true
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_declined]",
+          "passed": true
+        },
+        {
+          "name": "test_explicit_operation_preservation_reopen_and_retry[reason_menu_closed]",
+          "passed": true
+        },
+        {
+          "name": "test_cross_session_concurrent_intent_and_outbox_then_retraction",
+          "passed": true
+        },
+        {
+          "name": "test_legacy_ambiguity_does_not_choose_or_merge_history",
+          "passed": true
+        },
+        {
+          "name": "test_new_operations_reject_foreign_stale_legacy_and_retracted",
+          "passed": true
+        },
+        {
+          "name": "test_corrected_retry_preserves_first_measurement_and_rejects_changed_reason",
+          "passed": true
+        },
+        {
+          "name": "test_window_boundary_late_close_retraction_and_fixed_denominator",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes0-cross_session]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes1-invalid_binding]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes2-invalid_duration]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes3-invalid_duration]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes4-invalid_duration]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes5-invalid_duration]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes6-invalid_duration]",
+          "passed": true
+        },
+        {
+          "name": "test_active_duration_missing_binding_and_invalid_values[changes7-client_reported]",
+          "passed": true
+        },
+        {
+          "name": "test_zero_click_legacy_timeout_does_not_become_explicit_response",
+          "passed": true
+        },
+        {
+          "name": "test_click_ids_separate_new_intent_from_retry_after_retraction",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_action_select_edit_and_keep_content_out_of_events",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_display_ticket_rejects_tamper_and_replay",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_action_rejects_other_user_and_changed_version",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_action_expired_ticket_has_no_display",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_rechecks_permission_before_reason_write",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_cancel_is_not_decline_and_disconnection_is_not_display",
+          "passed": true
+        },
+        {
+          "name": "test_openwebui_s0_pipe_only_answers_fixture",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_fractional_deadline[59.5-59.5]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_fractional_deadline[59.999-59.999]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_fractional_deadline[60-60]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_fractional_deadline[60.001-60.001]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_fractional_deadline[61-1]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_fractional_deadline[-5-61]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_wait_timeout_cancels_callback",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-cancel]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-select]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-disconnect]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[False-pending]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-cancel]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-select]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-disconnect]",
+          "passed": true
+        },
+        {
+          "name": "test_new_ticket_supersedes_old_callback[True-pending]",
+          "passed": true
+        },
+        {
+          "name": "test_ticket_replaced_between_display_and_reason",
+          "passed": true
+        },
+        {
+          "name": "test_full_ticket_lifetime[0]",
+          "passed": true
+        },
+        {
+          "name": "test_full_ticket_lifetime[59.0]",
+          "passed": true
+        },
+        {
+          "name": "test_full_ticket_lifetime[59.5]",
+          "passed": true
+        },
+        {
+          "name": "test_full_ticket_lifetime[59.999]",
+          "passed": true
+        },
+        {
+          "name": "test_full_ticket_lifetime[60.001]",
+          "passed": true
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[False-cancel]",
+          "passed": true
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[False-select]",
+          "passed": true
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[True-cancel]",
+          "passed": true
+        },
+        {
+          "name": "test_new_menu_supersedes_pending_callback[True-select]",
+          "passed": true
+        },
+        {
+          "name": "test_host_new_click_after_retraction",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u90fd\\u4e0d\\u662f]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u6682\\u65f6\\u8df3\\u8fc7]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u4e0d\\u613f\\u8bf4\\u660e]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u5173\\u95ed]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[None]",
+          "passed": true
+        },
+        {
+          "name": "test_invalid_optional_timing_does_not_block_http_feedback[active_ms]",
+          "passed": true
+        },
+        {
+          "name": "test_invalid_optional_timing_does_not_block_http_feedback[elapsed_ms]",
+          "passed": true
+        },
+        {
+          "name": "test_late_retraction_is_separately_reported",
+          "passed": true
+        },
+        {
+          "name": "test_repeated_operation_counts_reconcile",
+          "passed": true
+        }
+      ]
+    },
+    "expanded_qa": {
+      "passed": 17,
+      "failed": 2,
+      "cases": [
+        {
+          "name": "test_host_new_click_after_retraction",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u90fd\\u4e0d\\u662f]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u6682\\u65f6\\u8df3\\u8fc7]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u4e0d\\u613f\\u8bf4\\u660e]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[\\u5173\\u95ed]",
+          "passed": true
+        },
+        {
+          "name": "test_no_reason_notification_is_accurate[None]",
+          "passed": true
+        },
+        {
+          "name": "test_invalid_optional_timing_does_not_block_http_feedback[active_ms]",
+          "passed": true
+        },
+        {
+          "name": "test_invalid_optional_timing_does_not_block_http_feedback[elapsed_ms]",
+          "passed": true
+        },
+        {
+          "name": "test_late_retraction_is_separately_reported",
+          "passed": true
+        },
+        {
+          "name": "test_repeated_operation_counts_reconcile",
+          "passed": true
+        },
+        {
+          "name": "test_completed_click_retry_does_not_reopen_or_append[False]",
+          "passed": false
+        },
+        {
+          "name": "test_completed_click_retry_does_not_reopen_or_append[True]",
+          "passed": false
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]",
+          "passed": true
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000]",
+          "passed": true
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[False]",
+          "passed": true
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[1]",
+          "passed": true
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[None]",
+          "passed": true
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[inf]",
+          "passed": true
+        },
+        {
+          "name": "test_additional_invalid_duration_boundaries[nan]",
+          "passed": true
+        }
+      ]
+    },
+    "native": {
+      "passed": 53,
+      "failed": 0,
+      "cases": [
+        {
+          "name": "test_target_matrix_and_immutable_updates[user-False]",
+          "passed": true
+        },
+        {
+          "name": "test_target_matrix_and_immutable_updates[user-True]",
+          "passed": true
+        },
+        {
+          "name": "test_target_matrix_and_immutable_updates[admin-False]",
+          "passed": true
+        },
+        {
+          "name": "test_target_matrix_and_immutable_updates[admin-True]",
+          "passed": true
+        },
+        {
+          "name": "test_admin_content_update_and_legacy_no_promotion[False]",
+          "passed": true
+        },
+        {
+          "name": "test_admin_content_update_and_legacy_no_promotion[True]",
+          "passed": true
+        },
+        {
+          "name": "test_delete_rollback_and_retry[single]",
+          "passed": true
+        },
+        {
+          "name": "test_delete_rollback_and_retry[all]",
+          "passed": true
+        },
+        {
+          "name": "test_delete_rollback_and_retry[folder]",
+          "passed": true
+        },
+        {
+          "name": "test_delete_rollback_and_retry[account]",
+          "passed": true
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[create-write]",
+          "passed": true
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[create-delete]",
+          "passed": true
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[create-revoke]",
+          "passed": true
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[update-write]",
+          "passed": true
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[update-delete]",
+          "passed": true
+        },
+        {
+          "name": "test_sqlite_writer_interleaving[update-revoke]",
+          "passed": true
+        },
+        {
+          "name": "test_migration_preserves_old_rows_and_downgrade",
+          "passed": true
+        },
+        {
+          "name": "test_commit_failure_is_atomic[create]",
+          "passed": true
+        },
+        {
+          "name": "test_commit_failure_is_atomic[update]",
+          "passed": true
+        },
+        {
+          "name": "test_commit_failure_is_atomic[account]",
+          "passed": true
+        },
+        {
+          "name": "test_review_inventory_is_read_only_and_minimal",
+          "passed": true
+        },
+        {
+          "name": "test_auth_account_delete_rolls_back_at_credential_failure",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-admin-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-admin-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-user-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-False-user-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-admin-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-admin-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-user-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[GET-True-user-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-admin-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-admin-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-user-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-False-user-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-admin-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-admin-True]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-user-False]",
+          "passed": true
+        },
+        {
+          "name": "test_feedback_access_matrix[POST-True-user-True]",
+          "passed": true
+        },
+        {
+          "name": "test_create_update_snapshot_and_export",
+          "passed": true
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[single]",
+          "passed": true
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[single_admin]",
+          "passed": true
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[all]",
+          "passed": true
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[folder]",
+          "passed": true
+        },
+        {
+          "name": "test_deletion_scope_and_unrelated_feedback[account]",
+          "passed": true
+        },
+        {
+          "name": "test_delete_all_with_no_chats_preserves_unrelated_feedback",
+          "passed": true
+        },
+        {
+          "name": "test_activity_backup_export_and_log_boundaries",
+          "passed": true
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[single]",
+          "passed": true
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[all]",
+          "passed": true
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[folder]",
+          "passed": true
+        },
+        {
+          "name": "test_shared_snapshot_cleanup_and_unrelated_share[account]",
+          "passed": true
+        },
+        {
+          "name": "test_shared_snapshot_restored_on_account_credential_failure",
+          "passed": true
+        },
+        {
+          "name": "test_identifier_length_boundary_and_zero_write[chat_id]",
+          "passed": true
+        },
+        {
+          "name": "test_identifier_length_boundary_and_zero_write[message_id]",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "observations": [
+    {
+      "case": "post_retraction",
+      "same_event": false,
+      "result": "reason_submitted",
+      "actions": 2,
+      "gate_outbox": 2
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "都不是",
+      "reason_code": null,
+      "notifications": [
+        "反馈已保存：都不是，当前原因已清空"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "暂时跳过",
+      "reason_code": null,
+      "notifications": [
+        "反馈已保存：暂时跳过，当前原因保持不变"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "不愿说明",
+      "reason_code": null,
+      "notifications": [
+        "反馈已保存：不愿说明，当前原因保持不变"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": "关闭",
+      "reason_code": null,
+      "notifications": [
+        "原因菜单已关闭，当前原因保持不变"
+      ]
+    },
+    {
+      "case": "no_reason_notification",
+      "label": null,
+      "reason_code": null,
+      "notifications": [
+        "原因菜单已关闭，当前原因保持不变"
+      ]
+    },
+    {
+      "case": "oversized_timing",
+      "field": "active_ms",
+      "status": 200,
+      "events_before": 2,
+      "events_after": 3
+    },
+    {
+      "case": "oversized_timing",
+      "field": "elapsed_ms",
+      "status": 200,
+      "events_before": 2,
+      "events_after": 3
+    },
+    {
+      "case": "late_retraction",
+      "denominator": 1,
+      "window_status": "unresponded",
+      "current": "retracted",
+      "aggregate": {
+        "unresponded": 1
+      }
+    },
+    {
+      "case": "repeat_counts",
+      "per_action_occurrences": {
+        "reason_selected": 1,
+        "reason_edited": 2
+      },
+      "aggregate_unique_actions": {
+        "reason_declined": 0,
+        "reason_edited": 1,
+        "reason_none_matched": 0,
+        "reason_selected": 1,
+        "reason_skipped": 0
+      }
+    },
+    {
+      "case": "completed_click_retry",
+      "reconnect": false,
+      "menus": 2,
+      "before_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ],
+      "after_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected",
+        "reason_displayed",
+        "reason_edited"
+      ],
+      "first_status": "selected",
+      "retry_status": "edited"
+    },
+    {
+      "case": "completed_click_retry",
+      "reconnect": true,
+      "menus": 2,
+      "before_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected"
+      ],
+      "after_types": [
+        "negative_feedback_action_recorded",
+        "reason_displayed",
+        "reason_selected",
+        "reason_displayed",
+        "reason_edited"
+      ],
+      "first_status": "selected",
+      "retry_status": "edited"
+    }
+  ],
+  "http": {
+    "checks": [
+      {
+        "name": "create",
+        "actual": 202,
+        "expected": 202,
+        "passed": true
+      },
+      {
+        "name": "new-request-same-active-intent",
+        "actual": "434e01d7-338d-4f54-ad95-98f0f24a1220",
+        "expected": "434e01d7-338d-4f54-ad95-98f0f24a1220",
+        "passed": true
+      },
+      {
+        "name": "reason_selected-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_selected-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_selected-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_skipped-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_declined-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_declined-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-reason",
+        "actual": "style",
+        "expected": "style",
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_menu_closed-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-ticket",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-rendered",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-status",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-reason",
+        "actual": null,
+        "expected": null,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-retry",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "reason_none_matched-retry-no-append",
+        "actual": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "name": "oversized-optional-timing-accepted",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      },
+      {
+        "name": "oversized-optional-timing-response-persisted",
+        "actual": 1,
+        "expected": 1,
+        "passed": true
+      },
+      {
+        "name": "valid-retry-after-invalid-timing",
+        "actual": 200,
+        "expected": 200,
+        "passed": true
+      }
+    ],
+    "passed": 35,
+    "failed": 0,
+    "event_types": [
+      "negative_feedback_action_recorded",
+      "reason_displayed",
+      "reason_selected",
+      "reason_displayed",
+      "reason_skipped",
+      "reason_displayed",
+      "reason_declined",
+      "reason_displayed",
+      "reason_menu_closed",
+      "reason_displayed",
+      "reason_none_matched",
+      "reason_displayed",
+      "reason_selected"
+    ],
+    "db_sha256": "ecae2585c7a252d3e7fa1d61e07b51806c276dba4973d1de7a87a18189886914",
+    "scope": "Loopback demo HTTP; scripted client timings; no browser or real host login"
+  },
+  "patches": {
+    "manual-v0.11.4-timing.patch": "1db5759e8c4e50e4ce36f71e0a8c5682cf30cbe74ee1194c5c429e56f03a3645",
+    "native-v0.11.4-s0.patch": "f2eedf75e3be42786265c742be7f9701b5717311b9ed34efaee29f5d6881d8e8"
+  },
+  "browser": {
+    "executed": false,
+    "error": "nodeRepl.fetch request failed"
+  },
+  "new_issue": "Q-21",
+  "scope": "Synthetic local technical QA; full acceptance remains NO-GO",
+  "document_updates": {
+    "prd": {
+      "before": 84,
+      "after": 85,
+      "history_preserved": true,
+      "section": "doxc6M6lEkRK9rFoqDDJ3i6rrAe"
+    },
+    "technical": {
+      "before": 24,
+      "after": 25,
+      "history_preserved": true,
+      "section": "doxc6XWF7H0V8h8g2FVwp9odeRh"
+    }
+  },
+  "cleanup": {
+    "temporary_port_8106_stopped": true,
+    "original_workspace_changes_preserved": true,
+    "audit_databases_retained": true
+  }
+}

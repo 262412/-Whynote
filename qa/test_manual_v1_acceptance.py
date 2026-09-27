@@ -5,6 +5,7 @@ import hashlib
 import json
 import runpy
 import sqlite3
+import uuid
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,7 @@ from fastapi.testclient import TestClient
 
 from whynote.api import create_app
 from whynote.domain import MANUAL_OPERATIONS, MANUAL_REASONS, MANUAL_UI_VERSION, Principal
-from whynote.measurement import report
+from whynote.measurement import report, timing_payload
 from whynote.store import EventStore
 
 HELPERS = runpy.run_path(str(Path(__file__).parents[1] / "tests/test_openwebui_s0.py"))
@@ -191,3 +192,44 @@ def test_repeated_operation_counts_reconcile(monkeypatch, tmp_path):
     assert counts["reason_edited"] == 2
     assert result["response_action_counts_in_window"]["reason_edited"] == 1
     assert result["filled_numerator"] == result["denominator"] == 1
+
+
+@pytest.mark.parametrize("reconnect", [False, True])
+def test_completed_click_retry_does_not_reopen_or_append(monkeypatch, tmp_path, reconnect):
+    """Same click ID is a request retry even while its action remains active."""
+    action, body = host(monkeypatch, tmp_path)
+    body["whynote_click_id"] = str(uuid.uuid4())
+    opened = []
+
+    async def choose(menu):
+        opened.append(menu["data"]["input"]["measurement"]["display_id"])
+        return HELPERS["selected_value"](menu, "事实有误")
+
+    first = asyncio.run(action.action(body, __user__={"id": "alice"}, __event_call__=choose))
+    principal = Principal(action.tenant, "alice")
+    before = action.store.get_events(principal, first["event_id"])
+    retry_body = {**body, "session_id": "reconnected"} if reconnect else body.copy()
+    second = asyncio.run(action.action(retry_body, __user__={"id": "alice"}, __event_call__=choose))
+    after = action.store.get_events(principal, first["event_id"])
+    emit_evidence(
+        "completed_click_retry",
+        reconnect=reconnect,
+        menus=len(opened),
+        before_types=[e["event_type"] for e in before],
+        after_types=[e["event_type"] for e in after],
+        first_status=first["attribution_status"],
+        retry_status=second["attribution_status"],
+    )
+    assert len(opened) == 1, "A completed click retry must reuse its result without reopening a menu"
+    assert after == before
+    assert second == first
+
+
+@pytest.mark.parametrize("value", [-(10**400), 10**400, False, "1", None, float("inf"), float("nan")])
+def test_additional_invalid_duration_boundaries(value):
+    result = timing_payload(
+        {"version": "active-v1", "session_ref": "s", "display_id": "d", "active_ms": value, "elapsed_ms": 2},
+        {"client_session_ref": "s", "display_id": "d"},
+        10,
+    )
+    assert result == {"active_ms": None, "timing_status": "invalid_duration", "server_total_ms": 10}
