@@ -1,0 +1,14 @@
+{
+  "enabled": false,
+  "mode": "cloud",
+  "instance_id": "[待填写：本轮唯一实例]",
+  "user_id": "[待填写：实际宿主用户ID]",
+  "db_path": "[待填写：独立SQLite绝对路径]",
+  "version_key": "[待填写：本机生成的随机密钥，不提交]",
+  "started_at": null,
+  "base_url": "https://api.deepseek.com",
+  "provider_model": "deepseek-flash",
+  "pricing_version": "deepseek-flash-cny-2026-09-27",
+  "provider_data_terms_ref": null,
+  "outbound_approval_ref": null
+}

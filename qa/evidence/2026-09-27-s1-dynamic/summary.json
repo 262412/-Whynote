@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-27",
+  "scope": "Author synthetic development tests; no browser, live cloud or independent acceptance",
+  "base": "1475e2c3c727b25610ff84caf8e9e7e1dd8b9d35",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "core_and_preserved_qa": {
+    "passed": 199,
+    "failed": 0
+  },
+  "native": {
+    "passed": 69,
+    "failed": 0
+  },
+  "native_q16_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "login_http_websocket": {
+    "passed": 46,
+    "failed": 0
+  },
+  "frontend_build": "passed",
+  "browser": "nodeRepl.fetch request failed; not verified",
+  "live_provider_calls": 0,
+  "history": [
+    "First native setup failed: old reverse-check invalid after layered patch; corrected full-stack verification and future-import placement.",
+    "First real host run rejected default builtin tools; disabled injection and added boundary controls.",
+    "HTTP close test initially sent null; corrected to the existing browser contract false; retained earlier database and log.",
+    "Automated review found one P1 and four P2 on 7ddf55f; repaired on same PR before acceptance. Prior 193/68/43 results do not cover these repairs."
+  ],
+  "files": {
+    "src/whynote/s1.py": "ec4a6ed8c30c3f5836a25cbbc08f04afa687b925a5700f130368ef86b278831d",
+    "src/whynote/s1_host.py": "dfc49026220a3b174ff668b64c67ca2d64c6dacf94058620114de4e0657b4151",
+    "src/whynote/s1_provider.py": "1aea40bcf93c825baea7cae2e4b372ced31d9a729e32c4b01effb5652b94a2ed",
+    "integrations/openwebui/s1_pipe.py": "0734b23b9e2a99df08ada436521fc3d5a122c11be2959f5865ef6cf6373b2b8f",
+    "integrations/openwebui/s1_action.py": "31b332fbb1c0eb6415585128877295c28b1e15175db7a50fc3c008c0f5616fb8",
+    "integrations/openwebui/s1_retract_action.py": "baa0c48e5587490046ad2b46bbe8824386bb58974be8b7e9506a921bf85b6a1c",
+    "integrations/openwebui/patches/s1-v0.11.4-trial.patch": "0178d8a145a8fe51a6adccb320b8d87a618e823d55e3d91f49df73cea2f3a293"
+  },
+  "followup": "Five review findings repaired: host final-save confirmation, remove/restore invalidation, trusted prior history, atomic first migration, canonical evidence hashes. Final local full core199/native69 and fresh real-login two-turn HTTP46 passed.",
+  "hash_encoding": "files: SHA256 of git staged blob bytes (LF); working_tree_files: actual Windows test source bytes (may contain CRLF)",
+  "working_tree_files": {
+    "src/whynote/s1.py": "1f8d5722ed29f5b20555f5e1c3a5b478498969a41fa94416cea60a1c49dcb710",
+    "src/whynote/s1_host.py": "5a84927af36ca556b0680bf8ba7877c669cf1d01586ed39af91c9eb14760ccbb",
+    "src/whynote/s1_provider.py": "1aea40bcf93c825baea7cae2e4b372ced31d9a729e32c4b01effb5652b94a2ed",
+    "integrations/openwebui/s1_pipe.py": "354495bfad8a23f529000dab67bb5824cdd5e4c5bced5e35c76966d8819e484e",
+    "integrations/openwebui/s1_action.py": "31b332fbb1c0eb6415585128877295c28b1e15175db7a50fc3c008c0f5616fb8",
+    "integrations/openwebui/s1_retract_action.py": "baa0c48e5587490046ad2b46bbe8824386bb58974be8b7e9506a921bf85b6a1c",
+    "integrations/openwebui/patches/s1-v0.11.4-trial.patch": "0178d8a145a8fe51a6adccb320b8d87a618e823d55e3d91f49df73cea2f3a293"
+  }
+}

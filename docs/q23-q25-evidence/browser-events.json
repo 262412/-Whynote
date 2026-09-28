@@ -1,0 +1,30 @@
+{
+  "scope": "developer browser generated answer, selected, edited, retracted; synthetic only",
+  "events": [
+    {
+      "type": "negative_feedback_action_recorded",
+      "reason": null
+    },
+    {
+      "type": "reason_displayed",
+      "reason": null
+    },
+    {
+      "type": "reason_selected",
+      "reason": "factual_error"
+    },
+    {
+      "type": "reason_displayed",
+      "reason": null
+    },
+    {
+      "type": "reason_edited",
+      "reason": "incomplete"
+    },
+    {
+      "type": "action_retracted",
+      "reason": null
+    }
+  ],
+  "current_receipts": 1
+}

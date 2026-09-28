@@ -11,6 +11,8 @@ from types import SimpleNamespace
 import pytest
 
 UPSTREAM_SHA = "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d"
+ROOT = Path(__file__).parents[3]
+sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 
 
 @pytest.fixture(scope="session")
@@ -18,7 +20,16 @@ def native(tmp_path_factory):
     source = Path(os.environ["WHYNOTE_OPENWEBUI_SOURCE"]).resolve()
     assert subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip() == UPSTREAM_SHA
     patch = Path(__file__).parents[1] / "patches/native-v0.11.4-s0.patch"
-    subprocess.run(["git", "-C", str(source), "apply", "--reverse", "--check", str(patch)], check=True)
+    # Validate the complete stack in a temporary index: later hooks modify the
+    # same hunks, so reversing the first patch alone is no longer meaningful.
+    index = tmp_path_factory.mktemp("patch-index") / "index"
+    env = {**os.environ, "GIT_INDEX_FILE": str(index)}
+    git = ["git", "-C", str(source)]
+    subprocess.run([*git, "read-tree", "HEAD"], env=env, check=True)
+    for name in ("native-v0.11.4-s0.patch", "manual-v0.11.4-timing.patch", "s1-v0.11.4-trial.patch"):
+        subprocess.run([*git, "apply", "--cached", str(patch.parent / name)], env=env, check=True)
+    paths = subprocess.check_output([*git, "diff", "--cached", "--name-only"], env=env, text=True).splitlines()
+    subprocess.run([*git, "diff", "--exit-code", "--", *paths], env=env, check=True)
     data = tmp_path_factory.mktemp("native-synthetic")
     os.environ.update(
         DATA_DIR=str(data),

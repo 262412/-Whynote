@@ -1,0 +1,14 @@
+{
+  "scope": "Supplement after original shutdown probe stopped at raw current-index assertion; original failure preserved",
+  "saved": true,
+  "final_websocket_event": "passed before original assertion failure",
+  "status": "awaiting_save",
+  "saved_at": null,
+  "current_index_rows": 1,
+  "eligible_receipts": 0,
+  "reserved_micro": 4008192,
+  "settled_micro": null,
+  "feedback_status": 400,
+  "event_delta": 0,
+  "config_left_disabled": true
+}
