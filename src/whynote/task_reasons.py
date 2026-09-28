@@ -64,7 +64,7 @@ def load_reasons():
 
 
 def _values(value, allowed, *, nonempty=False):
-    _require(isinstance(value, (list, tuple)) and len(value) <= len(allowed), "invalid_arguments")
+    _require(isinstance(value, (list, tuple)), "invalid_arguments")
     _require(all(isinstance(v, str) and v in allowed for v in value), "invalid_arguments")
     _require(bool(value) or not nonempty, "missing_task")
     return tuple(v for v in allowed if v in value)

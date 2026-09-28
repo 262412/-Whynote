@@ -96,6 +96,19 @@ def test_task_order_and_duplicates_do_not_change_candidate_identity():
     assert a.candidate_set_id == b.candidate_set_id
 
 
+@pytest.mark.parametrize("field", ["task_types", "fallback_tasks", "evidence_kinds"])
+def test_repetitions_beyond_enum_size_preserve_identity_but_do_not_hide_invalid_values(field):
+    inputs = {"task_types": ["general"], "fallback_tasks": ["code_rewrite"], "evidence_kinds": list(FULL)}
+    expected = reasons.prepare_candidates(**inputs)
+    inputs[field] *= 10
+    repeated = reasons.prepare_candidates(**inputs)
+    assert repeated == expected
+    assert repeated.candidate_set_id == expected.candidate_set_id
+    inputs[field].append("invalid")
+    with pytest.raises(reasons.ReasonContractError, match="^invalid_arguments$"):
+        reasons.prepare_candidates(**inputs)
+
+
 def test_missing_original_code_is_visible_and_cannot_be_selected():
     current = candidates(evidence=("request", "answer"))
     assert "code.interface_changed" in current.routed_reason_ids
