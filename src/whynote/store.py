@@ -382,29 +382,54 @@ class EventStore:
             return self._events(db, event_id)
 
     def retract_action(self, principal: Principal, event_id: str, idempotency_key: str) -> dict[str, Any]:
+        with self._transaction() as db:
+            return self._retract_action(db, principal, event_id, idempotency_key)
+
+    def _retract_action(self, db, principal, event_id, idempotency_key):
         key_hash = _digest(idempotency_key)
         request_hash = _digest(_json({"event_id": event_id, "operation": "retract"}))
-        with self._transaction() as db:
-            self._require_owner(db, principal, event_id)
-            old = self._check_idempotency(db, principal, key_hash, "retract", request_hash)
-            if old:
-                return self._projection(db, event_id)
-            if self._projection(db, event_id)["action_status"] == "retracted":
-                original = db.execute(
-                    "SELECT record_id FROM events WHERE event_id=? AND event_type='action_retracted' ORDER BY seq LIMIT 1",
-                    (event_id,),
-                ).fetchone()
-                self._save_idempotency(
-                    db, principal, key_hash, "retract", request_hash, event_id, original["record_id"]
-                )
-                return self._projection(db, event_id)
-            record_id = self._append(db, event_id, "action_retracted", {}, "user")
-            db.execute(
-                "INSERT INTO outbox(message_id,event_id,topic,payload,created_at) VALUES(?,?,?,?,?)",
-                (str(uuid.uuid4()), event_id, "feedback.action.retracted", _json({"event_id": event_id}), _now()),
-            )
-            self._save_idempotency(db, principal, key_hash, "retract", request_hash, event_id, record_id)
+        self._require_owner(db, principal, event_id)
+        old = self._check_idempotency(db, principal, key_hash, "retract", request_hash)
+        if old:
             return self._projection(db, event_id)
+        if self._projection(db, event_id)["action_status"] == "retracted":
+            original = db.execute(
+                "SELECT record_id FROM events WHERE event_id=? AND event_type='action_retracted' ORDER BY seq LIMIT 1",
+                (event_id,),
+            ).fetchone()
+            self._save_idempotency(db, principal, key_hash, "retract", request_hash, event_id, original["record_id"])
+            return self._projection(db, event_id)
+        record_id = self._append(db, event_id, "action_retracted", {}, "user")
+        db.execute(
+            "INSERT INTO outbox(message_id,event_id,topic,payload,created_at) VALUES(?,?,?,?,?)",
+            (str(uuid.uuid4()), event_id, "feedback.action.retracted", _json({"event_id": event_id}), _now()),
+        )
+        self._save_idempotency(db, principal, key_hash, "retract", request_hash, event_id, record_id)
+        return self._projection(db, event_id)
+
+    def toggle_action(self, principal, target_ref, metadata, idempotency_key):
+        """One durable toggle per click, committed before any model work."""
+        key_hash = _digest(idempotency_key)
+        request_hash = _digest(_json({"target_ref": target_ref, "metadata": metadata}))
+        with self._transaction() as db:
+            old = self._check_idempotency(db, principal, key_hash, "toggle", request_hash)
+            if old:
+                return self._projection(db, old["event_id"]), False
+            rows = db.execute(
+                "SELECT event_id FROM actions WHERE tenant_ref=? AND actor_ref=? AND target_ref=?",
+                (principal.tenant_ref, principal.actor_ref, _json(target_ref)),
+            ).fetchall()
+            active = [r["event_id"] for r in rows if self._projection(db, r["event_id"])["action_status"] == "active"]
+            if len(active) > 1:
+                raise ConflictError("multiple active actions require review")
+            if active:
+                state = self._retract_action(db, principal, active[0], "toggle-retract:" + idempotency_key)
+            else:
+                state, _ = self._create_action(db, principal, target_ref, metadata, "toggle-create:" + idempotency_key)
+            event_id = state["event_id"]
+            record_id = self._events(db, event_id)[-1]["record_id"]
+            self._save_idempotency(db, principal, key_hash, "toggle", request_hash, event_id, record_id)
+            return state, True
 
     def issue_display_ticket(self, principal: Principal, event_id: str, display_id: str) -> None:
         """Supersede pending menus without claiming that a display occurred."""

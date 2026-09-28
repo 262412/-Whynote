@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-28",
+  "scope": "developer verification, independent acceptance pending",
+  "browser": [
+    "one thumbs-down control",
+    "click 1 saved then real Laya classification",
+    "click 2 retracted",
+    "reload then click 3 new action and real Laya classification"
+  ],
+  "model_source": "model_inferred_unconfirmed; no user reason confirmation",
+  "actions": [
+    {
+      "event_id": "6a8aa383-10a4-486d-9eef-c2bf5953caa1",
+      "target_ref": "{\"object_id\":\"a7ccacf0-5469-4e8b-a2b5-3ee5239ec1da/afc4e6db-2c90-4ba4-a378-576d01f993f5\",\"object_type\":\"openwebui_assistant_message\",\"object_version\":\"s1v1-fcea851204583e898dec9015936029c6488c01559c22c856adf573745c0cf354\"}"
+    },
+    {
+      "event_id": "94ec8d54-dc06-4ea7-b813-09a496db47f3",
+      "target_ref": "{\"object_id\":\"a7ccacf0-5469-4e8b-a2b5-3ee5239ec1da/afc4e6db-2c90-4ba4-a378-576d01f993f5\",\"object_type\":\"openwebui_assistant_message\",\"object_version\":\"s1v1-fcea851204583e898dec9015936029c6488c01559c22c856adf573745c0cf354\"}"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "6a8aa383-10a4-486d-9eef-c2bf5953caa1",
+      "event_type": "negative_feedback_action_recorded",
+      "source": "user"
+    },
+    {
+      "event_id": "6a8aa383-10a4-486d-9eef-c2bf5953caa1",
+      "event_type": "action_retracted",
+      "source": "user"
+    },
+    {
+      "event_id": "94ec8d54-dc06-4ea7-b813-09a496db47f3",
+      "event_type": "negative_feedback_action_recorded",
+      "source": "user"
+    }
+  ],
+  "outbox": [
+    {
+      "event_id": "6a8aa383-10a4-486d-9eef-c2bf5953caa1",
+      "topic": "feedback.gate.requested"
+    },
+    {
+      "event_id": "6a8aa383-10a4-486d-9eef-c2bf5953caa1",
+      "topic": "feedback.action.retracted"
+    },
+    {
+      "event_id": "94ec8d54-dc06-4ea7-b813-09a496db47f3",
+      "topic": "feedback.gate.requested"
+    }
+  ],
+  "tests": {
+    "core": 315,
+    "native": 77,
+    "focused": 26,
+    "ruff": "passed"
+  },
+  "new_cloud_calls": 0,
+  "history_and_budget": "preserved"
+}

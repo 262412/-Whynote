@@ -44,6 +44,8 @@ async def local_suggestion(question, answer):
 
 
 class Action(FeedbackAction):
+    suggestion_message = "Laya 建议：{label}。模型推测，未确认、未经校准；请在知因原因菜单中自行选择。"
+
     async def _eligible(self, body, user):
         if os.environ.get("WHYNOTE_LOCAL_CHAIN") != "1" or not isinstance(user, dict) or not user.get("id"):
             raise NotFoundError("Local chain is disabled or unauthenticated")
@@ -55,10 +57,12 @@ class Action(FeedbackAction):
             raise NotFoundError("先通过知因菜单点踩，再获取建议")
         return chat, target, state["event_id"]
 
-    async def action(self, body, __user__=None, __event_emitter__=None):
+    async def action(self, body, __user__=None, __event_emitter__=None, expected_event=None):
         if __event_emitter__ is None:
             raise NotFoundError("Browser session required")
         chat, target, event_id = await self._eligible(body, __user__)
+        if expected_event is not None and event_id != expected_event:
+            raise NotFoundError("Feedback changed before Laya started")
         messages = chat.chat["history"]["messages"]
         answer = messages[body["id"]]
         question = messages[answer["parentId"]]["content"]
@@ -81,7 +85,7 @@ class Action(FeedbackAction):
                 "type": "notification",
                 "data": {
                     "type": "info",
-                    "content": f"Laya 建议：{label}。模型推测，未确认、未经校准；请在知因原因菜单中自行选择。",
+                    "content": self.suggestion_message.format(label=label),
                 },
             }
         )
