@@ -112,7 +112,7 @@ async def run(action, body, user, call, emitter, target, event_id):
             return await asyncio.wait_for(callback(), remaining)
 
         await current()
-        rendered, _ = await receive(
+        rendered, received_at = await receive(
             "whynote:suggestion-render",
             {
                 "binding": binding,
@@ -124,7 +124,9 @@ async def run(action, body, user, call, emitter, target, event_id):
         if not isinstance(rendered, dict) or rendered != {"binding": binding}:
             raise ValueError("Invalid client render receipt")
         _, store = await current()
-        suggestions.render(store, principal, event_id, str(uuid.uuid4()), display_id, binding)
+        suggestions.render(
+            store, principal, event_id, str(uuid.uuid4()), display_id, binding, server_received_at=received_at
+        )
         previous = suggestions.project_suggestions(store.get_events(principal, event_id))["last_response_id"]
         while True:
             response, received_at = await receive(

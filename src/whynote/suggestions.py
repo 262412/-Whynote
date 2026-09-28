@@ -194,14 +194,19 @@ def _current(events, suggestion_id, binding, received_at=None):
     return suggestion
 
 
-def render(store, principal, event_id, request_id, display_id, binding):
+def render(store, principal, event_id, request_id, display_id, binding, *, server_received_at=None):
     """Binding is the exact generated snapshot reported by the synthetic client."""
+    # Preserve callback arrival through host rechecks and SQLite waits (Q-27).
+    now = time.time()
+    received_at = now if server_received_at is None else server_received_at
+    if type(received_at) not in (int, float) or not math.isfinite(received_at) or received_at > now:
+        raise ValueError("Invalid server receipt time")
     with store._transaction() as db:
         events, current_binding = _admit(store, db, principal, event_id)
         _uuid(display_id)
         if not isinstance(binding, dict):
             raise ValueError("Invalid display binding")
-        suggestion = _current(events, binding.get("suggestion_id"), current_binding)
+        suggestion = _current(events, binding.get("suggestion_id"), current_binding, received_at)
         if binding != suggestion["binding"] or binding["outcome"] != "suggested" or binding["display_id"] != display_id:
             raise ConflictError("Display does not match the suggested candidates")
         command = {"display_id": display_id, "binding": binding}
