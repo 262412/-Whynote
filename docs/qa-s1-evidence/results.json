@@ -1,0 +1,266 @@
+{
+  "date": "2026-09-28",
+  "candidate": "4825c9bb7e3a8ac8cd06b7783234591bd0fccc48",
+  "checkout": "7a03f472d3130798ae17a4f57e8d5dcabfe90a52",
+  "main": "9859fce090e636664216dad9e2fcbf94605149c8",
+  "core": {
+    "passed": 199,
+    "failed": 0
+  },
+  "native_existing": {
+    "passed": 69,
+    "failed": 0
+  },
+  "q16_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "independent_boundaries": {
+    "passed": 0,
+    "failed": 3
+  },
+  "http": {
+    "scope": "Independent QA rerun of developer probe against a fresh synthetic host; real login HTTP/WebSocket; no browser or live cloud",
+    "checks": [
+      {
+        "name": "alice-login",
+        "passed": true
+      },
+      {
+        "name": "bob-login",
+        "passed": true
+      },
+      {
+        "name": "generation-http",
+        "passed": true
+      },
+      {
+        "name": "saved-complete-answer",
+        "passed": true
+      },
+      {
+        "name": "saved-without-error",
+        "passed": true
+      },
+      {
+        "name": "trusted-history-generation",
+        "passed": true
+      },
+      {
+        "name": "trusted-history-answer",
+        "passed": true
+      },
+      {
+        "name": "trusted-history-no-error",
+        "passed": true
+      },
+      {
+        "name": "feedback-http",
+        "passed": true
+      },
+      {
+        "name": "feedback-result",
+        "passed": true
+      },
+      {
+        "name": "menu-called",
+        "passed": true
+      },
+      {
+        "name": "same-click-retry",
+        "passed": true
+      },
+      {
+        "name": "retry-no-menu",
+        "passed": true
+      },
+      {
+        "name": "retry-no-events",
+        "passed": true
+      },
+      {
+        "name": "reconnect-retry",
+        "passed": true
+      },
+      {
+        "name": "reconnect-no-menu",
+        "passed": true
+      },
+      {
+        "name": "reconnect-no-events",
+        "passed": true
+      },
+      {
+        "name": "menu-option-1",
+        "passed": true
+      },
+      {
+        "name": "menu-option-2",
+        "passed": true
+      },
+      {
+        "name": "menu-option-3",
+        "passed": true
+      },
+      {
+        "name": "menu-option-4",
+        "passed": true
+      },
+      {
+        "name": "menu-option-5",
+        "passed": true
+      },
+      {
+        "name": "menu-option-6",
+        "passed": true
+      },
+      {
+        "name": "menu-option-7",
+        "passed": true
+      },
+      {
+        "name": "menu-option-8",
+        "passed": true
+      },
+      {
+        "name": "menu-option-9",
+        "passed": true
+      },
+      {
+        "name": "menu-option-10",
+        "passed": true
+      },
+      {
+        "name": "menu-option-11",
+        "passed": true
+      },
+      {
+        "name": "close-menu",
+        "passed": true
+      },
+      {
+        "name": "close-menu-event",
+        "passed": true
+      },
+      {
+        "name": "bob-refused",
+        "passed": true
+      },
+      {
+        "name": "bob-zero-write",
+        "passed": true
+      },
+      {
+        "name": "retract",
+        "passed": true
+      },
+      {
+        "name": "retract-retry",
+        "passed": true
+      },
+      {
+        "name": "retract-retry-no-write",
+        "passed": true
+      },
+      {
+        "name": "new-click-after-retract",
+        "passed": true
+      },
+      {
+        "name": "two-actions-after-retract",
+        "passed": true
+      },
+      {
+        "name": "two-explicit-generations-only",
+        "passed": true
+      },
+      {
+        "name": "edit-http",
+        "passed": true
+      },
+      {
+        "name": "stale-version-refused",
+        "passed": true
+      },
+      {
+        "name": "stale-version-zero-write",
+        "passed": true
+      },
+      {
+        "name": "bypass-refused:/openai/chat/completions",
+        "passed": true
+      },
+      {
+        "name": "bypass-refused:/openai/responses",
+        "passed": true
+      },
+      {
+        "name": "bypass-refused:/api/v1/tasks/title/completions",
+        "passed": true
+      },
+      {
+        "name": "receipt-no-answer-text",
+        "passed": true
+      },
+      {
+        "name": "receipt-no-prompt-text",
+        "passed": true
+      }
+    ],
+    "passed": 46,
+    "failed": 0,
+    "event_types": [
+      "negative_feedback_action_recorded",
+      "reason_displayed",
+      "reason_selected",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_edited",
+      "reason_displayed",
+      "reason_none_matched",
+      "reason_displayed",
+      "reason_skipped",
+      "reason_displayed",
+      "reason_declined",
+      "reason_displayed",
+      "reason_menu_closed",
+      "reason_displayed",
+      "reason_menu_closed",
+      "action_retracted",
+      "negative_feedback_action_recorded",
+      "reason_displayed",
+      "reason_selected"
+    ]
+  },
+  "browser_generation": {
+    "status": 403,
+    "model_item_present": true,
+    "memory_feature": true,
+    "new_generations": 0
+  },
+  "browser_feedback_events": [
+    "negative_feedback_action_recorded",
+    "reason_displayed",
+    "reason_selected",
+    "reason_displayed",
+    "reason_edited",
+    "action_retracted"
+  ],
+  "feishu": {
+    "prd": 250,
+    "tech": 241,
+    "history_unchanged": true,
+    "original_links_preserved": true
+  }
+}

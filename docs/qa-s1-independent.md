@@ -96,3 +96,10 @@
 本 QA 分支仅增加测试和报告，依赖 `codex/s1-cloud-contract` / `7a03f47`，评审 PR 以该分支为基线，避免把未经批准的业务集成混入 QA 变更。新增失败测试用于阻止误合并，CI 失败不作豁免；业务修复后重跑，不能删除或降低断言。
 
 本地原始记录在 QA 工作树 `var/qa-s1-independent/`：`native.log/xml`、`boundaries.log/xml`、`http-results.json`、`browser-request.json`、`browser-events.json` 与本轮虚构库。分享版不包含 private/trial 配置、密码、token 或认证头。原工作目录的既有修改、旧分支与历史审计库全部保留。
+
+## 6. 文档同步与收尾
+
+- [PRD](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg) **248 → 250**、[技术文档](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh) **237 → 241**。按每次新读取的 revision-id 局部替换原 S1-2/当前工程条目，逐次读回复核；历史归档逐字不变，已有链接全部保留。
+- QA 草稿 [PR #27](https://github.com/262412/-Whynote/pull/27)；仅测试、证据与文档。严格失败用例等待业务修复，不批准合并。CI 以 GitHub 当前 head 检查结果为准，不将本地已知失败宣称绿色。
+- [机器可读结果](qa-s1-evidence/results.json) 只保存本轮虚构结果和计数。两个临时服务（8126/8127）已停止，浏览器临时标签已关闭；全新证据库保留供修复复验。
+- 原工作目录收尾状态与开工一致。QA 工作树/分支因开放缺陷与未合并 PR 保留；宿主/后端/客户端修复完成、非作者评审和签署后，再核对正确 main 集成与引用清理。
