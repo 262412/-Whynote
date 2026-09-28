@@ -12,6 +12,7 @@ from pathlib import Path
 from .domain import NotFoundError, Principal
 from .measurement import report_from_connection, utc
 from .research import SOURCES
+from .suggestions import report_from_connection as suggestion_report
 
 INVALIDATIONS = {"invalidated", "revoked", "superseded"}
 
@@ -57,6 +58,7 @@ def _group(db, principal, answers, as_of, source):
         "inference_retractions": None,
         "model_source_confusion": None,
         "manual": manual,
+        "suggestions": suggestion_report(db, ids, as_of),
         "strata": list(strata.values()),
     }
 

@@ -27,6 +27,9 @@ def validate_config(config):
     enabled = config.get("research_enabled", False)
     if type(enabled) is not bool or (enabled and config.get("mode") != "mock"):
         raise ValueError("S1 research is available only for explicit mock development")
+    suggestions = config.get("suggestion_research_enabled", False)
+    if type(suggestions) is not bool or (suggestions and not enabled):
+        raise ValueError("Suggestion research requires explicit mock research")
     if enabled:
         for name in ("research_study_ref", "research_protocol_ref"):
             if not isinstance(config.get(name), str):

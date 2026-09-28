@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-28",
+  "baseline": "c2ee7a3463f2b058d4f7560ec8e1a440b3c0564e",
+  "input_revisions": {
+    "prd": 334,
+    "technical": 332
+  },
+  "scope": "synthetic_development_only",
+  "tests": {
+    "total": 585,
+    "new": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "59.439",
+    "command": "uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_acceptance.py -q"
+  },
+  "ruff_check": "passed",
+  "ruff_format": "passed",
+  "fixture_command": "uv run --no-sync python qa/m52_suggestion_fixture.py --output var/m52a-fixture-final",
+  "source_sha256_lf": {
+    "src/whynote/suggestions.py": "81b93bfe8169653cc8c5c0e0c4221c0502d541bfc88a67c3a92955a596528ad7",
+    "src/whynote/research.py": "ce20c016cb76f3edbd4926340744d0c3cf1ada31ed9ce7b685db4ccbd303e01b",
+    "src/whynote/research_report.py": "eab2745ae7398fecd70d1387e1800e12022f778c4b8832228290bbb10276553b",
+    "tests/test_suggestions.py": "2c957701bd885d16aa16c8c264e3557923997e29ccbb1b8f6c0d90a044e8ca35",
+    "qa/m52_suggestion_fixture.py": "6a525d5c530c098089627f7f3d5696706457c1db5aeb59a161c4d5e240584e44"
+  },
+  "independent_qa": "pending",
+  "contract_signoff": "pending",
+  "real_collection": "disabled",
+  "browser_validation": "not_run",
+  "local_model_call": "not_run",
+  "native_host": "CI_only",
+  "report_sha256_lf": "ed91adecf7d48db5c34ad934db2bc59770c3bef74d4389df2f21926973396be1",
+  "idempotency_fix_source_sha256_lf": {
+    "src/whynote/suggestions.py": "ba85437c5ea28320a37273a32a81449b7d88674ca572e633bdb05b5820245ce3",
+    "tests/test_suggestions.py": "116b2f1042e48cf372bdb2e4596677f5c16b3e6bc826e47ccba2daacd77bc25b"
+  },
+  "idempotency_fix_tests": {
+    "total": 101,
+    "failures": 0,
+    "errors": 0,
+    "command": "uv run --no-sync pytest tests/test_suggestions.py tests/test_s1_research.py tests/test_s1_research_independent.py -q"
+  }
+}

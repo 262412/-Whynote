@@ -1,0 +1,952 @@
+[
+  {
+    "seq": 2,
+    "record_id": "cd91a75b-3fa4-4525-a50d-5a3007d98156",
+    "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "b827ac8e-ab1f-4dfa-9f51-df192e7e1042",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "954bd324-980c-5eec-b57b-793a1f8888c8",
+        "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab",
+        "target_ref": {
+          "object_id": "2fd35900-fd11-5aa3-920b-c6f4eaf0a667/1fdfcd83-3da5-5deb-8086-35b8f65015d3",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-4c8c83a9a7444c31e689e3622485e67a6a623e0cf5551dafa67644aa08e5317b"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "b827ac8e-ab1f-4dfa-9f51-df192e7e1042",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "954bd324-980c-5eec-b57b-793a1f8888c8",
+        "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab",
+        "target_ref": {
+          "object_id": "2fd35900-fd11-5aa3-920b-c6f4eaf0a667/1fdfcd83-3da5-5deb-8086-35b8f65015d3",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-4c8c83a9a7444c31e689e3622485e67a6a623e0cf5551dafa67644aa08e5317b"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "aafa75e3-07af-53f5-ac8f-86cc92851767"
+    }
+  },
+  {
+    "seq": 3,
+    "record_id": "89c04096-71e0-4312-ae92-54d1e53e2d25",
+    "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+    "event_type": "m52_render_reported",
+    "source": "client_reported",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "binding": {
+          "actor_ref": "synthetic-alice",
+          "attempt_id": "b827ac8e-ab1f-4dfa-9f51-df192e7e1042",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "criteria_version": "m5-task-criteria-v1",
+          "display_id": "954bd324-980c-5eec-b57b-793a1f8888c8",
+          "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+          "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "outcome": "suggested",
+          "package_version": "m5-task-reasons-v1",
+          "reason_ids": [
+            "code.behavior_changed",
+            "general.style"
+          ],
+          "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab",
+          "target_ref": {
+            "object_id": "2fd35900-fd11-5aa3-920b-c6f4eaf0a667/1fdfcd83-3da5-5deb-8086-35b8f65015d3",
+            "object_type": "openwebui_assistant_message",
+            "object_version": "s1v1-4c8c83a9a7444c31e689e3622485e67a6a623e0cf5551dafa67644aa08e5317b"
+          },
+          "template_version": "m5-task-templates-v1",
+          "tenant_ref": "synthetic-s1-study",
+          "ui_version": "m5-suggestion-mock-v1"
+        },
+        "display_id": "954bd324-980c-5eec-b57b-793a1f8888c8"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "d8dbb02e-b976-5597-8c78-176c739163e4"
+    }
+  },
+  {
+    "seq": 4,
+    "record_id": "605208cd-fbe0-4a23-8dd2-f7f011fd4940",
+    "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "954bd324-980c-5eec-b57b-793a1f8888c8",
+        "operation": "yes",
+        "previous_response_id": null,
+        "reason_id": "code.behavior_changed",
+        "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "37d716c6-bbea-5117-a016-a2d38bdde7db"
+    }
+  },
+  {
+    "seq": 5,
+    "record_id": "d25ce1b6-4270-4bf7-b4dc-242acf210b65",
+    "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "954bd324-980c-5eec-b57b-793a1f8888c8",
+        "operation": "correct",
+        "previous_response_id": "605208cd-fbe0-4a23-8dd2-f7f011fd4940",
+        "reason_id": "general.style",
+        "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "659808cd-5f7f-5816-ad26-4c728e88b300"
+    }
+  },
+  {
+    "seq": 6,
+    "record_id": "c38ba4a6-7947-4a50-9da8-e861ee7e6d71",
+    "event_id": "7f1b42cc-d436-4abc-a6de-c01bf5295c4e",
+    "event_type": "m52_suggestion_invalidated",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "463c228c-dcab-5459-b81c-cb366a992c9e"
+    }
+  },
+  {
+    "seq": 9,
+    "record_id": "25de00ea-c594-4132-ae61-fdef5666990f",
+    "event_id": "f8937801-d75b-443a-9592-228d428c2318",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "59e6b5a5-cd12-4ca4-990d-9e3d88dd434a",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "9d868060-d374-52f8-86b0-0b323e484fd8",
+        "event_id": "f8937801-d75b-443a-9592-228d428c2318",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "2efe2915-115e-5576-a327-cb60b6daa0aa",
+        "target_ref": {
+          "object_id": "f2e34a54-991b-586c-8ba9-e715a302a8a1/55f55b67-d94a-5e17-b932-4ebed7f2d06b",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-5de94a33947f697ad92eb15f09f56d9b689f83799bf46f629860097e26e37ee0"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "59e6b5a5-cd12-4ca4-990d-9e3d88dd434a",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "9d868060-d374-52f8-86b0-0b323e484fd8",
+        "event_id": "f8937801-d75b-443a-9592-228d428c2318",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "2efe2915-115e-5576-a327-cb60b6daa0aa",
+        "target_ref": {
+          "object_id": "f2e34a54-991b-586c-8ba9-e715a302a8a1/55f55b67-d94a-5e17-b932-4ebed7f2d06b",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-5de94a33947f697ad92eb15f09f56d9b689f83799bf46f629860097e26e37ee0"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "65089205-2477-513e-98a4-0ef9b43748e9"
+    }
+  },
+  {
+    "seq": 10,
+    "record_id": "3e86926a-d76d-4993-9bdc-6db56ef8b030",
+    "event_id": "f8937801-d75b-443a-9592-228d428c2318",
+    "event_type": "m52_render_reported",
+    "source": "client_reported",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "binding": {
+          "actor_ref": "synthetic-alice",
+          "attempt_id": "59e6b5a5-cd12-4ca4-990d-9e3d88dd434a",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "criteria_version": "m5-task-criteria-v1",
+          "display_id": "9d868060-d374-52f8-86b0-0b323e484fd8",
+          "event_id": "f8937801-d75b-443a-9592-228d428c2318",
+          "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "outcome": "suggested",
+          "package_version": "m5-task-reasons-v1",
+          "reason_ids": [
+            "code.behavior_changed",
+            "general.style"
+          ],
+          "suggestion_id": "2efe2915-115e-5576-a327-cb60b6daa0aa",
+          "target_ref": {
+            "object_id": "f2e34a54-991b-586c-8ba9-e715a302a8a1/55f55b67-d94a-5e17-b932-4ebed7f2d06b",
+            "object_type": "openwebui_assistant_message",
+            "object_version": "s1v1-5de94a33947f697ad92eb15f09f56d9b689f83799bf46f629860097e26e37ee0"
+          },
+          "template_version": "m5-task-templates-v1",
+          "tenant_ref": "synthetic-s1-study",
+          "ui_version": "m5-suggestion-mock-v1"
+        },
+        "display_id": "9d868060-d374-52f8-86b0-0b323e484fd8"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "a1858cc8-5841-5253-b307-d2320500ea14"
+    }
+  },
+  {
+    "seq": 11,
+    "record_id": "b7d63982-8cc3-4e79-a38c-780503189729",
+    "event_id": "f8937801-d75b-443a-9592-228d428c2318",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "9d868060-d374-52f8-86b0-0b323e484fd8",
+        "operation": "no",
+        "previous_response_id": null,
+        "reason_id": "code.behavior_changed",
+        "suggestion_id": "2efe2915-115e-5576-a327-cb60b6daa0aa"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "c8698d26-bb82-55ca-989f-27fd347b5653"
+    }
+  },
+  {
+    "seq": 13,
+    "record_id": "adcab36d-a12e-469e-8ddd-c84a723a8c49",
+    "event_id": "fcf769a6-fff5-42bd-b634-0398243efbe0",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "86c50375-cf03-491c-9983-c87b5f08d9d7",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "c794c203-8168-55b0-a876-dc7b626d504f",
+        "event_id": "fcf769a6-fff5-42bd-b634-0398243efbe0",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "38d37057-ea9f-5467-89f5-bd648aa600b8",
+        "target_ref": {
+          "object_id": "fb0ab30d-2e51-5efe-9a27-9229ffe29f86/839965ce-05e8-5b73-b2aa-002fe91aa0d3",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-6adff50afbed224f4cec3e21f489dfb3d1428b03b84a65e6b8f87b9bc36ae233"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "86c50375-cf03-491c-9983-c87b5f08d9d7",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "c794c203-8168-55b0-a876-dc7b626d504f",
+        "event_id": "fcf769a6-fff5-42bd-b634-0398243efbe0",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "38d37057-ea9f-5467-89f5-bd648aa600b8",
+        "target_ref": {
+          "object_id": "fb0ab30d-2e51-5efe-9a27-9229ffe29f86/839965ce-05e8-5b73-b2aa-002fe91aa0d3",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-6adff50afbed224f4cec3e21f489dfb3d1428b03b84a65e6b8f87b9bc36ae233"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "306b83a5-27d5-5334-972a-6c80a0cef2d0"
+    }
+  },
+  {
+    "seq": 14,
+    "record_id": "26b033d3-486e-4375-a815-048b2d17000a",
+    "event_id": "fcf769a6-fff5-42bd-b634-0398243efbe0",
+    "event_type": "m52_render_reported",
+    "source": "client_reported",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "binding": {
+          "actor_ref": "synthetic-alice",
+          "attempt_id": "86c50375-cf03-491c-9983-c87b5f08d9d7",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "criteria_version": "m5-task-criteria-v1",
+          "display_id": "c794c203-8168-55b0-a876-dc7b626d504f",
+          "event_id": "fcf769a6-fff5-42bd-b634-0398243efbe0",
+          "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "outcome": "suggested",
+          "package_version": "m5-task-reasons-v1",
+          "reason_ids": [
+            "code.behavior_changed",
+            "general.style"
+          ],
+          "suggestion_id": "38d37057-ea9f-5467-89f5-bd648aa600b8",
+          "target_ref": {
+            "object_id": "fb0ab30d-2e51-5efe-9a27-9229ffe29f86/839965ce-05e8-5b73-b2aa-002fe91aa0d3",
+            "object_type": "openwebui_assistant_message",
+            "object_version": "s1v1-6adff50afbed224f4cec3e21f489dfb3d1428b03b84a65e6b8f87b9bc36ae233"
+          },
+          "template_version": "m5-task-templates-v1",
+          "tenant_ref": "synthetic-s1-study",
+          "ui_version": "m5-suggestion-mock-v1"
+        },
+        "display_id": "c794c203-8168-55b0-a876-dc7b626d504f"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "014b18f1-9027-58c0-ac02-2ce70145ead4"
+    }
+  },
+  {
+    "seq": 15,
+    "record_id": "b3ead308-20ff-4519-baa1-def7e49269ae",
+    "event_id": "fcf769a6-fff5-42bd-b634-0398243efbe0",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "c794c203-8168-55b0-a876-dc7b626d504f",
+        "operation": "none_matched",
+        "previous_response_id": null,
+        "reason_id": null,
+        "suggestion_id": "38d37057-ea9f-5467-89f5-bd648aa600b8"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "185c25c8-88e1-5943-bd25-9ea2c317422e"
+    }
+  },
+  {
+    "seq": 17,
+    "record_id": "69b6fcb3-2e5c-4aa0-8c48-2fda49d13a1f",
+    "event_id": "fc73b49e-0b73-46cc-be63-28bac52320e4",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "447db4b4-93d2-4e79-940f-b4a82927e9e2",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "7f3bbfd8-112b-554d-8245-c7766cf595b3",
+        "event_id": "fc73b49e-0b73-46cc-be63-28bac52320e4",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "44d5a960-39e4-5148-a83f-31bc3f4dd729",
+        "target_ref": {
+          "object_id": "4dcebad4-72e7-57d8-a095-d0c00812d269/e198790a-3b22-5fbc-9c5c-ff45afa10904",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-b4789195bd2ae5f7404b70257ec693fc0f44225b77e4f9987d1894c03faf05f6"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "447db4b4-93d2-4e79-940f-b4a82927e9e2",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "7f3bbfd8-112b-554d-8245-c7766cf595b3",
+        "event_id": "fc73b49e-0b73-46cc-be63-28bac52320e4",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "44d5a960-39e4-5148-a83f-31bc3f4dd729",
+        "target_ref": {
+          "object_id": "4dcebad4-72e7-57d8-a095-d0c00812d269/e198790a-3b22-5fbc-9c5c-ff45afa10904",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-b4789195bd2ae5f7404b70257ec693fc0f44225b77e4f9987d1894c03faf05f6"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "7835b6ff-1e17-5b10-a4c0-e6268f48774a"
+    }
+  },
+  {
+    "seq": 18,
+    "record_id": "bff37c5c-948c-4da4-92ab-27891863c727",
+    "event_id": "fc73b49e-0b73-46cc-be63-28bac52320e4",
+    "event_type": "m52_render_reported",
+    "source": "client_reported",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "binding": {
+          "actor_ref": "synthetic-alice",
+          "attempt_id": "447db4b4-93d2-4e79-940f-b4a82927e9e2",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "criteria_version": "m5-task-criteria-v1",
+          "display_id": "7f3bbfd8-112b-554d-8245-c7766cf595b3",
+          "event_id": "fc73b49e-0b73-46cc-be63-28bac52320e4",
+          "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "outcome": "suggested",
+          "package_version": "m5-task-reasons-v1",
+          "reason_ids": [
+            "code.behavior_changed",
+            "general.style"
+          ],
+          "suggestion_id": "44d5a960-39e4-5148-a83f-31bc3f4dd729",
+          "target_ref": {
+            "object_id": "4dcebad4-72e7-57d8-a095-d0c00812d269/e198790a-3b22-5fbc-9c5c-ff45afa10904",
+            "object_type": "openwebui_assistant_message",
+            "object_version": "s1v1-b4789195bd2ae5f7404b70257ec693fc0f44225b77e4f9987d1894c03faf05f6"
+          },
+          "template_version": "m5-task-templates-v1",
+          "tenant_ref": "synthetic-s1-study",
+          "ui_version": "m5-suggestion-mock-v1"
+        },
+        "display_id": "7f3bbfd8-112b-554d-8245-c7766cf595b3"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "f947f2fa-2b31-5643-9f33-3590274109c8"
+    }
+  },
+  {
+    "seq": 19,
+    "record_id": "4e0f16f3-33b3-4761-adcb-ef21d7675c67",
+    "event_id": "fc73b49e-0b73-46cc-be63-28bac52320e4",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "7f3bbfd8-112b-554d-8245-c7766cf595b3",
+        "operation": "skip",
+        "previous_response_id": null,
+        "reason_id": null,
+        "suggestion_id": "44d5a960-39e4-5148-a83f-31bc3f4dd729"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "aebe1ffa-1e2d-5c7b-be63-5214e569c536"
+    }
+  },
+  {
+    "seq": 21,
+    "record_id": "c45cc4a0-10d3-492c-aaa2-01d925bba42b",
+    "event_id": "9c2c8c37-8a1d-411f-b918-bb3534120413",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "651ca5dd-9d8f-448a-8901-5bba44dddfa0",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "69941284-9f57-51e6-b3a0-a09ec3b7d51b",
+        "event_id": "9c2c8c37-8a1d-411f-b918-bb3534120413",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "502b601f-5445-50b0-912c-feae1800f1ec",
+        "target_ref": {
+          "object_id": "085855b9-fe21-5fda-8aa9-37636c8f12ee/f2dd27ec-f8ac-55b5-9218-947c20e9ad68",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-9370dfeb2ca465340f40dca9fda410fcbcd924b05485a627322d771ce5822845"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "651ca5dd-9d8f-448a-8901-5bba44dddfa0",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "69941284-9f57-51e6-b3a0-a09ec3b7d51b",
+        "event_id": "9c2c8c37-8a1d-411f-b918-bb3534120413",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "502b601f-5445-50b0-912c-feae1800f1ec",
+        "target_ref": {
+          "object_id": "085855b9-fe21-5fda-8aa9-37636c8f12ee/f2dd27ec-f8ac-55b5-9218-947c20e9ad68",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-9370dfeb2ca465340f40dca9fda410fcbcd924b05485a627322d771ce5822845"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "db13fb67-8147-5af2-a6be-6de930cb22b6"
+    }
+  },
+  {
+    "seq": 22,
+    "record_id": "3ee21637-9064-4cd0-9bec-22c524f28153",
+    "event_id": "9c2c8c37-8a1d-411f-b918-bb3534120413",
+    "event_type": "m52_render_reported",
+    "source": "client_reported",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "binding": {
+          "actor_ref": "synthetic-alice",
+          "attempt_id": "651ca5dd-9d8f-448a-8901-5bba44dddfa0",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "criteria_version": "m5-task-criteria-v1",
+          "display_id": "69941284-9f57-51e6-b3a0-a09ec3b7d51b",
+          "event_id": "9c2c8c37-8a1d-411f-b918-bb3534120413",
+          "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "outcome": "suggested",
+          "package_version": "m5-task-reasons-v1",
+          "reason_ids": [
+            "code.behavior_changed",
+            "general.style"
+          ],
+          "suggestion_id": "502b601f-5445-50b0-912c-feae1800f1ec",
+          "target_ref": {
+            "object_id": "085855b9-fe21-5fda-8aa9-37636c8f12ee/f2dd27ec-f8ac-55b5-9218-947c20e9ad68",
+            "object_type": "openwebui_assistant_message",
+            "object_version": "s1v1-9370dfeb2ca465340f40dca9fda410fcbcd924b05485a627322d771ce5822845"
+          },
+          "template_version": "m5-task-templates-v1",
+          "tenant_ref": "synthetic-s1-study",
+          "ui_version": "m5-suggestion-mock-v1"
+        },
+        "display_id": "69941284-9f57-51e6-b3a0-a09ec3b7d51b"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "3b6b34b9-f51b-5af2-a68f-9adcaeff06b3"
+    }
+  },
+  {
+    "seq": 23,
+    "record_id": "ea8567ca-64d9-4348-b863-6070220ef21f",
+    "event_id": "9c2c8c37-8a1d-411f-b918-bb3534120413",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "69941284-9f57-51e6-b3a0-a09ec3b7d51b",
+        "operation": "close",
+        "previous_response_id": null,
+        "reason_id": null,
+        "suggestion_id": "502b601f-5445-50b0-912c-feae1800f1ec"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "74e08cf2-094e-5f01-94f9-73b8721b44fd"
+    }
+  },
+  {
+    "seq": 25,
+    "record_id": "85ada558-c44e-42d0-83a4-205a3b756801",
+    "event_id": "326a58c0-6682-41ce-95c1-7204a203975c",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "b46a616b-b460-4717-bc83-3dd696c368a4",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "9c85195c-a12a-5135-9924-fbdd6889e51d",
+        "event_id": "326a58c0-6682-41ce-95c1-7204a203975c",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "c712a44b-51aa-57ea-93fb-405239a8e7f9",
+        "target_ref": {
+          "object_id": "f7863424-1ebd-5142-8ce2-05340d5780f0/aa141e8f-3818-542d-9afb-caf7de5b671b",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-5055512727457c3b7f7bff15333027ea23f247ad13eee2fd474f6f9403fb38f7"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "b46a616b-b460-4717-bc83-3dd696c368a4",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "9c85195c-a12a-5135-9924-fbdd6889e51d",
+        "event_id": "326a58c0-6682-41ce-95c1-7204a203975c",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "c712a44b-51aa-57ea-93fb-405239a8e7f9",
+        "target_ref": {
+          "object_id": "f7863424-1ebd-5142-8ce2-05340d5780f0/aa141e8f-3818-542d-9afb-caf7de5b671b",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-5055512727457c3b7f7bff15333027ea23f247ad13eee2fd474f6f9403fb38f7"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "e867e5cc-096c-57af-b35d-42ef09d6c7c3"
+    }
+  },
+  {
+    "seq": 26,
+    "record_id": "2589621c-4333-4b05-b5e6-7db6df389231",
+    "event_id": "326a58c0-6682-41ce-95c1-7204a203975c",
+    "event_type": "m52_render_reported",
+    "source": "client_reported",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "binding": {
+          "actor_ref": "synthetic-alice",
+          "attempt_id": "b46a616b-b460-4717-bc83-3dd696c368a4",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "criteria_version": "m5-task-criteria-v1",
+          "display_id": "9c85195c-a12a-5135-9924-fbdd6889e51d",
+          "event_id": "326a58c0-6682-41ce-95c1-7204a203975c",
+          "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "outcome": "suggested",
+          "package_version": "m5-task-reasons-v1",
+          "reason_ids": [
+            "code.behavior_changed",
+            "general.style"
+          ],
+          "suggestion_id": "c712a44b-51aa-57ea-93fb-405239a8e7f9",
+          "target_ref": {
+            "object_id": "f7863424-1ebd-5142-8ce2-05340d5780f0/aa141e8f-3818-542d-9afb-caf7de5b671b",
+            "object_type": "openwebui_assistant_message",
+            "object_version": "s1v1-5055512727457c3b7f7bff15333027ea23f247ad13eee2fd474f6f9403fb38f7"
+          },
+          "template_version": "m5-task-templates-v1",
+          "tenant_ref": "synthetic-s1-study",
+          "ui_version": "m5-suggestion-mock-v1"
+        },
+        "display_id": "9c85195c-a12a-5135-9924-fbdd6889e51d"
+      },
+      "contract": "m5-suggestion-v1",
+      "request_id": "909f0c4e-15ac-59b4-a9bd-c8c67b25ddc7"
+    }
+  },
+  {
+    "seq": 27,
+    "record_id": "6ef43488-84da-4a32-a803-167a45e5ba59",
+    "event_id": "326a58c0-6682-41ce-95c1-7204a203975c",
+    "event_type": "m52_response_recorded",
+    "source": "user",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "command": {
+        "display_id": "9c85195c-a12a-5135-9924-fbdd6889e51d",
+        "operation": "decline",
+        "previous_response_id": null,
+        "reason_id": null,
+        "suggestion_id": "c712a44b-51aa-57ea-93fb-405239a8e7f9"
+      },
+      "contract": "m5-suggestion-v1",
+      "received_at": 1788220800.0,
+      "request_id": "241d0269-1139-58e1-94e6-c78fe0e392b1"
+    }
+  },
+  {
+    "seq": 29,
+    "record_id": "e3eea3ee-d98b-47b5-a0b0-12098a109f6b",
+    "event_id": "7235b79d-17e8-44f9-adb5-3d5a73da5b3a",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "7caf9fb4-bc7c-48eb-bae4-0d95c57e1594",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "0695854d-fd99-582a-a79d-2ffeef8438e4",
+        "event_id": "7235b79d-17e8-44f9-adb5-3d5a73da5b3a",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "unknown",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [],
+        "suggestion_id": "7287a188-38b2-5983-a72a-b2682559806d",
+        "target_ref": {
+          "object_id": "bfa57758-fd7e-5bd0-a298-f897afe05793/529184aa-2a46-5101-9ebf-d191ad6e723f",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-85d1276bf80e5c37c89bc38e1cb135b327aab15c4ce3a4439abdd5ef5954560b"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "7caf9fb4-bc7c-48eb-bae4-0d95c57e1594",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "0695854d-fd99-582a-a79d-2ffeef8438e4",
+        "event_id": "7235b79d-17e8-44f9-adb5-3d5a73da5b3a",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "unknown",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [],
+        "suggestion_id": "7287a188-38b2-5983-a72a-b2682559806d",
+        "target_ref": {
+          "object_id": "bfa57758-fd7e-5bd0-a298-f897afe05793/529184aa-2a46-5101-9ebf-d191ad6e723f",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-85d1276bf80e5c37c89bc38e1cb135b327aab15c4ce3a4439abdd5ef5954560b"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "c73311ed-cfc8-512b-8db7-85ce22850342"
+    }
+  },
+  {
+    "seq": 31,
+    "record_id": "cfa25d69-dc93-4794-a1bf-12535f4aa97c",
+    "event_id": "dbcdaa29-43ec-4f5d-a024-7fb69ceca189",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "38e6097b-4cd3-47fb-b03f-8c81e110472d",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "ceb73d4c-356f-56b4-b440-c7a3d21862e6",
+        "event_id": "dbcdaa29-43ec-4f5d-a024-7fb69ceca189",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "no_match",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [],
+        "suggestion_id": "f985f3d9-7e7d-522f-b308-6db5df1624e0",
+        "target_ref": {
+          "object_id": "28854af4-6158-5cfc-86ab-0f3b1c676809/2ad23375-cb44-55cf-b3a5-0ac0debdfefc",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-c550024d8f4e769d00067419e1e9286bd081b72df494209d1ccf4f5578d47468"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "38e6097b-4cd3-47fb-b03f-8c81e110472d",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "ceb73d4c-356f-56b4-b440-c7a3d21862e6",
+        "event_id": "dbcdaa29-43ec-4f5d-a024-7fb69ceca189",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "no_match",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [],
+        "suggestion_id": "f985f3d9-7e7d-522f-b308-6db5df1624e0",
+        "target_ref": {
+          "object_id": "28854af4-6158-5cfc-86ab-0f3b1c676809/2ad23375-cb44-55cf-b3a5-0ac0debdfefc",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-c550024d8f4e769d00067419e1e9286bd081b72df494209d1ccf4f5578d47468"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "8d5b8a85-6796-5070-8860-e63e32e98567"
+    }
+  },
+  {
+    "seq": 33,
+    "record_id": "53c0554f-06e3-4d51-89f5-eacad1c610f7",
+    "event_id": "64c3cf4e-cefd-4bf6-865c-dab77d40f614",
+    "event_type": "m52_suggestion_generated",
+    "source": "synthetic_model",
+    "recorded_at": "2026-09-01T00:00:00+00:00",
+    "payload": {
+      "binding": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "8617e4e6-cf64-442d-b4aa-dd698996d401",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "ccb9156e-3d51-5fba-99ea-7ed979c18488",
+        "event_id": "64c3cf4e-cefd-4bf6-865c-dab77d40f614",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "08e403b4-0e49-54e8-8ca3-ccfcdbec10c7",
+        "target_ref": {
+          "object_id": "4886e99a-075c-5048-87a8-3eb4a42b2a94/ba03b086-1c50-5193-acbf-f09a9ca12363",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-e00966b98b54f712bb3542a20af9e61b6701ac83c3fd1c9a91e4eca54935d880"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "command": {
+        "actor_ref": "synthetic-alice",
+        "attempt_id": "8617e4e6-cf64-442d-b4aa-dd698996d401",
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "criteria_version": "m5-task-criteria-v1",
+        "display_id": "ccb9156e-3d51-5fba-99ea-7ed979c18488",
+        "event_id": "64c3cf4e-cefd-4bf6-865c-dab77d40f614",
+        "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "outcome": "suggested",
+        "package_version": "m5-task-reasons-v1",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "suggestion_id": "08e403b4-0e49-54e8-8ca3-ccfcdbec10c7",
+        "target_ref": {
+          "object_id": "4886e99a-075c-5048-87a8-3eb4a42b2a94/ba03b086-1c50-5193-acbf-f09a9ca12363",
+          "object_type": "openwebui_assistant_message",
+          "object_version": "s1v1-e00966b98b54f712bb3542a20af9e61b6701ac83c3fd1c9a91e4eca54935d880"
+        },
+        "template_version": "m5-task-templates-v1",
+        "tenant_ref": "synthetic-s1-study",
+        "ui_version": "m5-suggestion-mock-v1"
+      },
+      "contract": "m5-suggestion-v1",
+      "expires_at": 1788220860.0,
+      "request_id": "27326bff-a4ac-5a6a-84e4-a8d077da5d17"
+    }
+  }
+]

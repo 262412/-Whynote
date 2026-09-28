@@ -1,0 +1,95 @@
+{
+  "tested_commit": "f20518b9ea2a0ea73f34439be0dc8bc80c253c5c",
+  "main": "c2ee7a3463f2b058d4f7560ec8e1a440b3c0564e",
+  "scope": "independent_mock_ledger_only",
+  "baseline_passed": 592,
+  "new_independent_passed": 20,
+  "fixture_groups": {
+    "self_natural": {
+      "generated": 1,
+      "displayable": 1,
+      "render_reported": 1,
+      "valid_response": 1,
+      "confirmed": 1,
+      "status_counts": {
+        "responded": 1
+      }
+    },
+    "scripted": {
+      "generated": 5,
+      "displayable": 5,
+      "render_reported": 5,
+      "valid_response": 4,
+      "confirmed": 0,
+      "status_counts": {
+        "responded": 4,
+        "unresponded": 1
+      }
+    },
+    "public_replay": {
+      "generated": 3,
+      "displayable": 1,
+      "render_reported": 0,
+      "valid_response": 0,
+      "confirmed": 0,
+      "status_counts": {
+        "abstained": 2,
+        "render_unknown": 1
+      }
+    },
+    "missing": {
+      "generated": 0,
+      "displayable": 0,
+      "render_reported": 0,
+      "valid_response": 0,
+      "confirmed": 0,
+      "status_counts": {}
+    }
+  },
+  "event_counts": {
+    "action_retracted": 1,
+    "m52_render_reported": 6,
+    "m52_response_recorded": 7,
+    "m52_suggestion_generated": 9,
+    "m52_suggestion_invalidated": 1,
+    "negative_feedback_action_recorded": 10
+  },
+  "outbox_count": 11,
+  "readonly_report_equals_saved": true,
+  "database_unchanged_after_report": true,
+  "database_sha256": "b2207d2e3c3834735acc3f012821700049e82e96b7181cc9f9a1d1aa095e35dc",
+  "raw_text_and_fixture_key_absent": true,
+  "new_defects": [],
+  "not_executed": [
+    "browser",
+    "native_host_independent",
+    "real_collection",
+    "model_calls",
+    "M5-2b"
+  ],
+  "pending": [
+    "non_author_APPROVED",
+    "product_client_data_contract_and_result_signoff"
+  ],
+  "full_passed": 612,
+  "ruff": "passed",
+  "format_files": 81,
+  "source_equals_installed_wheel": true,
+  "implementation_sha256": {
+    "suggestions.py": "b62b71f4c32d1ea05a305e5b51a511db9a8b862d4cb9f96e4c454ec0693b1d99",
+    "research.py": "e69dfe95df048258bce2d7b4e2677a927042413b6edf640688943d9c8212ccd1",
+    "research_report.py": "8da81a4a83644c8b6c5edbf75acbf5786763784dd8a136de2ec82f239c3ab7f1",
+    "s1_host.py": "043564554ed1741db9599b73b1415a18701ca9b7b08f69fe54943f75326f3860"
+  },
+  "feishu": {
+    "input": {
+      "prd": 343,
+      "technical": 342
+    },
+    "readback": {
+      "prd": 350,
+      "technical": 350
+    },
+    "history_links_preserved": true
+  }
+}
