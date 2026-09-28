@@ -1,0 +1,17 @@
+{
+  "business_commit": "edda92f3f18d6c13b9b1c2a1435990f58068282c",
+  "main": "52ac4db21e9f83ae50f17f7a1a4c2c4984540997",
+  "prd_revision": 311,
+  "technical_revision": 313,
+  "baseline_passed": 393,
+  "independent_passed": 11,
+  "cli_targets": [
+    1,
+    2,
+    1
+  ],
+  "output_files": 7,
+  "repeat_byte_identical": true,
+  "report_sha256": "6fb621dec238da8f0cb97d8bf1d4c3c527b726cf9fd46ee79942273b5c4b3ff4",
+  "scope": "synthetic CLI only; no corpus, provider, browser or host server execution"
+}
