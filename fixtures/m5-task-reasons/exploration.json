@@ -1,0 +1,92 @@
+{
+  "schema_version": "m5-task-reason-exploration-v1",
+  "package_version": "m5-task-reasons-v1",
+  "review_origin": "developer_synthetic",
+  "holdout_status": "not_established",
+  "cases": [
+    {
+      "case_id": "interface_preservation",
+      "task_types": ["code_rewrite"],
+      "fallback_tasks": [],
+      "evidence_kinds": ["request", "answer", "original_code"],
+      "request": "只整理函数内部实现，不要改函数名和参数。",
+      "original_code": "def parse(text): return text.strip()",
+      "answer": "def parse_file(path): return path.strip()",
+      "outcome": "suggested",
+      "reason_ids": ["code.interface_changed"],
+      "developer_review": "原签名与回答可直接比较；对应用户明确的接口保留要求。不是模型预测或实际用户反馈。"
+    },
+    {
+      "case_id": "mixed_task",
+      "task_types": ["code_rewrite", "general"],
+      "fallback_tasks": [],
+      "evidence_kinds": ["request", "answer", "original_code"],
+      "request": "等价改写函数，并向初学者解释；空输入仍返回0。",
+      "original_code": "def total(xs): return sum(xs) if xs else 0",
+      "answer": "def total(xs):\n    if not xs: raise ValueError()\n    return sum(xs)\n解释：应用未定义的高阶术语即可。",
+      "outcome": "suggested",
+      "reason_ids": ["code.behavior_changed", "general.style"],
+      "developer_review": "代码分支改变与解释受众不匹配可并存；不把混合任务压成唯一理由。"
+    },
+    {
+      "case_id": "negative_constraint",
+      "task_types": ["code_rewrite"],
+      "fallback_tasks": [],
+      "evidence_kinds": ["request", "answer", "original_code"],
+      "request": "只改这个函数，不能加第三方依赖。",
+      "original_code": "def square(x): return x*x",
+      "answer": "import numpy\ndef square(x): return numpy.square(x)",
+      "outcome": "suggested",
+      "reason_ids": ["code.scope_exceeded"],
+      "developer_review": "依据明确否定约束与新增import；没有运行代码，不声称发生安装或运行错误。"
+    },
+    {
+      "case_id": "missing_material",
+      "task_types": ["code_rewrite"],
+      "fallback_tasks": [],
+      "evidence_kinds": ["request", "answer"],
+      "request": "按先前的源码等价改写。",
+      "original_code": null,
+      "answer": "def transform(x): return x",
+      "outcome": "unknown",
+      "reason_ids": [],
+      "developer_review": "当前输入没有先前源码，不能断言改变了接口或行为；材料缺失与类别缺失分开。"
+    },
+    {
+      "case_id": "no_matching_reason",
+      "task_types": ["code_rewrite"],
+      "fallback_tasks": [],
+      "evidence_kinds": ["request", "answer", "original_code"],
+      "request": "输入是整数列表，改写求和函数，保留返回结果。",
+      "original_code": "def total(xs): return sum(xs)",
+      "answer": "def total(xs):\n    for _ in xs:\n        sum(xs)\n    return sum(xs)",
+      "outcome": "no_match",
+      "reason_ids": [],
+      "developer_review": "开发者审阅关注新增冗余计算，但此版没有独立资源效率细项；不得硬塞行为错误。仅静态示例，不声称运行性能已测量。"
+    },
+    {
+      "case_id": "cross_task_fallback",
+      "task_types": ["general"],
+      "fallback_tasks": ["code_rewrite"],
+      "evidence_kinds": ["request", "answer", "original_code"],
+      "request": "保持调用方式，整理代码。",
+      "original_code": "def read(text): return text",
+      "answer": "def read(path, encoding): return path",
+      "outcome": "suggested",
+      "reason_ids": ["code.interface_changed"],
+      "developer_review": "模拟首轮任务路由为general；显式跨任务回退后重新构建候选集，旧候选集ID不得复用。"
+    },
+    {
+      "case_id": "requested_snippet_counterexample",
+      "task_types": ["code_rewrite"],
+      "fallback_tasks": [],
+      "evidence_kinds": ["request", "answer", "original_code"],
+      "request": "参数x是整数，只显示要替换的return语句，不要完整函数。",
+      "original_code": "def double(x):\n    return x + x",
+      "answer": "return 2 * x",
+      "outcome": "no_match",
+      "reason_ids": [],
+      "developer_review": "用户明确只要片段，不能仅因回答不是完整函数就标改写不完整。本例不含已识别缺陷。"
+    }
+  ]
+}
