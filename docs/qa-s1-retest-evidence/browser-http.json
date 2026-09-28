@@ -1,0 +1,21 @@
+{
+  "url": "http://127.0.0.1:8127/c/3769fde5-796b-49b1-a548-ffd4f58f4f2d",
+  "requests": [
+    {
+      "url": "http://127.0.0.1:8127/api/chat/completions",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8127/api/chat/actions/whynote_s1_action",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8127/api/chat/actions/whynote_s1_action",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:8127/api/chat/actions/whynote_s1_retract_action",
+      "status": 200
+    }
+  ]
+}

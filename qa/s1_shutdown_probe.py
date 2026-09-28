@@ -44,6 +44,7 @@ async def run(args):
                 json={
                     "model": "whynote_s1_pipe",
                     "stream": True,
+                    "parent_id": None,
                     "id": message,
                     "session_id": sio.get_sid(),
                     "user_message": {"id": parent, "role": "user", "content": "S1 虚构：正常回答", "parentId": None},
@@ -70,9 +71,25 @@ async def run(args):
                 db.row_factory = sqlite3.Row
                 row = db.execute("SELECT * FROM s1_generations WHERE message_id=?", (message,)).fetchone()
                 assert row["status"] == "awaiting_save" and row["saved_at"] is None
-                assert db.execute("SELECT COUNT(*) FROM s1_current WHERE chat_id=?", (chat,)).fetchone()[0] == 0
+                # s1_current points to the current attempt, including pending
+                # candidates. Feedback eligibility additionally requires a saved,
+                # completed generation, as in TrialStore.receipt.
+                candidate_count = db.execute("SELECT COUNT(*) FROM s1_current WHERE chat_id=?", (chat,)).fetchone()[0]
+                assert candidate_count == 1
+                assert (
+                    db.execute(
+                        "SELECT COUNT(*) FROM s1_current c JOIN s1_generations g ON c.attempt_id=g.attempt_id "
+                        "WHERE c.chat_id=? AND g.status='completed' AND g.saved_at IS NOT NULL",
+                        (chat,),
+                    ).fetchone()[0]
+                    == 0
+                )
                 # Unknown usage keeps the full conservative reservation.
-                assert row["reserved_micro"] > 0
+                assert row["reserved_micro"] == 4_008_192 and row["settled_micro"] is None
+                before = {
+                    table: db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+                    for table in ("actions", "events", "outbox")
+                }
             refused = await api.post(
                 "/api/chat/actions/whynote_s1_action",
                 json={
@@ -85,15 +102,21 @@ async def run(args):
                 },
             )
             assert refused.status_code in (400, 401, 403, 404)
+            with sqlite3.connect(args.data_dir / "whynote.db") as db:
+                after = {table: db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] for table in before}
+            assert after == before
             args.output.write_text(
                 json.dumps(
                     {
                         "saved": True,
                         "receipt": "awaiting_save",
                         "saved_at": None,
-                        "current_receipts": 0,
+                        "candidate_index_count": candidate_count,
+                        "eligible_receipts": 0,
                         "budget_preserved": True,
                         "feedback_refused": True,
+                        "feedback_status": refused.status_code,
+                        "actions_events_outbox_unchanged": True,
                         "final_websocket_event": True,
                         "scope": "real login HTTP/WebSocket; synthetic provider; entry left disabled",
                     },

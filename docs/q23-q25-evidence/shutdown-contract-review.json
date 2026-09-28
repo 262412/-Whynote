@@ -1,0 +1,13 @@
+{
+  "saved": true,
+  "receipt": "awaiting_save",
+  "saved_at": null,
+  "candidate_index_count": 1,
+  "eligible_receipts": 0,
+  "budget_preserved": true,
+  "feedback_refused": true,
+  "feedback_status": 400,
+  "actions_events_outbox_unchanged": true,
+  "final_websocket_event": true,
+  "scope": "real login HTTP/WebSocket; synthetic provider; entry left disabled"
+}
