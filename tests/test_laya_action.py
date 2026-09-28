@@ -1,11 +1,16 @@
 import asyncio
+import importlib
+from pathlib import Path
 from types import SimpleNamespace
 
 import httpx
 import pytest
 
-from integrations.openwebui import laya_action
 from whynote.domain import NotFoundError
+
+with pytest.MonkeyPatch.context() as imports:
+    imports.syspath_prepend(str(Path(__file__).parents[1]))
+    laya_action = importlib.import_module("integrations.openwebui.laya_action")
 
 
 def setup_action(monkeypatch):
