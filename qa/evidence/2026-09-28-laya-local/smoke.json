@@ -1,0 +1,144 @@
+{
+  "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+  "files_sha256": {
+    "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+    "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+    "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+    "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+    "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+  },
+  "runtime": {
+    "laya": "0.3.21",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.6",
+    "fastapi": "0.141.1"
+  },
+  "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "cuda": "12.8",
+  "peak_allocated_mib": 1506.3,
+  "load_ms": 6455.8,
+  "network_connect_blocked": true,
+  "long_input_rejected": true,
+  "fixed_prompt_token_counts": {
+    "primary_reason": {
+      "instructions": 18,
+      "options": [
+        8,
+        15,
+        7,
+        7,
+        7,
+        7,
+        10,
+        11
+      ]
+    },
+    "factual_error_signal": {
+      "instructions": 14,
+      "options": [
+        9,
+        7
+      ]
+    },
+    "instruction_failure_signal": {
+      "instructions": 12,
+      "options": [
+        9,
+        7
+      ]
+    }
+  },
+  "results": [
+    {
+      "case_id": "zh_arithmetic",
+      "elapsed_ms": 299.3,
+      "provider": "laya_local",
+      "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "taxonomy_version": "candidate-v1",
+      "primary_reason": "factual_error",
+      "reason_probabilities": {
+        "factual_error": 0.9551,
+        "instruction_not_followed": 0.0062,
+        "incomplete": 0.0172,
+        "irrelevant": 0.0079,
+        "style": 0.0014,
+        "outdated": 0.0025,
+        "unnecessary_refusal": 0.006,
+        "other_or_unknown": 0.0037
+      },
+      "binary_signals": {
+        "factual_error_signal": 0.598,
+        "instruction_failure_signal": 0.0104
+      },
+      "raw_confidence": 0.8754,
+      "usage": {
+        "input_tokens": 286,
+        "output_tokens": 0
+      },
+      "prompt_version": "laya-reason-local-v1",
+      "attribution_source": "model_inferred_unconfirmed",
+      "calibrated": false
+    },
+    {
+      "case_id": "zh_instruction",
+      "elapsed_ms": 14.8,
+      "provider": "laya_local",
+      "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "taxonomy_version": "candidate-v1",
+      "primary_reason": "factual_error",
+      "reason_probabilities": {
+        "factual_error": 0.5052,
+        "instruction_not_followed": 0.0655,
+        "incomplete": 0.0821,
+        "irrelevant": 0.1679,
+        "style": 0.0264,
+        "outdated": 0.0324,
+        "unnecessary_refusal": 0.1108,
+        "other_or_unknown": 0.0098
+      },
+      "binary_signals": {
+        "factual_error_signal": 0.2188,
+        "instruction_failure_signal": 0.0009
+      },
+      "raw_confidence": 0.267,
+      "usage": {
+        "input_tokens": 238,
+        "output_tokens": 0
+      },
+      "prompt_version": "laya-reason-local-v1",
+      "attribution_source": "model_inferred_unconfirmed",
+      "calibrated": false
+    },
+    {
+      "case_id": "zh_irrelevance",
+      "elapsed_ms": 14.0,
+      "provider": "laya_local",
+      "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "taxonomy_version": "candidate-v1",
+      "primary_reason": "other_or_unknown",
+      "reason_probabilities": {
+        "factual_error": 0.0247,
+        "instruction_not_followed": 0.0144,
+        "incomplete": 0.0077,
+        "irrelevant": 0.0098,
+        "style": 0.0003,
+        "outdated": 0.0025,
+        "unnecessary_refusal": 0.0004,
+        "other_or_unknown": 0.9402
+      },
+      "binary_signals": {
+        "factual_error_signal": 0.0192,
+        "instruction_failure_signal": 0.885
+      },
+      "raw_confidence": 0.8492,
+      "usage": {
+        "input_tokens": 235,
+        "output_tokens": 0
+      },
+      "prompt_version": "laya-reason-local-v1",
+      "attribution_source": "model_inferred_unconfirmed",
+      "calibrated": false
+    }
+  ],
+  "scope": "developer synthetic transport smoke; not accuracy evaluation or independent acceptance"
+}

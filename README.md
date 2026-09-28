@@ -28,6 +28,8 @@ Open WebUI `v0.11.4` 的固定虚构数据联调使用独立 Action/Pipe；安�
 
 ## 本地交互测试
 
+Laya Multilingual 已提供[独立本机原因测试页](docs/laya-local.md)：在本机 GPU 上运行固定 checkpoint，手动输入问题/回答，输出带真实模型版本的未确认原因推测。该入口不消费聊天或反馈事件，未启用自动归因；效果与运行证据分开记录。
+
 S1 个人云聊天的[接入契约与配置清单](docs/s1-cloud-contract.md)已准备待冻结。运行 `uv run --no-sync python -m qa.s1_mock_provider` 可启动本地虚构回包工具，覆盖完成、截断、断流、取消和服务失败；它不连接云服务，实际动态回答接入仍待 S1-2 实现。
 
 安装开发依赖后运行 `uv run --no-sync python -m whynote.demo`，在本机打开 <http://127.0.0.1:8765/demo>。页面用虚构对象和每次启动独立的临时身份走点踩、常规原因选择、更正及撤销流程；菜单展示回执在渲染帧后登记，只有 `actionable=true` 时才可提交原因。仅监听本机，不读取真实问题/回答，也不调用模型。流程与限制见 [本地反馈闭环测试宿主契约](docs/local-demo-contract.md)。
