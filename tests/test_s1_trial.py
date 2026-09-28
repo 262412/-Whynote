@@ -374,3 +374,42 @@ def test_boundary_only_allows_trial_generation_and_strips_background_tasks(trial
         )
         assert result.status_code == 200
         assert result.json()["background_tasks"] == {}
+
+
+def test_browser_metadata_is_discarded_before_trusted_host_lookup(trial):
+    app = FastAPI()
+    app.add_middleware(TrialBoundary)
+
+    @app.post("/api/chat/completions")
+    async def echo(request: Request):
+        return await request.json()
+
+    body = {
+        "model": PIPE_ID,
+        "model_item": {"id": PIPE_ID, "info": {"access_grants": ["client-forged"]}, "pipe": {"type": "pipe"}},
+        "features": {"memory": False, "web_search": False},
+        "background_tasks": {"title_generation": True},
+    }
+    with TestClient(app) as client:
+        result = client.post("/api/chat/completions", json=body)
+        assert result.status_code == 200
+        assert "model_item" not in result.json()
+        assert result.json()["background_tasks"] == {}
+        assert result.json()["tools"] == []
+        for item in ({"id": "other"}, {"id": PIPE_ID, "direct": True}, [], "bad"):
+            assert client.post("/api/chat/completions", json={**body, "model_item": item}).status_code == 403
+        for field, value in (
+            ("features", {"memory": True}),
+            ("features", {"web_search": True}),
+            ("tool_ids", ["forged"]),
+            ("filter_ids", ["forged"]),
+            ("files", [{"id": "forged"}]),
+        ):
+            assert client.post("/api/chat/completions", json={**body, field: value}).status_code == 403
+
+
+@pytest.mark.parametrize("history", [None, {}, {"messages": None}, {"messages": []}])
+def test_malformed_history_revokes_before_host_normalization(trial, history):
+    invalidate_edit(trial.chat, {"history": history})
+    with pytest.raises(NotFoundError):
+        trial.store.qualify(trial.chat, trial.body)

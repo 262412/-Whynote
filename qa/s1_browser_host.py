@@ -62,6 +62,7 @@ def serve(args):
         "ENABLE_ADMIN_EXPORT": "false",
         "ENABLE_ADMIN_CHAT_ACCESS": "false",
         "ENABLE_PERSISTENT_CONFIG": "false",
+        "ENABLE_MEMORIES": "false",
         "DATABASE_ENABLE_SQLITE_WAL": "false",
         "ENABLE_SIGNUP": "true",
         "DEFAULT_USER_ROLE": "user",

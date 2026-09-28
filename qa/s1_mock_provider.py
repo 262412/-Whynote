@@ -10,6 +10,7 @@ import argparse
 import asyncio
 import hmac
 import json
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -32,7 +33,7 @@ def messages_for(prompt: str) -> list[dict[str, str]]:
     return [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]
 
 
-def create_app() -> FastAPI:
+def create_app(completion_gate: Path | None = None) -> FastAPI:
     app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
     @app.middleware("http")
@@ -92,6 +93,10 @@ def create_app() -> FastAPI:
                 await asyncio.Event().wait()  # Host timeout / user cancellation must stop the request.
             if scenario == "interrupted":
                 return  # EOF without a terminal finish reason or [DONE].
+            if completion_gate is not None:
+                completion_gate.with_suffix(".waiting").touch()
+                while not completion_gate.exists():
+                    await asyncio.sleep(0.05)
             first["choices"] = [{"index": 0, "delta": {}, "finish_reason": scenario}]
             yield f"data: {json.dumps(first)}\n\n"
             yield "data: [DONE]\n\n"
@@ -114,8 +119,9 @@ def main():
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8126)
+    parser.add_argument("--completion-gate", type=Path, help="Synthetic shutdown test: wait for this file before stop")
     args = parser.parse_args()
-    uvicorn.run(create_app(), host="127.0.0.1", port=args.port, access_log=False)
+    uvicorn.run(create_app(args.completion_gate), host="127.0.0.1", port=args.port, access_log=False)
 
 
 if __name__ == "__main__":

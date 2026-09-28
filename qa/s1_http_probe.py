@@ -67,6 +67,23 @@ async def run(args):
                 user_message=dict(id=parent_id, role="user", content="S1 虚构：正常回答", parentId=None),
                 background_tasks={"title_generation": True},
             )
+            if args.browser_request:
+                config = await api.get("/api/config")
+                check("browser-memory-disabled", config.json()["features"]["enable_memories"], False)
+                models = await api.get("/api/models")
+                item = next(item for item in models.json()["data"] if item["id"] == model)
+                request.update(
+                    model_item=item,
+                    features={
+                        "voice": False,
+                        "image_generation": False,
+                        "code_interpreter": False,
+                        "web_search": False,
+                    },
+                    params={},
+                    tool_servers=[],
+                    message_ids=[{"model_id": model, "message_id": message_id, "modelIdx": 0}],
+                )
             generated = await api.post("/api/chat/completions", json=request)
             check("generation-http", generated.status_code, 200)
             result = generated.json()
@@ -89,6 +106,8 @@ async def run(args):
                 "id": next_answer,
                 "user_message": dict(id=next_user, role="user", content="S1 虚构：正常回答", parentId=message_id),
             }
+            if args.browser_request:
+                followup["message_ids"] = [{"model_id": model, "message_id": next_answer, "modelIdx": 0}]
             response = await api.post("/api/chat/completions", json=followup)
             check("trusted-history-generation", response.status_code, 200)
             for _ in range(200):
@@ -193,4 +212,5 @@ if __name__ == "__main__":
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--base-url", default="http://127.0.0.1:8127")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--browser-request", action="store_true", help="Replay native browser metadata over HTTP")
     asyncio.run(run(parser.parse_args()))

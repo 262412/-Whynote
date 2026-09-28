@@ -9,6 +9,7 @@ import os
 import uuid
 
 from whynote.domain import NotFoundError
+from whynote.provider_keys import load_provider_key
 from whynote.s1 import PIPE_ID, TrialStore, generation_input, load_config
 from whynote.s1_provider import complete_response
 
@@ -46,6 +47,9 @@ class Pipe:
         store.enroll(chat_id, config["user_id"])
         # Reuse the host's server-side connection and HTTP pool, not a second SDK.
         url, key, _ = await get_openai_connection(0)
+        key_file = os.environ.get("WHYNOTE_PROVIDER_KEYS_FILE")
+        if config["mode"] == "cloud" and key_file:
+            key = load_provider_key(key_file, "deepseek")
         if url.rstrip("/") != config["base_url"] or not key:
             raise ValueError("S1 host connection does not match the approved endpoint")
         session = await get_session()

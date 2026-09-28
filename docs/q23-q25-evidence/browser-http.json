@@ -1,0 +1,22 @@
+[
+  {
+    "id": "2632.552",
+    "url": "http://127.0.0.1:8128/api/chat/completions",
+    "status": 200
+  },
+  {
+    "id": "2632.562",
+    "url": "http://127.0.0.1:8128/api/chat/actions/whynote_s1_action",
+    "status": 200
+  },
+  {
+    "id": "2632.564",
+    "url": "http://127.0.0.1:8128/api/chat/actions/whynote_s1_action",
+    "status": 200
+  },
+  {
+    "id": "2632.565",
+    "url": "http://127.0.0.1:8128/api/chat/actions/whynote_s1_retract_action",
+    "status": 200
+  }
+]

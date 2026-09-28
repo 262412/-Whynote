@@ -6,6 +6,7 @@ from pathlib import Path
 
 from starlette.responses import JSONResponse
 
+from .domain import NotFoundError
 from .s1 import PIPE_ID, TrialStore, load_config
 
 
@@ -23,13 +24,16 @@ def invalidate_edit(chat, incoming):
     if "history" not in incoming:
         return
     before = chat.chat.get("history", {}).get("messages", {})
-    after = incoming.get("history", {}).get("messages", {})
+    history = incoming.get("history")
+    after = history.get("messages") if isinstance(history, dict) else None
     fields = ("role", "content", "parentId", "model", "timestamp", "done", "error", "output")
-    if before.keys() - after.keys() or any(
-        old is not None and any(old.get(k) != value.get(k) for k in fields)
-        for mid, value in after.items()
-        if isinstance(value, dict)
-        for old in [before.get(mid)]
+    # The host drops null messages. Revoke before that normalization so restoring
+    # the original bytes cannot revive a receipt that crossed a deletion/edit.
+    if not isinstance(after, dict) or any(
+        not isinstance(after.get(mid), dict)
+        or not isinstance(old, dict)
+        or any(old.get(k) != after[mid].get(k) for k in fields)
+        for mid, old in before.items()
     ):
         invalidate_chat(chat.id)
 
@@ -37,7 +41,12 @@ def invalidate_edit(chat, incoming):
 def confirm_saved_response(chat, message_id):
     path = os.environ.get("WHYNOTE_S1_CONFIG")
     if path:
-        config = load_config(path)
+        try:
+            config = load_config(path)
+        except NotFoundError:
+            # Stopping admission must not abort the host's final stream cleanup.
+            # Leave the candidate unconfirmed and retain its budget charge.
+            return
         TrialStore(config).confirm_saved(chat, message_id)
 
 
@@ -94,13 +103,17 @@ class TrialBoundary:
                     not isinstance(data, dict)
                     or data.get("model") != PIPE_ID
                     or data.get("models")
-                    or data.get("model_item")
                     or data.get("tool_ids")
                     or data.get("files")
                     or any(data.get("features", {}).values())
                     or data.get("filter_ids")
                 ):
                     raise ValueError("unsupported S1 generation")
+                item = data.pop("model_item", None)
+                if item is not None and (not isinstance(item, dict) or item.get("id") != PIPE_ID or item.get("direct")):
+                    raise ValueError("unsupported S1 model metadata")
+                # Browser metadata is only a display hint. Removing it forces
+                # the host to resolve the model and permissions server-side.
                 data["background_tasks"] = {}  # Suppress hidden title/tag/follow-up calls.
                 data["tools"] = []  # Explicitly opt out of the host's builtin tools.
                 encoded = json.dumps(data).encode()
