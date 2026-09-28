@@ -194,9 +194,7 @@ def render(store, principal, event_id, request_id, display_id, binding):
             if e["event_type"] == "m52_render_reported" and e["payload"]["command"]["display_id"] == display_id
         ]
         if existing:
-            if existing[0]["payload"]["command"] != command:
-                raise ConflictError("Display ID conflicts")
-            return existing[0]["record_id"]
+            raise ConflictError("Display already recorded; retry the original request ID")
         return _append(store, db, event_id, "m52_render_reported", request_id, command, "client_reported")
 
 

@@ -31,5 +31,15 @@
   "browser_validation": "not_run",
   "local_model_call": "not_run",
   "native_host": "CI_only",
-  "report_sha256_lf": "ed91adecf7d48db5c34ad934db2bc59770c3bef74d4389df2f21926973396be1"
+  "report_sha256_lf": "ed91adecf7d48db5c34ad934db2bc59770c3bef74d4389df2f21926973396be1",
+  "idempotency_fix_source_sha256_lf": {
+    "src/whynote/suggestions.py": "ba85437c5ea28320a37273a32a81449b7d88674ca572e633bdb05b5820245ce3",
+    "tests/test_suggestions.py": "116b2f1042e48cf372bdb2e4596677f5c16b3e6bc826e47ccba2daacd77bc25b"
+  },
+  "idempotency_fix_tests": {
+    "total": 101,
+    "failures": 0,
+    "errors": 0,
+    "command": "uv run --no-sync pytest tests/test_suggestions.py tests/test_s1_research.py tests/test_s1_research_independent.py -q"
+  }
 }

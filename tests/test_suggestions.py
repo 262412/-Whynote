@@ -163,7 +163,8 @@ def test_duplicate_commands_and_conflicting_ids(trial):
     assert generate(f) == binding
     receipt = render(f, binding)
     assert render(f, binding) == receipt
-    assert s.render(f.store, f.principal, f.event_id, ref("other-request"), ref("display"), binding) == receipt
+    with pytest.raises(ConflictError):
+        s.render(f.store, f.principal, f.event_id, ref("other-request"), ref("display"), binding)
     response = respond(f)
     assert respond(f) == response
     before = events(f)
