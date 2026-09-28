@@ -37,3 +37,7 @@ S1 个人云聊天的[接入契约与配置清单](docs/s1-cloud-contract.md)已
 Open WebUI 隔离实例的虚构数据实测与原生评分复用结论见 [S0 数据审计](docs/openwebui-s0-data-audit.md)；这份审计尚不构成知因与宿主的联调验收。
 
 归因状态、展示绑定、UTC 时间及旧事件重放规则见 [归因与展示契约 v3](docs/attribution-contract-v3.md)。当前仅完成 Q-01 至 Q-03 的服务端修复；PRD 的完整链路和产品验收仍未完成。
+
+### S1-2 动态回答开发切片
+
+已确认的v1契约现有[动态回答接入与迁移说明](docs/s1-dynamic-delivery.md)。仅完成作者虚构复测；独立浏览器、评审和真实出站门槛仍待完成。运行配置默认关闭，见 `fixtures/s1-runtime.example.json`。

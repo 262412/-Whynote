@@ -30,6 +30,14 @@ UI_VERSION = MANUAL_UI_VERSION
 class Action:
     """Open WebUI 0.11.4 Action; only the synthetic S0 fixture is eligible."""
 
+    menu_title = MENU_TITLE
+    menu_message = MENU_MESSAGE
+    channel = "openwebui-s0"
+    recorded_message = "知因 S0 反馈与原因已记录"
+
+    def _store_for_target(self, principal, target):
+        return self.store
+
     def __init__(self):
         self.tenant = os.environ["WHYNOTE_S0_TENANT"]
         self.version_key = os.environ["WHYNOTE_S0_VERSION_KEY"].encode("utf-8")
@@ -96,6 +104,7 @@ class Action:
         principal = Principal(self.tenant, user_id)
         owned = await self._owned_chat(body.get("chat_id", ""), user_id)
         target = self._target(owned, body)
+        store = self._store_for_target(principal, target)
         click_id = body.get("whynote_click_id")
         if click_id is not None:
             if not isinstance(click_id, str):
@@ -108,21 +117,21 @@ class Action:
         ).hexdigest()
         metadata = {
             "action_type": "negative_feedback",
-            "channel": "openwebui-s0",
+            "channel": self.channel,
             "locale": "zh-CN",
             "client_occurred_at": None,
             "interaction_contract": "manual-v1",
         }
         display_id = str(uuid.uuid4())
         if click_id is not None:
-            state, replay = self.store.begin_host_click(principal, target, metadata, key, display_id, time.time)
+            state, replay = store.begin_host_click(principal, target, metadata, key, display_id, time.time)
             if replay is not None:
                 return replay
         else:
-            state = self.store.create_action(principal, target, metadata, key, restart_retracted=True)
+            state = store.create_action(principal, target, metadata, key, restart_retracted=True)
             if state["action_status"] != "active":
                 return {"event_id": state["event_id"], "result": "retracted"}
-            self.store.issue_display_ticket(principal, state["event_id"], display_id)
+            store.issue_display_ticket(principal, state["event_id"], display_id)
         event_id = state["event_id"]
         mode = "edit_menu" if state["attribution_status"] in {"selected", "edited"} else "manual_menu"
         session_ref = hashlib.sha256(session_id.encode()).hexdigest()
@@ -139,8 +148,8 @@ class Action:
             "mode": mode,
             "expires_at": expires_at,
             "ui_version": UI_VERSION,
-            "title": MENU_TITLE,
-            "message": MENU_MESSAGE,
+            "title": self.menu_title,
+            "message": self.menu_message,
             "reasons": list(REASONS.items()),
         }
         choices = []
@@ -157,7 +166,7 @@ class Action:
         if click_id is not None:
             # Persist alongside the callback, without a database lock around UI work.
             deadline_task = asyncio.create_task(
-                asyncio.to_thread(self.store.set_host_click_deadline, principal, event_id, key, display_id, expires_at)
+                asyncio.to_thread(store.set_host_click_deadline, principal, event_id, key, display_id, expires_at)
             )
 
         async def receive_answer():
@@ -165,8 +174,8 @@ class Action:
                 {
                     "type": "input",
                     "data": {
-                        "title": MENU_TITLE,
-                        "message": MENU_MESSAGE,
+                        "title": self.menu_title,
+                        "message": self.menu_message,
                         "input": {
                             "type": "select",
                             "measurement": {
@@ -209,7 +218,7 @@ class Action:
         current = await self._owned_chat(body["chat_id"], user_id)
         if self._target(current, body) != target:
             return {"event_id": event_id, "result": "target_changed"}
-        receipt = self.store.record_display(
+        receipt = store.record_display(
             principal,
             event_id,
             display_id,
@@ -223,7 +232,7 @@ class Action:
         current = await self._owned_chat(body["chat_id"], user_id)
         if self._target(current, body) != target:
             return {"event_id": event_id, "display": receipt, "result": "target_changed"}
-        updated = self.store.record_user_action(
+        updated = store.record_user_action(
             principal,
             event_id,
             reason_code
@@ -236,7 +245,7 @@ class Action:
             timing=timing,
         )
         if __event_emitter__ is not None:
-            message = "知因 S0 反馈与原因已记录"
+            message = self.recorded_message
             if reason_code in MANUAL_OPERATIONS:
                 message = {
                     "reason_none_matched": "反馈已保存：都不是，当前原因已清空",
