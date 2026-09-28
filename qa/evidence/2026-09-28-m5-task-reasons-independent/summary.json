@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-28",
+  "tested_commit": "ab908bc1031502bed5dd40719295554132b20a40",
+  "main": "453fca7df7756e38a65b6f829d5204b1ec39b2bb",
+  "scope": "independent_offline_synthetic_engineering",
+  "baseline_passed": 450,
+  "new_independent_passed": 23,
+  "full_passed": 473,
+  "ruff_check": "passed",
+  "ruff_format_files": 72,
+  "material_route_scenarios": 80,
+  "three_reason_combinations": 165,
+  "cli_file_bytes": {
+    "8191": 0,
+    "8192": 0,
+    "8193": 2
+  },
+  "new_defects": [],
+  "not_executed": [
+    "model_quality",
+    "real_corpus",
+    "independent_holdout",
+    "browser",
+    "native_host_independent_retest"
+  ],
+  "pending": [
+    "non_author_approved",
+    "applicable_owner_signoff",
+    "real_exploration",
+    "product_adopted_taxonomy",
+    "independent_holdout"
+  ],
+  "raw_evidence": "var/qa-m5-0b-independent/",
+  "feishu": {
+    "input": {
+      "prd": 316,
+      "technical": 321
+    },
+    "verified_after": {
+      "prd": 317,
+      "technical": 323
+    },
+    "history_and_links_preserved": true
+  }
+}

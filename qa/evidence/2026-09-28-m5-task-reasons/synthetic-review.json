@@ -1,0 +1,145 @@
+{
+  "scope": "developer_synthetic_contract_validation",
+  "input_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+  "model_called": false,
+  "quality_metrics": null,
+  "holdout_status": "not_established",
+  "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+  "cases": [
+    {
+      "case_id": "interface_preservation",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 9,
+      "supplied_selection": {
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.interface_changed"
+        ],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    },
+    {
+      "case_id": "mixed_task",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 9,
+      "supplied_selection": {
+        "candidate_set_id": "0c014d22abcaf8b7e123ca195ea4da1d726219a8e1894cf67ef5f244c907b1a2",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.behavior_changed",
+          "general.style"
+        ],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    },
+    {
+      "case_id": "negative_constraint",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 9,
+      "supplied_selection": {
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.scope_exceeded"
+        ],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    },
+    {
+      "case_id": "missing_material",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 5,
+      "supplied_selection": {
+        "candidate_set_id": "02408c0da1d319307923f0a413de823bf005e879c2d1a439664e0cae0b792eb7",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "unknown",
+        "reason_ids": [],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    },
+    {
+      "case_id": "no_matching_reason",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 9,
+      "supplied_selection": {
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "no_match",
+        "reason_ids": [],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    },
+    {
+      "case_id": "cross_task_fallback",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 9,
+      "supplied_selection": {
+        "candidate_set_id": "71f25daadc87b02a132c6f137fc9bc58f18b4d0b869cdd805bf4c2e786bb8664",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.interface_changed"
+        ],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    },
+    {
+      "case_id": "requested_snippet_counterexample",
+      "validation": "passed",
+      "routed": 11,
+      "selectable": 9,
+      "supplied_selection": {
+        "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684",
+        "package_version": "m5-task-reasons-v1",
+        "criteria_version": "m5-task-criteria-v1",
+        "template_version": "m5-task-templates-v1",
+        "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "outcome": "no_match",
+        "reason_ids": [],
+        "selection_origin": "caller_supplied",
+        "confirmation_status": "unconfirmed",
+        "scope": "offline_only"
+      }
+    }
+  ]
+}
