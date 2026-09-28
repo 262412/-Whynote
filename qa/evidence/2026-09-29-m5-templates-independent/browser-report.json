@@ -1,0 +1,595 @@
+{
+  "metric_version": "s1-research-v1",
+  "scope": "synthetic_development_only",
+  "since": "2026-09-01T00:00:00+00:00",
+  "as_of": "2026-09-28T16:00:14.843074+00:00",
+  "boundary": "since <= first_eligible_at <= as_of; feedback observed through as_of",
+  "denominator_policy": "historically_eligible; invalidation does not remove answers",
+  "participant_count": 1,
+  "untracked_attempt_count_through_cutoff": 0,
+  "attempt_status_counts_in_interval": {
+    "eligible": 1
+  },
+  "unmatched_actions_in_interval": 0,
+  "groups": {
+    "self_natural": {
+      "eligible_answers": 0,
+      "negative_answers": 0,
+      "negative_answer_rate": null,
+      "actor_roles": {},
+      "public_label_origins": {},
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {},
+      "displayed_actions": 0,
+      "display_coverage": null,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-28T16:00:14.843074+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": false,
+        "filled_numerator": 0,
+        "fill_rate": null,
+        "window_status_counts": {},
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 0
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 0,
+        "displayable": 0,
+        "render_reported": 0,
+        "valid_response": 0,
+        "confirmed": 0,
+        "render_rate": null,
+        "response_rate": null,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 0,
+        "outcome_counts": {},
+        "status_counts": {},
+        "operation_counts": {},
+        "invalidated": 0,
+        "retracted_action_count": 0,
+        "strata": [],
+        "current_confirmations": {},
+        "rows": [],
+        "response_timings": [],
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {}
+      },
+      "strata": [],
+      "attempt_status_counts_in_interval": {}
+    },
+    "scripted": {
+      "eligible_answers": 1,
+      "negative_answers": 1,
+      "negative_answer_rate": 1.0,
+      "actor_roles": {
+        "self_report": 1
+      },
+      "public_label_origins": {
+        "none": 1
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 1,
+        "model_revision": 1,
+        "patch_sha256": 1,
+        "pricing_version": 1
+      },
+      "displayed_actions": 1,
+      "display_coverage": 0.5,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 1,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-28T16:00:14.843074+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": true,
+        "filled_numerator": 1,
+        "fill_rate": 0.5,
+        "window_status_counts": {
+          "retracted": 1,
+          "selected": 1
+        },
+        "retracted_action_count": 1,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 1,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 1,
+          "median": 7886.3640000000005,
+          "p90": 7886.3640000000005,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {
+          "missing": 1
+        },
+        "action_count": 2
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 2,
+        "displayable": 2,
+        "render_reported": 2,
+        "valid_response": 2,
+        "confirmed": 1,
+        "render_rate": 1.0,
+        "response_rate": 1.0,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 0,
+        "outcome_counts": {
+          "suggested": 2
+        },
+        "status_counts": {
+          "responded": 2
+        },
+        "operation_counts": {
+          "yes": 1,
+          "correct": 1,
+          "none_matched": 1
+        },
+        "invalidated": 0,
+        "retracted_action_count": 1,
+        "strata": [
+          {
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-template-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "generated": 2,
+            "displayable": 2,
+            "render_reported": 2,
+            "valid_response": 2
+          }
+        ],
+        "current_confirmations": {
+          "1d5240af-4b80-4d2b-87eb-9671358cdb0e": {
+            "reason_id": null,
+            "source": "none",
+            "status": "action_retracted",
+            "response_id": null,
+            "last_response_id": "bf9f8165-9026-4959-9e75-e9e2022d052b"
+          },
+          "2cf89fa2-d4f4-4dda-83a2-e53910dea09c": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": "e752d9b7-4ced-420b-adc6-f17a1888807a"
+          }
+        },
+        "rows": [
+          {
+            "event_id": "1d5240af-4b80-4d2b-87eb-9671358cdb0e",
+            "suggestion_id": "b028b792-316f-4c3c-9d0d-d8f3c1855ca2",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": true,
+            "operations": {
+              "yes": 1,
+              "correct": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-template-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": true,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "2cf89fa2-d4f4-4dda-83a2-e53910dea09c",
+            "suggestion_id": "2db6a7de-0aa4-423c-9689-037e8e1395a7",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": false,
+            "operations": {
+              "none_matched": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-template-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          }
+        ],
+        "response_timings": [
+          {
+            "active_ms": 3602.39999999851,
+            "server_total_ms": 3654.2859077453613,
+            "timing_status": "client_reported"
+          },
+          {
+            "active_ms": 10377.39999999851,
+            "server_total_ms": 10430.232763290405,
+            "timing_status": "client_reported"
+          },
+          {
+            "active_ms": 4009.0999999940395,
+            "server_total_ms": 4034.3782901763916,
+            "timing_status": "client_reported"
+          }
+        ],
+        "active_ms": {
+          "n": 3,
+          "median": 4009.0999999940395,
+          "p90": 10377.39999999851,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 3,
+          "median": 4034.3782901763916,
+          "p90": 10430.232763290405,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {
+          "client_reported": 3
+        }
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 1,
+          "negative_answers": 1
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 1
+      }
+    },
+    "public_replay": {
+      "eligible_answers": 0,
+      "negative_answers": 0,
+      "negative_answer_rate": null,
+      "actor_roles": {},
+      "public_label_origins": {},
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {},
+      "displayed_actions": 0,
+      "display_coverage": null,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": "not_applicable",
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-28T16:00:14.843074+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": false,
+        "filled_numerator": 0,
+        "fill_rate": null,
+        "window_status_counts": {},
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 0
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 0,
+        "displayable": 0,
+        "render_reported": 0,
+        "valid_response": 0,
+        "confirmed": 0,
+        "render_rate": null,
+        "response_rate": null,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 0,
+        "outcome_counts": {},
+        "status_counts": {},
+        "operation_counts": {},
+        "invalidated": 0,
+        "retracted_action_count": 0,
+        "strata": [],
+        "current_confirmations": {},
+        "rows": [],
+        "response_timings": [],
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {}
+      },
+      "strata": [],
+      "attempt_status_counts_in_interval": {}
+    },
+    "missing": {
+      "eligible_answers": 0,
+      "negative_answers": 0,
+      "negative_answer_rate": null,
+      "actor_roles": {},
+      "public_label_origins": {},
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {},
+      "displayed_actions": 0,
+      "display_coverage": null,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-28T16:00:14.843074+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": false,
+        "filled_numerator": 0,
+        "fill_rate": null,
+        "window_status_counts": {},
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 0
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 0,
+        "displayable": 0,
+        "render_reported": 0,
+        "valid_response": 0,
+        "confirmed": 0,
+        "render_rate": null,
+        "response_rate": null,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 0,
+        "outcome_counts": {},
+        "status_counts": {},
+        "operation_counts": {},
+        "invalidated": 0,
+        "retracted_action_count": 0,
+        "strata": [],
+        "current_confirmations": {},
+        "rows": [],
+        "response_timings": [],
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {}
+      },
+      "strata": [],
+      "attempt_status_counts_in_interval": {}
+    }
+  },
+  "answers": [
+    {
+      "attempt_id": "e861c51d-5a61-4347-9787-45f5c3b31b27",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "8f1844a8-9613-5eae-aa68-e9e8ee39d058/fbfb5a17-cb84-5fec-9b87-d0aaca49909f",
+        "object_version": "s1v1-4fa108729a881ad7eca1ca9e12d548f73577552774e64a3daf5fef1698d4afe0"
+      },
+      "eligible_at": 1790611114.15763,
+      "registration_id": "eba9d45f-4b37-5d86-83be-b4826cbb3bd8",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "8f1844a8-9613-5eae-aa68-e9e8ee39d058",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "1d5240af-4b80-4d2b-87eb-9671358cdb0e",
+        "2cf89fa2-d4f4-4dda-83a2-e53910dea09c"
+      ]
+    }
+  ],
+  "snapshot_sha256": "652bc80b291e2ce31c843900b3e313f61641138646aa8c0d0115ea54c7ee6561"
+}

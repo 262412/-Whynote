@@ -1,0 +1,73 @@
+{
+  "business_commit": "54744965f85843165ff00134930b782135d16504",
+  "main": "3f4c9e898f82ece7bf8f428c99ade050b334b8b7",
+  "input_revisions": {
+    "prd": 361,
+    "technical": 361
+  },
+  "baseline": {
+    "passed": 653,
+    "failed": 0
+  },
+  "independent": {
+    "passed": 22,
+    "failed": 1
+  },
+  "native": {
+    "passed": 80,
+    "failed": 0,
+    "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d"
+  },
+  "native_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "browser": {
+    "scope": "real IAB browser with synthetic host records; actual Action and dialog JS",
+    "event_counts": {
+      "action_retracted": 1,
+      "m52_render_reported": 2,
+      "m52_response_recorded": 3,
+      "m52_suggestion_generated": 2,
+      "negative_feedback_action_recorded": 2,
+      "reason_displayed": 1,
+      "reason_selected": 1
+    },
+    "outbox": 3,
+    "replay_identical": true,
+    "db_bytes_unchanged": true,
+    "db_sha256": "b02ce4e28bd7f4ee8621178df082d8e9a1ba5988cb6df3e341c7b469a37cb320"
+  },
+  "open_defect": {
+    "id": "Q-27",
+    "severity": "P2",
+    "received_at": 1788220859.5,
+    "expires_at": 1788220860.0,
+    "checked_at": 1788220860.5,
+    "result": "superseded",
+    "events": [
+      "negative_feedback_action_recorded",
+      "m52_suggestion_generated"
+    ],
+    "outbox": 1,
+    "expected_render_reported": 1,
+    "actual_render_reported": 0
+  },
+  "full": {
+    "passed": 675,
+    "failed": 1
+  },
+  "ruff": "passed",
+  "js_syntax": "passed",
+  "source_wheel_verified": {
+    "suggestions.py": "7e8b0a446271d6c962f23058080c3eca66c939633d3657423ada43d769a75d4e",
+    "template_suggestions.py": "0e5b0075ce9d928dbeff40367dd2864dc5880aa5f9f819c5fa304102743e98eb",
+    "research.py": "59c4fc253fbc5dd0ee071924cf3884bdd578f4ec08799d5ed3b42d3fd2418d05",
+    "research_report.py": "767e73ead9906cfd408bf87deaa607c8a80bc2843dd1b11905781fe111b107ab",
+    "s1_host.py": "90f40f4cd9d06498e317a7860044f5211072bab543e15364ac49839b64a89ad7"
+  },
+  "output_revisions": {
+    "prd": 371,
+    "technical": 370
+  }
+}
