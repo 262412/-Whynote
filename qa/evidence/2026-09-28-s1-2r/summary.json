@@ -1,0 +1,35 @@
+{
+  "base": "47212fb058b3769bfb9a922fe33dbc7fad3e9e79",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "scope": "Developer synthetic host retest; no live cloud or independent QA",
+  "native_passed": 75,
+  "http_passed": 47,
+  "browser_operations": [
+    "login",
+    "generate",
+    "select",
+    "edit",
+    "retract"
+  ],
+  "browser_actions": 1,
+  "browser_outbox_topics": [
+    "feedback.action.retracted",
+    "feedback.gate.requested"
+  ],
+  "browser_event_types": [
+    "negative_feedback_action_recorded",
+    "reason_displayed",
+    "reason_selected",
+    "reason_displayed",
+    "reason_edited",
+    "action_retracted"
+  ],
+  "browser_generation_status": "completed",
+  "browser_reserved_micro": 4008192,
+  "browser_settled_micro": null,
+  "raw_text_in_receipt_database": false,
+  "browser_network_trace": false,
+  "cloud_requests": 0,
+  "private_key_value_read": false,
+  "independent_acceptance": false
+}
