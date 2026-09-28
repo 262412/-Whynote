@@ -1,0 +1,1 @@
+[{"context": [{"role": "user", "content": "只改写函数，不改签名。"}], "response1": "def changed_name(): pass", "response2": "def unchanged_name(): pass", "feedback1": ["SYNTHETIC_FEEDBACK_ONE", "SYNTHETIC_FEEDBACK_TWO"], "feedback2": ["SYNTHETIC_FEEDBACK_THREE"], "language": "python", "edit": "FUTURE_EDIT_MUST_NOT_LEAK"}]
