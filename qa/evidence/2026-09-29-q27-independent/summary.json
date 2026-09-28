@@ -1,0 +1,65 @@
+{
+  "tested_commit": "fbd24ca3162f7af4b1252655bd3fd3c69e67d0b5",
+  "main": "3f4c9e898f82ece7bf8f428c99ade050b334b8b7",
+  "input_revisions": {
+    "prd": 377,
+    "technical": 375
+  },
+  "test_suites": {
+    "focused": {
+      "passed": 46,
+      "failed": 0,
+      "failures": []
+    },
+    "full": {
+      "passed": 699,
+      "failed": 0,
+      "failures": []
+    },
+    "native": {
+      "passed": 80,
+      "failed": 0,
+      "failures": []
+    }
+  },
+  "wheel_source_sha256": {
+    "suggestions.py": "6a38358c34265b1735e0e90131b573232ba31445e75a663c841945c047eb2f68",
+    "template_suggestions.py": "0e5b0075ce9d928dbeff40367dd2864dc5880aa5f9f819c5fa304102743e98eb",
+    "research.py": "59c4fc253fbc5dd0ee071924cf3884bdd578f4ec08799d5ed3b42d3fd2418d05",
+    "research_report.py": "767e73ead9906cfd408bf87deaa607c8a80bc2843dd1b11905781fe111b107ab",
+    "s1_host.py": "90f40f4cd9d06498e317a7860044f5211072bab543e15364ac49839b64a89ad7"
+  },
+  "original_independent_test_and_evidence_unchanged": true,
+  "q27": {
+    "arrival": 1788220859.5,
+    "expiry": 1788220860.0,
+    "after_recheck": 1788220860.5,
+    "result": "fallback",
+    "outbox": 1,
+    "event_types": [
+      "negative_feedback_action_recorded",
+      "m52_suggestion_generated",
+      "m52_render_reported",
+      "reason_displayed",
+      "reason_menu_closed"
+    ],
+    "research_confirmation_count": 0,
+    "receipt_recorded": true
+  },
+  "scope": {
+    "mock_only": true,
+    "fresh_browser_test": false,
+    "real_model_or_user_trial": false,
+    "business_code_modified_by_qa": false
+  },
+  "output_revisions": {
+    "prd": 387,
+    "tech": 384
+  },
+  "native_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "ruff": "passed",
+  "original_test_sha256": "ee671a70461d1c394bac6948133da31fa64edf12aedd66b802c180707d852d64"
+}
