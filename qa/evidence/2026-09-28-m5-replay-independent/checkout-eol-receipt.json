@@ -1,0 +1,12 @@
+{
+  "path": "fixtures/m5-task-reasons/exploration.json",
+  "before_sha256": "d650da6c19b4458fd737584f434612d27bc3ce5fdd3476bb4cd1979cd285a6ec",
+  "head_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+  "only_crlf_difference": true,
+  "initial_tests": {
+    "passed": 492,
+    "failed": 25
+  },
+  "initial_cli_exit": 1,
+  "initial_cli_error": "file_hash_mismatch"
+}

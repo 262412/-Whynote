@@ -1,0 +1,120 @@
+{
+  "tested_commit": "85c09b9b5d38cf0578eda90f72047f1ba21ef401",
+  "scope": "real_local_backend_budget_probe_not_quality",
+  "backend": {
+    "status": "ready",
+    "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+    "files_sha256": {
+      "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+      "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+      "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+      "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+      "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+    },
+    "network_disabled": true,
+    "runtime": {
+      "laya": "0.3.21",
+      "torch": "2.11.0+cu128",
+      "transformers": "4.57.6"
+    },
+    "device": "cuda",
+    "hardware": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "load_ms": 6239.104,
+    "backend": "laya_local"
+  },
+  "worker_terminated": true,
+  "cases": [
+    {
+      "case": "700_tokens",
+      "input_sha256": "82ccde85077ead9e08ea3766eff32b024cb4aa1c14fb209346321714ff4066bf",
+      "utf8_bytes": 3499,
+      "expected_error": null,
+      "status": "ok",
+      "budget": {
+        "state_tokens": 700,
+        "questions": {
+          "route": {
+            "instructions": 17,
+            "options": [
+              7,
+              7,
+              7,
+              4,
+              8
+            ]
+          }
+        }
+      },
+      "answers": {
+        "route": {
+          "choice": "unknown",
+          "probabilities": {
+            "code_rewrite": 0.1825,
+            "general": 0.1216,
+            "mixed": 0.2134,
+            "other": 0.1467,
+            "unknown": 0.3358
+          }
+        }
+      }
+    },
+    {
+      "case": "701_tokens",
+      "input_sha256": "5232e0ae2bd7f5c40db52e0f7254023a4e4be5f01aeec13277236bed949b5ef6",
+      "utf8_bytes": 3504,
+      "expected_error": "input_tokens_exceeded",
+      "status": "rejected",
+      "error": "input_tokens_exceeded"
+    },
+    {
+      "case": "reserved_token",
+      "input_sha256": "ef6c747344b3c5ec593e127786c46942cb0618f5d073d5fb830abe003d2f2146",
+      "utf8_bytes": 5,
+      "expected_error": "reserved_token",
+      "status": "rejected",
+      "error": "reserved_token"
+    },
+    {
+      "case": "8193_bytes",
+      "input_sha256": "e5c8309afda18ec4ec225ada92dab2d5768f7d845d8cebf2b9968392a6bfd6de",
+      "utf8_bytes": 8193,
+      "expected_error": "input_bytes_exceeded",
+      "status": "rejected",
+      "error": "input_bytes_exceeded"
+    },
+    {
+      "case": "valid_after_rejections",
+      "input_sha256": "c6b576d243a3522042322d96fc746c79ef8bc6f370d958b2dba04d511a094c56",
+      "utf8_bytes": 35,
+      "expected_error": null,
+      "status": "ok",
+      "budget": {
+        "state_tokens": 6,
+        "questions": {
+          "route": {
+            "instructions": 17,
+            "options": [
+              7,
+              7,
+              7,
+              4,
+              8
+            ]
+          }
+        }
+      },
+      "answers": {
+        "route": {
+          "choice": "unknown",
+          "probabilities": {
+            "code_rewrite": 0.0272,
+            "general": 0.0264,
+            "mixed": 0.0256,
+            "other": 0.0572,
+            "unknown": 0.8636
+          }
+        }
+      }
+    }
+  ]
+}
