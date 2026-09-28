@@ -1,0 +1,74 @@
+{
+  "date": "2026-09-28",
+  "scope": "developer generation failure diagnosis; no acceptance claim",
+  "before": {
+    "scope": "explicit synthetic diagnostic generation",
+    "attempt_id": "a49a3fe1-34a0-4373-b9d7-e92ac5469671",
+    "bytes": 262146,
+    "lines": 1815,
+    "finish_reasons": [],
+    "usage_seen": false,
+    "model_mismatch": false,
+    "generic_error": true,
+    "done": false
+  },
+  "after": {
+    "scope": "explicit synthetic diagnostic generation",
+    "attempt_id": "a8cf1e9d-05ad-463e-b8a1-4ecccc04e02a",
+    "bytes": 295592,
+    "lines": 2051,
+    "finish_reasons": [
+      "length"
+    ],
+    "usage_seen": true,
+    "model_mismatch": false,
+    "generic_error": false,
+    "length_error": true,
+    "done": false
+  },
+  "generations": [
+    {
+      "attempt_id": "f80f765e-3106-493b-9794-4ff289f92522",
+      "chat_id": "a7ccacf0-5469-4e8b-a2b5-3ee5239ec1da",
+      "status": "completed",
+      "prompt_tokens": 42,
+      "completion_tokens": 12,
+      "reserved_micro": 4008192,
+      "settled_micro": 180
+    },
+    {
+      "attempt_id": "a8cf1e9d-05ad-463e-b8a1-4ecccc04e02a",
+      "chat_id": "76c9e730-96d6-4555-b135-f9c5550f6b44",
+      "status": "incomplete",
+      "prompt_tokens": 60,
+      "completion_tokens": 1024,
+      "reserved_micro": 4008192,
+      "settled_micro": 8312
+    },
+    {
+      "attempt_id": "a49a3fe1-34a0-4373-b9d7-e92ac5469671",
+      "chat_id": "8a07ffae-ae94-463c-b56a-904bea67d52c",
+      "status": "incomplete",
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "reserved_micro": 4008192,
+      "settled_micro": null
+    },
+    {
+      "attempt_id": "e02ac433-6565-49ed-9517-220154f4b8c2",
+      "chat_id": "d0e63da3-76f0-413f-8aff-92cfdd54be3c",
+      "status": "incomplete",
+      "prompt_tokens": null,
+      "completion_tokens": null,
+      "reserved_micro": 4008192,
+      "settled_micro": null
+    }
+  ],
+  "tests": {
+    "core": 305,
+    "native": 77,
+    "ruff": "passed"
+  },
+  "old_unknown_reservations": "retained; no retry or reset",
+  "browser_short_answer": "completed after service restart"
+}

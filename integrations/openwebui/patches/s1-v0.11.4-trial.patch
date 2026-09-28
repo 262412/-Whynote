@@ -82,14 +82,14 @@
  		}).catch((error) => {
  			toast.error(`${error}`);
 -			messages.at(-1).error = { content: error };
-+			if (!['whynote_s1_action', 'whynote_s1_retract_action'].includes(actionId)) {
++			if (!['whynote_s1_action', 'whynote_s1_retract_action', 'whynote_laya_action'].includes(actionId)) {
 +				messages.at(-1).error = { content: error };
 +			}
  			return null;
  		});
  
 +		// S1 feedback changes the event ledger, never the saved generation.
-+		if (['whynote_s1_action', 'whynote_s1_retract_action'].includes(actionId)) return;
++		if (['whynote_s1_action', 'whynote_s1_retract_action', 'whynote_laya_action'].includes(actionId)) return;
 +
  		if (res !== null && res.messages) {
  			// Update chat history with the new messages

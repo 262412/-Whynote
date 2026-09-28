@@ -1,0 +1,28 @@
+{
+  "base": "14e1141",
+  "scope": "Developer live DeepSeek / local Laya / browser integration test; user explicitly requested",
+  "cloud_generations": 1,
+  "cloud_input_tokens": 36,
+  "cloud_output_tokens": 18,
+  "conservative_cost_micro_cny": 216,
+  "supplier_bill_verified": false,
+  "laya_suggestion": "instruction_not_followed",
+  "model_quality_pass": false,
+  "events": [
+    "negative_feedback_action_recorded",
+    "reason_displayed",
+    "reason_selected",
+    "reason_displayed",
+    "reason_none_matched",
+    "action_retracted"
+  ],
+  "actions": 1,
+  "outbox": 2,
+  "after_retraction_laya_rejected": true,
+  "research_enabled": false,
+  "independent_qa": false,
+  "notes": [
+    "First browser menu expired; action was retained, no reason fabricated. Browser automation pointer interactions unreliable; focused keyboard operation succeeded.",
+    "Initial native rerun failed at patch application because patch was accidentally written as CRLF; restored LF and reran."
+  ]
+}

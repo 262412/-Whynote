@@ -19,9 +19,21 @@ ROOT = Path(__file__).parents[3]
 
 
 @pytest.mark.parametrize(
-    "case", ["stop", "length", "no_done", "invalid_json", "tools", "timeout", "redirect", "wrong_model"]
+    "case",
+    [
+        "stop",
+        "length",
+        "no_done",
+        "invalid_json",
+        "tools",
+        "timeout",
+        "redirect",
+        "wrong_model",
+        "large_sse",
+        "oversized_sse",
+    ],
 )
-def test_provider_validation_and_safe_errors(tmp_path, case):
+def test_provider_validation_and_safe_errors(tmp_path, case, caplog):
     from whynote.s1_provider import complete_response
 
     config = dict(
@@ -39,6 +51,15 @@ def test_provider_validation_and_safe_errors(tmp_path, case):
 
     class Content:
         async def __aiter__(self):
+            if case in ("large_sse", "oversized_sse"):
+                # Per-token JSON metadata alone can exceed the former 256 KiB cap.
+                for _ in range(1024 if case == "large_sse" else 4096):
+                    chunk = {
+                        "model": "deepseek-flash",
+                        "id": "x" * 200,
+                        "choices": [{"delta": {"content": "x"}, "finish_reason": None}],
+                    }
+                    yield ("data: " + json.dumps(chunk) + "\n\n").encode()
             if case == "invalid_json":
                 yield b"data: {not-json-secret\n"
                 return
@@ -84,13 +105,23 @@ def test_provider_validation_and_safe_errors(tmp_path, case):
         response = await complete_response(session, config, store, attempt, "synthetic-private-key", [])
         output = "".join([chunk async for chunk in response.body_iterator])
         assert "secret" not in output and "synthetic-private-key" not in output
-        assert ("[DONE]" in output) == (case == "stop")
+        successful = case in ("stop", "large_sse")
+        assert ("[DONE]" in output) == successful
+        assert "secret" not in caplog.text
+        expected_errors = {
+            "length": ("length", "1024 token"),
+            "timeout": ("timeout", "超时"),
+            "oversized_sse": ("stream_limit", "传输大小上限"),
+        }
+        if case in expected_errors:
+            code, message = expected_errors[case]
+            assert f"code={code}" in caplog.text and message in output
         assert session.calls == 1
         assert session.response.closed == (case != "timeout")
         with store._transaction() as db:
             row = db.execute("SELECT * FROM s1_generations").fetchone()
-            assert row["status"] == ("awaiting_save" if case == "stop" else "incomplete")
-            if case in ("stop", "length", "no_done"):
+            assert row["status"] == ("awaiting_save" if successful else "incomplete")
+            if case in ("stop", "large_sse", "length", "no_done"):
                 assert row["settled_micro"] == 60
             else:
                 assert row["settled_micro"] is None
