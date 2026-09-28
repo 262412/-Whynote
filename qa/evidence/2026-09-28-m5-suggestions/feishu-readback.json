@@ -133,11 +133,12 @@
     "document": "tech",
     "selector": "doxc6uOkrEQYU9i3R3JP2XUTn1f",
     "old_block_id": "doxc6uOkrEQYU9i3R3JP2XUTn1f",
-    "new_block_id": "doxc6o4k87UBHCO9kYOeNgo7Dvg",
+    "new_block_id": "doxc6svHSVWaBcW41dZEbTdWdKd",
     "revision_before": 338,
     "revision_after": 339,
     "exact_text_readback": true,
-    "historical_links_preserved": true
+    "historical_links_preserved": true,
+    "identity_verified_by": "field_table_status_column"
   },
   {
     "document": "tech",
@@ -146,6 +147,26 @@
     "new_block_id": "doxc6Qtgecbfy0GxhlfRdgw0UEe",
     "revision_before": 339,
     "revision_after": 340,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "idempotency_fix_semantic",
+    "old_block_id": "doxc6raqq2PqNIeaYfvkUMWiFIb",
+    "new_block_id": "doxc6PKSS9gmESoZYYR7nMiHywg",
+    "revision_before": 341,
+    "revision_after": 342,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "idempotency_fix_semantic",
+    "old_block_id": "doxc6o4k87UBHCO9kYOeNgo7Dvg",
+    "new_block_id": "doxc69ZaXzdwC7xDT6lcpKr2oDc",
+    "revision_before": 340,
+    "revision_after": 341,
     "exact_text_readback": true,
     "historical_links_preserved": true
   }
