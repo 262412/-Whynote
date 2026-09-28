@@ -1,0 +1,26 @@
+{
+  "saved": true,
+  "receipt": "awaiting_save",
+  "saved_at": null,
+  "candidate_index_count": 1,
+  "eligible_receipts": 0,
+  "budget_preserved": true,
+  "feedback_refused": true,
+  "feedback_status": 400,
+  "actions_events_outbox_unchanged": true,
+  "final_websocket_event": true,
+  "scope": "real login HTTP/WebSocket; synthetic provider; entry left disabled",
+  "tested_commit": "f341a742b3d252a7805406ace6802bb1c66b8002",
+  "independent_counts": {
+    "actions": 0,
+    "events": 0,
+    "outbox": 0,
+    "s1_current": 1
+  },
+  "reserved_micro": 4008192,
+  "settled_micro": null,
+  "core_passed": 209,
+  "native_passed": 72,
+  "prd_read_revision": 264,
+  "tech_read_revision": 261
+}
