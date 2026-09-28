@@ -1,8 +1,10 @@
 import copy
 import hashlib
 import json
+import multiprocessing
 import shutil
 import sys
+import time
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -102,6 +104,31 @@ def test_source_corruption_does_not_suppress_other_sources(tmp_path):
     assert len(samples) == 10
     assert inputs["source_report"]["sources"][0]["reason"] == "file_hash_mismatch"
     assert "SENSITIVE" not in json.dumps(inputs)
+
+
+def test_all_sources_held_writes_report_without_loading_model(tmp_path, monkeypatch):
+    manifest_path = copied_manifest(tmp_path)
+    batch_path = tmp_path / "m5-synthetic/batch.json"
+    batch = json.loads(batch_path.read_bytes())
+    for source in batch["sources"]:
+        source["status"] = "HOLD"
+    batch_path.write_text(json.dumps(batch), encoding="utf-8")
+    manifest = json.loads(manifest_path.read_bytes())
+    manifest.update(exploration_path=None, exploration_sha256=None)
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    pin(manifest_path, "source_batch")
+    monkeypatch.setattr(replay, "LayaReplay", lambda *a, **kw: pytest.fail("model loaded without eligible data"))
+    output = tmp_path / "run"
+    assert (
+        replay.main(
+            ["--manifest", str(manifest_path), "--output", str(output), "--model-dir", "unused", "--enable-local-model"]
+        )
+        == 2
+    )
+    report = json.loads((output / "report.json").read_text(encoding="utf-8"))
+    assert report["sample_count"] == 0 and report["backend"]["model_loaded"] is False
+    assert all(s["status"] == "HOLD" for s in report["source_mapping"]["sources"])
+    assert (output / "predictions.jsonl").read_bytes() == b""
 
 
 def test_a_keeps_old_interface_b_single_domain_c_can_recover_across_tasks():
@@ -251,6 +278,23 @@ def test_timeout_terminates_worker_and_prevents_followup_send():
     assert calls == ["terminated", "closed"]
     with pytest.raises(ReplayError, match="^backend_unavailable$"):
         backend.predict("secret", {})
+
+
+def test_timeout_reaps_an_actual_dedicated_process():
+    context = multiprocessing.get_context("spawn")
+    backend = object.__new__(LayaReplay)
+    backend.connection, peer = context.Pipe()
+    backend.alive, backend.timeout = True, 0.01
+    backend.process = context.Process(target=time.sleep, args=(30,), daemon=True)
+    backend.process.start()
+    try:
+        with pytest.raises(ReplayError, match="^timeout$"):
+            backend._receive()
+        assert not backend.process.is_alive()
+        assert backend.process.exitcode is not None
+    finally:
+        peer.close()
+        backend.close()
 
 
 @pytest.mark.parametrize(

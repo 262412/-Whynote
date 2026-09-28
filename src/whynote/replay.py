@@ -224,7 +224,7 @@ def load_samples(manifest_path):
             )
     else:
         require(manifest["exploration_sha256"] is None, "invalid_replay_manifest")
-    require(0 < len(samples) <= PROTOCOL["max_samples"], "invalid_sample_count")
+    require(len(samples) <= PROTOCOL["max_samples"], "invalid_sample_count")
     require(len({s["input_id"] for s in samples}) == len(samples), "duplicate_sample")
     return samples, {
         "manifest_sha256": hashlib.sha256(raw).hexdigest(),
@@ -474,10 +474,13 @@ def main(argv=None):
         require(args.enable_local_model, "model_disabled")
         require(not args.output.exists(), "output_exists")
         samples, inputs = load_samples(args.manifest)
-        try:
-            backend = LayaReplay(args.model_dir, device=args.device, enabled=True)
-        except ReplayError as exc:
-            backend = UnavailableBackend(str(exc))
+        if not samples:
+            backend = UnavailableBackend("no_eligible_samples")
+        else:
+            try:
+                backend = LayaReplay(args.model_dir, device=args.device, enabled=True)
+            except ReplayError as exc:
+                backend = UnavailableBackend(str(exc))
         report = run_replay(samples, inputs, args.output, backend)
         print(json.dumps({"status": "completed", "run_id": report["run_id"], "samples": len(samples)}))
         return (
