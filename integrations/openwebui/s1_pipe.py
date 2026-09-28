@@ -10,6 +10,7 @@ import uuid
 
 from whynote.domain import NotFoundError
 from whynote.provider_keys import load_provider_key
+from whynote.research import BROWSER_FIELDS
 from whynote.s1 import PIPE_ID, TrialStore, generation_input, load_config
 from whynote.s1_provider import complete_response
 
@@ -32,6 +33,8 @@ class Pipe:
         ):
             raise NotFoundError("S1 authenticated text task is required")
         metadata = __metadata__ or {}
+        if BROWSER_FIELDS & (set(body) | set(metadata)):
+            raise NotFoundError("S1 source registration is server controlled")
         if any(metadata.get(k) for k in ("files", "tools", "tool_ids", "tool_servers", "assistant_message_id")):
             raise NotFoundError("S1 supports text generation only")
         if any(metadata.get("features", {}).values()):

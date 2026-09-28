@@ -7,6 +7,7 @@ from pathlib import Path
 from starlette.responses import JSONResponse
 
 from .domain import NotFoundError
+from .research import BROWSER_FIELDS
 from .s1 import PIPE_ID, TrialStore, load_config
 
 
@@ -15,6 +16,10 @@ def invalidate_chat(chat_id, *, revoke=False):
     if path:
         # Deletion must also work with the entry disabled. Never enable outbound.
         config = json.loads(Path(path).read_text(encoding="utf-8"))
+        # A stopped/misconfigured research entry must not prevent host deletion.
+        # Cleanup only appends invalidation for attempts already tracked.
+        config["research_enabled"] = False
+        config.pop("research_versions", None)
         TrialStore(config).invalidate(chat_id, revoke=revoke)
 
 
@@ -107,6 +112,7 @@ class TrialBoundary:
                     or data.get("files")
                     or any(data.get("features", {}).values())
                     or data.get("filter_ids")
+                    or bool(BROWSER_FIELDS & set(data))
                 ):
                     raise ValueError("unsupported S1 generation")
                 item = data.pop("model_item", None)

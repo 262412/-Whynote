@@ -1,0 +1,72 @@
+{
+  "tested_commit": "3d2a5c741bd317955f323f412d418083a9252776",
+  "main": "5ee95c543b3944b1d65e7a9d517ed610e094c5bb",
+  "prd": 275,
+  "technical": 275,
+  "core_passed": 297,
+  "native_passed": 75,
+  "added_independent_passed": 8,
+  "fixed_snapshot_sha256": "9c76759875d9e5b9f1b786cd39aee5337b41c413bc250900d57917b1073c9012",
+  "report_cli_readonly": true,
+  "registration_cli_retry_no_change": true,
+  "database_sha256": "e3f4c747b76c030b6132d520990903709ea3be164db4738a0a0f4ba6920b6756",
+  "groups": {
+    "self_natural": {
+      "eligible_answers": 2,
+      "negative_answers": 1,
+      "actor_roles": {
+        "self_report": 2
+      },
+      "invalidated_eligible_answers": 2
+    },
+    "scripted": {
+      "eligible_answers": 3,
+      "negative_answers": 3,
+      "actor_roles": {
+        "self_report": 3
+      },
+      "invalidated_eligible_answers": 0
+    },
+    "public_replay": {
+      "eligible_answers": 2,
+      "negative_answers": 2,
+      "actor_roles": {
+        "evaluator": 2
+      },
+      "invalidated_eligible_answers": 0
+    },
+    "missing": {
+      "eligible_answers": 1,
+      "negative_answers": 0,
+      "actor_roles": {
+        "unknown": 1
+      },
+      "invalidated_eligible_answers": 0
+    }
+  },
+  "http_browser": "NOT RUN: automatic approval rejected loopback service startup: blocked by policy; no specific reason",
+  "table_counts": {
+    "s1_research_sources": 3,
+    "s1_research_attempts": 11,
+    "s1_research_states": 35,
+    "s1_research_answers": 8,
+    "actions": 6,
+    "events": 23,
+    "outbox": 7
+  },
+  "outbox_by_topic": {
+    "feedback.action.retracted": 1,
+    "feedback.gate.requested": 6
+  },
+  "events_by_type": {
+    "action_retracted": 1,
+    "negative_feedback_action_recorded": 6,
+    "reason_declined": 1,
+    "reason_displayed": 8,
+    "reason_edited": 1,
+    "reason_menu_closed": 1,
+    "reason_none_matched": 1,
+    "reason_selected": 3,
+    "reason_skipped": 1
+  }
+}

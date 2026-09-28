@@ -9,6 +9,7 @@ import os
 
 from integrations.openwebui.s0_action import Action as FixtureAction
 from whynote.domain import NotFoundError
+from whynote.research import BROWSER_FIELDS
 from whynote.s1 import TrialStore, load_config
 
 
@@ -50,6 +51,8 @@ class Action(FixtureAction):
 
     def _target(self, chat, body):
         self._current_config()
+        if BROWSER_FIELDS & set(body):
+            raise NotFoundError("S1 source registration is server controlled")
         if chat is None or chat.user_id != self.config["user_id"]:
             raise NotFoundError("S1 chat is unavailable")
         return self.store.qualify(chat, body)
