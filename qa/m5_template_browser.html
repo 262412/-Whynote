@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><title>知因 M5-2b 合成验证</title></head>
+<body style="font:16px system-ui;max-width:800px;margin:40px auto;padding:20px;">
+<h1>知因 M5-2b 合成验证</h1><p>固定虚构代码案例。沿用单按钮动作，不调用云端或 Laya，不收集真实聊天。</p>
+<button id="downvote">点踩 / 撤销</button> <button id="report">读取报告</button>
+<p id="status" role="status">尚未点踩</p><pre id="result" style="white-space:pre-wrap"></pre>
+<script type="module">
+import {renderSuggestion,respondSuggestion,dismissSuggestion} from '/suggestion_dialog.js';
+const status=document.querySelector('#status'), result=document.querySelector('#result');
+async function api(path, method='GET', body) {
+ const response=await fetch('/api/'+path,{method,headers:{'x-fixture-token':'FIXTURE_TOKEN','Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});
+ if(response.status===204)return null;
+ if(!response.ok)throw new Error('合成请求未完成');
+ return response.json();
+}
+document.querySelector('#downvote').onclick=()=>api('click','POST').then(value=>{result.textContent=JSON.stringify(value,null,2)}).catch(error=>{status.textContent=error.message});
+document.querySelector('#report').onclick=()=>api('report').then(value=>{result.textContent=JSON.stringify(value.groups.scripted.suggestions,null,2)});
+async function handle(event){
+ if(event.type==='notification'){status.textContent=event.data.content;return;}
+ let response;
+ if(event.type==='whynote:suggestion-render')response=await renderSuggestion(event.data);
+ else if(event.type==='whynote:suggestion-response')response=await respondSuggestion(event.data);
+ else if(event.type==='whynote:suggestion-dismiss')response=dismissSuggestion(event.data.display_id);
+ else if(event.type==='input') {
+   // Reproduce the existing select contract using DOM text only; no default reason.
+   response=await new Promise(resolve=>{
+     const dialog=document.createElement('dialog'),label=document.createElement('h2'),select=document.createElement('select');
+     label.textContent='常规理由菜单';dialog.append(label);
+     const placeholder=document.createElement('option');placeholder.textContent='请选择';placeholder.value='';select.append(placeholder);
+     for(const item of event.data.input.options){const option=document.createElement('option');option.textContent=item.label;option.value=item.value;select.append(option);}
+     dialog.append(select);
+     for(const text of ['提交','关闭']){const button=document.createElement('button');button.textContent=text;button.onclick=()=>{if(text==='提交'&&!select.value)return;resolve(text==='提交'?select.value:false);dialog.remove();};dialog.append(button);}
+     dialog.oncancel=e=>{e.preventDefault();resolve(false);dialog.remove();};document.body.append(dialog);dialog.showModal();
+   });
+ }
+ await api('callback/'+event.id,'POST',response);
+}
+while(true){try{const event=await api('event');if(event)handle(event).catch(()=>{status.textContent='回调已过期或关闭';});}catch{status.textContent='合成服务断开';break;}}
+</script></body></html>

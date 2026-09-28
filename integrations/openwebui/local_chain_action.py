@@ -10,7 +10,7 @@ import uuid
 from urllib.parse import quote
 
 from integrations.openwebui.laya_action import Action as LayaAction
-from whynote.domain import NotFoundError, Principal
+from whynote.domain import ConflictError, NotFoundError, Principal
 
 icon_url = "data:image/svg+xml," + quote(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.8"'
@@ -23,7 +23,7 @@ class Action(LayaAction):
     icon_url = icon_url
     suggestion_message = "知因原因分析：{label}。由 Laya 推测，未确认、未经校准。再次点击点踩按钮可撤销。"
 
-    async def action(self, body, __user__=None, __event_emitter__=None):
+    async def action(self, body, __user__=None, __event_emitter__=None, __event_call__=None):
         if (
             os.environ.get("WHYNOTE_LOCAL_CHAIN") != "1"
             or not isinstance(__user__, dict)
@@ -31,6 +31,11 @@ class Action(LayaAction):
             or __event_emitter__ is None
         ):
             raise NotFoundError("知因本机入口不可用")
+        templates = os.environ.get("WHYNOTE_TEMPLATE_SYNTHETIC") == "1"
+        if templates:
+            from integrations.openwebui.template_action import gate
+
+            gate(self, __user__)
         click_id = body.get("whynote_click_id")
         if not isinstance(click_id, str):
             raise ValueError("知因点击标识必须是 UUID")
@@ -68,6 +73,16 @@ class Action(LayaAction):
         )
         if retracted:
             return result
+        if templates:
+            from integrations.openwebui.template_action import run
+
+            try:
+                suggestion = await run(
+                    self, body, __user__, __event_call__, __event_emitter__, target, state["event_id"]
+                )
+            except (NotFoundError, ConflictError):
+                suggestion = {"result": "superseded"}
+            return {**result, "suggestion": suggestion}
         # Never keep a transaction open while awaiting Laya. A later click can retract.
         try:
             _, current_target, current_event = await self._eligible(body, __user__)

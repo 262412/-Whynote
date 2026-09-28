@@ -52,6 +52,9 @@ jobs:
           git -C var/openwebui-source apply "$GITHUB_WORKSPACE/integrations/openwebui/patches/manual-v0.11.4-timing.patch"
           git -C var/openwebui-source apply --check "$GITHUB_WORKSPACE/integrations/openwebui/patches/s1-v0.11.4-trial.patch"
           git -C var/openwebui-source apply "$GITHUB_WORKSPACE/integrations/openwebui/patches/s1-v0.11.4-trial.patch"
+          git -C var/openwebui-source apply "$GITHUB_WORKSPACE/integrations/openwebui/patches/m5-v0.11.4-templates.patch"
+          mkdir -p var/openwebui-source/src/lib/whynote
+          cp integrations/openwebui/suggestion_dialog.js var/openwebui-source/src/lib/whynote/suggestion_dialog.js
       - name: Install locked host regression dependencies
         run: |
           uv venv --python 3.11 var/native-venv

@@ -73,14 +73,14 @@ class Fixture:
             register_source(self.store, self.principal, chat.id, registration(name, source))
         return chat
 
-    def answer(self, chat, name, *, complete=True, save=True):
+    def answer(self, chat, name, *, complete=True, save=True, prompt="虚构研究问题", response="虚构研究回答"):
         parent_id, message_id = ref(name + "-parent"), ref(name + "-answer")
         messages = chat.chat["history"]["messages"]
-        messages[parent_id] = {"id": parent_id, "role": "user", "content": "虚构研究问题", "parentId": None}
+        messages[parent_id] = {"id": parent_id, "role": "user", "content": prompt, "parentId": None}
         messages[message_id] = {
             "id": message_id,
             "role": "assistant",
-            "content": "虚构研究回答",
+            "content": response,
             "done": True,
             "parentId": parent_id,
             "model": PIPE_ID,

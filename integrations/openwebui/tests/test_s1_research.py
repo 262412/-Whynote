@@ -15,7 +15,8 @@ from whynote.s1_host import confirm_saved_response
 
 
 @pytest.mark.parametrize("source", ["self_natural", "scripted", "public_replay"])
-def test_native_save_feedback_and_delete_keep_denominator(native, tmp_path, monkeypatch, source):
+@pytest.mark.parametrize("templates", [False, True])
+def test_native_save_feedback_and_delete_keep_denominator(native, tmp_path, monkeypatch, source, templates):
     from integrations.openwebui.s1_action import Action
 
     async def scenario():
@@ -35,6 +36,20 @@ def test_native_save_feedback_and_delete_keep_denominator(native, tmp_path, monk
             research_study_ref=study,
             research_protocol_ref=protocol,
         )
+        if templates:
+            config.update(
+                suggestion_research_enabled=True,
+                suggestion_template_enabled=True,
+                suggestion_model_revision="a" * 40,
+                suggestion_fixture={
+                    "tasks": ["general"],
+                    "outcome": "suggested",
+                    "reason_ids": ["general.style"],
+                    "citations": {},
+                },
+            )
+            monkeypatch.setenv("WHYNOTE_TEMPLATE_SYNTHETIC", "1")
+            monkeypatch.setenv("WHYNOTE_LOCAL_CHAIN", "1")
         path = tmp_path / "config.json"
         path.write_text(json.dumps(config), encoding="utf-8")
         monkeypatch.setenv("WHYNOTE_S1_CONFIG", str(path))
@@ -90,12 +105,40 @@ def test_native_save_feedback_and_delete_keep_denominator(native, tmp_path, monk
         async def choose(menu):
             return menu["data"]["input"]["options"][0]["value"]
 
-        result = await Action().action(body, {"id": user_id}, choose)
-        assert result["result"] == "reason_submitted"
+        async def template_callback(event):
+            kind, data = event["type"], event["data"]
+            if kind == "whynote:suggestion-render":
+                return {"binding": data["binding"]}
+            if kind == "whynote:suggestion-response":
+                return {
+                    "operation": "done" if data["confirmed"] else "yes",
+                    "reason_id": None if data["confirmed"] else "general.style",
+                    "timing": None,
+                }
+            assert kind == "whynote:suggestion-dismiss"
+            return True
+
+        async def emit(event):
+            assert event["type"] == "notification"
+
+        async def perform():
+            if templates:
+                from integrations.openwebui.local_chain_action import Action as TemplateAction
+
+                return await TemplateAction().action(body, {"id": user_id}, emit, template_callback)
+            return await Action().action(body, {"id": user_id}, choose)
+
+        result = await perform()
+        if templates:
+            assert result["suggestion"]["result"] == "confirmed"
+        else:
+            assert result["result"] == "reason_submitted"
         cutoff = datetime.now(timezone.utc).isoformat()
         before = report(store.path, principal, "2026-01-01T00:00:00Z", cutoff)
         assert before["groups"][source]["eligible_answers"] == 2
         assert before["groups"][source]["negative_answers"] == 1
+        if templates:
+            assert before["groups"][source]["suggestions"]["confirmed"] == 1
         assert before["attempt_status_counts_in_interval"]["incomplete"] == 1
         # Actual pinned ORM deletion invokes the existing S1 invalidation hook.
         assert await native.chats.Chats.delete_chat_by_id(chat_id)
@@ -104,9 +147,9 @@ def test_native_save_feedback_and_delete_keep_denominator(native, tmp_path, monk
         assert after["groups"][source]["invalidated_eligible_answers"] == 2
         assert report(store.path, principal, before["since"], cutoff) == before
         with pytest.raises(NotFoundError):
-            await Action().action(body, {"id": user_id}, choose)
+            await perform()
         with store._transaction() as db:
-            assert db.execute("SELECT count(*) FROM events").fetchone()[0] == 3
+            assert db.execute("SELECT count(*) FROM events").fetchone()[0] == (4 if templates else 3)
             assert db.execute("SELECT count(*) FROM outbox").fetchone()[0] == 1
 
     asyncio.run(scenario())
