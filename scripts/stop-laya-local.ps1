@@ -1,7 +1,7 @@
 param([Parameter(Mandatory = $true)][string]$ProjectRoot, [int]$Port = 8766)
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path -LiteralPath $ProjectRoot).Path
-$receipt = Get-Content -LiteralPath (Join-Path $root "var/laya/service-$Port.json") -Raw | ConvertFrom-Json
+$receipt = Get-Content -LiteralPath (Join-Path $root "var/laya/service-$Port.json") -Raw -Encoding utf8 | ConvertFrom-Json
 $process = Get-CimInstance Win32_Process -Filter "ProcessId = $($receipt.process_id)"
 if (!$process) { Write-Output 'The recorded Laya process has already stopped.'; return }
 if ($process.ExecutablePath -ne $receipt.python -or
