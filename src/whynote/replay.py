@@ -71,6 +71,7 @@ PROTOCOL = {
     "max_total_tokens": 1024,
     "timeout_seconds": 60,
     "max_samples": 100,
+    "length_buckets_utf8_bytes": [1024, 4096, 8192],
     "A": QUESTIONS,
     "B": ROUTE_B,
     "C": ROUTE_C,
@@ -86,8 +87,18 @@ def state_text(fields):
     return json.dumps(fields, ensure_ascii=False, separators=(",", ":"))
 
 
+def length_bucket(byte_count):
+    if byte_count is None:
+        return "unknown"
+    for maximum in (1024, 4096, 8192):
+        if byte_count <= maximum:
+            return {1024: "0-1024", 4096: "1025-4096", 8192: "4097-8192"}[maximum]
+    return "over-8192"
+
+
 def sample(fields, *, identity, source, task, language, evidence, partition, error=None):
     state = state_text(fields) if fields is not None else None
+    byte_count = len(state.encode("utf-8")) if state is not None else None
     return {
         "input_id": digest(identity),
         "identity": identity,
@@ -98,6 +109,8 @@ def sample(fields, *, identity, source, task, language, evidence, partition, err
         "evidence_kinds": evidence,
         "state": state,
         "state_sha256": hashlib.sha256(state.encode()).hexdigest() if state else None,
+        "input_utf8_bytes": byte_count,
+        "length_bucket": length_bucket(byte_count),
         "input_error": error,
     }
 
@@ -260,7 +273,19 @@ def route_candidates(scheme, route, evidence):
 
 
 def infer_scheme(backend, item, scheme):
-    result = {k: item[k] for k in ("input_id", "source", "task", "language", "partition", "state_sha256")}
+    result = {
+        k: item[k]
+        for k in (
+            "input_id",
+            "source",
+            "task",
+            "language",
+            "partition",
+            "state_sha256",
+            "input_utf8_bytes",
+            "length_bucket",
+        )
+    }
     result |= {
         "scheme": scheme,
         "status": "error",
@@ -384,7 +409,7 @@ def summarize(predictions):
                 }
                 for value in sorted({r[key] for r in predictions})
             }
-            for key in ("source", "task", "language")
+            for key in ("source", "task", "language", "length_bucket")
         },
         "quality_metrics": None,
         "user_cost_metrics": None,

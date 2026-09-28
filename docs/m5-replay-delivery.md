@@ -32,25 +32,30 @@ Windows / Python3.11.14，锁文件安装，修改后重装非editable包：
 | 检查 | 结果 |
 | --- | --- |
 | Ruff check / format `src tests integrations qa` | 通过，76个文件 |
-| 新增 `tests/test_replay.py` | 34项通过 |
-| 完整 `pytest -q tests qa` | 507项通过；1条既有Starlette/httpx弃用警告 |
+| 新增 `tests/test_replay.py` | 44项通过 |
+| 完整 `pytest -q tests qa` | 517项通过；1条既有Starlette/httpx弃用警告 |
 | 实机固定checkpoint | RTX5070Ti Laptop，Laya0.3.21 / Torch2.11.0+cu128 / Transformers4.57.6 |
 | 合成输入 | WildFB1、HelpSteer3按回答2、WildFeedback1、任务探索7，共11对象×3方案 |
-| 重复回放 | 3次，选择/状态/概率逐项一致；耗时与run_id按次保留 |
-| 最终代码对应 | attempt-3 manifest中9个实现/包文件SHA与实际执行源码一致 |
+| 重复回放 | 4次，选择/状态/概率逐项一致；耗时与run_id按次保留 |
+| 实机代码对应 | attempt-4 manifest中9个实现/包文件SHA对应评审修复后的实际执行源码 |
 
 [汇总回执](../qa/evidence/2026-09-28-m5-replay/summary.json)、
-[最终manifest](../qa/evidence/2026-09-28-m5-replay/attempt-3/run-manifest.json)、
-[最终预测](../qa/evidence/2026-09-28-m5-replay/attempt-3/predictions.jsonl)、
-[最终报告](../qa/evidence/2026-09-28-m5-replay/attempt-3/report.json)。
-attempt-1为首轮；attempt-2补全来源失败审计；attempt-3对应最终统计代码。
-三次未改变提示/输入/模型/协议，早期结果全部保留。
+[最终manifest](../qa/evidence/2026-09-28-m5-replay/attempt-4/run-manifest.json)、
+[最终预测](../qa/evidence/2026-09-28-m5-replay/attempt-4/predictions.jsonl)、
+[最终报告](../qa/evidence/2026-09-28-m5-replay/attempt-4/report.json)。
+attempt-1为首轮；attempt-2补全来源失败审计；attempt-3对应首个实现提交的统计代码。
+前三次未改变提示/输入/模型/协议；attempt-4补齐长度报告与运行绑定校验，预测配置不变，四次选择/概率一致。早期结果全部保留。
+随后`7f4f56a`补上全来源HOLD且无探索样本时保留空批报告、不加载模型的边界，并新增实际子进程
+超时终止检查；新增测试由34项增至36项。该补修没有改变正常样本的模型输入或预测路径。
+后续Codex评审指出长度分层、留出集标签完整性和跨运行混算三项缺口，均已修复并增加8项回归，
+现为44项新增/517项完整测试；无标签仍不计算质量。质量函数验证完整holdout标签与单一manifest/协议/模型/输入身份。
+最终实机11例全在0–1024字节桶，长输入边界只有单测证据，未报告长输入实机效果。
 
 | 方案 | 合法输出/尝试 | 具体理由 | unknown | no_match | p50 / p95 ms |
 | --- | --- | --- | --- | --- | --- |
-| A | 11/11 | 10 | 1 | 0 | 16.850 / 319.642 |
-| B | 11/11 | 3 | 6 | 2 | 29.522 / 45.880 |
-| C | 11/11 | 3 | 8 | 0 | 33.660 / 46.498 |
+| A | 11/11 | 10 | 1 | 0 | 16.329 / 310.545 |
+| B | 11/11 | 3 | 6 | 2 | 29.900 / 46.856 |
+| C | 11/11 | 3 | 8 | 0 | 35.056 / 45.447 |
 
 以上仅为11个合成对象的开发运行结果。没有删掉冷启动首例；模型加载另计。
 部分代码例A输出unnecessary_refusal，不符合开发者预期；B/C也存在拒识和与开发预期不符的
@@ -86,7 +91,10 @@ CLI退出0为本批来源与全部方案合法完成；2为部分来源/运行�
 
 ## 剩余与交付门槛
 
-工程实现待PR最新CI、非作者有效批准与独立QA/适用签署；本批不是完整FR或M5-1质量验收。
+[PR #37](https://github.com/262412/-Whynote/pull/37)首个实现`810e74d`的
+[CI 36427121385](https://github.com/262412/-Whynote/actions/runs/36427121385)两项通过；
+补修及文档后的最新head CI以PR检查为准。工程实现待非作者有效批准与独立QA/适用签署；
+当前Copilot因配额用尽未评审；Codex三项意见已修复，没有有效APPROVED。本批不是完整FR或M5-1质量验收。
 真实数据入口沿用M5-0a的synthetic限制：剩余逐源许可/用途及受控存储记录、原文件schema/关联实测、
 真实探索后的产品采用理由版本、独立留出集、样本量/接受阈值事前签署。
 未启动M5-2展示/确认采集，生产上下文、auto-attach、自由文本SLM和训练导出仍关闭。

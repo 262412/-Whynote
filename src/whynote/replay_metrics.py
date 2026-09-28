@@ -3,15 +3,31 @@
 import uuid
 
 from .laya_local import QUESTIONS
-from .replay import POOL, route_candidates
+from .replay import MODEL, POOL, PROTOCOL, VERSION, route_candidates
 from .replay_laya import require
+from .source_mapping import digest
 from .task_reasons import TASK_TYPES
 
 
-def quality_metrics(predictions, samples, labels):
+def quality_metrics(predictions, samples, labels, *, run_manifest=None):
     """No label file means no quality claim; synthetic CLI never supplies labels."""
     if labels is None:
         return None
+    require(isinstance(run_manifest, dict), "missing_run_manifest")
+    require(
+        run_manifest.get("schema_version") == VERSION
+        and run_manifest.get("protocol") == PROTOCOL
+        and run_manifest.get("protocol_sha256") == digest(PROTOCOL),
+        "run_protocol_mismatch",
+    )
+    expected_run = digest({k: v for k, v in run_manifest.items() if k != "run_id"})
+    require(run_manifest.get("run_id") == expected_run, "run_manifest_mismatch")
+    require(
+        run_manifest.get("samples") == [{k: v for k, v in s.items() if k != "state"} for s in samples],
+        "run_samples_mismatch",
+    )
+    backend = run_manifest.get("backend", {})
+    require(backend.get("backend") == "laya_local" and backend.get("model") == MODEL, "not_pinned_model_run")
     require(isinstance(labels, dict) and set(labels) == {"schema_version", "items"}, "invalid_labels")
     require(labels["schema_version"] == "m5-replay-labels-v1" and isinstance(labels["items"], list), "invalid_labels")
     inputs = {s["input_id"]: s for s in samples}
@@ -75,14 +91,20 @@ def quality_metrics(predictions, samples, labels):
             "invalid_reference_route",
         )
         by_id[key] = label
+    require(
+        set(by_id) == {key for key, value in inputs.items() if value["partition"] == "holdout"},
+        "incomplete_holdout_labels",
+    )
     seen = set()
     for row in predictions:
+        require(row.get("run_id") == expected_run, "mixed_replay_runs")
         key = (row["input_id"], row["scheme"])
         require(
             row["input_id"] in inputs and row["scheme"] in ("A", "B", "C") and key not in seen,
             "invalid_prediction_identity",
         )
         seen.add(key)
+        require(row.get("state_sha256") == inputs[row["input_id"]]["state_sha256"], "prediction_input_mismatch")
     require(seen == {(key, scheme) for key in inputs for scheme in ("A", "B", "C")}, "missing_predictions")
 
     def ratio(numerator, denominator):

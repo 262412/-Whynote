@@ -1,6 +1,6 @@
 {
   "scope": "developer_synthetic_real_checkpoint_replay",
-  "final_attempt": "attempt-3",
+  "final_attempt": "attempt-4",
   "identical_selections": true,
   "identical_probabilities": true,
   "final_code_hashes_match": {
@@ -293,8 +293,106 @@
           "quality_metrics": null
         }
       }
+    },
+    {
+      "directory": "attempt-4",
+      "run_id": "b45b9f6b61b1148378a20939b78b2bdfb43fa9e92eaa7b9056620cd3264ec57a",
+      "sample_count": 11,
+      "by_scheme": {
+        "A": {
+          "attempts": 11,
+          "valid_outputs": 11,
+          "statuses": {
+            "suggested": 10,
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 88,
+            "available": 88
+          },
+          "elapsed_ms": {
+            "p50": 16.329,
+            "p95": 310.545
+          },
+          "stages": {
+            "reason": {
+              "calls": 11,
+              "p50_ms": 16.281,
+              "p95_ms": 310.508
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 11,
+          "valid_outputs": 11,
+          "statuses": {
+            "unknown": 6,
+            "suggested": 3,
+            "no_match": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 44,
+            "available": 24
+          },
+          "elapsed_ms": {
+            "p50": 29.9,
+            "p95": 46.856
+          },
+          "stages": {
+            "reason": {
+              "calls": 6,
+              "p50_ms": 16.112,
+              "p95_ms": 20.261
+            },
+            "route": {
+              "calls": 11,
+              "p50_ms": 14.526,
+              "p95_ms": 46.786
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 11,
+          "valid_outputs": 11,
+          "statuses": {
+            "unknown": 8,
+            "suggested": 3
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 121,
+            "available": 79
+          },
+          "elapsed_ms": {
+            "p50": 35.056,
+            "p95": 45.447
+          },
+          "stages": {
+            "reason": {
+              "calls": 11,
+              "p50_ms": 19.428,
+              "p95_ms": 25.507
+            },
+            "route": {
+              "calls": 11,
+              "p50_ms": 14.961,
+              "p95_ms": 19.368
+            }
+          },
+          "quality_metrics": null
+        }
+      }
     }
   ],
   "quality_metrics": null,
-  "independent_holdout": false
+  "independent_holdout": false,
+  "review_fixes": [
+    "length_strata",
+    "complete_holdout_labels",
+    "single_run_manifest_binding"
+  ]
 }

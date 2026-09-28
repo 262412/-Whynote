@@ -325,7 +325,7 @@ def test_budget_rejects_before_sdk_can_truncate(monkeypatch, state, option_size,
         check_budget(agent, state, replay.ROUTE_B)
 
 
-def test_quality_metrics_keep_library_routing_material_and_judgment_separate():
+def metric_fixture():
     samples = [example()]
     samples[0]["partition"] = "holdout"
     rows = [replay.infer_scheme(Backend(), samples[0], scheme) for scheme in ("A", "B", "C")]
@@ -346,8 +346,29 @@ def test_quality_metrics_keep_library_routing_material_and_judgment_separate():
             }
         ],
     }
+    manifest = metric_manifest(samples, rows)
+    return samples, rows, labels, manifest
+
+
+def metric_manifest(samples, rows):
+    # A fictional manifest only for testing accounting; never written as real model evidence.
+    manifest = {
+        "schema_version": replay.VERSION,
+        "protocol": copy.deepcopy(replay.PROTOCOL),
+        "protocol_sha256": replay.digest(replay.PROTOCOL),
+        "samples": [{k: v for k, v in s.items() if k != "state"} for s in samples],
+        "backend": {"backend": "laya_local", "model": replay.MODEL},
+    }
+    manifest["run_id"] = replay.digest(manifest)
+    for row in rows:
+        row["run_id"] = manifest["run_id"]
+    return manifest
+
+
+def test_quality_metrics_keep_library_routing_material_and_judgment_separate():
+    samples, rows, labels, manifest = metric_fixture()
     assert quality_metrics(rows, samples, None) is None
-    result = quality_metrics(rows, samples, labels)
+    result = quality_metrics(rows, samples, labels, run_manifest=manifest)
     assert result["A"]["library_coverage"]["value"] == 0
     assert result["B"]["library_coverage"]["value"] == 1
     assert result["B"]["routing_omission"]["value"] == 1
@@ -357,18 +378,84 @@ def test_quality_metrics_keep_library_routing_material_and_judgment_separate():
     assert result["C"]["routing_omission"]["value"] == 0
     rows[2]["available_ids"] = []
     rows[2]["reason_ids"] = []
-    material = quality_metrics(rows, samples, labels)["C"]
+    material = quality_metrics(rows, samples, labels, run_manifest=manifest)["C"]
     assert material["material_unavailable"]["value"] == 1
     assert material["judgment_error"]["denominator"] == 0
     rows[2]["available_ids"] = ["code.interface_changed"]
     rows[2]["reason_ids"] = []
     rows[2]["outcome"] = "unknown"
-    assert quality_metrics(rows, samples, labels)["C"]["judgment_error"]["value"] == 1
+    assert quality_metrics(rows, samples, labels, run_manifest=manifest)["C"]["judgment_error"]["value"] == 1
     rows[2]["status"] = "error"
-    assert quality_metrics(rows, samples, labels)["C"]["judgment_error"]["denominator"] == 0
-    assert quality_metrics(rows, samples, labels)["C"]["candidate_hit"]["denominator"] == 1
+    assert quality_metrics(rows, samples, labels, run_manifest=manifest)["C"]["judgment_error"]["denominator"] == 0
+    assert quality_metrics(rows, samples, labels, run_manifest=manifest)["C"]["candidate_hit"]["denominator"] == 1
     rows[2]["route"] = None
-    assert quality_metrics(rows, samples, labels)["C"]["routing_unavailable"] == 1
+    assert quality_metrics(rows, samples, labels, run_manifest=manifest)["C"]["routing_unavailable"] == 1
     labels["items"][0]["review_origin"] = "developer_synthetic"
     with pytest.raises(ReplayError, match="labels_not_independent_holdout"):
-        quality_metrics(rows, samples, labels)
+        quality_metrics(rows, samples, labels, run_manifest=manifest)
+
+
+@pytest.mark.parametrize(
+    "issue,code",
+    [
+        ("partial_labels", "incomplete_holdout_labels"),
+        ("mixed_runs", "mixed_replay_runs"),
+        ("protocol", "run_protocol_mismatch"),
+        ("manifest_hash", "run_manifest_mismatch"),
+        ("input_hash", "prediction_input_mismatch"),
+        ("samples", "run_samples_mismatch"),
+    ],
+)
+def test_quality_rejects_partial_labels_or_unbound_predictions(issue, code):
+    samples, rows, labels, manifest = metric_fixture()
+    if issue == "partial_labels":
+        labels["items"] = []
+    elif issue == "mixed_runs":
+        rows[0]["run_id"] = "different_run"
+    elif issue == "protocol":
+        manifest["protocol"]["seed"] = 99
+    elif issue == "manifest_hash":
+        manifest["run_id"] = "wrong_hash"
+    elif issue == "input_hash":
+        rows[0]["state_sha256"] = "wrong_hash"
+    else:
+        samples[0]["language"] = "en"
+    with pytest.raises(ReplayError, match=code):
+        quality_metrics(rows, samples, labels, run_manifest=manifest)
+
+
+def test_unlabeled_exploration_does_not_replace_required_holdout_labels():
+    samples, rows, labels, _ = metric_fixture()
+    other = replay.load_samples(FIXTURES / "m5-replay.json")[0][5]
+    samples.append(other)
+    rows.extend(replay.infer_scheme(Backend(), other, scheme) for scheme in ("A", "B", "C"))
+    manifest = metric_manifest(samples, rows)
+    result = quality_metrics(rows, samples, labels, run_manifest=manifest)
+    assert result["C"]["candidate_hit"]["denominator"] == 1
+    assert result["C"]["unlabeled"] == 1
+    other["partition"] = "holdout"
+    manifest = metric_manifest(samples, rows)
+    with pytest.raises(ReplayError, match="incomplete_holdout_labels"):
+        quality_metrics(rows, samples, labels, run_manifest=manifest)
+
+
+def test_input_length_buckets_include_rejections_and_separate_latency():
+    samples = [
+        replay.sample(
+            {"request": "x" * size, "answer": "y"},
+            identity={"size": size},
+            source="task_examples",
+            task="general",
+            language="en",
+            evidence=["request", "answer"],
+            partition="exploration",
+        )
+        for size in (100, 1100, 5000, 8200)
+    ]
+    predictions = [replay.infer_scheme(Backend(), item, "A") for item in samples]
+    groups = replay.summarize(predictions)["strata"]["length_bucket"]
+    assert set(groups) == {"0-1024", "1025-4096", "4097-8192", "over-8192"}
+    assert groups["over-8192"]["A"]["statuses"] == {"input_bytes_exceeded": 1}
+    assert groups["0-1024"]["A"]["elapsed_ms"]["p50"] == predictions[0]["elapsed_ms"]
+    assert replay.length_bucket(None) == "unknown"
+    assert [replay.length_bucket(n) for n in (1024, 4096, 8192)] == ["0-1024", "1025-4096", "4097-8192"]

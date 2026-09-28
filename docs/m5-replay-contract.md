@@ -46,11 +46,16 @@ model_inferred_unconfirmed；测试替身明确标test_stub，不能作为真实
 
 - 所有结果带样本ID、state hash、方案、路由、完整库/路由后/材料可用候选、预测或错误、
   阶段耗时、提示摘要。超时终止专用模型子进程，后续样本报backend_unavailable，保留分母。
-- 报告按来源、人工审阅任务、语言分别分层；未知值单列。无独立标签时quality_metrics=null。
+- 报告按来源、人工审阅任务、语言和state UTF-8字节长度分别分层；长度桶固定为0–1024、
+  1025–4096、4097–8192、超过8192；无法构建state为unknown。拒绝与耗时进入对应桶。
+  无独立标签时quality_metrics=null。
 - 独立标签通过单独 `m5-replay-labels-v1` 文件读取，只供结果分析：固定input_id、partition=holdout、
   review_origin=independent_adjudicated、两名不同reviewer UUID、adjudication UUID，
   verdict=defect/no_defect/unjudgeable、reason_ids与legacy_reason_codes分别标注。
   开发者合成标签不能升级为该来源；v1合成CLI拒绝附带独立标签，指标函数仅用单元测试检验口径。
+  固定holdout必须全部有裁决（允许unjudgeable）；缺任何holdout标签拒绝计算，探索样本可不标。
+  指标函数必须接收运行manifest，验证manifest摘要、固定协议/模型、完整样本清单及输入hash，
+  三方案预测必须来自同一run_id；不能拼接不同运行的有利结果。
 - 覆盖分母为可判定有问题的已标对象，完整库至少命中1项才算覆盖；不把unknown算覆盖。
   路由遗漏以完整库覆盖为分母；材料门槛遗漏与路由遗漏分开。人工任务参照用同一候选规则对照。
   最终命中以全部可判定有问题样本为分母，运行失败仍在其中；判断错误仅在正确候选可用且有
