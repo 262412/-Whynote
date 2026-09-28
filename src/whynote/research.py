@@ -30,6 +30,9 @@ def validate_config(config):
     suggestions = config.get("suggestion_research_enabled", False)
     if type(suggestions) is not bool or (suggestions and not enabled):
         raise ValueError("Suggestion research requires explicit mock research")
+    templates = config.get("suggestion_template_enabled", False)
+    if type(templates) is not bool or (templates and not suggestions):
+        raise ValueError("Template suggestions require explicit mock suggestions")
     if enabled:
         for name in ("research_study_ref", "research_protocol_ref"):
             if not isinstance(config.get(name), str):

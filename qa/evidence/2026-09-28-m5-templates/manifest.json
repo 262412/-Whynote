@@ -1,0 +1,25 @@
+{
+  "scope": "synthetic_developer_verification",
+  "baseline": "3f4c9e898f82ece7bf8f428c99ade050b334b8b7",
+  "final_suite": {
+    "passed": 653,
+    "seconds": 83.23
+  },
+  "targeted": 133,
+  "native_orm": {
+    "passed": 6,
+    "seconds": 28.17,
+    "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d"
+  },
+  "browser": "real IAB DOM, keyboard activation, synthetic callbacks over loopback; not full native frontend deployment",
+  "model_calls": 0,
+  "source_hashes": {
+    "src/whynote/suggestions.py": "aef1756d0f315cdfc56d04f3adba3f36f34760c269f7cd75b55c7bcb9e1936b4",
+    "src/whynote/template_suggestions.py": "8dae7c531cbe52a5c6035cbaf7ab4c5cb363e74f4b8a54457e218a235ad0ac38",
+    "integrations/openwebui/template_action.py": "8c6f71c605e9e919b620151a989361a851f0cc0b7d5caea3653fab12828083ed",
+    "integrations/openwebui/local_chain_action.py": "cdb89cdba449592b4563b7132e8a2e942bcd88391ddc20e846bf914d0ae094da",
+    "integrations/openwebui/suggestion_dialog.js": "8c6c9684e6faa601da9f6938f472d0c24bc893a466272e9732fbf42dd7c20a18",
+    "qa/m5_template_browser.py": "98a2fd5fb078ee0a353ebf601c58fbf4572140d07e8212343fdd4c988eb3542f",
+    "qa/m5_template_browser.html": "fdf3c73b847636baa2e5758aaa0c0ac207ada9b5033084029ba25a7db8566276"
+  }
+}

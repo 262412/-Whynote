@@ -154,7 +154,7 @@ def report(db_path: str | Path, principal: Principal, since: str, as_of: str) ->
                 answer is None
                 or accepted_at < answer["eligible_at"]
                 or payload.get("interaction_contract") != "manual-v1"
-                or payload.get("channel") != "openwebui-s1"
+                or payload.get("channel") not in {"openwebui-s1", "openwebui-local-chain"}
             ):
                 unmatched += 1
                 continue

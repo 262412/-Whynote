@@ -20,6 +20,7 @@ def invalidate_chat(chat_id, *, revoke=False):
         # Cleanup only appends invalidation for attempts already tracked.
         config["research_enabled"] = False
         config["suggestion_research_enabled"] = False
+        config["suggestion_template_enabled"] = False
         config.pop("research_versions", None)
         TrialStore(config).invalidate(chat_id, revoke=revoke)
 

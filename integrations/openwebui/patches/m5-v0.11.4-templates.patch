@@ -1,0 +1,49 @@
+--- a/src/lib/components/chat/Chat.svelte
++++ b/src/lib/components/chat/Chat.svelte
+@@ -1,4 +1,5 @@
+ <script lang="ts">
++	import { renderSuggestion, respondSuggestion, dismissSuggestion } from "$lib/whynote/suggestion_dialog.js";
+ 	import { v4 as uuidv4 } from 'uuid';
+ 	import { toast } from 'svelte-sonner';
+ 
+@@ -1401,7 +1402,13 @@
+ 					eventConfirmationInputType = data?.input?.type ?? data?.type ?? '';
+ 					eventConfirmationInputOptions = data?.input?.options ?? data?.options ?? [];
+ 					eventMeasurement = data?.input?.measurement ?? null;
+-				} else if (type === 'request:user_input') {
++				} else if (type === 'whynote:suggestion-render') {
++                    cb(await renderSuggestion(data));
++                } else if (type === 'whynote:suggestion-response') {
++                    cb(await respondSuggestion(data));
++                } else if (type === 'whynote:suggestion-dismiss') {
++                    cb(dismissSuggestion(data.display_id));
++                } else if (type === 'request:user_input') {
+ 					eventCallback = cb;
+ 					askUserQuestions = data?.questions ?? [];
+ 					askUserAllowOther = data?.allow_other ?? true;
+@@ -2574,7 +2581,7 @@
+ 		const messages = createMessagesList(history, responseMessageId);
+ 
+ 		const res = await chatAction(localStorage.token, actionId, {
+-			...(['whynote_s0_action', 'whynote_s1_action'].includes(actionId) ? { whynote_click_id: crypto.randomUUID() } : {}),
++			...(['whynote_s0_action', 'whynote_s1_action', 'whynote_local_chain_action'].includes(actionId) ? { whynote_click_id: crypto.randomUUID() } : {}),
+ 			model: modelId,
+ 			messages: messages.map((m) => ({
+ 				id: m.id,
+@@ -2591,14 +2598,14 @@
+ 			id: responseMessageId
+ 		}).catch((error) => {
+ 			toast.error(`${error}`);
+-			if (!['whynote_s1_action', 'whynote_s1_retract_action', 'whynote_laya_action'].includes(actionId)) {
++			if (!['whynote_s1_action', 'whynote_s1_retract_action', 'whynote_laya_action', 'whynote_local_chain_action'].includes(actionId)) {
+ 				messages.at(-1).error = { content: error };
+ 			}
+ 			return null;
+ 		});
+ 
+ 		// S1 feedback changes the event ledger, never the saved generation.
+-		if (['whynote_s1_action', 'whynote_s1_retract_action', 'whynote_laya_action'].includes(actionId)) return;
++		if (['whynote_s1_action', 'whynote_s1_retract_action', 'whynote_laya_action', 'whynote_local_chain_action'].includes(actionId)) return;
+ 
+ 		if (res !== null && res.messages) {
+ 			// Update chat history with the new messages

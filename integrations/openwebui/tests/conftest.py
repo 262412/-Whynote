@@ -26,8 +26,16 @@ def native(tmp_path_factory):
     env = {**os.environ, "GIT_INDEX_FILE": str(index)}
     git = ["git", "-C", str(source)]
     subprocess.run([*git, "read-tree", "HEAD"], env=env, check=True)
-    for name in ("native-v0.11.4-s0.patch", "manual-v0.11.4-timing.patch", "s1-v0.11.4-trial.patch"):
+    for name in (
+        "native-v0.11.4-s0.patch",
+        "manual-v0.11.4-timing.patch",
+        "s1-v0.11.4-trial.patch",
+        "m5-v0.11.4-templates.patch",
+    ):
         subprocess.run([*git, "apply", "--cached", str(patch.parent / name)], env=env, check=True)
+    assert (source / "src/lib/whynote/suggestion_dialog.js").read_bytes() == (
+        ROOT / "integrations/openwebui/suggestion_dialog.js"
+    ).read_bytes()
     paths = subprocess.check_output([*git, "diff", "--cached", "--name-only"], env=env, text=True).splitlines()
     subprocess.run([*git, "diff", "--exit-code", "--", *paths], env=env, check=True)
     data = tmp_path_factory.mktemp("native-synthetic")
