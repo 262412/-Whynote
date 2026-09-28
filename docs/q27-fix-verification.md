@@ -36,7 +36,17 @@ uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_accept
 ```
 
 本轮未重新运行浏览器或本地原生整套；前次独立QA的浏览器、原生80/80、探针58/58属于
-`5474496`的历史证据。新提交的远端CI另行核验后记录，不用旧绿色结果替代。
+`5474496`的历史证据。修复提交`c00408b079e5bbe651f9324ad7c45e8889ef949c`的
+[CI 36455026963](https://github.com/262412/-Whynote/actions/runs/36455026963)已逐项核验：
+quality通过（659+9+31），native-regression通过（原生80、Q16探针58）。
+
+## 交付回执
+
+飞书原11个受影响条目局部更新并逐项读回，PRD371→377、技术370→375；原失败记录和链接保留，
+见[回执](../qa/evidence/2026-09-29-q27-fix/feishu-readback.json)。原独立断言、报告和证据目录相对5227e61无差异。
+主目录只更新当前计划的日期、输入与M5-2b剩余项，另外15个已有改动文件摘要保持一致，
+见[保护记录](../qa/evidence/2026-09-29-q27-fix/primary-plan-update.json)。代码在原PR工作树，真实服务和数据未改动。
+本轮最后一次提交只追加文档/回执，最新head的CI另在PR检查中核验；不以c00408b检查代替后续提交检查。
 
 ## 待完成
 

@@ -8,7 +8,7 @@
 
 2026-09-28产品复核main 52ac4db21e9f83ae50f17f7a1a4c2c4984540997：PR #30～34已合入。DeepSeek、Open WebUI、Laya及单按钮点踩/撤销已经接通；用户已实际试用，反馈基本分类可用但遇到无法归类案例，尚无量化效果结论。当前只传直接父问题与目标回答、显示一个模型分类，不采集原因确认或建议展示回执；S1-3研究记录仅mock。本轮按用户要求，已交付任务退出当前待办，保留历史证据；下一阶段为M5-0a案例/三源映射→M5-0b任务理由包→M5-1三方案回放→M5-2模板建议与确认记录。生产上下文、auto-attach、自由文本SLM和训练导出仍关闭；完整FR、独立验收及适用签署不由合并代替。上述为产品计划轮的核对结论；当前M5-1已执行合成样本的真实Laya回放，状态见下方任务卡；真实语料和质量评测仍未执行。
 
-当前输入：[PRD350](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg) / [技术350](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh)。M5-2a PR #38已合入main `3f4c9e8`，用户验收。当前切片M5-2b仅合成实现与验证；用户明确真实本人试用参数另行确认。旧计划及历史回填见[归档](archive/development-readiness-20260928-m52a.md)。 开发回填读回PRD361 / 技术361；2026-09-29独立QA局部更新读回PRD371 / 技术370，Q-27已开发修复，待独立复验，见[修复证据](q27-fix-verification.md)。
+当前输入：[PRD350](https://my.feishu.cn/wiki/XG6SwutL0i3fyWkwmhScEEB86Gg) / [技术350](https://my.feishu.cn/wiki/GuphweJs3iWwBRkBDjlcljA16bh)。M5-2a PR #38已合入main `3f4c9e8`，用户验收。当前切片M5-2b仅合成实现与验证；用户明确真实本人试用参数另行确认。旧计划及历史回填见[归档](archive/development-readiness-20260928-m52a.md)。 开发回填读回PRD361 / 技术361；2026-09-29独立QA局部更新读回PRD371 / 技术370，Q-27修复c00408b已通过699项/Ruff及CI36455026963，飞书局部更新读回PRD377/技术375；待独立复验，见[修复证据](q27-fix-verification.md)。
 
 **本阶段目标：** 提高理由对实际问题的覆盖，让用户用更少补充说明确认具体问题。用户说“基本分类可用、无法归类情况较多”是N=1试用线索；尚无失败比例、案例集或独立标签，不能先假定都是类别不足。
 

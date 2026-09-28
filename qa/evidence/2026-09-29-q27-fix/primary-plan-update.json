@@ -1,0 +1,24 @@
+{
+  "scope": "primary checkout only current plan paragraphs updated",
+  "protected_files": {
+    ".github/pull_request_template.md": "d40787368e9947fe3fa4e2002cbbfbf0ed6f8ccc2be71c3b88952af97c4adf55",
+    ".github/workflows/ci.yml": "169e76ebf5924b2697d9521a88379da231d499ec28427e47c62bfa0a1d71683c",
+    "AGENTS.md": "a45efda8ce82a4b9a8b0ccf4fc329fbc738fbbd3eff3efb78b03859da4d8d4b5",
+    "docs/archive/development-readiness-20260928-m52a.md": "458e6a479efc005d5515794f03e9adfa00ecede72115d275244ba6b11165ca88",
+    "docs/archive/development-readiness-20260928-s1.md": "ea28cab7dd5603bf0b64bb969ec6be833e25eb5ea4a6ad91e64f810688b6812a",
+    "docs/development-governance.md": "40e3c1128dd3ec01c18eae61d8b9db12639519841acb11e7e4488d83471d1c04",
+    "docs/laya-local-contract.md": "715ccb9fdad0ee169191ac58cf7bfe93b370b55f80e52f45c117de35c7a0f70f",
+    "docs/laya-local.md": "41c293740c3e8f3c20cf4eb576f49364e1fbe09a029164876098bec0c087d75c",
+    "docs/quality-baseline.md": "2c208034af028ea73b5acff2f756a83bc8ce9dbeaa9b2cc6365f4ef41f3e1401",
+    "README.md": "4f1187678d4e14ba993a0d93ff4b7340e1d7bda02780ce7b1ee28c66f12bac95",
+    "pyproject.toml": "060c93e38ee6472c8b902d4462c544983aa97e09691713b475194e2de7dffbae",
+    "src/whynote/domain.py": "f6dbfb0e84c9d38cf04d59899ef1a4d7f658d778f970355e968214a015f13b15",
+    "src/whynote/store.py": "c80e90ead88cf82ae17650f68b25edf7b922cb6a853a1aefd3127c10939c7227",
+    "tests/test_feedback.py": "2c6f0af40e4c77684fe293cd977357808b40ac62a90f356f6ca0a982fe092fc6",
+    "uv.lock": "32f83633ab6835f64ac9b24aca2d720ae9e86593b0fa6e97a6d087aa7393d805"
+  },
+  "protected_files_unchanged": true,
+  "plan_before_sha256": "26c47e8ecc159895071b77293867f01a2c2c8362a8b71e98786e871bc3d91c43",
+  "plan_after_sha256": "80e264c0d6edc12895cf64fcb9841193b2c9df77ae8490797dc5c420c56fad8b",
+  "backup": "var/q27-primary-plan-before.md"
+}

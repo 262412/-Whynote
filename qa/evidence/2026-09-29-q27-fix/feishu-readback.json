@@ -1,0 +1,123 @@
+[
+  {
+    "document": "prd",
+    "entry": "overview",
+    "old_block_id": "doxc6vEXEFUSGP3tw2otJpl8xPc",
+    "new_block_id": "doxc6NnCoarwIO6FYJcQh2Pvj4e",
+    "revision_before": 371,
+    "revision_after": 372,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "prd",
+    "entry": "FR-06",
+    "old_block_id": "doxc6U9HGqRls5lN16qVCwtv6gg",
+    "new_block_id": "doxc6wKuvbZilQkrUY9BGwQtCqf",
+    "revision_before": 372,
+    "revision_after": 373,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "prd",
+    "entry": "FR-11",
+    "old_block_id": "doxc6trveTdgiJSHuzM9dFD429k",
+    "new_block_id": "doxc6f2PPQuzDOs0qvuS4DIg0Md",
+    "revision_before": 373,
+    "revision_after": 374,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "prd",
+    "entry": "FR-13",
+    "old_block_id": "doxc6jvjDQWfZ4QSgow8rDdzxCg",
+    "new_block_id": "doxc6I3INpyv9GFtr34IPG3I9Ef",
+    "revision_before": 374,
+    "revision_after": 375,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "prd",
+    "entry": "FR-15",
+    "old_block_id": "doxc6G0fe5uHhgzpYj7fX5lKXgh",
+    "new_block_id": "doxc6e83Szvn1aLj8vNvmKWgrDh",
+    "revision_before": 375,
+    "revision_after": 376,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "prd",
+    "entry": "M5-2b",
+    "old_block_id": "doxc6UsvyIU3m585OjDp5IzMaoh",
+    "new_block_id": "doxc6n22YSxoBYcrHOHLvOKW3Kg",
+    "revision_before": 376,
+    "revision_after": 377,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "tech",
+    "entry": "overview",
+    "old_block_id": "doxc6CtJSpYlRWHH1kflRSGvt0b",
+    "new_block_id": "doxc6dzaSp1svLemE4RimCq1Feg",
+    "revision_before": 370,
+    "revision_after": 371,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "tech",
+    "entry": "M5-2b",
+    "old_block_id": "doxc67MhPl0CeZxZwiuTyqCh1zh",
+    "new_block_id": "doxc65nsNCx7p0hlORNRP4THYie",
+    "revision_before": 371,
+    "revision_after": 372,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "tech",
+    "entry": "TD-04",
+    "old_block_id": "doxc6cmuruztySYd9gLzOAboe4f",
+    "new_block_id": "doxc6K2SmWMTiOVXD0OMALByiGg",
+    "revision_before": 372,
+    "revision_after": 373,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "tech",
+    "entry": "TD-10",
+    "old_block_id": "doxc6SErIBhDoPz1GZ7914kKvZ8",
+    "new_block_id": "doxc6qIAfF5mBm7d1oA1Iy7i49d",
+    "revision_before": 373,
+    "revision_after": 374,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  },
+  {
+    "document": "tech",
+    "entry": "TD-11",
+    "old_block_id": "doxc6bH2eRjGW3c52PAcj0ZS39b",
+    "new_block_id": "doxc6hn3F5NPk6u4hMjr6zFNEHh",
+    "revision_before": 374,
+    "revision_after": 375,
+    "exact_text_readback": true,
+    "historical_text_and_links_preserved": true,
+    "repair_commit": "c00408b"
+  }
+]

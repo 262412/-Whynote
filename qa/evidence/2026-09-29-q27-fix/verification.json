@@ -1,0 +1,67 @@
+{
+  "date": "2026-09-29",
+  "scope": "developer synthetic repair, independent retest pending",
+  "qa_baseline": "5227e61863daf0ed17adac0d2599cc4e9c6c2a71",
+  "repair_commit": "c00408b079e5bbe651f9324ad7c45e8889ef949c",
+  "before": {
+    "test": "tests/test_templates_independent.py::test_arrived_render_receipt_survives_slow_host_recheck",
+    "failed": 1,
+    "duration_seconds": 0.54,
+    "received_at": 1788220859.5,
+    "expires_at": 1788220860.0,
+    "checked_at": 1788220860.5,
+    "result": "superseded",
+    "outbox": 1,
+    "event_types": [
+      "negative_feedback_action_recorded",
+      "m52_suggestion_generated"
+    ]
+  },
+  "after": {
+    "targeted_passed": 46,
+    "targeted_seconds": 7.83,
+    "new_developer_tests": 23,
+    "full_passed": 699,
+    "full_seconds": 78.4,
+    "warnings": 1,
+    "ruff_lint": "pass",
+    "ruff_format": "pass",
+    "q27_result": "fallback",
+    "q27_outbox": 1,
+    "q27_event_types": [
+      "negative_feedback_action_recorded",
+      "m52_suggestion_generated",
+      "m52_render_reported",
+      "reason_displayed",
+      "reason_menu_closed"
+    ]
+  },
+  "ci": {
+    "run": 36455026963,
+    "head": "c00408b079e5bbe651f9324ad7c45e8889ef949c",
+    "quality": "success",
+    "quality_tests": [
+      659,
+      9,
+      31
+    ],
+    "native_regression": "success",
+    "native_passed": 80,
+    "q16_passed": 58
+  },
+  "independent_evidence_unchanged": true,
+  "new_local_browser_run": false,
+  "new_local_native_run": false,
+  "production": "NO-GO",
+  "remaining": [
+    "independent Q-27 retest",
+    "current head non-author approval",
+    "applicable owner signatures",
+    "real trial parameters and protocol"
+  ],
+  "repair_file_sha256": {
+    "src/whynote/suggestions.py": "3d3c0969f96749acf2111adf612fd149be38253103df4a901fa49e7d0c3716bf",
+    "integrations/openwebui/template_action.py": "3d6bce2a49b8d5dc5ab2deeb32879c4256dd8ee6bcb73998549218e85189e338",
+    "tests/test_render_receipt_timing.py": "21b7af0ce3624c784a8a1e10fcf5243dbae3257258b5b93e16a10e50cce91508"
+  }
+}
