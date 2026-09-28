@@ -4,10 +4,25 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 
 from fastapi.responses import StreamingResponse
 
 from .s1 import PIPE_ID
+
+logger = logging.getLogger(__name__)
+# SSE repeats metadata for each token; this is not the answer size limit.
+MAX_STREAM_BYTES = 1024 * 1024
+ERROR_MESSAGES = {
+    "invalid_response": "模型响应未通过校验，请稍后手动重试。",
+    "http_rejected": "云服务拒绝了生成请求，请检查服务配置或额度。",
+    "stream_limit": "模型流式响应超过传输大小上限，请缩短回答要求。",
+    "answer_limit": "回答超过正文大小上限，请缩短回答要求。",
+    "length": "回答达到 1024 token 长度上限，未完整生成；请要求更简短的回答。",
+    "incomplete": "模型响应未完整结束，请稍后手动重试。",
+    "timeout": "模型响应超时，请稍后手动重试。",
+    "connection": "云服务连接中断，请稍后手动重试。",
+}
 
 
 async def complete_response(session, config, store, attempt, credential, messages):
@@ -30,6 +45,7 @@ async def complete_response(session, config, store, attempt, credential, message
     async def stream():
         answer, finish, usage, terminal = "", None, None, False
         response = None
+        failure_code = "invalid_response"
         try:
             async with asyncio.timeout(60):
                 response = await session.request(
@@ -41,11 +57,13 @@ async def complete_response(session, config, store, attempt, credential, message
                     timeout=aiohttp.ClientTimeout(total=60, sock_connect=10, sock_read=20),
                 )
                 if response.status != 200 or "text/event-stream" not in response.headers.get("Content-Type", ""):
+                    failure_code = "http_rejected"
                     raise ValueError("provider rejected request")
                 received = 0
                 async for raw in response.content:
                     received += len(raw)
-                    if received > 262144:
+                    if received > MAX_STREAM_BYTES:
+                        failure_code = "stream_limit"
                         raise ValueError("provider response limit exceeded")
                     line = raw.decode("utf-8").strip()
                     if not line or line.startswith(":"):
@@ -77,6 +95,7 @@ async def complete_response(session, config, store, attempt, credential, message
                         raise ValueError("invalid provider content")
                     answer += content
                     if len(answer.encode("utf-8")) > 65536:
+                        failure_code = "answer_limit"
                         raise ValueError("provider output limit exceeded")
                     if choice.get("finish_reason") is not None:
                         if finish is not None:
@@ -97,6 +116,7 @@ async def complete_response(session, config, store, attempt, credential, message
                 # host final-save hook may promote it to a completed receipt.
                 store.finish(attempt, answer=answer, complete=terminal, usage=usage)
                 if not terminal:
+                    failure_code = "length" if finish == "length" else "incomplete"
                     raise ValueError("generation did not finish naturally")
                 safe = {
                     "id": attempt,
@@ -108,9 +128,15 @@ async def complete_response(session, config, store, attempt, credential, message
                 yield f"data: {json.dumps(safe)}\n\ndata: [DONE]\n\n"
         except asyncio.CancelledError:
             raise
-        except Exception:
+        except Exception as exc:
             # Never copy a provider error body, exception repr, key, or prompt.
-            yield 'data: {"error":{"message":"S1 generation unavailable; existing feedback remains available"}}\n\n'
+            if isinstance(exc, TimeoutError):
+                failure_code = "timeout"
+            elif isinstance(exc, aiohttp.ClientError):
+                failure_code = "connection"
+            logger.warning("S1 generation failed code=%s", failure_code)
+            error = {"error": {"message": ERROR_MESSAGES[failure_code] + " 此回答不可用于反馈，已有反馈仍可使用。"}}
+            yield f"data: {json.dumps(error, ensure_ascii=False)}\n\n"
         finally:
             if response is not None:
                 response.close()
