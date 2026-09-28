@@ -1,0 +1,31 @@
+{
+  "base_main": "5ee95c543b3944b1d65e7a9d517ed610e094c5bb",
+  "scope": "developer synthetic verification; no independent QA, browser or real provider claims",
+  "core_and_preserved_qa": {
+    "passed": 297,
+    "new": 39
+  },
+  "actual_native": {
+    "passed": 75,
+    "new": 3,
+    "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d"
+  },
+  "ruff": "passed",
+  "fixture_snapshot": "9c76759875d9e5b9f1b786cd39aee5337b41c413bc250900d57917b1073c9012",
+  "cli_report_readonly": true,
+  "cli_registration_idempotency": true,
+  "independent_approval": false,
+  "real_collection": "NO-GO",
+  "source_file_sha256_lf": {
+    "src/whynote/research.py": "71539740f4217599e6043a23d1d8e1121404aa6812b56b4bf08cc88a74e1da43",
+    "src/whynote/research_report.py": "71b83d636e4bff42872d4bf8103d562203cc724ad36e75990c641641ec711755",
+    "src/whynote/s1.py": "77649c685aa06eece41527edc685e119768b4480453b4e1aacfb0ed671d3cd4d",
+    "src/whynote/s1_host.py": "f74625cadef22ba81201ba877c4a97448628c7d3f97b01971604ab05c4e2ac56",
+    "src/whynote/measurement.py": "f8a5f5c34060f83ece62b01bf2a02fb18686ac0d44d8efc341c890328d546ec9",
+    "integrations/openwebui/s1_action.py": "fd6a2f3be5f45eb9cc4e9fe4cbc55bf8b3693b5d960c52bb5c31f96baa2b08f5",
+    "integrations/openwebui/s1_pipe.py": "c3cd85ccb85d21695db0998e9d345a2af25f56a1a4021d941c84c6639bbe15b9",
+    "tests/test_s1_research.py": "33952aa03c87af5483bc836018193fae2edf313c8fc6a7b134e5c6204c50cc94",
+    "integrations/openwebui/tests/test_s1_research.py": "866004ad029430a08efb540883e1092286f3aa516679e7c910c553864917273e",
+    "qa/s1_research_fixture.py": "1b81d09d56f1a11602277dab14fe14cb25446b0317e14b920008ff82ebf52b0f"
+  }
+}

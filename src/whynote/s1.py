@@ -15,6 +15,7 @@ import uuid
 from contextlib import contextmanager
 from pathlib import Path
 
+from . import research
 from .domain import ConflictError, NotFoundError, Principal
 from .store import EventStore
 
@@ -35,6 +36,7 @@ def load_config(path: str | Path) -> dict:
     config = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(config, dict) or config.get("enabled") is not True:
         raise NotFoundError("S1 entry is disabled")
+    research.validate_config(config)
     for field in ("instance_id", "user_id", "db_path", "version_key"):
         if not isinstance(config.get(field), str) or not config[field].strip():
             raise ValueError("S1 configuration is incomplete")
@@ -114,6 +116,7 @@ def generation_input(chat, message_id: str, store) -> tuple[str, str, list[dict]
 
 class TrialStore(EventStore):
     def __init__(self, config: dict, guard=None):
+        research.validate_config(config)
         self.config = config
         self.guard = None
         super().__init__(config["db_path"])
@@ -156,6 +159,7 @@ class TrialStore(EventStore):
                 db.execute("INSERT INTO s1_instance VALUES (?)", (config["instance_id"],))
             elif instance["id"] != config["instance_id"]:
                 raise ValueError("S1 database belongs to another instance")
+            research.initialize(db)
         self.guard = guard
 
     @contextmanager
@@ -185,6 +189,11 @@ class TrialStore(EventStore):
         with self._transaction() as db:
             self._admitted(db, chat_id, user_id)
             self._available(db)
+            previous = db.execute(
+                "SELECT attempt_id FROM s1_current WHERE chat_id=? AND message_id=?", (chat_id, message_id)
+            ).fetchone()
+            if previous:
+                research.record_state(db, previous[0], "superseded", time.time())
             db.execute(
                 "INSERT INTO s1_generations "
                 "(attempt_id,chat_id,user_id,message_id,parent_id,parent_hash,answer_hash,version,status,"
@@ -205,6 +214,7 @@ class TrialStore(EventStore):
                 ),
             )
             db.execute("INSERT OR REPLACE INTO s1_current VALUES (?, ?, ?)", (chat_id, message_id, attempt))
+            research.capture_attempt(db, self.config, attempt)
         return attempt
 
     @staticmethod
@@ -256,6 +266,7 @@ class TrialStore(EventStore):
                     attempt,
                 ),
             )
+            research.record_state(db, attempt, "awaiting_save" if answer_hash else "incomplete", time.time())
 
     def receipt(self, db: sqlite3.Connection, chat_id: str, user_id: str, message_id: str):
         self._admitted(db, chat_id, user_id)
@@ -298,10 +309,12 @@ class TrialStore(EventStore):
                 and row["parent_hash"] == digest(key, parent.get("content"))
                 and row["answer_hash"] == digest(key, answer.get("content"))
             ):
+                saved_at = time.time()
                 db.execute(
                     "UPDATE s1_generations SET status='completed',saved_at=? WHERE attempt_id=?",
-                    (time.time(), row["attempt_id"]),
+                    (saved_at, row["attempt_id"]),
                 )
+                research.record_answer(db, row["attempt_id"], row["version"], saved_at)
 
     def qualify(self, chat, body: dict) -> dict[str, str]:
         chat_id, message_id = str(uuid.UUID(body["chat_id"])), str(uuid.UUID(body["id"]))
@@ -336,6 +349,9 @@ class TrialStore(EventStore):
 
     def invalidate(self, chat_id: str, *, revoke=False):
         with self._transaction() as db:
+            # Record all tracked attempts, including previously superseded ones.
+            for row in db.execute("SELECT attempt_id FROM s1_generations WHERE chat_id=?", (chat_id,)).fetchall():
+                research.record_state(db, row[0], "revoked" if revoke else "invalidated", time.time())
             db.execute("DELETE FROM s1_current WHERE chat_id=?", (chat_id,))
             if revoke:
                 db.execute("UPDATE s1_chats SET active=0 WHERE chat_id=?", (chat_id,))

@@ -1,0 +1,683 @@
+{
+  "metric_version": "s1-research-v1",
+  "scope": "synthetic_development_only",
+  "since": "2026-09-01T00:00:00+00:00",
+  "as_of": "2026-09-02T00:00:09+00:00",
+  "boundary": "since <= first_eligible_at <= as_of; feedback observed through as_of",
+  "denominator_policy": "historically_eligible; invalidation does not remove answers",
+  "participant_count": 1,
+  "untracked_attempt_count_through_cutoff": 0,
+  "attempt_status_counts_in_interval": {
+    "eligible": 8,
+    "incomplete": 2,
+    "awaiting_save": 1
+  },
+  "unmatched_actions_in_interval": 0,
+  "groups": {
+    "self_natural": {
+      "eligible_answers": 2,
+      "negative_answers": 1,
+      "negative_answer_rate": 0.5,
+      "actor_roles": {
+        "self_report": 2
+      },
+      "public_label_origins": {
+        "none": 2
+      },
+      "invalidated_eligible_answers": 2,
+      "lifecycle_counts": {
+        "revoked": 2
+      },
+      "version_missing_counts": {
+        "host_sha": 2,
+        "model_revision": 2,
+        "patch_sha256": 2,
+        "pricing_version": 2
+      },
+      "displayed_actions": 1,
+      "display_coverage": 1.0,
+      "edited_actions": 1,
+      "late_responses": 0,
+      "retracted_after_window": 1,
+      "missing_active_timing": 1,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-02T00:00:09+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 1,
+        "provisional": false,
+        "filled_numerator": 1,
+        "fill_rate": 1.0,
+        "window_status_counts": {
+          "edited": 1
+        },
+        "retracted_action_count": 1,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 1,
+          "reason_none_matched": 0,
+          "reason_selected": 1,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 1,
+          "median": 100,
+          "p90": 100,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 2,
+          "median": 1500.0,
+          "p90": 2000.0,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {
+          "client_reported": 1,
+          "missing": 1
+        },
+        "action_count": 1
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 2,
+          "negative_answers": 1
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 2,
+        "incomplete": 2,
+        "awaiting_save": 1
+      }
+    },
+    "scripted": {
+      "eligible_answers": 3,
+      "negative_answers": 3,
+      "negative_answer_rate": 1.0,
+      "actor_roles": {
+        "self_report": 3
+      },
+      "public_label_origins": {
+        "none": 3
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 3,
+        "model_revision": 3,
+        "patch_sha256": 3,
+        "pricing_version": 3
+      },
+      "displayed_actions": 3,
+      "display_coverage": 1.0,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 3,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-02T00:00:09+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 3,
+        "provisional": false,
+        "filled_numerator": 0,
+        "fill_rate": 0.0,
+        "window_status_counts": {
+          "unresponded": 1,
+          "declined": 1,
+          "none_matched": 1
+        },
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 1,
+          "reason_edited": 0,
+          "reason_none_matched": 1,
+          "reason_selected": 0,
+          "reason_skipped": 1
+        },
+        "close_count": 1,
+        "closed_action_count": 1,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 3,
+          "median": 1000.0,
+          "p90": 2000.0,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {
+          "missing": 3
+        },
+        "action_count": 3
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 3,
+          "negative_answers": 3
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 3
+      }
+    },
+    "public_replay": {
+      "eligible_answers": 2,
+      "negative_answers": 2,
+      "negative_answer_rate": 1.0,
+      "actor_roles": {
+        "evaluator": 2
+      },
+      "public_label_origins": {
+        "automated": 2
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 2,
+        "model_revision": 2,
+        "patch_sha256": 2,
+        "pricing_version": 2
+      },
+      "displayed_actions": 2,
+      "display_coverage": 1.0,
+      "edited_actions": 0,
+      "late_responses": 1,
+      "retracted_after_window": 0,
+      "missing_active_timing": 2,
+      "missing_total_timing": 0,
+      "historical_public_timing": "not_applicable",
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-02T00:00:09+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 2,
+        "provisional": false,
+        "filled_numerator": 1,
+        "fill_rate": 0.5,
+        "window_status_counts": {
+          "selected": 1,
+          "display_unknown": 1
+        },
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 1,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 2,
+          "median": 43201500.0,
+          "p90": 86402000.0,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {
+          "missing": 2
+        },
+        "action_count": 2
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 2,
+          "negative_answers": 2
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 2
+      }
+    },
+    "missing": {
+      "eligible_answers": 1,
+      "negative_answers": 0,
+      "negative_answer_rate": 0.0,
+      "actor_roles": {
+        "unknown": 1
+      },
+      "public_label_origins": {
+        "unknown": 1
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 1,
+        "model_revision": 1,
+        "patch_sha256": 1,
+        "pricing_version": 1
+      },
+      "displayed_actions": 0,
+      "display_coverage": null,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-02T00:00:09+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": false,
+        "filled_numerator": 0,
+        "fill_rate": null,
+        "window_status_counts": {},
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 0
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": null,
+            "study_ref": null
+          },
+          "eligible_answers": 1,
+          "negative_answers": 0
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 1
+      }
+    }
+  },
+  "answers": [
+    {
+      "attempt_id": "0e0f8b29-7ea8-5286-aae8-05f2ea820d42",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "01217bc0-8b10-5125-b551-1a5948bec731/96d9c2a9-35dc-51fe-9e12-b1a77a7ba5a9",
+        "object_version": "s1v1-a03f9de2f1e321f785ff8993358e61f5be3c790c3955fc8cce152c73108c55f5"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "54609092-540d-56c2-919e-0d945f93b2c9",
+      "source_kind": "self_natural",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "01217bc0-8b10-5125-b551-1a5948bec731",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible",
+        "revoked"
+      ],
+      "action_ids": []
+    },
+    {
+      "attempt_id": "d90db35e-1e42-52d8-a356-97722e65f009",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "01217bc0-8b10-5125-b551-1a5948bec731/5829f9d2-a40a-51b3-b3cd-2555192914f3",
+        "object_version": "s1v1-4d1c762bd2b52d0ca844d1b533e507f2f609558d1c538abb7743734d5e79ed2d"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "54609092-540d-56c2-919e-0d945f93b2c9",
+      "source_kind": "self_natural",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "01217bc0-8b10-5125-b551-1a5948bec731",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible",
+        "revoked"
+      ],
+      "action_ids": [
+        "be87fe46-5502-5d14-a76f-038e7f88b265"
+      ]
+    },
+    {
+      "attempt_id": "7aa5ac56-b6a4-5db1-b162-78ef98e2ce0e",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "b975a95d-d91d-55ff-895b-bbe1d4cf56c5/218054ed-8f71-5aa7-a3f0-3758da62cde7",
+        "object_version": "s1v1-65dd754c49ce76d1ca4109eedfafdabf5da4fa2585f5e166a87c283c14f09e7a"
+      },
+      "eligible_at": 1788220802.0,
+      "registration_id": "3030010b-05bd-5a3e-98a8-9ce78cf0049c",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "b975a95d-d91d-55ff-895b-bbe1d4cf56c5",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "d473e727-fa7a-51d7-ba7c-874aed985e9b"
+      ]
+    },
+    {
+      "attempt_id": "54a4014e-7067-52f8-ab0f-86b26373b6f5",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "b975a95d-d91d-55ff-895b-bbe1d4cf56c5/4ced17d8-6e8f-55a8-8ade-973ebc17dc14",
+        "object_version": "s1v1-68e345af08146e88fc84ffd0281569501ded392a369ae461f8d989ffb0605e2d"
+      },
+      "eligible_at": 1788220804.0,
+      "registration_id": "3030010b-05bd-5a3e-98a8-9ce78cf0049c",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "b975a95d-d91d-55ff-895b-bbe1d4cf56c5",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "33c6d08e-f5f2-500b-8a65-f0593d8b0f56"
+      ]
+    },
+    {
+      "attempt_id": "a26dd41b-f982-5e39-9d83-36c6c1f7a152",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "b975a95d-d91d-55ff-895b-bbe1d4cf56c5/4efeefed-09d1-5a0a-8a5a-1e711da2ca67",
+        "object_version": "s1v1-1dd135f6ad46639cff63dd593601e5e77147986a8578fdb2dbf81ca5f2123ad8"
+      },
+      "eligible_at": 1788220805.0,
+      "registration_id": "3030010b-05bd-5a3e-98a8-9ce78cf0049c",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "b975a95d-d91d-55ff-895b-bbe1d4cf56c5",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "29446d5b-5f2f-5f10-8d3d-012e1a55787f"
+      ]
+    },
+    {
+      "attempt_id": "f5a3e6a2-a4e1-5f4c-bce6-8d2bb25b8fb3",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "2378c9fd-fe15-5820-8be2-92c1a3e5ec44/35ce6a87-c8d2-5752-a1a2-590f8dad247e",
+        "object_version": "s1v1-20fd362bab6be24d55e2804abe89a458fe17d604a32a676d57eba2b8eb327808"
+      },
+      "eligible_at": 1788220806.0,
+      "registration_id": "4f9bb9e1-e5b0-5cd6-af8d-93b69e81ac56",
+      "source_kind": "public_replay",
+      "actor_role": "evaluator",
+      "public_label_origin": "automated",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "2378c9fd-fe15-5820-8be2-92c1a3e5ec44",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "81dd3103-e386-537e-91f3-04239830b578"
+      ]
+    },
+    {
+      "attempt_id": "65b45881-d679-5d33-beef-4b3f2da8b4f5",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "2378c9fd-fe15-5820-8be2-92c1a3e5ec44/8f45f116-c087-571b-9c5b-df626fd5deef",
+        "object_version": "s1v1-7ff703835a65999564351110c42dee5bbf1187bb2822088813710f6f49c527d9"
+      },
+      "eligible_at": 1788220807.0,
+      "registration_id": "4f9bb9e1-e5b0-5cd6-af8d-93b69e81ac56",
+      "source_kind": "public_replay",
+      "actor_role": "evaluator",
+      "public_label_origin": "automated",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "2378c9fd-fe15-5820-8be2-92c1a3e5ec44",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "f99a6ade-78c1-5775-b310-ee75ad4b4f33"
+      ]
+    },
+    {
+      "attempt_id": "d3e58c2e-966a-5270-b1f3-0c058707e635",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "9e885306-0434-5e66-a106-7441662a5023/62ebda82-dca8-56b7-875d-7d4766f7a446",
+        "object_version": "s1v1-1f70920c7fc519b17c8859a3a84fd5640345f3ddb71fd4d54e9070da6341c686"
+      },
+      "eligible_at": 1788220807.0,
+      "registration_id": null,
+      "source_kind": "missing",
+      "actor_role": "unknown",
+      "public_label_origin": "unknown",
+      "study_ref": null,
+      "protocol_ref": null,
+      "context_ref": null,
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": []
+    }
+  ],
+  "snapshot_sha256": "9c76759875d9e5b9f1b786cd39aee5337b41c413bc250900d57917b1073c9012"
+}
