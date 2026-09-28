@@ -178,3 +178,28 @@ def test_optional_noul_uses_existing_validator(call):
     assert call(lambda _: httpx.Response(200, json=result), question=questions)["binary_signals"] == {
         "factual_error_signal": 0.5
     }
+
+
+@pytest.mark.parametrize("signal", ["factual_error_signal", "instruction_failure_signal"])
+@pytest.mark.parametrize("value", [0, 1, None, True, -1, 1.1, "0", "missing", "wrong_type"])
+def test_requested_noul_value_contract(call, signal, value):
+    questions = {
+        "primary_reason": {
+            "type": "choice",
+            "instructions": "Synthetic only",
+            "criteria": {code: code for code in REASON_CODES},
+        },
+        signal: {"type": "noul", "instructions": "Synthetic signal"},
+    }
+    result = response()
+    if value != "missing":
+        result["answers"][signal] = {"type": "choice" if value == "wrong_type" else "noul", "noul": value}
+
+    def handler(_):
+        return httpx.Response(200, json=result)
+
+    if type(value) is int and value in (0, 1):
+        assert call(handler, question=questions)["binary_signals"] == {signal: float(value)}
+    else:
+        with pytest.raises(ValueError, match="pinned contract"):
+            call(handler, question=questions)

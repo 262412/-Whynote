@@ -92,6 +92,12 @@ async def evaluate_reason(
         response = json.loads(raw)
         if not isinstance(response, dict) or set(response.get("answers", {})) != set(questions):
             raise ValueError
+        # The shared validator allows omitted optional signals in older inputs.
+        # Here every requested question must have a typed answer, including Noul.
+        for name, question in questions.items():
+            answer = response["answers"][name]
+            if not isinstance(answer, dict) or answer.get("type") != question["type"]:
+                raise ValueError
         return validate_jev_response(response, MODEL)
     except (ValueError, TypeError, AttributeError):
         raise ValueError("Jev response does not match the pinned contract") from None
