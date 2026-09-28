@@ -1,1 +1,4 @@
 integrations/openwebui/patches/*.patch text eol=lf -whitespace
+fixtures/m5-replay.json text eol=lf
+fixtures/m5-task-reasons/exploration.json text eol=lf
+fixtures/m5-synthetic/*.json text eol=lf
