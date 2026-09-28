@@ -1,0 +1,36 @@
+import hashlib,json,os
+from pathlib import Path
+from whynote.replay_laya import LayaReplay, ReplayError
+from whynote.replay import ROUTE_C
+
+def main():
+ os.environ['HF_HUB_OFFLINE']='1';os.environ['TRANSFORMERS_OFFLINE']='1'
+ from transformers import AutoTokenizer
+ from laya.common import encode_text
+ model=Path('D:/PythonProject/jev项目/var/models/laya/multilingual')
+ tok=AutoTokenizer.from_pretrained(model/'tokenizer',local_files_only=True)
+ exact={}
+ for count in range(680,705):
+  text=' '.join(['word']*count)
+  size=len(encode_text(tok,text,add_special_tokens=False)['input_ids'])
+  if size in (700,701): exact[size]=text
+ assert set(exact)=={700,701}
+ backend=LayaReplay(model,enabled=True)
+ records=[]
+ try:
+  for name,state,wanted in [('700_tokens',exact[700],None),('701_tokens',exact[701],'input_tokens_exceeded'),('reserved_token',tok.all_special_tokens[0],'reserved_token'),('8193_bytes','x'*8193,'input_bytes_exceeded'),('valid_after_rejections','Synthetic short request and answer.',None)]:
+   record={'case':name,'input_sha256':hashlib.sha256(state.encode()).hexdigest(),'utf8_bytes':len(state.encode()),'expected_error':wanted}
+   try:
+    result=backend.predict(state,ROUTE_C)
+    assert wanted is None
+    record.update(status='ok',budget=result['budget'],answers=result['answers'])
+   except ReplayError as exc:
+    assert str(exc)==wanted
+    record.update(status='rejected',error=str(exc))
+   records.append(record)
+ finally: backend.close()
+ assert not backend.process.is_alive()
+ output={'tested_commit':'85c09b9b5d38cf0578eda90f72047f1ba21ef401','scope':'real_local_backend_budget_probe_not_quality','backend':backend.metadata,'worker_terminated':True,'cases':records}
+ Path('var/qa-m5-1-independent/actual-budget.json').write_text(json.dumps(output,indent=2),encoding='utf-8')
+ print([(r['case'],r['status']) for r in records])
+if __name__=='__main__':main()

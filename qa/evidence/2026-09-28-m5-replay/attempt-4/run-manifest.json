@@ -1,0 +1,759 @@
+{
+  "schema_version": "m5-replay-v1",
+  "protocol": {
+    "version": "m5-replay-v1",
+    "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+    "package_version": "m5-task-reasons-v1",
+    "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+    "criteria_version": "m5-task-criteria-v1",
+    "seed": 42,
+    "candidate_count": 1,
+    "scheme_order": [
+      "A",
+      "B",
+      "C"
+    ],
+    "context": "identical_prediction_only_state",
+    "max_bytes": 8192,
+    "max_state_tokens": 700,
+    "max_head_tokens": 256,
+    "max_total_tokens": 1024,
+    "timeout_seconds": 60,
+    "max_samples": 100,
+    "length_buckets_utf8_bytes": [
+      1024,
+      4096,
+      8192
+    ],
+    "A": {
+      "primary_reason": {
+        "type": "choice",
+        "instructions": "Why is this answer unsatisfactory? Choose the main reason supported by the text.",
+        "criteria": {
+          "factual_error": "Incorrect facts or calculation",
+          "instruction_not_followed": "Ignores the user's explicit instructions",
+          "incomplete": "Missing necessary details or steps",
+          "irrelevant": "Does not address the question",
+          "style": "Unsuitable tone or presentation",
+          "outdated": "Information is out of date",
+          "unnecessary_refusal": "Refuses a reasonable request",
+          "other_or_unknown": "Other reason or insufficient evidence"
+        }
+      },
+      "factual_error_signal": {
+        "type": "noul",
+        "instructions": "Does the answer contain a factual or calculation error?"
+      },
+      "instruction_failure_signal": {
+        "type": "noul",
+        "instructions": "Does the answer violate explicit user instructions?"
+      }
+    },
+    "B": {
+      "route": {
+        "type": "choice",
+        "instructions": "Choose the single main domain of the user's request.",
+        "criteria": {
+          "code": "Code rewriting or programming",
+          "general": "Other tasks"
+        }
+      }
+    },
+    "C": {
+      "route": {
+        "type": "choice",
+        "instructions": "Choose the task in the user's request, preserving negations.",
+        "criteria": {
+          "code_rewrite": "Rewrite existing code",
+          "general": "General non-code task",
+          "mixed": "Code rewrite and another task",
+          "other": "Other task",
+          "unknown": "Insufficient information to identify the task"
+        }
+      }
+    },
+    "decision_choices": {
+      "yes": "The evidence supports this defect",
+      "no": "This defect is not supported",
+      "unknown": "Insufficient evidence to judge"
+    },
+    "reason_instructions": {
+      "code.interface_changed": "Select only when the request requires preserving the interface and the original code and answer show a signature, parameter or return-contract change. An explicitly requested interface change is not a defect.",
+      "code.behavior_changed": "Select only for a supported behavior change that violates the requested preservation of behavior. Compare the original code with the answer. Do not invent execution results or treat a requested behavior change as an error.",
+      "code.incomplete_rewrite": "Select when a requested complete rewrite omits necessary original behavior or implementation. Check the requested output scope. A requested snippet or pseudocode is not an incomplete rewrite.",
+      "code.scope_exceeded": "Select only when an explicit scope boundary or prohibition is violated by the proposed rewrite. Preserve negations in the request. Do not infer that every extra change is unwanted.",
+      "general.factual_error": "Select a factual or calculation contradiction supported by the supplied reference. Do not guess a fact is false when the evidence is unavailable.",
+      "general.instruction_not_followed": "Select a violation of an explicit user instruction, including a negated constraint. Preserve the full instruction and its exceptions; do not infer unstated preferences.",
+      "general.incomplete": "Select missing information or steps necessary to satisfy the stated request. Respect requests for summaries or partial output.",
+      "general.irrelevant": "Select when the answer primarily addresses a different question. Necessary background that supports a direct answer is not irrelevant.",
+      "general.style": "Select a tone or presentation mismatch supported by the stated audience or purpose. Do not substitute the evaluator's unstated stylistic preferences.",
+      "general.outdated": "Select outdated information only with a dated or versioned reference and a request that requires that time or version. Historical questions are not automatically outdated.",
+      "general.unnecessary_refusal": "Select an unsupported refusal of a reasonable request. A justified refusal or a request for necessary clarification is not an unnecessary refusal; abstain if unsure."
+    },
+    "fallback": "C general without yes and with original_code: add code once",
+    "quality_thresholds": null,
+    "purpose": "synthetic_engineering_replay"
+  },
+  "protocol_sha256": "5af46ec9cc3b4591af076f98c2b49963c56aa9394e1d8950f4e881f5dac4a98f",
+  "backend": {
+    "status": "ready",
+    "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+    "files_sha256": {
+      "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+      "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+      "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+      "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+      "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+    },
+    "network_disabled": true,
+    "runtime": {
+      "laya": "0.3.21",
+      "torch": "2.11.0+cu128",
+      "transformers": "4.57.6"
+    },
+    "device": "cuda",
+    "hardware": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "load_ms": 6450.159,
+    "backend": "laya_local"
+  },
+  "inputs": {
+    "manifest_sha256": "110bc171451caa241fb4e9b844437ecec23a5dceab024f4e3bf3f64c71830656",
+    "input_manifest": {
+      "schema_version": "m5-replay-v1",
+      "mode": "synthetic",
+      "source_batch_path": "m5-synthetic/batch.json",
+      "source_batch_sha256": "2d587ddcce41951baf116c0f7bd9f61656550200bd1c44fdb954283b3118ecc4",
+      "exploration_path": "m5-task-reasons/exploration.json",
+      "exploration_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c"
+    },
+    "source_report": {
+      "schema_version": "m5-source-report-v1",
+      "manifest_sha256": "2d587ddcce41951baf116c0f7bd9f61656550200bd1c44fdb954283b3118ecc4",
+      "mode": "synthetic",
+      "sources": [
+        {
+          "source": "wildfb",
+          "status": "mapped",
+          "reason": null,
+          "rows_read": 1,
+          "mapped_targets": 1,
+          "rejected_outcomes": 0,
+          "rejection_codes": {},
+          "split_conflicts": 0,
+          "ready_for_replay": 1,
+          "unreviewed_targets": 0,
+          "missing": {
+            "review_ref": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "screening_ref": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "group_ref": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "split_version": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "task": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "context_language": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "feedback_language": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            }
+          },
+          "diagnoses": {
+            "missing_category": 1,
+            "multiple_issues": 1
+          },
+          "diagnosis_matrix": {
+            "missing_category+multiple_issues": 1
+          },
+          "coverage": {
+            "task": {
+              "code_rewrite": 1
+            },
+            "context_language": {
+              "zh": 1
+            },
+            "feedback_language": {
+              "en": 1
+            },
+            "partition": {
+              "exploration": 1
+            }
+          },
+          "input_utf8_bytes_buckets": {
+            "0-1024": 1
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "status": "mapped",
+          "reason": null,
+          "rows_read": 1,
+          "mapped_targets": 2,
+          "rejected_outcomes": 0,
+          "rejection_codes": {},
+          "split_conflicts": 0,
+          "ready_for_replay": 2,
+          "unreviewed_targets": 0,
+          "missing": {
+            "review_ref": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            },
+            "screening_ref": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            },
+            "group_ref": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            },
+            "split_version": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            },
+            "task": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            },
+            "context_language": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            },
+            "feedback_language": {
+              "count": 0,
+              "denominator": 2,
+              "rate": 0.0
+            }
+          },
+          "diagnoses": {
+            "missing_category": 2,
+            "multiple_issues": 2
+          },
+          "diagnosis_matrix": {
+            "missing_category+multiple_issues": 2
+          },
+          "coverage": {
+            "task": {
+              "code_rewrite": 2
+            },
+            "context_language": {
+              "zh": 2
+            },
+            "feedback_language": {
+              "en": 2
+            },
+            "partition": {
+              "exploration": 2
+            }
+          },
+          "input_utf8_bytes_buckets": {
+            "0-1024": 2
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "status": "mapped",
+          "reason": null,
+          "rows_read": 1,
+          "mapped_targets": 1,
+          "rejected_outcomes": 0,
+          "rejection_codes": {},
+          "split_conflicts": 0,
+          "ready_for_replay": 1,
+          "unreviewed_targets": 0,
+          "missing": {
+            "review_ref": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "screening_ref": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "group_ref": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "split_version": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "task": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "context_language": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            },
+            "feedback_language": {
+              "count": 0,
+              "denominator": 1,
+              "rate": 0.0
+            }
+          },
+          "diagnoses": {
+            "missing_category": 1,
+            "multiple_issues": 1
+          },
+          "diagnosis_matrix": {
+            "missing_category+multiple_issues": 1
+          },
+          "coverage": {
+            "task": {
+              "code_rewrite": 1
+            },
+            "context_language": {
+              "zh": 1
+            },
+            "feedback_language": {
+              "en": 1
+            },
+            "partition": {
+              "exploration": 1
+            }
+          },
+          "input_utf8_bytes_buckets": {
+            "0-1024": 1
+          }
+        }
+      ],
+      "quality_metrics": null,
+      "user_cost_metrics": null,
+      "near_duplicate_review_complete": false
+    },
+    "mapping_failures": [
+      {
+        "source": "wildfb",
+        "status": "mapped",
+        "reason": null,
+        "rejected": []
+      },
+      {
+        "source": "helpsteer3",
+        "status": "mapped",
+        "reason": null,
+        "rejected": []
+      },
+      {
+        "source": "wildfeedback",
+        "status": "mapped",
+        "reason": null,
+        "rejected": []
+      }
+    ]
+  },
+  "samples": [
+    {
+      "input_id": "fe2a31d8e9b1d000ff5894e6853f7e6a010dcd8737cabdc648e923cda1bf367c",
+      "identity": {
+        "record_id": "c18da891f35946fc7ebe28423babf2fb0c1a4bbffdaa9f3d240958b33783fa1a",
+        "source": "wildfb",
+        "revision": "0791dbc3101c6be7e0316cba1d8caf10c28917ad",
+        "config": "default",
+        "split": "train",
+        "row_id": 0,
+        "target_key": "conversation",
+        "target_version": "7b33c37a015fb08e191e81974dcf1acb1759e377dc114ef81e806ed21f37a1a0",
+        "context_sha256": "8704f6ab138ae76530471516ff5d3aa10490b886b6cfb06d9ebcd631f774db75",
+        "prediction_refs": {
+          "context": [
+            {
+              "row_id": 0,
+              "pointer": "/messages/0",
+              "sha256": "30c24a097f966efbc5cd66850641513a1e27dc84da89dc790eaafa6754f0eb9d"
+            }
+          ],
+          "target": {
+            "row_id": 0,
+            "pointer": "/messages/1/content",
+            "sha256": "7b33c37a015fb08e191e81974dcf1acb1759e377dc114ef81e806ed21f37a1a0"
+          }
+        },
+        "review": {
+          "review_ref": "00000000-0000-4000-8000-000000000001",
+          "reviewer_ref": "00000000-0000-4000-8000-000000000002",
+          "review_version": "m5-case-review-v1",
+          "diagnoses": [
+            "missing_category",
+            "multiple_issues"
+          ],
+          "task": "code_rewrite",
+          "context_language": "zh",
+          "feedback_language": "en",
+          "group_ref": "00000000-0000-4000-8000-000000000001",
+          "partition": "exploration",
+          "split_version": "00000000-0000-4000-8000-000000000001",
+          "screening_ref": "00000000-0000-4000-8000-000000000001"
+        }
+      },
+      "source": "wildfb",
+      "task": "code_rewrite",
+      "language": "zh",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer"
+      ],
+      "state_sha256": "ffc21b1fc52d033c2440c06621bf3db55f01f61b47ccdc5588a594da334b8af8",
+      "input_utf8_bytes": 100,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "079ba7a6738c41889ee0710f4aef9a7130d65363f45af4d0eb4033eda7d1ecc9",
+      "identity": {
+        "record_id": "363f321250f709055216ac72663fcad91809c51d600b64a5d47b1ebd24e10822",
+        "source": "helpsteer3",
+        "revision": "f6d145777bcbde96137596340fab89793acd1031",
+        "config": "feedback",
+        "split": "train",
+        "row_id": 0,
+        "target_key": "response1",
+        "target_version": "971630b1c4d87737edbfc8e4019ebdff58122fdad05213024bdce5f1ab87fb1c",
+        "context_sha256": "8c0cbdcdafe698070f5d30a3da8c646856753c0e3ed3d022ca3fbb257839dc48",
+        "prediction_refs": {
+          "context": [
+            {
+              "row_id": 0,
+              "pointer": "/context/0",
+              "sha256": "4a1517935451b295ba0411fb5b181e5e83f59d47423e7b9f4af401b601160fdb"
+            }
+          ],
+          "target": {
+            "row_id": 0,
+            "pointer": "/response1",
+            "sha256": "971630b1c4d87737edbfc8e4019ebdff58122fdad05213024bdce5f1ab87fb1c"
+          }
+        },
+        "review": {
+          "review_ref": "00000000-0000-4000-8000-000000000001",
+          "reviewer_ref": "00000000-0000-4000-8000-000000000002",
+          "review_version": "m5-case-review-v1",
+          "diagnoses": [
+            "missing_category",
+            "multiple_issues"
+          ],
+          "task": "code_rewrite",
+          "context_language": "zh",
+          "feedback_language": "en",
+          "group_ref": "00000000-0000-4000-8000-000000000001",
+          "partition": "exploration",
+          "split_version": "00000000-0000-4000-8000-000000000001",
+          "screening_ref": "00000000-0000-4000-8000-000000000001"
+        }
+      },
+      "source": "helpsteer3",
+      "task": "code_rewrite",
+      "language": "zh",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer"
+      ],
+      "state_sha256": "767c2d133138b1f1af60d3a502f96c1afeec23ec451f3a2f480cb53d3febe163",
+      "input_utf8_bytes": 111,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "aadc2258016a2b97db88804ec1c41fdbad1650a3a7dd6ddf3bf8796168d41a97",
+      "identity": {
+        "record_id": "4a34fea1160cde02bc7ad1f17d72f3897f2f8c148b95ec3becf32640c8a6628d",
+        "source": "helpsteer3",
+        "revision": "f6d145777bcbde96137596340fab89793acd1031",
+        "config": "feedback",
+        "split": "train",
+        "row_id": 0,
+        "target_key": "response2",
+        "target_version": "ce599b28c024de67b1d12a2180cf9c1531b9246930f1b23311b1037f78920538",
+        "context_sha256": "8c0cbdcdafe698070f5d30a3da8c646856753c0e3ed3d022ca3fbb257839dc48",
+        "prediction_refs": {
+          "context": [
+            {
+              "row_id": 0,
+              "pointer": "/context/0",
+              "sha256": "4a1517935451b295ba0411fb5b181e5e83f59d47423e7b9f4af401b601160fdb"
+            }
+          ],
+          "target": {
+            "row_id": 0,
+            "pointer": "/response2",
+            "sha256": "ce599b28c024de67b1d12a2180cf9c1531b9246930f1b23311b1037f78920538"
+          }
+        },
+        "review": {
+          "review_ref": "00000000-0000-4000-8000-000000000001",
+          "reviewer_ref": "00000000-0000-4000-8000-000000000002",
+          "review_version": "m5-case-review-v1",
+          "diagnoses": [
+            "missing_category",
+            "multiple_issues"
+          ],
+          "task": "code_rewrite",
+          "context_language": "zh",
+          "feedback_language": "en",
+          "group_ref": "00000000-0000-4000-8000-000000000001",
+          "partition": "exploration",
+          "split_version": "00000000-0000-4000-8000-000000000001",
+          "screening_ref": "00000000-0000-4000-8000-000000000001"
+        }
+      },
+      "source": "helpsteer3",
+      "task": "code_rewrite",
+      "language": "zh",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer"
+      ],
+      "state_sha256": "36f5d510a10855e34eefecf8707aeeb95b6588772993fc2d935733ea9c69a6d8",
+      "input_utf8_bytes": 113,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "8aeeadd16a7731b5a1b30a4f4da3b7dfb9eb2d4c63446536b5bd43d9b77ed67f",
+      "identity": {
+        "record_id": "ab87a5ed03b5c021a31771d69c3bdf35fc07822c58dafa8271aa23641db05da6",
+        "source": "wildfeedback",
+        "revision": "8b1a3e530b949d6aacfad6ba8912e209a05bc846",
+        "config": "sat_dsat_annotation",
+        "split": "train",
+        "row_id": 0,
+        "target_key": "conversation",
+        "target_version": "7b33c37a015fb08e191e81974dcf1acb1759e377dc114ef81e806ed21f37a1a0",
+        "context_sha256": "8704f6ab138ae76530471516ff5d3aa10490b886b6cfb06d9ebcd631f774db75",
+        "prediction_refs": {
+          "context": [
+            {
+              "row_id": 0,
+              "pointer": "/messages/0",
+              "sha256": "30c24a097f966efbc5cd66850641513a1e27dc84da89dc790eaafa6754f0eb9d"
+            }
+          ],
+          "target": {
+            "row_id": 0,
+            "pointer": "/messages/1/content",
+            "sha256": "7b33c37a015fb08e191e81974dcf1acb1759e377dc114ef81e806ed21f37a1a0"
+          }
+        },
+        "review": {
+          "review_ref": "00000000-0000-4000-8000-000000000001",
+          "reviewer_ref": "00000000-0000-4000-8000-000000000002",
+          "review_version": "m5-case-review-v1",
+          "diagnoses": [
+            "missing_category",
+            "multiple_issues"
+          ],
+          "task": "code_rewrite",
+          "context_language": "zh",
+          "feedback_language": "en",
+          "group_ref": "00000000-0000-4000-8000-000000000001",
+          "partition": "exploration",
+          "split_version": "00000000-0000-4000-8000-000000000001",
+          "screening_ref": "00000000-0000-4000-8000-000000000001"
+        }
+      },
+      "source": "wildfeedback",
+      "task": "code_rewrite",
+      "language": "zh",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer"
+      ],
+      "state_sha256": "ffc21b1fc52d033c2440c06621bf3db55f01f61b47ccdc5588a594da334b8af8",
+      "input_utf8_bytes": 100,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "d11e755667207a66d8aaf7ec9f09020320176948344a432a108e84e9e61cf571",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "interface_preservation"
+      },
+      "source": "task_examples",
+      "task": "code_rewrite",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer",
+        "original_code"
+      ],
+      "state_sha256": "634de8e0fe66199ee2b3b8c41c46cf337edbeb827fd68b20cf4c7853a8b15502",
+      "input_utf8_bytes": 182,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "2f8692a873d08e4c75fe86ee753c05769b8d680076bf6a11b541b8b474366383",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "mixed_task"
+      },
+      "source": "task_examples",
+      "task": "mixed",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer",
+        "original_code"
+      ],
+      "state_sha256": "be9919e657d6731b5d882cf233669f0e7302039104c7f5563a401c775b67f184",
+      "input_utf8_bytes": 273,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "16d0a75b483e934ae49e8f6a5b73cfcad88f271da7c4a886a9df08c4bdfd44a9",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "negative_constraint"
+      },
+      "source": "task_examples",
+      "task": "code_rewrite",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer",
+        "original_code"
+      ],
+      "state_sha256": "6038f35c9ee4408cde2d71ba1600380ae7ee5dda4d42a42d2fd84422b0446fe7",
+      "input_utf8_bytes": 169,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "ebc1b0f3193073d01e686fdd245256fd25e3245e15ed5e18bdc674293b4c09ba",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "missing_material"
+      },
+      "source": "task_examples",
+      "task": "code_rewrite",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer"
+      ],
+      "state_sha256": "0271b70116ae817caee1dca1b110a6490a97e6bf6a21acf85012e2812a9b2ffd",
+      "input_utf8_bytes": 85,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "9f1c01130bc65e24902dc44277b07299c09463c41c6a54a230f141ace7d4e0fb",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "no_matching_reason"
+      },
+      "source": "task_examples",
+      "task": "code_rewrite",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer",
+        "original_code"
+      ],
+      "state_sha256": "8bd12afb7e179ed513771bbb56348a9c96ef32c4cb3d30c911787314a089d945",
+      "input_utf8_bytes": 209,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "63b43cc62674c32d818a0c0376c54f6994da1dfb5889f1dbb1c683b4185b5fd1",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "cross_task_fallback"
+      },
+      "source": "task_examples",
+      "task": "general",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer",
+        "original_code"
+      ],
+      "state_sha256": "7a61aebb6b33fc291953c7dcf120927a89deaec9fef84946c5451f6b6e63b608",
+      "input_utf8_bytes": 145,
+      "length_bucket": "0-1024",
+      "input_error": null
+    },
+    {
+      "input_id": "979df67cfc18f7c3f4af64126c628f83db3d0ec226ee2c80dc29ec23fa5bb2f1",
+      "identity": {
+        "file_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c",
+        "case_id": "requested_snippet_counterexample"
+      },
+      "source": "task_examples",
+      "task": "code_rewrite",
+      "language": "unknown",
+      "partition": "exploration",
+      "evidence_kinds": [
+        "request",
+        "answer",
+        "original_code"
+      ],
+      "state_sha256": "0f9a0be54bfa5414385a8be78bca374f53c0ac7cdab3eef783607b7a781af724",
+      "input_utf8_bytes": 165,
+      "length_bucket": "0-1024",
+      "input_error": null
+    }
+  ],
+  "quality_labels": null,
+  "scope": "synthetic_engineering_only",
+  "started_at": "2026-09-28T13:23:32.107285+00:00",
+  "implementation_sha256": {
+    "replay.py": "588439357e55530beb90c0f7bb71f0bbef8a93b9711883f3c8b8a91084fe0ea2",
+    "replay_laya.py": "9e3a97e88b7e7c77631969ecab6df26acb966f7c025907e26da3e5e44d8236f2",
+    "replay_metrics.py": "d27db735b4793490705adab483d4b3f03635eb086d2f62ca0244e405b7150d6a",
+    "laya_local.py": "0c4191ba16d071b9c6105920af0815c4173786f93e7501c4a3d4c2e28cb400b7",
+    "laya_manifest.py": "3b1b605f278e9be6a2494b5ae4fcd69477cf6a8f272bdb975a235f75f6b1c467",
+    "source_mapping.py": "e52a8517ea2827e895ac1cb0ee0ef9776a32110dbf087d6ee426687fe3482f7d",
+    "source_review.py": "418a28cc3c124b19d0b61aebff6d29286fc55fd6872afd33338c0ed7d6848ea4",
+    "task_reasons.py": "d8b0aa893d16854844844b9e392b44b49a77d72e7d6115cbb4c8fdc5a4441fb5",
+    "task_reasons.json": "83b9da60d1c67ccdb9ef33cc6322ebea94672302b0ed154b350390b43c5d714e"
+  },
+  "run_id": "b45b9f6b61b1148378a20939b78b2bdfb43fa9e92eaa7b9056620cd3264ec57a"
+}

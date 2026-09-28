@@ -1,0 +1,8 @@
+{
+  "schema_version": "m5-replay-v1",
+  "mode": "synthetic",
+  "source_batch_path": "m5-synthetic/batch.json",
+  "source_batch_sha256": "2d587ddcce41951baf116c0f7bd9f61656550200bd1c44fdb954283b3118ecc4",
+  "exploration_path": "m5-task-reasons/exploration.json",
+  "exploration_sha256": "0fbdcc6cc420d35a030cc0a2ba15f1929f99b8c57cc1cae32f29fec13c990e0c"
+}

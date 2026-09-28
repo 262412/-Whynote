@@ -1,0 +1,132 @@
+{
+  "tested_commit": "85c09b9b5d38cf0578eda90f72047f1ba21ef401",
+  "main": "441b2a5884fb3742800309dab4755f9facbf5631",
+  "scope": "independent_synthetic_engineering_not_model_quality",
+  "baseline_passed_after_checkout_eol_repair": 517,
+  "new_independent_passed": 14,
+  "full_passed": 531,
+  "ruff": "passed",
+  "format_files": 77,
+  "runs": [
+    {
+      "directory": "actual-1",
+      "run_id": "02b9ba064118eed82426fcfb2fdda2aadfe8f208605f6ce195be0028fa936b6f",
+      "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "statuses": {
+        "A": {
+          "suggested": 10,
+          "unknown": 1
+        },
+        "B": {
+          "unknown": 6,
+          "suggested": 3,
+          "no_match": 2
+        },
+        "C": {
+          "unknown": 8,
+          "suggested": 3
+        }
+      },
+      "latencies_ms": {
+        "A": {
+          "p50": 15.603,
+          "p95": 318.871
+        },
+        "B": {
+          "p50": 29.559,
+          "p95": 45.954
+        },
+        "C": {
+          "p50": 33.133,
+          "p95": 43.618
+        }
+      },
+      "raw_sha256": {
+        "helpsteer3-report.json": "4ea5c80288e028ec1f963d54457341eec6ff055a0ca3677406d6523da641cfb4",
+        "predictions.jsonl": "a5e1d4195d7f80c0d4f89e4f797572af6b13a300e28c8261519d9acd0a338e47",
+        "report.json": "49cb6c49aed9c86dff2d78b79442a7cfcae7943cb00fda5b894abdd3db040981",
+        "run-manifest.json": "1dc7c5aec6095d76ecd2d6f1a6b574772fec822449604c4cffbe9b46df97ee3b",
+        "task_examples-report.json": "71d94872e01adfc5d6d7b7f82515edbdcb0c983d28bfbdce15e51749533921cf",
+        "wildfb-report.json": "a02d74ef0fdd9c3098db4e2e19356334a899c9881b27cf7c5984329d1938cc09",
+        "wildfeedback-report.json": "f824dc9484007dfcf9a52131745bcb484c9421cc77966d8fc6cff5b549e23d49"
+      },
+      "report_recomputed": true,
+      "implementation_sha256_matches": true,
+      "equals_developer_attempt_4": true
+    },
+    {
+      "directory": "actual-2",
+      "run_id": "423c53844a3c2acdd9da96d16d3bf29cdc6b9bebae9625b507df073144bd99de",
+      "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "statuses": {
+        "A": {
+          "suggested": 10,
+          "unknown": 1
+        },
+        "B": {
+          "unknown": 6,
+          "suggested": 3,
+          "no_match": 2
+        },
+        "C": {
+          "unknown": 8,
+          "suggested": 3
+        }
+      },
+      "latencies_ms": {
+        "A": {
+          "p50": 16.648,
+          "p95": 390.486
+        },
+        "B": {
+          "p50": 28.918,
+          "p95": 45.729
+        },
+        "C": {
+          "p50": 35.558,
+          "p95": 43.162
+        }
+      },
+      "raw_sha256": {
+        "helpsteer3-report.json": "06c114578a893605565d7551393ee5fb7bce9e5f3810ebe006f3a71be424b29f",
+        "predictions.jsonl": "be6274d2ed0aa571e6181e926621f2a53afa8f4b06e841a0afa2971afa2c39a6",
+        "report.json": "84f6555175dba607fa7b58a5910e175817c3045ef2e1074370f3458e673a586c",
+        "run-manifest.json": "c925c2ee44998fc5b2e2c15a4b4d1ceaa7cd9ecc2f39fffff915e6b2ef3cace2",
+        "task_examples-report.json": "3165fc79f8a1d511f87856dac4f7efbb8af776a814c60a5eb1167b7a0024e006",
+        "wildfb-report.json": "f3e4119a3cd35b09f34884e44ea91b930080a78a5d4697c722cfd4b2e9686822",
+        "wildfeedback-report.json": "72da1e02ae0002db6fcb1c42ba04da81636af84b4d6e6e419e588bc8e90b5591"
+      },
+      "report_recomputed": true,
+      "implementation_sha256_matches": true,
+      "equals_developer_attempt_4": true
+    }
+  ],
+  "real_backend_budget_probe_passed": 5,
+  "quality_metrics": null,
+  "new_business_defects": [],
+  "initial_checkout_failure_preserved": true,
+  "not_executed": [
+    "real_corpus",
+    "independent_holdout",
+    "model_quality",
+    "browser",
+    "independent_native_host"
+  ],
+  "pending": [
+    "non_author_approved",
+    "applicable_owner_signoff",
+    "real_source_admission",
+    "holdout_and_preregistered_thresholds"
+  ],
+  "feishu": {
+    "input": {
+      "prd": 332,
+      "technical": 330
+    },
+    "readback": {
+      "prd": 334,
+      "technical": 332
+    },
+    "history_links_preserved": true
+  }
+}

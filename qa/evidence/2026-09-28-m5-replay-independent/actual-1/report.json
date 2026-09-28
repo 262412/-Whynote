@@ -1,0 +1,1210 @@
+{
+  "by_scheme": {
+    "A": {
+      "attempts": 11,
+      "valid_outputs": 11,
+      "statuses": {
+        "suggested": 10,
+        "unknown": 1
+      },
+      "fallbacks": 0,
+      "candidate_counts": {
+        "routed": 88,
+        "available": 88
+      },
+      "elapsed_ms": {
+        "p50": 15.603,
+        "p95": 318.871
+      },
+      "stages": {
+        "reason": {
+          "calls": 11,
+          "p50_ms": 15.521,
+          "p95_ms": 318.833
+        }
+      },
+      "quality_metrics": null
+    },
+    "B": {
+      "attempts": 11,
+      "valid_outputs": 11,
+      "statuses": {
+        "unknown": 6,
+        "suggested": 3,
+        "no_match": 2
+      },
+      "fallbacks": 0,
+      "candidate_counts": {
+        "routed": 44,
+        "available": 24
+      },
+      "elapsed_ms": {
+        "p50": 29.559,
+        "p95": 45.954
+      },
+      "stages": {
+        "reason": {
+          "calls": 6,
+          "p50_ms": 16.145,
+          "p95_ms": 21.109
+        },
+        "route": {
+          "calls": 11,
+          "p50_ms": 14.031,
+          "p95_ms": 45.896
+        }
+      },
+      "quality_metrics": null
+    },
+    "C": {
+      "attempts": 11,
+      "valid_outputs": 11,
+      "statuses": {
+        "unknown": 8,
+        "suggested": 3
+      },
+      "fallbacks": 0,
+      "candidate_counts": {
+        "routed": 121,
+        "available": 79
+      },
+      "elapsed_ms": {
+        "p50": 33.133,
+        "p95": 43.618
+      },
+      "stages": {
+        "reason": {
+          "calls": 11,
+          "p50_ms": 18.987,
+          "p95_ms": 24.361
+        },
+        "route": {
+          "calls": 11,
+          "p50_ms": 14.078,
+          "p95_ms": 19.117
+        }
+      },
+      "quality_metrics": null
+    }
+  },
+  "strata": {
+    "source": {
+      "helpsteer3": {
+        "A": {
+          "attempts": 2,
+          "valid_outputs": 2,
+          "statuses": {
+            "suggested": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 16,
+            "available": 16
+          },
+          "elapsed_ms": {
+            "p50": 14.944,
+            "p95": 15.075
+          },
+          "stages": {
+            "reason": {
+              "calls": 2,
+              "p50_ms": 14.902,
+              "p95_ms": 15.034
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 2,
+          "valid_outputs": 2,
+          "statuses": {
+            "unknown": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 8,
+            "available": 0
+          },
+          "elapsed_ms": {
+            "p50": 13.589,
+            "p95": 14.025
+          },
+          "stages": {
+            "route": {
+              "calls": 2,
+              "p50_ms": 13.534,
+              "p95_ms": 13.959
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 2,
+          "valid_outputs": 2,
+          "statuses": {
+            "unknown": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 22,
+            "available": 10
+          },
+          "elapsed_ms": {
+            "p50": 28.298,
+            "p95": 30.051
+          },
+          "stages": {
+            "reason": {
+              "calls": 2,
+              "p50_ms": 14.531,
+              "p95_ms": 15.409
+            },
+            "route": {
+              "calls": 2,
+              "p50_ms": 13.292,
+              "p95_ms": 14.065
+            }
+          },
+          "quality_metrics": null
+        }
+      },
+      "task_examples": {
+        "A": {
+          "attempts": 7,
+          "valid_outputs": 7,
+          "statuses": {
+            "suggested": 6,
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 56,
+            "available": 56
+          },
+          "elapsed_ms": {
+            "p50": 15.844,
+            "p95": 20.273
+          },
+          "stages": {
+            "reason": {
+              "calls": 7,
+              "p50_ms": 15.807,
+              "p95_ms": 20.222
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 7,
+          "valid_outputs": 7,
+          "statuses": {
+            "unknown": 2,
+            "suggested": 3,
+            "no_match": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 28,
+            "available": 24
+          },
+          "elapsed_ms": {
+            "p50": 29.99,
+            "p95": 39.363
+          },
+          "stages": {
+            "reason": {
+              "calls": 6,
+              "p50_ms": 16.145,
+              "p95_ms": 21.109
+            },
+            "route": {
+              "calls": 7,
+              "p50_ms": 14.821,
+              "p95_ms": 18.133
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 7,
+          "valid_outputs": 7,
+          "statuses": {
+            "unknown": 4,
+            "suggested": 3
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 77,
+            "available": 59
+          },
+          "elapsed_ms": {
+            "p50": 37.064,
+            "p95": 43.618
+          },
+          "stages": {
+            "reason": {
+              "calls": 7,
+              "p50_ms": 21.375,
+              "p95_ms": 24.361
+            },
+            "route": {
+              "calls": 7,
+              "p50_ms": 14.153,
+              "p95_ms": 19.117
+            }
+          },
+          "quality_metrics": null
+        }
+      },
+      "wildfb": {
+        "A": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 8,
+            "available": 8
+          },
+          "elapsed_ms": {
+            "p50": 318.871,
+            "p95": 318.871
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 318.833,
+              "p95_ms": 318.833
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 4,
+            "available": 0
+          },
+          "elapsed_ms": {
+            "p50": 45.954,
+            "p95": 45.954
+          },
+          "stages": {
+            "route": {
+              "calls": 1,
+              "p50_ms": 45.896,
+              "p95_ms": 45.896
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 11,
+            "available": 5
+          },
+          "elapsed_ms": {
+            "p50": 31.656,
+            "p95": 31.656
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 16.018,
+              "p95_ms": 16.018
+            },
+            "route": {
+              "calls": 1,
+              "p50_ms": 15.111,
+              "p95_ms": 15.111
+            }
+          },
+          "quality_metrics": null
+        }
+      },
+      "wildfeedback": {
+        "A": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 8,
+            "available": 8
+          },
+          "elapsed_ms": {
+            "p50": 14.385,
+            "p95": 14.385
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 14.345,
+              "p95_ms": 14.345
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 4,
+            "available": 0
+          },
+          "elapsed_ms": {
+            "p50": 13.356,
+            "p95": 13.356
+          },
+          "stages": {
+            "route": {
+              "calls": 1,
+              "p50_ms": 13.297,
+              "p95_ms": 13.297
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 11,
+            "available": 5
+          },
+          "elapsed_ms": {
+            "p50": 28.618,
+            "p95": 28.618
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 14.658,
+              "p95_ms": 14.658
+            },
+            "route": {
+              "calls": 1,
+              "p50_ms": 13.376,
+              "p95_ms": 13.376
+            }
+          },
+          "quality_metrics": null
+        }
+      }
+    },
+    "task": {
+      "code_rewrite": {
+        "A": {
+          "attempts": 9,
+          "valid_outputs": 9,
+          "statuses": {
+            "suggested": 8,
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 72,
+            "available": 72
+          },
+          "elapsed_ms": {
+            "p50": 15.568,
+            "p95": 318.871
+          },
+          "stages": {
+            "reason": {
+              "calls": 9,
+              "p50_ms": 15.521,
+              "p95_ms": 318.833
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 9,
+          "valid_outputs": 9,
+          "statuses": {
+            "unknown": 6,
+            "no_match": 2,
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 36,
+            "available": 16
+          },
+          "elapsed_ms": {
+            "p50": 29.559,
+            "p95": 45.954
+          },
+          "stages": {
+            "reason": {
+              "calls": 4,
+              "p50_ms": 16.145,
+              "p95_ms": 21.109
+            },
+            "route": {
+              "calls": 9,
+              "p50_ms": 14.031,
+              "p95_ms": 45.896
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 9,
+          "valid_outputs": 9,
+          "statuses": {
+            "unknown": 8,
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 99,
+            "available": 61
+          },
+          "elapsed_ms": {
+            "p50": 31.656,
+            "p95": 42.697
+          },
+          "stages": {
+            "reason": {
+              "calls": 9,
+              "p50_ms": 16.018,
+              "p95_ms": 22.92
+            },
+            "route": {
+              "calls": 9,
+              "p50_ms": 14.078,
+              "p95_ms": 19.117
+            }
+          },
+          "quality_metrics": null
+        }
+      },
+      "general": {
+        "A": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 8,
+            "available": 8
+          },
+          "elapsed_ms": {
+            "p50": 15.603,
+            "p95": 15.603
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 15.493,
+              "p95_ms": 15.493
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 4,
+            "available": 4
+          },
+          "elapsed_ms": {
+            "p50": 29.301,
+            "p95": 29.301
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 15.376,
+              "p95_ms": 15.376
+            },
+            "route": {
+              "calls": 1,
+              "p50_ms": 13.805,
+              "p95_ms": 13.805
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 11,
+            "available": 9
+          },
+          "elapsed_ms": {
+            "p50": 33.133,
+            "p95": 33.133
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 18.987,
+              "p95_ms": 18.987
+            },
+            "route": {
+              "calls": 1,
+              "p50_ms": 13.663,
+              "p95_ms": 13.663
+            }
+          },
+          "quality_metrics": null
+        }
+      },
+      "mixed": {
+        "A": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 8,
+            "available": 8
+          },
+          "elapsed_ms": {
+            "p50": 19.958,
+            "p95": 19.958
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 19.908,
+              "p95_ms": 19.908
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 4,
+            "available": 4
+          },
+          "elapsed_ms": {
+            "p50": 37.888,
+            "p95": 37.888
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 20.105,
+              "p95_ms": 20.105
+            },
+            "route": {
+              "calls": 1,
+              "p50_ms": 17.652,
+              "p95_ms": 17.652
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 1,
+          "valid_outputs": 1,
+          "statuses": {
+            "suggested": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 11,
+            "available": 9
+          },
+          "elapsed_ms": {
+            "p50": 43.618,
+            "p95": 43.618
+          },
+          "stages": {
+            "reason": {
+              "calls": 1,
+              "p50_ms": 24.361,
+              "p95_ms": 24.361
+            },
+            "route": {
+              "calls": 1,
+              "p50_ms": 18.651,
+              "p95_ms": 18.651
+            }
+          },
+          "quality_metrics": null
+        }
+      }
+    },
+    "language": {
+      "unknown": {
+        "A": {
+          "attempts": 7,
+          "valid_outputs": 7,
+          "statuses": {
+            "suggested": 6,
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 56,
+            "available": 56
+          },
+          "elapsed_ms": {
+            "p50": 15.844,
+            "p95": 20.273
+          },
+          "stages": {
+            "reason": {
+              "calls": 7,
+              "p50_ms": 15.807,
+              "p95_ms": 20.222
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 7,
+          "valid_outputs": 7,
+          "statuses": {
+            "unknown": 2,
+            "suggested": 3,
+            "no_match": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 28,
+            "available": 24
+          },
+          "elapsed_ms": {
+            "p50": 29.99,
+            "p95": 39.363
+          },
+          "stages": {
+            "reason": {
+              "calls": 6,
+              "p50_ms": 16.145,
+              "p95_ms": 21.109
+            },
+            "route": {
+              "calls": 7,
+              "p50_ms": 14.821,
+              "p95_ms": 18.133
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 7,
+          "valid_outputs": 7,
+          "statuses": {
+            "unknown": 4,
+            "suggested": 3
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 77,
+            "available": 59
+          },
+          "elapsed_ms": {
+            "p50": 37.064,
+            "p95": 43.618
+          },
+          "stages": {
+            "reason": {
+              "calls": 7,
+              "p50_ms": 21.375,
+              "p95_ms": 24.361
+            },
+            "route": {
+              "calls": 7,
+              "p50_ms": 14.153,
+              "p95_ms": 19.117
+            }
+          },
+          "quality_metrics": null
+        }
+      },
+      "zh": {
+        "A": {
+          "attempts": 4,
+          "valid_outputs": 4,
+          "statuses": {
+            "suggested": 4
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 32,
+            "available": 32
+          },
+          "elapsed_ms": {
+            "p50": 14.944,
+            "p95": 318.871
+          },
+          "stages": {
+            "reason": {
+              "calls": 4,
+              "p50_ms": 14.902,
+              "p95_ms": 318.833
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 4,
+          "valid_outputs": 4,
+          "statuses": {
+            "unknown": 4
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 16,
+            "available": 0
+          },
+          "elapsed_ms": {
+            "p50": 13.589,
+            "p95": 45.954
+          },
+          "stages": {
+            "route": {
+              "calls": 4,
+              "p50_ms": 13.534,
+              "p95_ms": 45.896
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 4,
+          "valid_outputs": 4,
+          "statuses": {
+            "unknown": 4
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 44,
+            "available": 20
+          },
+          "elapsed_ms": {
+            "p50": 28.618,
+            "p95": 31.656
+          },
+          "stages": {
+            "reason": {
+              "calls": 4,
+              "p50_ms": 14.658,
+              "p95_ms": 16.018
+            },
+            "route": {
+              "calls": 4,
+              "p50_ms": 13.376,
+              "p95_ms": 15.111
+            }
+          },
+          "quality_metrics": null
+        }
+      }
+    },
+    "length_bucket": {
+      "0-1024": {
+        "A": {
+          "attempts": 11,
+          "valid_outputs": 11,
+          "statuses": {
+            "suggested": 10,
+            "unknown": 1
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 88,
+            "available": 88
+          },
+          "elapsed_ms": {
+            "p50": 15.603,
+            "p95": 318.871
+          },
+          "stages": {
+            "reason": {
+              "calls": 11,
+              "p50_ms": 15.521,
+              "p95_ms": 318.833
+            }
+          },
+          "quality_metrics": null
+        },
+        "B": {
+          "attempts": 11,
+          "valid_outputs": 11,
+          "statuses": {
+            "unknown": 6,
+            "suggested": 3,
+            "no_match": 2
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 44,
+            "available": 24
+          },
+          "elapsed_ms": {
+            "p50": 29.559,
+            "p95": 45.954
+          },
+          "stages": {
+            "reason": {
+              "calls": 6,
+              "p50_ms": 16.145,
+              "p95_ms": 21.109
+            },
+            "route": {
+              "calls": 11,
+              "p50_ms": 14.031,
+              "p95_ms": 45.896
+            }
+          },
+          "quality_metrics": null
+        },
+        "C": {
+          "attempts": 11,
+          "valid_outputs": 11,
+          "statuses": {
+            "unknown": 8,
+            "suggested": 3
+          },
+          "fallbacks": 0,
+          "candidate_counts": {
+            "routed": 121,
+            "available": 79
+          },
+          "elapsed_ms": {
+            "p50": 33.133,
+            "p95": 43.618
+          },
+          "stages": {
+            "reason": {
+              "calls": 11,
+              "p50_ms": 18.987,
+              "p95_ms": 24.361
+            },
+            "route": {
+              "calls": 11,
+              "p50_ms": 14.078,
+              "p95_ms": 19.117
+            }
+          },
+          "quality_metrics": null
+        }
+      }
+    }
+  },
+  "quality_metrics": null,
+  "user_cost_metrics": null,
+  "run_id": "02b9ba064118eed82426fcfb2fdda2aadfe8f208605f6ce195be0028fa936b6f",
+  "sample_count": 11,
+  "source_mapping": {
+    "schema_version": "m5-source-report-v1",
+    "manifest_sha256": "2d587ddcce41951baf116c0f7bd9f61656550200bd1c44fdb954283b3118ecc4",
+    "mode": "synthetic",
+    "sources": [
+      {
+        "source": "wildfb",
+        "status": "mapped",
+        "reason": null,
+        "rows_read": 1,
+        "mapped_targets": 1,
+        "rejected_outcomes": 0,
+        "rejection_codes": {},
+        "split_conflicts": 0,
+        "ready_for_replay": 1,
+        "unreviewed_targets": 0,
+        "missing": {
+          "review_ref": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "screening_ref": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "group_ref": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "split_version": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "task": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "context_language": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "feedback_language": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          }
+        },
+        "diagnoses": {
+          "missing_category": 1,
+          "multiple_issues": 1
+        },
+        "diagnosis_matrix": {
+          "missing_category+multiple_issues": 1
+        },
+        "coverage": {
+          "task": {
+            "code_rewrite": 1
+          },
+          "context_language": {
+            "zh": 1
+          },
+          "feedback_language": {
+            "en": 1
+          },
+          "partition": {
+            "exploration": 1
+          }
+        },
+        "input_utf8_bytes_buckets": {
+          "0-1024": 1
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "status": "mapped",
+        "reason": null,
+        "rows_read": 1,
+        "mapped_targets": 2,
+        "rejected_outcomes": 0,
+        "rejection_codes": {},
+        "split_conflicts": 0,
+        "ready_for_replay": 2,
+        "unreviewed_targets": 0,
+        "missing": {
+          "review_ref": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          },
+          "screening_ref": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          },
+          "group_ref": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          },
+          "split_version": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          },
+          "task": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          },
+          "context_language": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          },
+          "feedback_language": {
+            "count": 0,
+            "denominator": 2,
+            "rate": 0.0
+          }
+        },
+        "diagnoses": {
+          "missing_category": 2,
+          "multiple_issues": 2
+        },
+        "diagnosis_matrix": {
+          "missing_category+multiple_issues": 2
+        },
+        "coverage": {
+          "task": {
+            "code_rewrite": 2
+          },
+          "context_language": {
+            "zh": 2
+          },
+          "feedback_language": {
+            "en": 2
+          },
+          "partition": {
+            "exploration": 2
+          }
+        },
+        "input_utf8_bytes_buckets": {
+          "0-1024": 2
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "status": "mapped",
+        "reason": null,
+        "rows_read": 1,
+        "mapped_targets": 1,
+        "rejected_outcomes": 0,
+        "rejection_codes": {},
+        "split_conflicts": 0,
+        "ready_for_replay": 1,
+        "unreviewed_targets": 0,
+        "missing": {
+          "review_ref": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "screening_ref": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "group_ref": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "split_version": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "task": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "context_language": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "feedback_language": {
+            "count": 0,
+            "denominator": 1,
+            "rate": 0.0
+          }
+        },
+        "diagnoses": {
+          "missing_category": 1,
+          "multiple_issues": 1
+        },
+        "diagnosis_matrix": {
+          "missing_category+multiple_issues": 1
+        },
+        "coverage": {
+          "task": {
+            "code_rewrite": 1
+          },
+          "context_language": {
+            "zh": 1
+          },
+          "feedback_language": {
+            "en": 1
+          },
+          "partition": {
+            "exploration": 1
+          }
+        },
+        "input_utf8_bytes_buckets": {
+          "0-1024": 1
+        }
+      }
+    ],
+    "quality_metrics": null,
+    "user_cost_metrics": null,
+    "near_duplicate_review_complete": false
+  },
+  "mapping_failures": [
+    {
+      "source": "wildfb",
+      "status": "mapped",
+      "reason": null,
+      "rejected": []
+    },
+    {
+      "source": "helpsteer3",
+      "status": "mapped",
+      "reason": null,
+      "rejected": []
+    },
+    {
+      "source": "wildfeedback",
+      "status": "mapped",
+      "reason": null,
+      "rejected": []
+    }
+  ],
+  "backend": {
+    "status": "ready",
+    "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+    "files_sha256": {
+      "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+      "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+      "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+      "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+      "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+    },
+    "network_disabled": true,
+    "runtime": {
+      "laya": "0.3.21",
+      "torch": "2.11.0+cu128",
+      "transformers": "4.57.6"
+    },
+    "device": "cuda",
+    "hardware": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "load_ms": 6631.902,
+    "backend": "laya_local"
+  }
+}
