@@ -1,0 +1,36 @@
+{
+  "reviewed_base": "32e9858e78412469009cef8d644b0d07383a0c39",
+  "review_comment_ids": [
+    4123215957,
+    4123215971,
+    4123215988
+  ],
+  "red_regressions": [
+    "FAILED tests/test_suggestions.py::test_confirmation_provenance_survives_a_later_rejection",
+    "FAILED tests/test_suggestions.py::test_host_cleanup_ignores_stopped_suggestion_configuration[False]",
+    "FAILED tests/test_suggestions.py::test_host_cleanup_ignores_stopped_suggestion_configuration[True]",
+    "FAILED tests/test_suggestions.py::test_terminal_suggestions_are_not_pending_before_expiry[invalidated]",
+    "FAILED tests/test_suggestions.py::test_terminal_suggestions_are_not_pending_before_expiry[superseded]",
+    "FAILED tests/test_suggestions.py::test_terminal_suggestions_are_not_pending_before_expiry[action_retracted]",
+    "FAILED tests/test_suggestions.py::test_terminal_suggestions_are_not_pending_before_expiry[answer_unavailable]"
+  ],
+  "red_failed": 7,
+  "fixed_tests": 592,
+  "new_tests_total": 61,
+  "failures": 0,
+  "errors": 0,
+  "command": "uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_acceptance.py -q",
+  "ruff_check": "passed",
+  "ruff_format": "passed",
+  "source_sha256_lf": {
+    "src/whynote/suggestions.py": "84274e31063106ac83cfde988573cf27cbf0e57d41f5c147e0728794a4578d77",
+    "src/whynote/s1_host.py": "38cecadc242e666011a07f91fb475a2e65f18c01284af516546f92afaa7cf102",
+    "src/whynote/research.py": "ce20c016cb76f3edbd4926340744d0c3cf1ada31ed9ce7b685db4ccbd303e01b",
+    "src/whynote/research_report.py": "eab2745ae7398fecd70d1387e1800e12022f778c4b8832228290bbb10276553b",
+    "tests/test_suggestions.py": "ad90fca29944bfb7f87edf520bc98853c6958447a25a37228351ce805b89aa8f",
+    "qa/m52_suggestion_fixture.py": "6a525d5c530c098089627f7f3d5696706457c1db5aeb59a161c4d5e240584e44"
+  },
+  "report_sha256_lf": "b80fd44dcbb85f67643ade2d724b375d14786018bd63168691ebc2486d5437b6",
+  "independent_qa": "pending",
+  "contract_signoff": "pending"
+}

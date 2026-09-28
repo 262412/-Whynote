@@ -1,0 +1,1173 @@
+{
+  "metric_version": "s1-research-v1",
+  "scope": "synthetic_development_only",
+  "since": "2026-09-01T00:00:00+00:00",
+  "as_of": "2026-09-01T00:01:00+00:00",
+  "boundary": "since <= first_eligible_at <= as_of; feedback observed through as_of",
+  "denominator_policy": "historically_eligible; invalidation does not remove answers",
+  "participant_count": 1,
+  "untracked_attempt_count_through_cutoff": 0,
+  "attempt_status_counts_in_interval": {
+    "eligible": 10
+  },
+  "unmatched_actions_in_interval": 0,
+  "groups": {
+    "self_natural": {
+      "eligible_answers": 1,
+      "negative_answers": 1,
+      "negative_answer_rate": 1.0,
+      "actor_roles": {
+        "self_report": 1
+      },
+      "public_label_origins": {
+        "none": 1
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 1,
+        "model_revision": 1,
+        "patch_sha256": 1,
+        "pricing_version": 1
+      },
+      "displayed_actions": 0,
+      "display_coverage": 0.0,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-01T00:01:00+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": true,
+        "filled_numerator": 0,
+        "fill_rate": 0.0,
+        "window_status_counts": {
+          "retracted": 1
+        },
+        "retracted_action_count": 1,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 1
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 1,
+        "displayable": 1,
+        "render_reported": 1,
+        "valid_response": 1,
+        "confirmed": 1,
+        "render_rate": 1.0,
+        "response_rate": 1.0,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 0,
+        "outcome_counts": {
+          "suggested": 1
+        },
+        "status_counts": {
+          "responded": 1
+        },
+        "operation_counts": {
+          "yes": 1,
+          "correct": 1
+        },
+        "invalidated": 1,
+        "retracted_action_count": 1,
+        "strata": [
+          {
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "generated": 1,
+            "displayable": 1,
+            "render_reported": 1,
+            "valid_response": 1
+          }
+        ],
+        "current_confirmations": {
+          "971d424d-3833-4fe1-8bef-ebce948b06eb": {
+            "reason_id": null,
+            "source": "none",
+            "status": "action_retracted",
+            "response_id": "823f3aa9-8911-4579-9071-29c4ec953a92",
+            "last_response_id": "823f3aa9-8911-4579-9071-29c4ec953a92"
+          }
+        },
+        "rows": [
+          {
+            "event_id": "971d424d-3833-4fe1-8bef-ebce948b06eb",
+            "suggestion_id": "5440c435-04df-5348-aca5-279a60c3b7ab",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": true,
+            "operations": {
+              "yes": 1,
+              "correct": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": true,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": true
+          }
+        ]
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 1,
+          "negative_answers": 1
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 1
+      }
+    },
+    "scripted": {
+      "eligible_answers": 5,
+      "negative_answers": 5,
+      "negative_answer_rate": 1.0,
+      "actor_roles": {
+        "self_report": 5
+      },
+      "public_label_origins": {
+        "none": 5
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 5,
+        "model_revision": 5,
+        "patch_sha256": 5,
+        "pricing_version": 5
+      },
+      "displayed_actions": 0,
+      "display_coverage": 0.0,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-01T00:01:00+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": true,
+        "filled_numerator": 0,
+        "fill_rate": 0.0,
+        "window_status_counts": {
+          "pending": 5
+        },
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 5
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 5,
+        "displayable": 5,
+        "render_reported": 5,
+        "valid_response": 4,
+        "confirmed": 0,
+        "render_rate": 1.0,
+        "response_rate": 0.8,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 1,
+        "outcome_counts": {
+          "suggested": 5
+        },
+        "status_counts": {
+          "responded": 4,
+          "unresponded": 1
+        },
+        "operation_counts": {
+          "decline": 1,
+          "no": 1,
+          "close": 1,
+          "skip": 1,
+          "none_matched": 1
+        },
+        "invalidated": 0,
+        "retracted_action_count": 0,
+        "strata": [
+          {
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "generated": 5,
+            "displayable": 5,
+            "render_reported": 5,
+            "valid_response": 4
+          }
+        ],
+        "current_confirmations": {
+          "ea2758c0-02cc-4893-a23c-bdafe10de7c0": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": "c9ca70f6-0baa-40c6-a19d-2bf9be4f8102"
+          },
+          "298f9542-0207-41c3-a25a-d6e05f62aa45": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": "003e79d2-75f8-447a-8e1c-ee492265960f"
+          },
+          "414ba91f-a63d-4249-89ff-4be607563b4e": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": "4fb0ffe5-47de-4280-8017-0bd99f17bce0"
+          },
+          "7bc2dbf9-8b55-4b10-b6c9-975f204b3dbd": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": "3c8c5962-adbc-4d0c-bd67-33084081ddac"
+          },
+          "658cacb9-4103-41ce-8353-3bff4df0be18": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": "4ab6f5cd-d581-45c5-af34-07c3b488bd24"
+          }
+        },
+        "rows": [
+          {
+            "event_id": "ea2758c0-02cc-4893-a23c-bdafe10de7c0",
+            "suggestion_id": "c712a44b-51aa-57ea-93fb-405239a8e7f9",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": false,
+            "operations": {
+              "decline": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "298f9542-0207-41c3-a25a-d6e05f62aa45",
+            "suggestion_id": "2efe2915-115e-5576-a327-cb60b6daa0aa",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": false,
+            "operations": {
+              "no": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "414ba91f-a63d-4249-89ff-4be607563b4e",
+            "suggestion_id": "502b601f-5445-50b0-912c-feae1800f1ec",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": false,
+            "confirmed": false,
+            "operations": {
+              "close": 1
+            },
+            "status": "unresponded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "7bc2dbf9-8b55-4b10-b6c9-975f204b3dbd",
+            "suggestion_id": "44d5a960-39e4-5148-a83f-31bc3f4dd729",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": false,
+            "operations": {
+              "skip": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "658cacb9-4103-41ce-8353-3bff4df0be18",
+            "suggestion_id": "38d37057-ea9f-5467-89f5-bd648aa600b8",
+            "outcome": "suggested",
+            "render_reported": true,
+            "valid_response": true,
+            "confirmed": false,
+            "operations": {
+              "none_matched": 1
+            },
+            "status": "responded",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          }
+        ]
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 5,
+          "negative_answers": 5
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 5
+      }
+    },
+    "public_replay": {
+      "eligible_answers": 4,
+      "negative_answers": 4,
+      "negative_answer_rate": 1.0,
+      "actor_roles": {
+        "evaluator": 4
+      },
+      "public_label_origins": {
+        "automated": 4
+      },
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {
+        "host_sha": 4,
+        "model_revision": 4,
+        "patch_sha256": 4,
+        "pricing_version": 4
+      },
+      "displayed_actions": 0,
+      "display_coverage": 0.0,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": "not_applicable",
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-01T00:01:00+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": true,
+        "filled_numerator": 0,
+        "fill_rate": 0.0,
+        "window_status_counts": {
+          "pending": 4
+        },
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 4
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 3,
+        "displayable": 1,
+        "render_reported": 0,
+        "valid_response": 0,
+        "confirmed": 0,
+        "render_rate": 0.0,
+        "response_rate": null,
+        "actions_without_generation": 1,
+        "missing_render": 1,
+        "missing_response": 0,
+        "outcome_counts": {
+          "suggested": 1,
+          "no_match": 1,
+          "unknown": 1
+        },
+        "status_counts": {
+          "render_unknown": 1,
+          "abstained": 2
+        },
+        "operation_counts": {},
+        "invalidated": 0,
+        "retracted_action_count": 0,
+        "strata": [
+          {
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "generated": 3,
+            "displayable": 1,
+            "render_reported": 0,
+            "valid_response": 0
+          }
+        ],
+        "current_confirmations": {
+          "a593f246-54da-4372-ac0a-e0198f8ccaa3": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": null
+          },
+          "85f93629-dc9a-4083-9935-bb18ad757bac": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": null
+          },
+          "aa5526b0-142c-4fed-9b0c-d1c42b98fd96": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": null
+          },
+          "088df414-837e-425f-9934-810ab8b864c4": {
+            "reason_id": null,
+            "source": "none",
+            "status": "none",
+            "response_id": null,
+            "last_response_id": null
+          }
+        },
+        "rows": [
+          {
+            "event_id": "85f93629-dc9a-4083-9935-bb18ad757bac",
+            "suggestion_id": "08e403b4-0e49-54e8-8ca3-ccfcdbec10c7",
+            "outcome": "suggested",
+            "render_reported": false,
+            "valid_response": false,
+            "confirmed": false,
+            "operations": {},
+            "status": "render_unknown",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "aa5526b0-142c-4fed-9b0c-d1c42b98fd96",
+            "suggestion_id": "f985f3d9-7e7d-522f-b308-6db5df1624e0",
+            "outcome": "no_match",
+            "render_reported": false,
+            "valid_response": false,
+            "confirmed": false,
+            "operations": {},
+            "status": "abstained",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          },
+          {
+            "event_id": "088df414-837e-425f-9934-810ab8b864c4",
+            "suggestion_id": "7287a188-38b2-5983-a72a-b2682559806d",
+            "outcome": "unknown",
+            "render_reported": false,
+            "valid_response": false,
+            "confirmed": false,
+            "operations": {},
+            "status": "abstained",
+            "versions": {
+              "model_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "package_version": "m5-task-reasons-v1",
+              "criteria_version": "m5-task-criteria-v1",
+              "template_version": "m5-task-templates-v1",
+              "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+              "ui_version": "m5-suggestion-mock-v1",
+              "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+            },
+            "action_retracted": false,
+            "answer_unavailable": false,
+            "superseded": false,
+            "invalidated": false
+          }
+        ]
+      },
+      "strata": [
+        {
+          "versions": {
+            "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+            "contract": "s1-research-v1",
+            "host_sha": null,
+            "mode": "mock",
+            "model_revision": null,
+            "patch_sha256": null,
+            "pricing_version": null,
+            "provider_model": "whynote-s1-synthetic",
+            "ui_version": "manual-menu-v1",
+            "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+            "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3"
+          },
+          "eligible_answers": 4,
+          "negative_answers": 4
+        }
+      ],
+      "attempt_status_counts_in_interval": {
+        "eligible": 4
+      }
+    },
+    "missing": {
+      "eligible_answers": 0,
+      "negative_answers": 0,
+      "negative_answer_rate": null,
+      "actor_roles": {},
+      "public_label_origins": {},
+      "invalidated_eligible_answers": 0,
+      "lifecycle_counts": {},
+      "version_missing_counts": {},
+      "displayed_actions": 0,
+      "display_coverage": null,
+      "edited_actions": 0,
+      "late_responses": 0,
+      "retracted_after_window": 0,
+      "missing_active_timing": 0,
+      "missing_total_timing": 0,
+      "historical_public_timing": null,
+      "timing_unit": "current_operator_explicit_response",
+      "inference_retractions": null,
+      "model_source_confusion": null,
+      "manual": {
+        "metric_version": "manual-v1",
+        "as_of": "2026-09-01T00:01:00+00:00",
+        "window_seconds": 86400,
+        "window_boundary": "accepted_at <= response_at < window_end",
+        "matured_action_count": 0,
+        "provisional": false,
+        "filled_numerator": 0,
+        "fill_rate": null,
+        "window_status_counts": {},
+        "retracted_action_count": 0,
+        "response_action_counts_in_window": {
+          "reason_declined": 0,
+          "reason_edited": 0,
+          "reason_none_matched": 0,
+          "reason_selected": 0,
+          "reason_skipped": 0
+        },
+        "close_count": 0,
+        "closed_action_count": 0,
+        "active_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "server_total_ms": {
+          "n": 0,
+          "median": null,
+          "p90": null,
+          "percentile_method": "nearest_rank",
+          "unit": "explicit_response"
+        },
+        "timing_status_counts": {},
+        "action_count": 0
+      },
+      "suggestions": {
+        "contract": "m5-suggestion-v1",
+        "unit": "suggestion_group",
+        "scope": "synthetic_development_only",
+        "generated": 0,
+        "displayable": 0,
+        "render_reported": 0,
+        "valid_response": 0,
+        "confirmed": 0,
+        "render_rate": null,
+        "response_rate": null,
+        "actions_without_generation": 0,
+        "missing_render": 0,
+        "missing_response": 0,
+        "outcome_counts": {},
+        "status_counts": {},
+        "operation_counts": {},
+        "invalidated": 0,
+        "retracted_action_count": 0,
+        "strata": [],
+        "current_confirmations": {},
+        "rows": []
+      },
+      "strata": [],
+      "attempt_status_counts_in_interval": {}
+    }
+  },
+  "answers": [
+    {
+      "attempt_id": "0ddf356f-7f82-4cc2-965d-0cad9619010a",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "010e98aa-b38b-5dbc-9fe6-c27a8fa2b182/449b4e41-12c6-5e99-80b2-b1aa4c450302",
+        "object_version": "s1v1-1e888959281bc2eb7e6afddfbfcb1cdebe45fe0657fac8ae2e0f5fa6e9156c2d"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "e9a1069f-2d0e-58ad-b151-f4cbb578257e",
+      "source_kind": "public_replay",
+      "actor_role": "evaluator",
+      "public_label_origin": "automated",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "010e98aa-b38b-5dbc-9fe6-c27a8fa2b182",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "a593f246-54da-4372-ac0a-e0198f8ccaa3"
+      ]
+    },
+    {
+      "attempt_id": "1016bc0d-2255-41e8-8663-a9d89488e1f2",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "f7863424-1ebd-5142-8ce2-05340d5780f0/aa141e8f-3818-542d-9afb-caf7de5b671b",
+        "object_version": "s1v1-24d0feb6152f490f19659aa3aee14a5eb39b0b969b14b9cc977f0710da76ee03"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "c712a44b-51aa-57ea-93fb-405239a8e7f9",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "f7863424-1ebd-5142-8ce2-05340d5780f0",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "ea2758c0-02cc-4893-a23c-bdafe10de7c0"
+      ]
+    },
+    {
+      "attempt_id": "23a130d3-0ad2-4284-a21b-5df8c2777e9c",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "4886e99a-075c-5048-87a8-3eb4a42b2a94/ba03b086-1c50-5193-acbf-f09a9ca12363",
+        "object_version": "s1v1-e1f785468022dfd3db2bb32bfb7f68d2654c3b41e3b1c10ab87b1e3131b95925"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "08e403b4-0e49-54e8-8ca3-ccfcdbec10c7",
+      "source_kind": "public_replay",
+      "actor_role": "evaluator",
+      "public_label_origin": "automated",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "4886e99a-075c-5048-87a8-3eb4a42b2a94",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "85f93629-dc9a-4083-9935-bb18ad757bac"
+      ]
+    },
+    {
+      "attempt_id": "24900d27-4e74-403f-a92b-8ca2a5187e0d",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "28854af4-6158-5cfc-86ab-0f3b1c676809/2ad23375-cb44-55cf-b3a5-0ac0debdfefc",
+        "object_version": "s1v1-e369f3ddba62b58fa11021e97c7c1ac085a76b1a117813de4951fe6f262d3c32"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "f985f3d9-7e7d-522f-b308-6db5df1624e0",
+      "source_kind": "public_replay",
+      "actor_role": "evaluator",
+      "public_label_origin": "automated",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "28854af4-6158-5cfc-86ab-0f3b1c676809",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "aa5526b0-142c-4fed-9b0c-d1c42b98fd96"
+      ]
+    },
+    {
+      "attempt_id": "4bba22ec-0f09-41ca-bb53-3998070f35d3",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "f2e34a54-991b-586c-8ba9-e715a302a8a1/55f55b67-d94a-5e17-b932-4ebed7f2d06b",
+        "object_version": "s1v1-3e9990d647839844156073761f9a097205a49ae476a84f51a03bc736bcbfd874"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "2efe2915-115e-5576-a327-cb60b6daa0aa",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "f2e34a54-991b-586c-8ba9-e715a302a8a1",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "298f9542-0207-41c3-a25a-d6e05f62aa45"
+      ]
+    },
+    {
+      "attempt_id": "693d0fca-a5fb-452f-aad1-b7dc176aa1bb",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "085855b9-fe21-5fda-8aa9-37636c8f12ee/f2dd27ec-f8ac-55b5-9218-947c20e9ad68",
+        "object_version": "s1v1-635109e136ef04c7f092d5cb343334feb695992a6ded690202802ef4a6cff1b3"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "502b601f-5445-50b0-912c-feae1800f1ec",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "085855b9-fe21-5fda-8aa9-37636c8f12ee",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "414ba91f-a63d-4249-89ff-4be607563b4e"
+      ]
+    },
+    {
+      "attempt_id": "6baa039b-5301-4817-9f8a-1947e36daab7",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "bfa57758-fd7e-5bd0-a298-f897afe05793/529184aa-2a46-5101-9ebf-d191ad6e723f",
+        "object_version": "s1v1-2a33b6f6e9bc8b3467c354ccaee00ee7830b37d125dec1fcc7be4184843e51c8"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "7287a188-38b2-5983-a72a-b2682559806d",
+      "source_kind": "public_replay",
+      "actor_role": "evaluator",
+      "public_label_origin": "automated",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "bfa57758-fd7e-5bd0-a298-f897afe05793",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "088df414-837e-425f-9934-810ab8b864c4"
+      ]
+    },
+    {
+      "attempt_id": "741ef455-6ba1-4dc1-a631-1b6d57be6787",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "4dcebad4-72e7-57d8-a095-d0c00812d269/e198790a-3b22-5fbc-9c5c-ff45afa10904",
+        "object_version": "s1v1-16bbd427e7942d3c93da70b8f1c4813e6cd8fe7c6c7c52eb14565d933f431eca"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "44d5a960-39e4-5148-a83f-31bc3f4dd729",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "4dcebad4-72e7-57d8-a095-d0c00812d269",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "7bc2dbf9-8b55-4b10-b6c9-975f204b3dbd"
+      ]
+    },
+    {
+      "attempt_id": "8cb8520c-7ea5-4562-b07b-c9cc8cfb3577",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "fb0ab30d-2e51-5efe-9a27-9229ffe29f86/839965ce-05e8-5b73-b2aa-002fe91aa0d3",
+        "object_version": "s1v1-be425b2ff415aaf313a9d2dd4c9981899f5d12ccc3185fa6c257faa94e73121f"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "38d37057-ea9f-5467-89f5-bd648aa600b8",
+      "source_kind": "scripted",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "fb0ab30d-2e51-5efe-9a27-9229ffe29f86",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "658cacb9-4103-41ce-8353-3bff4df0be18"
+      ]
+    },
+    {
+      "attempt_id": "a0e26a4e-0001-4637-88c7-bc16ee30c98e",
+      "target": {
+        "object_type": "openwebui_assistant_message",
+        "object_id": "2fd35900-fd11-5aa3-920b-c6f4eaf0a667/1fdfcd83-3da5-5deb-8086-35b8f65015d3",
+        "object_version": "s1v1-a02fff8740b28fc96c17430552b51c6593a39d9fc791691ea8f8f55d68d3adec"
+      },
+      "eligible_at": 1788220800.0,
+      "registration_id": "5440c435-04df-5348-aca5-279a60c3b7ab",
+      "source_kind": "self_natural",
+      "actor_role": "self_report",
+      "public_label_origin": "none",
+      "study_ref": "809b4edd-213d-560e-8cf6-ee037f43f8a3",
+      "protocol_ref": "0c8f8575-2463-533e-bc31-d4691fdd14f9",
+      "context_ref": "2fd35900-fd11-5aa3-920b-c6f4eaf0a667",
+      "feedback_ref": null,
+      "versions": {
+        "config_ref": "b5fcfa88-026f-51f4-974b-d6b279209ffb",
+        "contract": "s1-research-v1",
+        "host_sha": null,
+        "mode": "mock",
+        "model_revision": null,
+        "patch_sha256": null,
+        "pricing_version": null,
+        "provider_model": "whynote-s1-synthetic",
+        "ui_version": "manual-menu-v1"
+      },
+      "lifecycle": [
+        "pending",
+        "awaiting_save",
+        "eligible"
+      ],
+      "action_ids": [
+        "971d424d-3833-4fe1-8bef-ebce948b06eb"
+      ]
+    }
+  ],
+  "snapshot_sha256": "ba57e6de0a4afe31ac874a7f657b413fe0cc3fae6370155f3386b69a04a69994"
+}

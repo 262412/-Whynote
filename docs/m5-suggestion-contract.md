@@ -30,6 +30,8 @@ UI 固定 `m5-suggestion-mock-v1`；理由、criteria、模板和目录摘要使
 
 yes 才能新建研究确认原因；correct 明确改为当前展示内另一个候选，必须已有本契约确认。
 每次响应携带 `previous_response_id`，与当前动作最后一次本契约响应作 CAS；首条为 null。
+研究投影的 `response_id` 仅指向建立当前确认的 yes/correct 事件；`last_response_id`
+单独指向最后一次响应。后续否定/跳过等只移动后者，不改变确认的证据关联。
 同展示已有响应后只能 correct；其他新意图须生成新建议并预约新展示。correct 保留完整前序；拒绝无效更正。
 no/none_matched/skip/close/decline 都不清空既有用户原因，不撤销点踩。
 与 manual-v1 的清空语义不同，使用新的事件命名空间和研究投影，不映射旧 reason_code。
@@ -42,6 +44,8 @@ no/none_matched/skip/close/decline 都不清空既有用户原因，不撤销点
 所有写入在同一个 `BEGIN IMMEDIATE` 中复核服务端开关、主体、动作 active、当前回答的
 generation receipt 与版本、冻结研究登记；复用 TrialStore guard 和撤权/删除失效钩子。
 宿主删除/编辑必须先调用现有 invalidate；本切片不新增真实宿主入口。
+宿主清理入口在临时配置中同时关闭两个研究开关，允许已停用或错配的入口完成失效；
+不改写磁盘配置，不启用出站或新采集。
 只接受当前建议及其预约的 display；期限沿用既有 60 秒工程时限，从生成预约时刻起算，等于截止时间即过期。
 响应入口在等待数据库锁之前捕获服务器 received_at，按此时刻验期限；提交前仍复核全部非时间准入。
 按时到达后等待锁不会被误判迟到，撤销先提交仍阻止响应。收到时间早于生成时刻的墙钟回退拒绝。
@@ -61,6 +65,8 @@ request_id 是 UUID，在单一动作的 M5-2a 命令内唯一；相同命令重
 单列 unknown/no_match、未渲染、待响应、到期未响应、渲染未知、无生成的动作数。
 关闭是客户端生命周期事件，单列且不算有效响应；更正和重试不重复增加响应组分母。
 不写入 reason_unresponded，按截止时刻派生未响应；撤销/失效不删除历史分母。
+无有效响应组在到期判断前先分出 action_retracted/answer_unavailable/invalidated/superseded；
+这些已终止组不计 pending。回答失效使用截至 as_of 的研究状态，不读取当前状态替换历史。
 新事件追加到已有表，无 schema 改写；旧数据库无 M5-2a 事件时返回零和缺失数。
 回滚关闭新开关，旧代码忽略新事件；研究确认仍保留审计，不能假定旧 UI 能显示新确认。
 

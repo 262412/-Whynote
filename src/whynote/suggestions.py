@@ -265,17 +265,18 @@ def invalidate(store, principal, event_id, request_id, suggestion_id):
 
 
 def project_suggestions(events):
-    state = {"reason_id": None, "source": "none", "status": "none", "response_id": None}
+    state = {"reason_id": None, "source": "none", "status": "none", "response_id": None, "last_response_id": None}
     for event in events:
         if event["event_type"] == "action_retracted":
             return {**state, "reason_id": None, "source": "none", "status": "action_retracted"}
         if event["event_type"] == "m52_response_recorded":
             command = event["payload"]["command"]
-            state["response_id"] = event["record_id"]
+            state["last_response_id"] = event["record_id"]
             if command["operation"] in {"yes", "correct"}:
                 state.update(
                     reason_id=command["reason_id"],
                     source="user",
+                    response_id=event["record_id"],
                     status="confirmed" if command["operation"] == "yes" else "corrected",
                 )
     return state
@@ -308,6 +309,20 @@ def report_from_connection(db, event_ids, as_of):
                 if e["event_type"] == "m52_response_recorded" and e["payload"]["command"]["suggestion_id"] == sid
             ]
             valid = any(op != "close" for op in responses)
+            invalidated = any(
+                e["event_type"] == "m52_suggestion_invalidated" and e["payload"]["command"]["suggestion_id"] == sid
+                for e in events
+            )
+            superseded = event["record_id"] != generated[-1]["record_id"]
+            retracted = any(e["event_type"] == "action_retracted" for e in events)
+            answer_unavailable = (
+                db.execute(
+                    "SELECT 1 FROM s1_research_states WHERE attempt_id=? AND recorded_at<=? "
+                    "AND kind IN ('invalidated','revoked','superseded') LIMIT 1",
+                    (p["binding"]["attempt_id"], cutoff),
+                ).fetchone()
+                is not None
+            )
             status = (
                 "responded"
                 if valid
@@ -315,6 +330,15 @@ def report_from_connection(db, event_ids, as_of):
             )
             if p["binding"]["outcome"] != "suggested":
                 status = "abstained"
+            elif not valid:
+                if retracted:
+                    status = "action_retracted"
+                elif answer_unavailable:
+                    status = "answer_unavailable"
+                elif invalidated:
+                    status = "invalidated"
+                elif superseded:
+                    status = "superseded"
             rows.append(
                 {
                     "event_id": event_id,
@@ -337,13 +361,10 @@ def report_from_connection(db, event_ids, as_of):
                             "candidate_set_id",
                         )
                     },
-                    "action_retracted": any(e["event_type"] == "action_retracted" for e in events),
-                    "superseded": event["record_id"] != generated[-1]["record_id"],
-                    "invalidated": any(
-                        e["event_type"] == "m52_suggestion_invalidated"
-                        and e["payload"]["command"]["suggestion_id"] == sid
-                        for e in events
-                    ),
+                    "action_retracted": retracted,
+                    "answer_unavailable": answer_unavailable,
+                    "superseded": superseded,
+                    "invalidated": invalidated,
                 }
             )
     displayable = sum(r["outcome"] == "suggested" for r in rows)

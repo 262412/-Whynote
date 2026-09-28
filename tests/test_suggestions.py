@@ -13,6 +13,7 @@ import pytest
 from whynote import suggestions as s
 from whynote.domain import MANUAL_REASONS, MANUAL_UI_VERSION, ConflictError, NotFoundError, Principal, project
 from whynote.research_report import report
+from whynote.s1_host import invalidate_chat
 from whynote.task_reasons import prepare_candidates
 
 FIXTURE = runpy.run_path(str(Path(__file__).parents[1] / "qa/s1_research_fixture.py"))
@@ -106,6 +107,7 @@ def test_explicit_confirmation_correction_and_old_projection(trial):
         "source": "user",
         "status": "corrected",
         "response_id": second,
+        "last_response_id": second,
     }
     assert project(events(f)) == before
     result = snapshot(f)["groups"]["scripted"]["suggestions"]
@@ -481,3 +483,51 @@ def test_new_reservation_blocks_late_old_render_even_before_new_render(trial):
     with pytest.raises(ConflictError):
         render(f, old)
     assert snapshot(f)["groups"]["scripted"]["suggestions"]["render_reported"] == 1
+
+
+def test_confirmation_provenance_survives_a_later_rejection(trial):
+    f = trial
+    render(f, generate(f))
+    confirmed = respond(f)
+    render(f, generate(f, "two", display="second"), "second")
+    rejected = respond(f, "no", name="rejected", suggestion="two", display="second", previous=confirmed)
+    state = snapshot(f)["groups"]["scripted"]["suggestions"]["current_confirmations"][f.event_id]
+    assert state["reason_id"] == "code.behavior_changed"
+    assert state["response_id"] == confirmed
+    assert state["last_response_id"] == rejected
+
+
+@pytest.mark.parametrize("revoke", [False, True])
+def test_host_cleanup_ignores_stopped_suggestion_configuration(trial, monkeypatch, revoke):
+    f = trial
+    render(f, generate(f))
+    stopped = {**f.config, "enabled": False, "research_enabled": False, "suggestion_research_enabled": True}
+    f.config_path.write_text(json.dumps(stopped), encoding="utf-8")
+    original = f.config_path.read_bytes()
+    monkeypatch.setenv("WHYNOTE_S1_CONFIG", str(f.config_path))
+    invalidate_chat(f.chat_record.id, revoke=revoke)
+    assert f.config_path.read_bytes() == original
+    with pytest.raises(NotFoundError):
+        respond(f)
+    assert snapshot(f)["groups"]["scripted"]["invalidated_eligible_answers"] == 1
+
+
+@pytest.mark.parametrize("terminal", ["invalidated", "superseded", "action_retracted", "answer_unavailable"])
+def test_terminal_suggestions_are_not_pending_before_expiry(trial, terminal):
+    f = trial
+    generate(f)
+    early = snapshot(f)
+    assert early["groups"]["scripted"]["suggestions"]["status_counts"] == {"pending": 1}
+    f.clock += 1
+    if terminal == "invalidated":
+        s.invalidate(f.store, f.principal, f.event_id, ref("invalidated"), ref("one"))
+    elif terminal == "superseded":
+        generate(f, "two", display="second")
+    elif terminal == "action_retracted":
+        f.store.retract_action(f.principal, f.event_id, "undo")
+    else:
+        f.store.invalidate(f.chat_record.id)
+    result = snapshot(f)["groups"]["scripted"]["suggestions"]
+    assert result["rows"][0]["status"] == terminal
+    assert result["status_counts"].get("pending", 0) == (terminal == "superseded")
+    assert snapshot(f, early["as_of"]) == early

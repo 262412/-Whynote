@@ -32,9 +32,10 @@ uv run --no-sync python qa/m52_suggestion_fixture.py --output var/m52-new-fixtur
 ```
 
 输出目录必须未存在，避免覆盖审计数据。具体结果见提交的
-[合成报告](../qa/evidence/2026-09-28-m5-suggestions/report.json)和
+[评审修复后合成报告](../qa/evidence/2026-09-28-m5-suggestions/report-reviewed.json)、
+[初版合成报告](../qa/evidence/2026-09-28-m5-suggestions/report.json)和
 [验证回执](../qa/evidence/2026-09-28-m5-suggestions/verification.json)。
-本地最终测试585项通过（新增54项），Ruff lint/format与diff检查通过。仅一条既有Starlette/httpx弃用警告。
+初版本地测试585项通过（新增54项），Ruff lint/format与diff检查通过。仅一条既有Starlette/httpx弃用警告。
 开发测试包括旧人工原因保留、并发幂等、失效后拒绝、研究停用、无登记、原子回滚、
 append-only、只读时点重放、无正文/密钥、59.999/60 秒边界与锁等待、迟到旧回执。
 初版 300 秒期限与渲染到达排序在核对 Q-22/H-04 后调整为现契约；早期本地输出保留在 var，
@@ -50,6 +51,18 @@ append-only、只读时点重放、无正文/密钥、59.999/60 秒边界与锁�
 补修提交`26642c4`的受影响101项与Ruff通过；
 [CI 36434922047](https://github.com/262412/-Whynote/actions/runs/36434922047)的quality/native-regression均成功。
 原验证回执保留初版全套身份，并单列补修源码摘要与测试，不覆盖历史证据。
+
+### 自动评审修复
+
+三条P2意见先新增复现测试，在`32e9858`上7项全部失败；随后修复：
+
+- 确认来源：response_id保留建立原因的yes/correct事件，last_response_id单列后续响应。
+- 宿主清理：临时配置同时关闭两个研究开关，停用/错配时删除、编辑仍能追加失效。
+- 报告终态：建议撤销、替代、动作撤销及回答失效不再计pending，按as_of重放历史。
+
+修复后完整592项（累计新增61项）、Ruff通过。见[红/绿验证及源码摘要](../qa/evidence/2026-09-28-m5-suggestions/review-fixes.json)。
+原7项失败输出保留在工作树var/m52a-review-red.txt；原585项证据保留，不能代替新用例。
+本地仍未运行原生宿主/浏览器，适用宿主回归由本PR最新CI核验。
 
 ## 剩余验收与交付状态
 
