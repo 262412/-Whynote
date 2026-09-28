@@ -42,8 +42,8 @@ Windows / CPython 3.11.14，锁文件安装，代码更新后强制重装 whynot
 | --- | --- |
 | Ruff check `src tests integrations qa` | 通过 |
 | Ruff format --check 同范围 | 71 文件通过 |
-| `pytest tests/test_task_reasons.py -q` | 43 passed |
-| `pytest -q tests qa` | 447 passed，包含新增43项 |
+| `pytest tests/test_task_reasons.py -q` | 46 passed |
+| `pytest -q tests qa` | 450 passed，包含新增46项 |
 | 7个合成探索案例的已安装包校验 | 7 passed；没有模型预测或用户确认 |
 | 安装包从仓库外临时目录运行CLI | 包内JSON可加载，导出及校验成功；未产生数据库/额外文件 |
 | 旧事件兼容 | 全部11个新ID被旧菜单拒绝且不追加事件；旧unknown选择与重放保持不变 |
@@ -56,12 +56,16 @@ Windows / CPython 3.11.14，锁文件安装，代码更新后强制重装 whynot
 [CI 36412489303](https://github.com/262412/-Whynote/actions/runs/36412489303)
 已通过 quality 与 native-regression。后续文档提交的 CI 以 PR 最新 head 为准。
 
+自动评审指出重复参数超过枚举数量时被提前拒绝，与去重契约不一致。`27c4e51` 已修复，
+补充任务/回退/证据种类3项回归：重复输入候选身份不变，混入非法值仍拒绝。
+重装包后理由包46项、完整450项及Ruff复验通过；原43/447为首个实现提交的结果。
+
 ## 当前交付与剩余事项
 
 [PR #36](https://github.com/262412/-Whynote/pull/36) 已推送，代码提交 CI 通过；
-工程实现待非作者有效批准、适用独立QA及签署。当前只有 Copilot 配额用尽的 COMMENTED，
-没有有效 APPROVED，因此按开发规约保留为待合并；不据开发通过写成完整 FR 或模型质量验收。
-飞书已在原 M5-0b 任务、字段/TD-02 及实现对照条目局部回填并读回：PRD **315** / 技术文档 **320**。
+工程实现待非作者有效批准、适用独立QA及签署。Copilot 配额用尽未评审；Codex 的参数去重意见已修复，
+当前没有有效 APPROVED，因此按开发规约保留为待合并；不据开发通过写成完整 FR 或模型质量验收。
+飞书已在原 M5-0b 任务、字段/TD-02 及实现对照条目局部回填并读回：PRD **316** / 技术文档 **321**。
 真实探索案例/三源准入和独立标签仍缺，7个合成案例只能验证结构和门槛。当前理由细分是
 开发种子库，真实探索审阅后需再冻结产品采用版本，再建立独立留出集。
 样本量、门槛、候选数量比较与Laya输出质量属于 M5-1；宿主白名单、持久化和真实确认属于 M5-2a/b。
