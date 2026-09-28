@@ -1,0 +1,18 @@
+{
+  "head": "648f58644ea9ad0b915f0c039fd18d69d6cefc9b",
+  "run_id": 36444465334,
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "native-regression",
+      "conclusion": "success",
+      "url": "https://github.com/262412/-Whynote/actions/runs/36444465334/job/109003055277"
+    },
+    {
+      "name": "quality",
+      "conclusion": "success",
+      "url": "https://github.com/262412/-Whynote/actions/runs/36444465334/job/109003055911"
+    }
+  ]
+}
