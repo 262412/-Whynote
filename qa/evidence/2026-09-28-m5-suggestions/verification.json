@@ -18,7 +18,6 @@
   "ruff_check": "passed",
   "ruff_format": "passed",
   "fixture_command": "uv run --no-sync python qa/m52_suggestion_fixture.py --output var/m52a-fixture-final",
-  "report_sha256": "9707367ec336dc594616bb479d3782dced692b0abb4c35e27c037862b4c0837f",
   "source_sha256_lf": {
     "src/whynote/suggestions.py": "81b93bfe8169653cc8c5c0e0c4221c0502d541bfc88a67c3a92955a596528ad7",
     "src/whynote/research.py": "ce20c016cb76f3edbd4926340744d0c3cf1ada31ed9ce7b685db4ccbd303e01b",
@@ -31,5 +30,6 @@
   "real_collection": "disabled",
   "browser_validation": "not_run",
   "local_model_call": "not_run",
-  "native_host": "CI_only"
+  "native_host": "CI_only",
+  "report_sha256_lf": "ed91adecf7d48db5c34ad934db2bc59770c3bef74d4389df2f21926973396be1"
 }

@@ -48,7 +48,11 @@ append-only、只读时点重放、无正文/密钥、59.999/60 秒边界与锁�
 ## 剩余验收与交付状态
 
 开发执行：本轮 Codex；独立 QA 待指定非作者执行；产品/客户端/数据责任人待签署契约和结果。
-PR、最新 head CI 与飞书读回信息在交付回填后记录。未取得非作者有效批准与适用签署前不合并。
+[PR #38](https://github.com/262412/-Whynote/pull/38)，业务提交 `4fe5c0d`；
+[CI 36434184529](https://github.com/262412/-Whynote/actions/runs/36434184529)的quality与native-regression通过。
+飞书15处原需求/字段/任务条目逐项局部更新并精确读回，PRD341 / 技术文档340，历史链接保留；
+见[同步回执](../qa/evidence/2026-09-28-m5-suggestions/feishu-readback.json)。
+Copilot评审仅返回配额耗尽的COMMENTED，无有效APPROVED。未取得非作者有效批准与适用签署前不合并。
 依据[开发规约 §3.2](development-governance.md)，绿色测试不能代替独立批准。
 当前分支及工作树保留供评审；原工作区已有代码、运行库和模型文件均保留。
 
