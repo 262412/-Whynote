@@ -1,0 +1,54 @@
+{
+  "health": {
+    "status": "ready",
+    "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+    "device": "cuda",
+    "busy": false
+  },
+  "cases": [
+    {
+      "case_id": "normal",
+      "status": 200,
+      "reason": "factual_error",
+      "elapsed_ms": 16.5
+    },
+    {
+      "case_id": "deliberate_repeat",
+      "status": 200,
+      "reason": "factual_error",
+      "elapsed_ms": 15.7
+    },
+    {
+      "case_id": "missing_token",
+      "status": 403
+    },
+    {
+      "case_id": "foreign_origin",
+      "status": 403
+    },
+    {
+      "case_id": "foreign_host",
+      "status": 403
+    },
+    {
+      "case_id": "empty",
+      "status": 422
+    },
+    {
+      "case_id": "unexpected_field",
+      "status": 422
+    },
+    {
+      "case_id": "token_window",
+      "status": 422
+    },
+    {
+      "case_id": "reserved_token",
+      "status": 422
+    },
+    {
+      "case_id": "body_limit",
+      "status": 413
+    }
+  ]
+}

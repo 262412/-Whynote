@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知因 · Laya 本地试验</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f5;color:#18352b;font:16px/1.6 system-ui,sans-serif}
+main{max-width:1100px;margin:36px auto;padding:0 24px}h1{font-size:30px;margin:4px 0}h2{font-size:20px;margin:0 0 16px}
+.tag{font-size:13px;color:#437562}.intro{color:#52675f;margin:8px 0 24px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+section{background:white;padding:24px;border-radius:16px;border:1px solid #dce5df}label{display:block;margin:12px 0 6px;font-weight:600}
+textarea{width:100%;font:inherit;border:1px solid #b5c8bf;border-radius:8px;padding:10px;resize:vertical;color:#18352b}
+button{font:inherit;padding:10px 18px;border-radius:8px;border:0;background:#146747;color:white;cursor:pointer;margin:16px 8px 0 0}
+button.secondary{background:#e8efe9;color:#244635}button:disabled{opacity:.55;cursor:wait}.muted{font-size:13px;color:#5b6e64}
+#status{min-height:26px;margin-top:12px}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:6px;border-bottom:1px solid #edf1ee}td:last-child{text-align:right}
+pre{white-space:pre-wrap;word-break:break-all;font-size:12px;color:#50635a}.result{font-size:24px;color:#146747;margin:12px 0}
+@media(max-width:760px){.grid{grid-template-columns:1fr}main{margin:20px auto}}
+</style>
+<main><div class="tag">WHYNOTE / LOCAL LAB</div><h1>Laya 多语言原因测试</h1>
+<p class="intro">手动输入一组问题与回答，查看本机模型的原因判断。内容仅用于本次推理，页面与服务不保存正文。</p>
+<div class="grid"><section><h2>测试内容</h2>
+<label for="question">用户问题</label><textarea id="question" rows="3" maxlength="3000" placeholder="输入你希望测试的问题"></textarea>
+<label for="answer">待评价的回答</label><textarea id="answer" rows="5" maxlength="3000" placeholder="粘贴需要判断原因的回答"></textarea>
+<label for="feedback">你的反馈（可选）</label><textarea id="feedback" rows="2" maxlength="1000" placeholder="例如：这个计算结果不对"></textarea>
+<button id="run">本地分析</button><button class="secondary" id="sample">填入虚构示例</button><button class="secondary" id="clear">清空</button>
+<div id="status" role="status" aria-live="polite"></div><p class="muted">最多 700 模型 token / 8192 字节；长文本请自行缩短。Laya 用于分类，不生成聊天回答。</p></section>
+<section><h2>模型推测 · 未经用户确认</h2><div id="empty" class="muted">分析后显示原因及八类分数。结果不会写入现有反馈记录。</div>
+<div id="result" hidden><div class="result" id="reason"></div><p id="timing" class="muted"></p><table aria-label="原因分数"><tbody id="scores"></tbody></table>
+<p class="muted">这些是未经本项目校准的模型原始分数，不代表准确率。原因判断可能有误，请自行核对。</p><details><summary>接口结果与模型版本</summary><pre id="raw"></pre></details></div>
+<p id="health" class="muted"></p></section></div></main>
+<script nonce="__TOKEN__">
+const $=id=>document.getElementById(id), labels={factual_error:'事实有误',instruction_not_followed:'未按指令',incomplete:'回答不完整',irrelevant:'答非所问',style:'表达方式不合适',outdated:'信息过时',unnecessary_refusal:'不必要的拒绝',other_or_unknown:'其他或无法归类'};
+fetch('/health').then(r=>r.json()).then(d=>{$('health').textContent='本地设备：'+d.device+' · Multilingual · 离线推理';});
+$('sample').onclick=()=>{$('question').value='17 加 25 等于多少？';$('answer').value='17 加 25 等于 41。';$('feedback').value='计算结果不对';};
+$('clear').onclick=()=>{for(const id of ['question','answer','feedback','status','raw']) {const el=$(id);if(el.tagName==='TEXTAREA')el.value='';else el.textContent='';}$('result').hidden=true;$('empty').hidden=false;};
+$('run').onclick=async()=>{
+  $('run').disabled=true;$('clear').disabled=true;$('sample').disabled=true;$('status').textContent='正在本机推理…';$('result').hidden=true;$('empty').hidden=false;
+  try{const r=await fetch('/api/reason',{method:'POST',headers:{'Content-Type':'application/json','X-Local-Token':'__TOKEN__'},body:JSON.stringify({question:$('question').value,answer:$('answer').value,feedback:$('feedback').value})});
+  const d=await r.json();if(!r.ok)throw new Error(d.detail||'请求失败');
+  $('reason').textContent=labels[d.primary_reason]||d.primary_reason;$('timing').textContent='耗时 '+d.elapsed_ms+' ms · 来源：模型推测，未确认';$('scores').replaceChildren();
+  for(const [key,value] of Object.entries(d.reason_probabilities).sort((a,b)=>b[1]-a[1])){const row=document.createElement('tr');for(const text of [labels[key]||key,(value*100).toFixed(2)+'%']){const cell=document.createElement('td');cell.textContent=text;row.appendChild(cell);}$('scores').appendChild(row);}
+  $('raw').textContent=JSON.stringify(d,null,2);$('result').hidden=false;$('empty').hidden=true;$('status').textContent='分析完成；未保存为反馈。';
+  }catch(e){$('status').textContent='分析未完成：'+e.message;}finally{$('run').disabled=false;$('clear').disabled=false;$('sample').disabled=false;}
+};
+</script></html>

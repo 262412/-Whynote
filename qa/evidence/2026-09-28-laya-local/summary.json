@@ -1,0 +1,18 @@
+{
+  "source_base": "a0a069c2c6e4fccf47bfef9d007cc78f9bc5e8bd",
+  "installed_source_sha256": {
+    "laya_local.py": "9aab5b985a41552242d05acf84adc20d8d81dc630ddb5ee61e1a3a53953decc0",
+    "laya_manifest.py": "3b1b605f278e9be6a2494b5ae4fcd69477cf6a8f272bdb975a235f75f6b1c467",
+    "laya_app.py": "51e25a36c993ba18bba8e47097085261c162edfbaa174e86cfa478b687b2d128",
+    "laya_local.html": "1b015337fbd7d4af98f43a4f47d742b6c68ad0c2e5bf7063f0650ae989452e1d",
+    "domain.py": "464b2a551b44c464a394ea3c2b0afca332521ba6d8098b47df67f44653378040"
+  },
+  "core_and_qa_passed": 329,
+  "local_contract_tests_included": 24,
+  "http_passed": 10,
+  "browser": "developer actual local page: sample, analyze, reason probabilities and unconfirmed source displayed; restart repeated successfully",
+  "browser_warm_elapsed_ms": 17.4,
+  "stop_restart": "listener released after stop; restart ready on loopback with verified worker PID",
+  "quality": "two of three synthetic examples differ from developer expectations; no gold accuracy claim",
+  "acceptance": "independent QA, non-author approval and formal model quality review pending"
+}
