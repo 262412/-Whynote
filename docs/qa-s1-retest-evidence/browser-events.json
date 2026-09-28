@@ -1,0 +1,26 @@
+[
+  [
+    "negative_feedback_action_recorded",
+    "{\"action_type\":\"negative_feedback\",\"channel\":\"openwebui-s1\",\"client_occurred_at\":null,\"interaction_contract\":\"manual-v1\",\"locale\":\"zh-CN\",\"target_ref\":{\"object_id\":\"3769fde5-796b-49b1-a548-ffd4f58f4f2d/573b1710-59c5-434d-9df1-141388011a46\",\"object_type\":\"openwebui_assistant_message\",\"object_version\":\"s1v1-f6e54c24993d177375993a3bb31f10128cb8fc780857adf65a972f5d3ee32912\"}}"
+  ],
+  [
+    "reason_displayed",
+    "{\"client_session_ref\":\"580697eca1b30cdbd9ab68d51c5ca3fdb9a8ab6e66f27b0f8204906f05fff6b9\",\"display_id\":\"60b1429b-8d5d-42f2-8464-a5f74b7fb701\",\"mode\":\"manual_menu\",\"shown_reason_codes\":[\"factual_error\",\"instruction_not_followed\",\"incomplete\",\"irrelevant\",\"style\",\"outdated\",\"unnecessary_refusal\",\"other_or_unknown\"],\"ui_version\":\"manual-menu-v1\"}"
+  ],
+  [
+    "reason_selected",
+    "{\"attribution_source\":\"user_manual\",\"display_id\":\"60b1429b-8d5d-42f2-8464-a5f74b7fb701\",\"display_mode\":\"manual_menu\",\"explicit_submission\":true,\"measurement\":{\"active_ms\":14717.399999999907,\"server_total_ms\":14766.375,\"timing_status\":\"client_reported\"},\"reason_code\":\"factual_error\",\"response_source\":\"user_explicit\",\"ui_version\":\"manual-menu-v1\"}"
+  ],
+  [
+    "reason_displayed",
+    "{\"client_session_ref\":\"580697eca1b30cdbd9ab68d51c5ca3fdb9a8ab6e66f27b0f8204906f05fff6b9\",\"display_id\":\"2cbc9301-bfed-4d97-a916-2f22ec9939e7\",\"mode\":\"edit_menu\",\"shown_reason_codes\":[\"factual_error\",\"instruction_not_followed\",\"incomplete\",\"irrelevant\",\"style\",\"outdated\",\"unnecessary_refusal\",\"other_or_unknown\"],\"ui_version\":\"manual-menu-v1\"}"
+  ],
+  [
+    "reason_edited",
+    "{\"display_id\":\"2cbc9301-bfed-4d97-a916-2f22ec9939e7\",\"display_mode\":\"edit_menu\",\"explicit_submission\":true,\"measurement\":{\"active_ms\":16770.899999999907,\"server_total_ms\":38151.958999999995,\"timing_status\":\"client_reported\"},\"reason_code\":\"incomplete\",\"response_source\":\"user_explicit\",\"ui_version\":\"manual-menu-v1\"}"
+  ],
+  [
+    "action_retracted",
+    "{}"
+  ]
+]

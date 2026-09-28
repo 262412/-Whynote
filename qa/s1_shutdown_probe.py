@@ -44,6 +44,7 @@ async def run(args):
                 json={
                     "model": "whynote_s1_pipe",
                     "stream": True,
+                    "parent_id": None,
                     "id": message,
                     "session_id": sio.get_sid(),
                     "user_message": {"id": parent, "role": "user", "content": "S1 虚构：正常回答", "parentId": None},
