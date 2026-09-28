@@ -62,14 +62,17 @@ append-only、只读时点重放、无正文/密钥、59.999/60 秒边界与锁�
 
 修复后完整592项（累计新增61项）、Ruff通过。见[红/绿验证及源码摘要](../qa/evidence/2026-09-28-m5-suggestions/review-fixes.json)。
 原7项失败输出保留在工作树var/m52a-review-red.txt；原585项证据保留，不能代替新用例。
-本地仍未运行原生宿主/浏览器，适用宿主回归由本PR最新CI核验。
+评审修复提交`46ac31f`的[CI 36435768391](https://github.com/262412/-Whynote/actions/runs/36435768391)
+quality/native-regression均成功；三条已修复评审线程已解决。该自动COMMENTED不代替非作者有效APPROVED。
+本地仍未运行原生宿主/浏览器，原生结果单列CI证据。
 
 ## 剩余验收与交付状态
 
 开发执行：本轮 Codex；独立 QA 待指定非作者执行；产品/客户端/数据责任人待签署契约和结果。
 [PR #38](https://github.com/262412/-Whynote/pull/38)，业务提交 `4fe5c0d`；
 [CI 36434184529](https://github.com/262412/-Whynote/actions/runs/36434184529)的quality与native-regression通过。
-飞书15处原需求/字段/任务条目及两处幂等补修条款逐项局部更新并精确读回，最终PRD342 / 技术文档341，历史链接保留；
+飞书15处原需求/字段/任务条目、两处幂等条款及两处评审修复条款局部更新并精确读回，
+最终PRD343 / 技术文档342，历史链接保留；
 见[同步回执](../qa/evidence/2026-09-28-m5-suggestions/feishu-readback.json)。
 Copilot评审仅返回配额耗尽的COMMENTED，无有效APPROVED。未取得非作者有效批准与适用签署前不合并。
 依据[开发规约 §3.2](development-governance.md)，绿色测试不能代替独立批准。

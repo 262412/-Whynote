@@ -169,5 +169,25 @@
     "revision_after": 341,
     "exact_text_readback": true,
     "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "review_fixes_semantic",
+    "old_block_id": "doxc6PKSS9gmESoZYYR7nMiHywg",
+    "new_block_id": "doxc6iVnAbTNHY6ITHvtQl97lJc",
+    "revision_before": 342,
+    "revision_after": 343,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "review_fixes_semantic",
+    "old_block_id": "doxc69ZaXzdwC7xDT6lcpKr2oDc",
+    "new_block_id": "doxc6pbHVxUjsFGnU6jOF6wq3uc",
+    "revision_before": 341,
+    "revision_after": 342,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
   }
 ]
