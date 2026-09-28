@@ -118,9 +118,7 @@ def provision(args):
         config_path.write_text(json.dumps(config), encoding="utf-8")
         functions = {
             "whynote_s1_pipe": ("s1_pipe.py", "知因 DeepSeek 本机联调"),
-            "whynote_s1_action": ("s1_action.py", "知因点踩及原因"),
-            "whynote_s1_retract_action": ("s1_retract_action.py", "撤回知因点踩"),
-            "whynote_laya_action": ("laya_action.py", "获取 Laya 原因建议"),
+            "whynote_s1_action": ("local_chain_action.py", "知因点踩 / 撤销"),
         }
         for ident, (filename, name) in functions.items():
             content = (ROOT / "integrations/openwebui" / filename).read_text(encoding="utf-8")
@@ -158,12 +156,52 @@ def provision(args):
     print("Local cloud test provisioned; credentials are in the private login.txt file.")
 
 
+def update_action(args):
+    """Update only this test model's controls; preserve users, chats and budget."""
+    import httpx
+
+    private = json.loads((args.data_dir / "private.json").read_text(encoding="utf-8"))
+    with httpx.Client(base_url=f"http://127.0.0.1:{args.port}", trust_env=False, timeout=60) as api:
+        r = api.post(
+            "/api/v1/auths/signin",
+            json={"email": "chain-admin@example.invalid", "password": private["admin_password"]},
+        )
+        r.raise_for_status()
+        api.headers["Authorization"] = "Bearer " + r.json()["token"]
+        r = api.post(
+            "/api/v1/functions/id/whynote_s1_action/update",
+            json={
+                "id": "whynote_s1_action",
+                "name": "知因点踩 / 撤销",
+                "content": (ROOT / "integrations/openwebui/local_chain_action.py").read_text(encoding="utf-8"),
+                "meta": {},
+            },
+        )
+        r.raise_for_status()
+        r = api.get("/api/v1/models/model", params={"id": "whynote_s1_pipe"})
+        r.raise_for_status()
+        model = r.json()
+        model["meta"]["actionIds"] = ["whynote_s1_action"]
+        r = api.post("/api/v1/models/model/update", json=model)
+        r.raise_for_status()
+        for ident in ("whynote_laya_action", "whynote_s1_retract_action"):
+            r = api.get(f"/api/v1/functions/id/{ident}")
+            if r.status_code == 404:
+                continue
+            r.raise_for_status()
+            if r.json()["is_active"]:
+                r = api.post(f"/api/v1/functions/id/{ident}/toggle")
+                r.raise_for_status()
+                assert not r.json()["is_active"]
+    print("Single Whynote control updated; history and budget preserved.")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("serve", "provision"))
+    parser.add_argument("command", choices=("serve", "provision", "update-action"))
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--keys-file", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8128)
     args = parser.parse_args()
-    (serve if args.command == "serve" else provision)(args)
+    {"serve": serve, "provision": provision, "update-action": update_action}[args.command](args)
