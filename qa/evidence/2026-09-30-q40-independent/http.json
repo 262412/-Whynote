@@ -1,0 +1,25 @@
+{
+  "scope": "fresh_synthetic_report",
+  "denials": [
+    {
+      "case": "missing",
+      "status": 403
+    },
+    {
+      "case": "wrong",
+      "status": 403
+    },
+    {
+      "case": "host",
+      "status": 403
+    },
+    {
+      "case": "unknown",
+      "status": 404
+    }
+  ],
+  "denials_zero_exposure": true,
+  "valid_status": 200,
+  "valid_exposure_delta": 1,
+  "no_store_nosniff_CSP": true
+}

@@ -1,5 +1,7 @@
 # M5-5 独立QA：新增Q-40，保留合并阻断
 
+> 历史报告保留原失败结论。2026-09-30固定382c95a的Q-40及合成案例UI独立复验已通过，见[后续复验](qa-q40-retest.md)；不改写本轮历史证据。
+
 2026-09-29；固定 **PR #43 / `c1fc01c50d72b8eaea063e02427b18d1894dcdbd`**；main `cdcfb15fec8474969d36e2955d70ba28ade01a06`。
 PR #42已合并，本PR目标main、保持Draft，当前无非作者APPROVED。业务候选[CI 36588120701](https://github.com/262412/-Whynote/actions/runs/36588120701)质量/原生通过；新失败断言另记，不能用旧绿灯覆盖。
 

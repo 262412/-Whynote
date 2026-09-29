@@ -1,0 +1,76 @@
+"""Actual isolated Laya; synthetic source and controlled expiry clock only."""
+import gzip,json,sys
+from pathlib import Path
+from whynote import explore_inputs as inp,explore_run as run
+from whynote.controlled_replay import source_hash
+from whynote.explore_prepare import prepare,SCHEMA
+from whynote.explore_report import report
+from whynote.replay_laya import ReplayError
+from whynote.windows_session import ResidentSession
+
+root=Path('D:/PythonProject/jev项目/var/research/m55/q40-independent-382c95a')
+root.mkdir(exist_ok=False)
+code=source_hash();assert code=='f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295'
+source=root/'synthetic.jsonl.gz'
+with gzip.open(source,'wt',encoding='utf-8') as f:
+    f.write(json.dumps({'context':[{'role':'user','content':'Explain Python list comprehensions in one sentence.'}],
+       'response1':'A list comprehension builds a list from an iterable using a compact expression.',
+       'response2':'It is a concise way to build lists by iterating over values.',
+       'feedback1':['SYNTHETIC evaluator reference A'],'feedback2':['SYNTHETIC evaluator reference B'],
+       'domain':'synthetic','language':'English'})+'\n')
+pin=('nvidia/HelpSteer3','1'*40,'feedback/validation.jsonl.gz',source.stat().st_size,inp.file_hash(source))
+inp.SOURCES['helpsteer3']=pin
+admission=dict(zip(('repo','revision','file','bytes','sha256'),pin,strict=True))|{
+    'source':'helpsteer3','status':'ADMITTED_FOR_EXPLORATION','path':str(source),
+    'purpose':'local_unlabelled_exploration','approval':'synthetic_boundary_fixture_only',
+    'access':['project_owner','local_codex'],'backup':False,'expires_at':'2099-01-01T00:00:00Z',
+    'max_source_records':1,'max_targets':2,'allow_all_scan':False}
+manifest={'schema_version':SCHEMA,'research_root':str(root),'project_root':str(root),'sources':[admission]}
+config={'python':sys.executable,'base_python':'C:/Users/22826/AppData/Roaming/uv/python/cpython-3.11-windows-x86_64-none',
+        'model_dir':'D:/PythonProject/jev项目/var/models/laya/multilingual','device':'cuda','load_timeout':60,'request_timeout':60}
+original_invoke=run.Worker.invoke
+original_request=ResidentSession.request
+original_init=run.Worker.__init__
+old_clock=run.datetime_valid
+receipts=[]
+for mode in ('control','after_response','during_load'):
+    out=root/mode;plan=prepare(manifest,out,records=1);assert plan['targets']==2
+    state={'expired':False,'sends':0,'loads':0}
+    run.datetime_valid=lambda _:not state['expired']
+    def request(self,*args,**kwargs):
+        state['sends']+=1
+        return original_request(self,*args,**kwargs)
+    def invoke(self,payload):
+        result=original_invoke(self,payload)
+        if mode=='after_response':state['expired']=True
+        return result
+    def init(self,box,config,record,cancelled):
+        def wrapped(row):
+            record(row)
+            if row['event']=='model_loaded':
+                state['loads']+=1
+                if mode=='during_load':state['expired']=True
+        original_init(self,box,config,wrapped,cancelled)
+    ResidentSession.request=request;run.Worker.invoke=invoke;run.Worker.__init__=init
+    result=run.real_run(out,config)
+    summary=report(out)
+    assert state['loads']==1
+    assert state['sends']=={'control':2,'after_response':1,'during_load':0}[mode]
+    assert summary['buckets']['technical_failure']==0 and summary['buckets']['interrupted']==0
+    assert result['status']==('COMPLETED' if mode=='control' else 'STOPPED')
+    if mode!='control':
+        assert result['error']=='source_expired' and summary['buckets']['not_started']==1
+        before=(out/'journal.jsonl').read_bytes()
+        try:run.real_run(out,config,resume=True)
+        except ReplayError as exc:assert str(exc)=='source_changed_or_expired'
+        else:raise AssertionError('expired resume allowed')
+        assert (out/'journal.jsonl').read_bytes()==before
+    assert summary['buckets']['skipped']==(1 if mode=='during_load' else 0)
+    receipts.append({'mode':mode,'actual_sends':state['sends'],'model_loads':state['loads'],
+       'execution':result,'buckets':summary['buckets'],'runtime':json.loads((out/'runtime.json').read_text(encoding='utf-8')),
+       'expired_resume_no_append':mode!='control'})
+    (root/'receipt.json').write_text(json.dumps({'candidate':'382c95a','source_sha256':code,
+       'scope':'actual_isolated_laya_synthetic_input_controlled_clock','results':receipts},indent=2),encoding='utf-8')
+    print(mode,'PASSED',flush=True)
+run.datetime_valid=old_clock;run.Worker.invoke=original_invoke;run.Worker.__init__=original_init;ResidentSession.request=original_request
+assert source_hash()==code
