@@ -1,0 +1,205 @@
+{
+  "candidate": "3ae7f304348bea15a853eb24495df692ce13c744",
+  "source_cases": [
+    {
+      "change": "valid",
+      "mode": "normal",
+      "returncode": 0
+    },
+    {
+      "change": "valid",
+      "mode": "-O",
+      "returncode": 0
+    },
+    {
+      "change": "valid",
+      "mode": "environment",
+      "returncode": 0
+    },
+    {
+      "change": "tracked-change",
+      "mode": "normal",
+      "returncode": 1
+    },
+    {
+      "change": "tracked-change",
+      "mode": "-O",
+      "returncode": 1
+    },
+    {
+      "change": "tracked-change",
+      "mode": "environment",
+      "returncode": 1
+    },
+    {
+      "change": "untracked-route",
+      "mode": "normal",
+      "returncode": 1
+    },
+    {
+      "change": "untracked-route",
+      "mode": "-O",
+      "returncode": 1
+    },
+    {
+      "change": "untracked-route",
+      "mode": "environment",
+      "returncode": 1
+    }
+  ],
+  "runtime_cases": [
+    {
+      "case": "ordinary-interpreter",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "missing-sdk",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "empty-model",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "bad-model-digest",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "valid-retry",
+      "returncode": 0,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 3,
+        "function": 3,
+        "model": 1,
+        "chat": 1
+      },
+      "files_before": 21,
+      "files_unchanged": false
+    }
+  ],
+  "source_restored": true,
+  "manifest_before": {
+    "deployment_manifest_version": 2,
+    "deployment_state": "not_verified",
+    "action_sha256": null,
+    "planned_action_sha256": "cdb89cdba449592b4563b7132e8a2e942bcd88391ddc20e846bf914d0ae094da",
+    "support_modules_sha256": {
+      "src/whynote/__init__.py": "0c83d44535409c404e19464943a0ae7ea5c900b90b18da90b9d3efd56a9f8bd8",
+      "src/whynote/api.py": "c8eb2a8d2f65438f7939b4642649b4b785735c6574dcabfde3d00361a0b0d57c",
+      "src/whynote/demo.py": "23da76f307e90af1c3bc8f858dc14cd0f4b825b645b4d7c99db1e74d9d38683e",
+      "src/whynote/domain.py": "464b2a551b44c464a394ea3c2b0afca332521ba6d8098b47df67f44653378040",
+      "src/whynote/jev_provider.py": "a60c683b9200b14f16765d98ced6071e861393e4549558403feb8e714def210c",
+      "src/whynote/laya_app.py": "0d0df66e9a8ba0b88995812ba8d7b693ac2edd58e444debc4b6d5036f6584e19",
+      "src/whynote/laya_local.py": "b3b75824c689a2cc411badfc1c7d2838e58a2aaabfbf4c6d986acf829d726141",
+      "src/whynote/laya_manifest.py": "3b1b605f278e9be6a2494b5ae4fcd69477cf6a8f272bdb975a235f75f6b1c467",
+      "src/whynote/live_suggestions.py": "0d9482739796eb5a73dd1ee6b4a7fd723f239092d6e5f92040b5d422366b2eb4",
+      "src/whynote/measurement.py": "2174ba127c30407cf4ee899d41abc17b56d0b70f5d05bd36de84071d9365c1d6",
+      "src/whynote/provider_keys.py": "3b22b2243535226fd9a9b37c88e1d6065279e159d1b2e83b3106bd5876c79d83",
+      "src/whynote/replay.py": "4ffc6b4c40dc734d3cd8e6d2f4ec3ee6e9da55a513ca71c7d561e5d5fe09fe27",
+      "src/whynote/replay_laya.py": "10ad4d77534f448ebff6bc339fcc76bf14f58ef0d764bb2929e9678e058c1e7c",
+      "src/whynote/replay_metrics.py": "a121c2043dfb12558c29946d293598b09d6812b873c5c7c5ad9c07e124ef2a2d",
+      "src/whynote/research.py": "2bc6d4da838230a750c7144ef5d4d3f6e358c519d678df9b42a475a37ff65724",
+      "src/whynote/research_report.py": "767e73ead9906cfd408bf87deaa607c8a80bc2843dd1b11905781fe111b107ab",
+      "src/whynote/s1.py": "76e32a8d7dd6a879983cfaf2c1287b09293ad3602854c941980d52efff948609",
+      "src/whynote/s1_host.py": "90f40f4cd9d06498e317a7860044f5211072bab543e15364ac49839b64a89ad7",
+      "src/whynote/s1_provider.py": "d9004f6f9ffff7296811ffc14fa2bfd70ae75954a06b544e0c5151ed2bb39a38",
+      "src/whynote/source_mapping.py": "dd97eeb04521522766edf8e257a6ee4b214ce2d7160623ae65dcade10653a602",
+      "src/whynote/source_review.py": "32ebdc8d84794ae9419a8b8dfee2dac2c4011bc2dd90e9bc6885e077b272c9c7",
+      "src/whynote/store.py": "75a50d78a66cd0e8d16b3e913cc8fd569dcc11fefb925158a67ba28dcfc89a4d",
+      "src/whynote/suggestions.py": "c53d845a93e1115c76f1e00f3837c89aa7fe9acdf50c8b47ec78512dd3396f09",
+      "src/whynote/task_reasons.json": "a9628a3136ece33622ba15cf7f18b4627ec95e6f72e618eaee523cd44f553f0f",
+      "src/whynote/task_reasons.py": "d8b0aa893d16854844844b9e392b44b49a77d72e7d6115cbb4c8fdc5a4441fb5",
+      "src/whynote/template_suggestions.py": "0e5b0075ce9d928dbeff40367dd2864dc5880aa5f9f819c5fa304102743e98eb",
+      "integrations/openwebui/laya_action.py": "93601ab1b686a2c63531f7b2d9382b955881f6da9c92a7979746f7ded190d7a4",
+      "integrations/openwebui/local_chain_action.py": "c9fa5b877f342e99af666792aec396bedbe218d83f798a867931d173ea952630",
+      "integrations/openwebui/review_feedback.py": "8c522f60c94c86e8559f84fabcc3e1eac6a9b28951946fa96940e973712465f3",
+      "integrations/openwebui/s0_action.py": "cda91a305a207b50fed3a90b21b1f11351c7d9578413d22e0c86f7bdd150f452",
+      "integrations/openwebui/s0_pipe.py": "0d8eb90d61a53fd583e3e3fea6e858f45f773b9cfaa441b3b3fb9cf71b4152af",
+      "integrations/openwebui/s1_action.py": "35fe7f74030b7b356a554043509e766cb64dcb8208e26fd6ee6718d44da8d778",
+      "integrations/openwebui/s1_pipe.py": "00dd4e1329f4b95f5d52d1597753107e4e3642aa85799c81ff40109f7314117d",
+      "integrations/openwebui/s1_retract_action.py": "72bb8246d40675f935036d0ee31bb3658f662eebd5bfdc9f19c895942c90cf38",
+      "integrations/openwebui/template_action.py": "d43ff7b80dcff69ac463a9ef2182fbe16dc1377ef9cdeb81d4cd587e9ee822ea",
+      "integrations/openwebui/tests/conftest.py": "227723d33d744427779c0c548521d7315dfc96eaf8ca202fac840b51d041a5f1",
+      "integrations/openwebui/tests/test_association.py": "90461abc770486488667792293e02f13f999ed2568222960de4fcf64a5a6bb21",
+      "integrations/openwebui/tests/test_native.py": "1de8da2881907823bfabf29cfc73b9f21e5b328604e2dcd4072286f084e1f967",
+      "integrations/openwebui/tests/test_qa_q16.py": "95cc52bfca28a4b4822a08dc72a7f3d59c8788fdc578578d6db71db235c7d4da",
+      "integrations/openwebui/tests/test_s1.py": "c386fc09e593c3dc499ec1f41b5e270959fd1318499275bce7c856e0e05cf324",
+      "integrations/openwebui/tests/test_s1_independent.py": "3fee3cc4a8973ad8bfe45c6050b24e416d42e6f1b9ac9b12ea84d321923da9f1",
+      "integrations/openwebui/tests/test_s1_research.py": "22570e5374a3deb1bd2c559f677e0e9246b7347eed169d7407874ad1290dddb4"
+    }
+  },
+  "manifest": {
+    "state": "verified",
+    "action_sha256": "cdb89cdba449592b4563b7132e8a2e942bcd88391ddc20e846bf914d0ae094da",
+    "http_sqlite_source_equal": true,
+    "active": true,
+    "global": false,
+    "support_module_count": 42,
+    "support_disk_startup_receipt_equal": true,
+    "verified_at": 1790662235
+  },
+  "host_stopped": true,
+  "dialog_restored": true
+}
