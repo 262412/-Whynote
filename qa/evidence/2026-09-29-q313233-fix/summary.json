@@ -16,5 +16,19 @@
   "browser_inference_frontend_build_rerun": false,
   "independent_retest": "pending",
   "outbound_isolation_concurrency": "open",
-  "production": "NO-GO"
+  "production": "NO-GO",
+  "fix_commit": "59a0f68659667da5c653a915851ff95b6488cace",
+  "ci": {
+    "run": 36523893438,
+    "quality": "success",
+    "core": 762,
+    "s0": 9,
+    "manual": 31,
+    "native": 80,
+    "probe": 58
+  },
+  "feishu": {
+    "prd": 464,
+    "tech": 454
+  }
 }

@@ -43,3 +43,6 @@ uv run --no-sync ruff format --check src tests integrations qa
 本轮未重新运行浏览器、模型推理或前端构建，预检不承诺CUDA/显存或预检后文件不变。
 出站隔离与跨进程单并发仍待处理；未执行外网泄漏/GPU耗尽试验。非作者APPROVED和适用签署仍缺。
 M5-3a仍HOLD，M5-4a/4b未开启；未合并，完整FR及生产NO-GO。
+
+
+本轮Q-31/Q-32/Q-33开发同步：飞书原FR/TD、字段及M5任务共15处更新并逐条读回，PRD456→464、技术447→454，旧链接与历史原文保留。修复59a0f68的[CI36523893438](https://github.com/262412/-Whynote/actions/runs/36523893438)通过（核心762＋S0 9＋manual 31，原生80、探针58）；后续文档head另核对。仍待独立复验、运行边界、非作者批准及签署。
