@@ -1,0 +1,18 @@
+{
+  "scope": "developer_synthetic_browser",
+  "base": "84aa76f",
+  "synthetic_targets": 2,
+  "summary_and_filter": true,
+  "case_context_answer_reference_prediction_visible": true,
+  "case_view": {
+    "event": "case_view",
+    "input_id": "409521a3b7f901f44400e4737d4fcd538f20e6da1615f13672871ac4d5fc31e7",
+    "group_id": "2a9df604d6d46908b15cd849d2c107646d567100041682958047fd7ee628fc88",
+    "at": "2026-09-29T15:53:28.175442+00:00",
+    "run_id": "717e362b99834f59933c47fe8e469a87"
+  },
+  "initial_immediate_ax_snapshot": "unchanged",
+  "later_async_result": "visible",
+  "independent_ui_acceptance": false,
+  "real_model_rerun": false
+}

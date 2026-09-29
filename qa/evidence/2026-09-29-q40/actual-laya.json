@@ -1,0 +1,133 @@
+{
+  "candidate": "40215eb",
+  "source_sha256": "f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295",
+  "scope": "actual_isolated_laya_synthetic_input_controlled_clock",
+  "results": [
+    {
+      "mode": "control",
+      "actual_sends": 2,
+      "model_loads": 1,
+      "execution": {
+        "status": "COMPLETED",
+        "quality": "NOT_EVALUATED",
+        "error": null
+      },
+      "buckets": {
+        "suggested": 0,
+        "abstained": 2,
+        "technical_failure": 0,
+        "ineligible": 0,
+        "skipped": 0,
+        "interrupted": 0,
+        "not_started": 0
+      },
+      "runtime": {
+        "source_sha256": "f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295",
+        "runtime_sha256": "ee50fd92e3d554965c9cde4d009c51d507b45c25714681376fd9811ce532216e",
+        "model": {
+          "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+          "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+          "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+          "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+          "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+        },
+        "catalog": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "config": {
+          "python": "D:\\PythonProject\\jev项目\\var\\laya-runtime\\Scripts\\python.exe",
+          "base_python": "C:\\Users\\22826\\AppData\\Roaming\\uv\\python\\cpython-3.11.14-windows-x86_64-none",
+          "model_dir": "D:\\PythonProject\\jev项目\\var\\models\\laya\\multilingual",
+          "device": "cuda",
+          "load_timeout": 60,
+          "request_timeout": 60
+        },
+        "manifest_sha256": "78db50de078e7231a4d109e90f89bebfe91d3c53acfb4168e766cd54156380e9",
+        "inputs_sha256": "f224356763531c20c503011b956813b2f45dc4b52b8862ec1dccee0f7be5039e"
+      },
+      "expired_resume_no_append": false
+    },
+    {
+      "mode": "after_response",
+      "actual_sends": 1,
+      "model_loads": 1,
+      "execution": {
+        "status": "STOPPED",
+        "quality": "NOT_EVALUATED",
+        "error": "source_expired"
+      },
+      "buckets": {
+        "suggested": 0,
+        "abstained": 1,
+        "technical_failure": 0,
+        "ineligible": 0,
+        "skipped": 0,
+        "interrupted": 0,
+        "not_started": 1
+      },
+      "runtime": {
+        "source_sha256": "f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295",
+        "runtime_sha256": "ee50fd92e3d554965c9cde4d009c51d507b45c25714681376fd9811ce532216e",
+        "model": {
+          "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+          "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+          "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+          "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+          "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+        },
+        "catalog": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "config": {
+          "python": "D:\\PythonProject\\jev项目\\var\\laya-runtime\\Scripts\\python.exe",
+          "base_python": "C:\\Users\\22826\\AppData\\Roaming\\uv\\python\\cpython-3.11.14-windows-x86_64-none",
+          "model_dir": "D:\\PythonProject\\jev项目\\var\\models\\laya\\multilingual",
+          "device": "cuda",
+          "load_timeout": 60,
+          "request_timeout": 60
+        },
+        "manifest_sha256": "a18e48ebeb6c65b8354d9248872ddbffcc86e3173fbb070c17465a2562ceafe0",
+        "inputs_sha256": "f224356763531c20c503011b956813b2f45dc4b52b8862ec1dccee0f7be5039e"
+      },
+      "expired_resume_no_append": true
+    },
+    {
+      "mode": "during_load",
+      "actual_sends": 0,
+      "model_loads": 1,
+      "execution": {
+        "status": "STOPPED",
+        "quality": "NOT_EVALUATED",
+        "error": "source_expired"
+      },
+      "buckets": {
+        "suggested": 0,
+        "abstained": 0,
+        "technical_failure": 0,
+        "ineligible": 0,
+        "skipped": 1,
+        "interrupted": 0,
+        "not_started": 1
+      },
+      "runtime": {
+        "source_sha256": "f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295",
+        "runtime_sha256": "ee50fd92e3d554965c9cde4d009c51d507b45c25714681376fd9811ce532216e",
+        "model": {
+          "model.safetensors": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+          "rl_agent_config.json": "25061739243b617ad88d1219ba6f8a9c86c5881ca28df024fa2d9b3b2fcc30c6",
+          "encoder/config.json": "83f6916d13ef0f556ac461f28308dc2bffa7ebeadee8ec9e2db5812020ea5bb4",
+          "tokenizer/tokenizer_config.json": "6c6b2d8e3c84ce0e671c129cd6b374b235d6f9863042a5836358d00a89bbb5a1",
+          "tokenizer/tokenizer.json": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f"
+        },
+        "catalog": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+        "config": {
+          "python": "D:\\PythonProject\\jev项目\\var\\laya-runtime\\Scripts\\python.exe",
+          "base_python": "C:\\Users\\22826\\AppData\\Roaming\\uv\\python\\cpython-3.11.14-windows-x86_64-none",
+          "model_dir": "D:\\PythonProject\\jev项目\\var\\models\\laya\\multilingual",
+          "device": "cuda",
+          "load_timeout": 60,
+          "request_timeout": 60
+        },
+        "manifest_sha256": "619d93b851ea6094831bd63f589255981bd29354f42b60bd5dcd487b48a85e53",
+        "inputs_sha256": "f224356763531c20c503011b956813b2f45dc4b52b8862ec1dccee0f7be5039e"
+      },
+      "expired_resume_no_append": true
+    }
+  ]
+}

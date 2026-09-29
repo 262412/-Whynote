@@ -1,0 +1,29 @@
+{
+  "base": "84aa76f",
+  "candidate": "40215eb",
+  "scope": "author_fix_validation_not_independent_acceptance",
+  "full_tests": 1039,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "original_qa_tests_unchanged": true,
+  "original_qa_test_sha256": "189c047f1dc1714d747e2a2af6796aaeff6991f387520cda508fd85794475d17",
+  "new_boundary_tests": 10,
+  "ruff_files": 130,
+  "before_qa": {
+    "passed": 1,
+    "failed": 1
+  },
+  "first_full_run": {
+    "passed": 1027,
+    "failed": 12,
+    "cause": "parent UTF-8 vs child Windows default traceback decoding"
+  },
+  "rerun_environment": {
+    "PYTHONUTF8": "1"
+  },
+  "source_sha256": "f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295",
+  "real_sources_350_3000_rerun": false,
+  "endurance_30min_rerun": false,
+  "native_ci": "verify_final_head_separately"
+}
