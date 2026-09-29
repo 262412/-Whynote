@@ -1,0 +1,16 @@
+{
+  "scope": "draft_protocol_preparation_only",
+  "protocol_frozen": false,
+  "real_data_downloaded_or_labeled": false,
+  "quality_evaluation_run": false,
+  "m54b_started": false,
+  "baseline_main": "1d2abd7c876de4a856c712c4fb00b558976b5eb6",
+  "merged_pr": 40,
+  "protocol_draft_pr": 41,
+  "feishu": {
+    "prd": 510,
+    "tech": 494
+  },
+  "document_links_checked": true,
+  "historical_plan_archived": true
+}

@@ -1,0 +1,90 @@
+[
+  {
+    "document": "prd",
+    "selector": "doxc6zqRCD8UvOogQmL9asObUMe",
+    "revision_before": 504,
+    "revision_after": 505,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6XnyjR4zrtOqyrg5eWCT08f",
+    "revision_before": 505,
+    "revision_after": 506,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc62fkOFUEuqb8eMAmUEfvpKh",
+    "revision_before": 506,
+    "revision_after": 507,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6oSu8xaOTj2D58ijSai9ycd",
+    "revision_before": 507,
+    "revision_after": 508,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc62mxGAEhv3Vevxc1kAT5gtt",
+    "revision_before": 508,
+    "revision_after": 509,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6JBrbDm8xeukj6kGsqYsPZb",
+    "revision_before": 509,
+    "revision_after": 510,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6UYxxaVxkjOLlBKVXXrdSXb",
+    "revision_before": 489,
+    "revision_after": 490,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6zeKK1bzCKCcLPuBqMsKsBh",
+    "revision_before": 490,
+    "revision_after": 491,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6E3xQGfEcawBNQx1USVry1D",
+    "revision_before": 491,
+    "revision_after": 492,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6XNq6GX0xpjeX5RRjjyOsNh",
+    "revision_before": 492,
+    "revision_after": 493,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6P5Gz3bHa7CgMYuMvgfWhYQ",
+    "revision_before": 493,
+    "revision_after": 494,
+    "exact_text_readback": true,
+    "old_links_preserved": true
+  }
+]
