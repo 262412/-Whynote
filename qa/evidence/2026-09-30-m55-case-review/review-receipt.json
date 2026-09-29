@@ -1,0 +1,15 @@
+{
+  "run_id": "7a6af87b202340cdb6e96a14280476af",
+  "events_appended": {
+    "case_view": 48,
+    "review_metadata": 2044
+  },
+  "case_target_count": 48,
+  "case_group_count": 48,
+  "metadata_only_target_count": 2044,
+  "source_manifest_sha256": "0d87aa17ccce6760036103b2af8b448adfbf68fabdedac7871663af5a54a1d47",
+  "input_sha256": "a839d7045d0eb6c41af70f2061eeab75179d33f87e58875e122e52df1377ad19",
+  "journal_sha256": "96995e9f4deb62087baa1e4c8775400be152c6b6c1be403cab6f018dd6146f31",
+  "new_inference_calls": 0,
+  "quality": "NOT_EVALUATED"
+}

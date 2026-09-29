@@ -1,0 +1,51 @@
+{
+  "tokenizer_sha256": "609d8f4c067cd3950f88594c5a802616cea245823836ef5848ee4fc40aab5b6f",
+  "ineligible_exact_token_crosscheck": 1960,
+  "metadata_review_exposures": 2044,
+  "note": "Last-pair numeric fit is a diagnostic upper bound, not an approved projection or measured quality improvement. Counts can overlap.",
+  "sources": {
+    "helpsteer3": {
+      "ineligible": 675,
+      "single_turn_ineligible": 244,
+      "last_pair_numeric_fit": 261,
+      "answer_alone_gt700": 278,
+      "request_alone_gt700": 40,
+      "history_more_than_half_components": 384,
+      "state_gt700": 675,
+      "skipped": 46,
+      "skipped_also_gt700": 38,
+      "skipped_email": 37,
+      "skipped_ipv4_loopback": 7,
+      "skipped_ipv4_global": 1,
+      "skipped_ipv4_non_global": 5
+    },
+    "wildfb": {
+      "ineligible": 616,
+      "single_turn_ineligible": 93,
+      "last_pair_numeric_fit": 334,
+      "answer_alone_gt700": 192,
+      "request_alone_gt700": 50,
+      "history_more_than_half_components": 476,
+      "state_gt700": 616,
+      "skipped": 15,
+      "skipped_also_gt700": 13,
+      "skipped_ipv4_non_global": 6,
+      "skipped_ipv4_global": 3,
+      "skipped_email": 6,
+      "skipped_ipv4_loopback": 3
+    },
+    "wildfeedback": {
+      "ineligible": 669,
+      "single_turn_ineligible": 31,
+      "last_pair_numeric_fit": 528,
+      "answer_alone_gt700": 77,
+      "request_alone_gt700": 43,
+      "history_more_than_half_components": 584,
+      "state_gt700": 669,
+      "skipped": 23,
+      "skipped_also_gt700": 21,
+      "skipped_email": 16,
+      "skipped_ipv4_non_global": 7
+    }
+  }
+}

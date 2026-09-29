@@ -1,0 +1,90 @@
+from pathlib import Path
+import json,sqlite3,collections,hashlib
+root=Path('D:/PythonProject/jev项目/var/research/m55/review-20260930-first')
+run=Path('D:/PythonProject/jev项目/var/research/m55/runs/batch-1000-final')
+out=Path('qa/evidence/2026-09-30-m55-case-review');out.mkdir(parents=True,exist_ok=True)
+selection=json.loads((root/'selection.json').read_text(encoding='utf-8'))
+plan=json.loads((run/'manifest.json').read_text(encoding='utf-8'))
+selection['source_expiry']={s['source']:s['expires_at'] for s in plan['sources']}
+selection['source_sha256']=json.loads((run/'runtime.json').read_text())['source_sha256']
+selection['review_checkout']='6004ee663e3c9aeb5b5b2e9bc5601420402baac3'
+selection['raw_material_policy']='Controlled project research directory only; same original expiry, no separate backup.'
+(root/'selection.json').write_text(json.dumps(selection,ensure_ascii=False,indent=2),encoding='utf-8')
+(out/'selection.json').write_text(json.dumps(selection,ensure_ascii=False,indent=2),encoding='utf-8')
+length=json.loads((root/'length-summary.json').read_text());(out/'length-summary.json').write_text(json.dumps(length,indent=2),encoding='utf-8')
+db=sqlite3.connect(f'file:{(run/"inputs.sqlite3").as_posix()}?mode=ro',uri=True)
+meta={k:s for k,s in db.execute('select input_id,source from inputs')}
+stats=collections.defaultdict(lambda:{'buckets':collections.Counter(),'reasons':collections.Counter(),'choices':collections.Counter(),'abstention_detail':collections.Counter(),'routes':collections.Counter(),'unavailable':collections.Counter()})
+for r in map(json.loads,(run/'journal.jsonl').read_text().splitlines()):
+ if 'bucket' not in r:continue
+ a=stats[meta[r['input_id']]];a['buckets'][r['bucket']]+=1;p=r.get('prediction') or {}
+ if not p:continue
+ a['reasons'].update(p['reason_ids']);a['routes'][p['route']]+=1;a['unavailable'].update(p['unavailable_ids'])
+ choices=[v['choice'] for s in p['stages'] if s['stage']!='route' for v in s.get('answers',{}).values()]
+ a['choices'][r['bucket']+':'+','.join(sorted(set(choices)))]+=1
+ if r['bucket']=='abstained':a['abstention_detail']['all_available_no' if choices and all(v=='no' for v in choices) else 'has_unknown']+=1
+assert sum(sum(x['buckets'].values()) for x in stats.values())==3000
+aggregate={'run_id':plan['run_id'],'counts':stats,'reference_presence':[list(r) for r in db.execute("select source,case when json_array_length(payload,'$.reference.feedback')=0 then 'empty' else 'present' end,count(*) from inputs group by 1,2")],'evidence_flags':[list(r) for r in db.execute("select source,json_extract(payload,'$.evidence_kinds'),count(*) from inputs group by 1,2")],'wildfb_automated_labels':[list(r) for r in db.execute("select json_extract(payload,'$.reference.automated_label'),count(*) from inputs where source='wildfb' group by 1")],'quality':'NOT_EVALUATED','new_model_inference_calls':0}
+(out/'aggregate.json').write_text(json.dumps(aggregate,ensure_ascii=False,indent=2),encoding='utf-8')
+notes=[
+('length','多轮历史占用，当前回答也较长；参考侧指出事实问题，不可把未推断归因于理由库。'),
+('length','历史与答案都长；评价员对代码质量有分歧，不能把其中一条当真值。'),
+('length','历史累积加长答案；参考评价指出事实问题，需可靠依据才能启用事实理由。'),
+('length','单轮请求；答案本身较长，state恰越700，删历史不能解决。'),
+('material','当前请求有未围栏代码，original_code标记缺失；六个候选被过滤，剩余均no。'),
+('abstention','回答直接回应，参考意见偏正面；unknown不是已证实漏报。'),
+('material','参考意见集中于事实/评分依据；事实候选因无reference不可用。'),
+('routing','新代码生成被路由改写；回答满足可见任务，拒识可作正常对照。'),
+('decision','回答给出完整实施步骤，却建议不必要拒绝；五个可用理由均yes，概率最大者胜出。'),
+('decision','角色设定得到确认及能力说明，却建议答非所问；与可见请求不符。'),
+('decision','回答直接介绍所问操作，建议答非所问缺乏支持；评价员本身也有分歧。'),
+('decision','要求新增能力未要求保留接口，回答明显未完成；建议接口改变越过定义前提。'),
+('filter','技术示例中的回环地址触发整例跳过；不据此解除排除。'),
+('filter','历史配置示例含邮箱占位符；当前任务被整例排除。'),
+('filter','邮件抽取示例中包含示范邮箱，触发模式排除。'),
+('filter','历史演示数据含邮箱；本轮代码改进虽相关仍被整例排除。'),
+('length','当前请求附长篇材料，单轮即超限；需任务材料抽取，不能仅删历史。'),
+('length','长历史包含前端/合约与调试依赖；仅留短当前请求会丢必要代码。'),
+('length','当前错误很短但依赖历史代码；需要定位代码与错误的引用关系。'),
+('length','单轮长任务及长回答，含重复材料；本源最接近700边界的超限样本。'),
+('abstention','字段命名已给出，后续是新字段请求；不能将后续请求自动当负反馈。'),
+('definition','长度要求基本可见，后续表达细粒度选项偏好；不可反推未表达喜好。'),
+('material','事实性问题缺可靠参照，保留unknown；没有据外部知识裁定答案真假。'),
+('definition','后续才补充标题/描述分开要求；当前预测时不可见，不应作为既有违令。'),
+('routing','中文回答回应语言切换请求，却路由代码改写并建议不完整。'),
+('material','代码在先前轮次，当前无original_code标记；风格理由缺支持，错误详情只在后续反馈。'),
+('definition','改写幅度不足的反馈与候选方向部分相关；具体应归不完整还是风格仍需用户裁决。'),
+('decision','完整改写并获致谢后请求口语版，却被建议不必要拒绝；当前回答并无拒绝。'),
+('filter','长配置/代码历史含地址及邮箱模式；保持排除，不作内容安全放行。'),
+('filter','讨论网络地址池必然出现地址样式；属于技术材料与过滤策略边界。'),
+('filter','求职材料含个人联络信息，应继续排除；不能把所有邮箱命中当误报。'),
+('filter','历史网络配置中的子网掩码触发排除；新问题与地址无关。'),
+('length','多轮材料积累；最新约束涉及元素组成，不能丢失否定限制。'),
+('length','连续不同创作任务累积历史；当前请求可自成任务，参考反馈为空。'),
+('length','历史跨多个话题；当前概念问题独立，历史窗口是优先候选。'),
+('length','连续创作任务；紧邻700边界，旧故事累积可解释超限。'),
+('abstention','给出所需名称，用户要求更多；unknown可作正常对照。'),
+('routing','允许继续提问的简短对话被路由代码改写；未强行给理由是正常对照。'),
+('abstention','文本系统说明无法提供图片；不能无依据认定不必要拒绝。'),
+('abstention','正向认可后追加更多选项；unknown不证明理由库遗漏。'),
+('decision','答案先自称无法写代码再给概述；拒绝候选有文本依据，是否不必要仍需裁决。'),
+('decision','答案给出翻译替代项却被建议不必要拒绝；自动事实标签不是gold。'),
+('definition','回答部分涉及比较且有拒绝前缀；答非所问过宽，应区分未完成与拒绝。'),
+('decision','按儿童口吻改写且没有拒绝，却建议不必要拒绝。'),
+('filter','历史账户列表代码示例中的邮箱模式触发排除。'),
+('filter','历史表单/代码示例包含邮箱；当前按钮组件请求被整例排除。'),
+('filter','发邮件示例有占位收发地址，触发过滤；不意味着已判定真实个人信息。'),
+('filter','路由器脚本示例的非全局地址触发排除。'),
+]
+assert len(notes)==48
+cases=json.loads((root/'cases-controlled.json').read_text(encoding='utf-8'));measure={r['input_id']:r for r in json.loads((root/'length-metadata.json').read_text())}
+records=[]
+for c,(kind,note) in zip(cases,notes,strict=True):
+ p=c['payload'];r=c['result'];pred=r.get('prediction') or {}
+ records.append({k:c[k] for k in ('case','source','bucket','input_id','group_id','selection')}|{'row_id':p['row_id'],'target_id':p['target_id'],'reviewer_type':'assistant_exploratory_not_gold','inspection_scope':'structure_and_bounded_content; key_short_counterexamples_checked_in_full','finding_category':kind,'note':note,'route':pred.get('route'),'reason_ids':pred.get('reason_ids',[]),'unavailable_ids':pred.get('unavailable_ids',[]),'evidence_kinds':p['evidence_kinds'],'state_tokens':(r.get('measurement') or measure.get(c['input_id'],{})).get('state_tokens'),'context_turns':len(p['context'])})
+(out/'case-notes.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
+ledger=[r for r in map(json.loads,(run/'exposure.jsonl').read_text().splitlines()) if r.get('review_id')=='m55-first-review-20260930-v1']
+events=collections.Counter(r['event'] for r in ledger);assert events=={'case_view':48,'review_metadata':2044}
+(out/'review-receipt.json').write_text(json.dumps({'run_id':plan['run_id'],'events_appended':events,'case_target_count':48,'case_group_count':len({x['group_id'] for x in records}),'metadata_only_target_count':2044,'source_manifest_sha256':hashlib.sha256((run/'manifest.json').read_bytes()).hexdigest(),'input_sha256':hashlib.sha256((run/'inputs.sqlite3').read_bytes()).hexdigest(),'journal_sha256':hashlib.sha256((run/'journal.jsonl').read_bytes()).hexdigest(),'new_inference_calls':0,'quality':'NOT_EVALUATED'},indent=2),encoding='utf-8')
+for name in ('review_extract','length_profile','summarize'):(out/f'{name}.py.txt').write_bytes(Path(f'var/qa-m55-case-review/{name}.py').read_bytes())
+print('metadata-only artifacts written; 48 cases/48 groups, 2044 offline profile records, zero inference')
