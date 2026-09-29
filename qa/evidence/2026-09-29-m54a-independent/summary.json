@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-29",
+  "candidate": "07b1754f1485298af12d31b15c2eefda625b5cb8",
+  "main": "1d2abd7c876de4a856c712c4fb00b558976b5eb6",
+  "prd_input": 518,
+  "tech_input": 502,
+  "prd_readback": 521,
+  "tech_readback": 505,
+  "scope": "specified E1/E2/E3 synthetic engineering checks passed; not real quality or independent labels",
+  "tests": {
+    "baseline": {
+      "passed": 906,
+      "failed": 0,
+      "junit_sha256": "e6c6ab4779d8b03573a96927516e7afecd31fb86729a25139ff6a6f51eadb0d5"
+    },
+    "independent": {
+      "passed": 16,
+      "failed": 0,
+      "junit_sha256": "7cfcf18aa4a617f2702fff928356da97493738fffdd03b682644c2509119e411"
+    },
+    "native": {
+      "passed": 80,
+      "failed": 0,
+      "junit_sha256": "e5f5b1706cb6dc7943f895b7dcb7158d2847867b65f0d5c464e0052b93ae56a4"
+    }
+  },
+  "combined_core_and_qa_two_invocations": 922,
+  "probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "ruff_format_files": 106,
+  "installed_source_matches_candidate_lf_sha256": {
+    "self_review": "80871b0a7f12036afb3868781cc8d63f22d05cab52e7c65b7fd663f495eb853f",
+    "self_review_contract": "4ed3d47ee35756d6c9ec18d1c06692a508823768203368cb9835d95511a91fc8",
+    "self_review_metrics": "54e9c3a37f27ad09d09e409a53abf543b36757ddeec7e3fa377c9fc4a4de8c4f"
+  },
+  "candidate_ci": 36539651035,
+  "new_defects": [],
+  "no_business_changes": true,
+  "not_executed": [
+    "real data admission or evaluation",
+    "local model inference",
+    "browser",
+    "host deployment",
+    "frontend build"
+  ],
+  "remaining": [
+    "admitted batches and sealed labels",
+    "real material adapter and fixed 180-call executor",
+    "OS outbound isolation and cross-process model concurrency",
+    "execution freeze",
+    "nonauthor APPROVED and applicable owner signatures"
+  ],
+  "pr_status": "DRAFT",
+  "production": "NO-GO"
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "name": "test_actual_report_routing_ten_percent_boundary[4-PASS]",
+    "seconds": 0.017,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_routing_ten_percent_boundary[5-FAIL]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_library_eighty_percent_boundary[32-PASS]",
+    "seconds": 0.018,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_library_eighty_percent_boundary[31-FAIL]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_half_of_defects_boundary[20-PASS]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_half_of_defects_boundary[19-FAIL]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_seventy_percent_material_boundary[42-PASS]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_actual_report_seventy_percent_material_boundary[41-FAIL]",
+    "seconds": 0.014,
+    "result": "passed"
+  },
+  {
+    "name": "test_nearest_rank_boundary_uses_all_sixty_attempts[3-1000-PASS]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_nearest_rank_boundary_uses_all_sixty_attempts[4-15001-FAIL]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_technical_error_five_percent_boundary[3-PASS]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_technical_error_five_percent_boundary[4-FAIL]",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_diagnostic_technical_failures_do_not_choose_or_fail_c",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_global_safety_stop_takes_priority_over_c_hard_failure",
+    "seconds": 0.013,
+    "result": "passed"
+  },
+  {
+    "name": "test_strata_reconcile_to_overall_counts_and_fraction_parts",
+    "seconds": 0.016,
+    "result": "passed"
+  },
+  {
+    "name": "test_two_actual_cli_writers_cannot_overwrite_the_same_report",
+    "seconds": 0.194,
+    "result": "passed"
+  }
+]

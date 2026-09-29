@@ -1,0 +1,62 @@
+[
+  {
+    "document": "prd",
+    "selector": "doxc6RlYyvLYc4xPNVHKqGNAkpe",
+    "revision_before": 515,
+    "revision_after": 516,
+    "exact_text_readback": true,
+    "historical_links_preserved": true,
+    "old_block_snapshot": "feishu-prior-blocks.json",
+    "implementation_commit": "d4ed35bbc47554decf19daf39ed7d4310675958c"
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6kO64LgFV41f3MG4fRhizCe",
+    "revision_before": 516,
+    "revision_after": 517,
+    "exact_text_readback": true,
+    "historical_links_preserved": true,
+    "old_block_snapshot": "feishu-prior-blocks.json",
+    "implementation_commit": "d4ed35bbc47554decf19daf39ed7d4310675958c"
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6cSp01oKzegBPZzIFUDSUJe",
+    "revision_before": 517,
+    "revision_after": 518,
+    "exact_text_readback": true,
+    "historical_links_preserved": true,
+    "old_block_snapshot": "feishu-prior-blocks.json",
+    "implementation_commit": "d4ed35bbc47554decf19daf39ed7d4310675958c"
+  },
+  {
+    "document": "tech",
+    "selector": "doxc68otOmQiYn3ILcQSfE3PHdf",
+    "revision_before": 499,
+    "revision_after": 500,
+    "exact_text_readback": true,
+    "historical_links_preserved": true,
+    "old_block_snapshot": "feishu-prior-blocks.json",
+    "implementation_commit": "d4ed35bbc47554decf19daf39ed7d4310675958c"
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6OB3zPBjNf2fzzTQzJ1mYLe",
+    "revision_before": 500,
+    "revision_after": 501,
+    "exact_text_readback": true,
+    "historical_links_preserved": true,
+    "old_block_snapshot": "feishu-prior-blocks.json",
+    "implementation_commit": "d4ed35bbc47554decf19daf39ed7d4310675958c"
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6Q73kkbfFF4AOgsnRniKnDc",
+    "revision_before": 501,
+    "revision_after": 502,
+    "exact_text_readback": true,
+    "historical_links_preserved": true,
+    "old_block_snapshot": "feishu-prior-blocks.json",
+    "implementation_commit": "d4ed35bbc47554decf19daf39ed7d4310675958c"
+  }
+]
