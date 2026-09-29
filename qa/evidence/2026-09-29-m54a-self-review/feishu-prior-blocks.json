@@ -1,0 +1,38 @@
+[
+  {
+    "document": "prd",
+    "revision": 515,
+    "block_id": "doxc6RlYyvLYc4xPNVHKqGNAkpe",
+    "xml": "<p id=\"doxc6RlYyvLYc4xPNVHKqGNAkpe\">产品已指定探索30（代码20/其他10）、验证60（代码40/其他20），至少30原生中文及10例&gt;1024字节；本人先标注封存再看预测，隔48小时盲重标固定20例。self_reviewed_blind与independent_adjudicated分开，不能伪造两名reviewer。E1数据/标签契约→E2指标/门槛→E3合成手算→E4运行就绪；真实入口仍需开发。<a href=\"https://github.com/262412/-Whynote/blob/b3d8f6f/docs/m54a-freeze-protocol.md\">审阅输入草案c153fb6（现行参数见D-20）</a> </p>"
+  },
+  {
+    "document": "prd",
+    "revision": 516,
+    "block_id": "doxc6kO64LgFV41f3MG4fRhizCe",
+    "xml": "<p id=\"doxc6kO64LgFV41f3MG4fRhizCe\">C门槛：覆盖&gt;=80%、命中&gt;=50%、条件路由遗漏&lt;=10%、错误具体建议&lt;=5%、可判拒识&lt;=30%、技术失败&lt;=5%、p95总耗时&lt;=15秒；全部最小分母与停止条件见本节参数表。分母不足INCONCLUSIVE；风险待审HOLD；明确不达标FAIL；全过仅PASS_SELF_REVIEW_PILOT。本人自评不等于独立质量验收，数据/环境未就绪不启动。<a href=\"https://github.com/262412/-Whynote/blob/b3d8f6f/docs/m54a-freeze-protocol.md\">审阅输入草案c153fb6（现行参数见D-20）</a> </p>"
+  },
+  {
+    "document": "prd",
+    "revision": 517,
+    "block_id": "doxc6cSp01oKzegBPZzIFUDSUJe",
+    "xml": "<p id=\"doxc6cSp01oKzegBPZzIFUDSUJe\">✔ task_reasons.py按证据种类筛选候选，replay.py保留材料不足/unknown/no_match及超长错误。4代码＋7通用理由只为开发种子；真实语料覆盖、缺材料/长代码拒绝率及partial-feature质量待M5-3a/4a。（2026-09-29，main 5abdc580；本轮699/699与Ruff通过，范围见本轮产品复核；历史证据见归档。）</p>"
+  },
+  {
+    "document": "tech",
+    "revision": 499,
+    "block_id": "doxc68otOmQiYn3ILcQSfE3PHdf",
+    "xml": "<p id=\"doxc68otOmQiYn3ILcQSfE3PHdf\">产品已指定探索30（代码20/其他10）、验证60（代码40/其他20），至少30原生中文及10例&gt;1024字节；本人先标注封存再看预测，隔48小时盲重标固定20例。self_reviewed_blind与independent_adjudicated分开，不能伪造两名reviewer。E1数据/标签契约→E2指标/门槛→E3合成手算→E4运行就绪；真实入口仍需开发。<a href=\"https://github.com/262412/-Whynote/blob/b3d8f6f/docs/m54a-freeze-protocol.md\">审阅输入草案c153fb6（现行参数见D-20）</a> </p>"
+  },
+  {
+    "document": "tech",
+    "revision": 500,
+    "block_id": "doxc6OB3zPBjNf2fzzTQzJ1mYLe",
+    "xml": "<p id=\"doxc6OB3zPBjNf2fzzTQzJ1mYLe\">C门槛：覆盖&gt;=80%、命中&gt;=50%、条件路由遗漏&lt;=10%、错误具体建议&lt;=5%、可判拒识&lt;=30%、技术失败&lt;=5%、p95总耗时&lt;=15秒；全部最小分母与停止条件见本节参数表。分母不足INCONCLUSIVE；风险待审HOLD；明确不达标FAIL；全过仅PASS_SELF_REVIEW_PILOT。本人自评不等于独立质量验收，数据/环境未就绪不启动。<a href=\"https://github.com/262412/-Whynote/blob/b3d8f6f/docs/m54a-freeze-protocol.md\">审阅输入草案c153fb6（现行参数见D-20）</a> </p>"
+  },
+  {
+    "document": "tech",
+    "revision": 501,
+    "block_id": "doxc6Q73kkbfFF4AOgsnRniKnDc",
+    "xml": "<p id=\"doxc6Q73kkbfFF4AOgsnRniKnDc\">D-20（2026-09-29）：用户确认全项目仅本人一人。产品参数M54A-E-v0.1已指定，执行冻结待就绪：先单人盲审预试验E，再条件进入本人对照4b-E；独立验收I保留后置，不冒充独立gold或完整FR。探索30、封存验证60；C为指定候选，A/B仅诊断。尚缺获准批次、最终理由包/标签hash、环境验证及运行人冻结记录；三源HOLD、真实评测/新真实研究均未开启。PR41仍Draft，原c153fb6绿色CI不覆盖本轮文档。 标签来源self_reviewed_blind；20例隔48小时重标分歧&gt;4即修订协议，独立I轨另用新留出集。新来源/schema及过程记录待E1实现，不放宽原独立标签校验。<a href=\"https://github.com/262412/-Whynote/blob/4fe5c0d/docs/m5-suggestion-contract.md\">M5-2a契约</a> <a href=\"https://github.com/262412/-Whynote/blob/4fe5c0d/docs/m5-suggestion-delivery.md\">M5-2a开发证据</a> <a href=\"https://github.com/262412/-Whynote/blob/codex/m5-display-contract/docs/qa-m5-suggestions-independent.md\">M5-2a独立QA证据与范围</a> <a href=\"https://github.com/262412/-Whynote/blob/648f586/docs/m5-template-delivery.md\">M5-2b合成交付与未完成项</a> <a href=\"https://github.com/262412/-Whynote/blob/codex/m5-template-confirmation/docs/qa-m5-templates-independent.md\">M5-2b独立QA与Q-27</a> <a href=\"https://github.com/262412/-Whynote/blob/c00408b/docs/q27-fix-verification.md\">Q-27开发修复与复验条件</a> <a href=\"https://github.com/262412/-Whynote/blob/codex/m5-template-confirmation/docs/qa-q27-retest.md\">Q-27独立复验及范围</a> </p>"
+  }
+]
