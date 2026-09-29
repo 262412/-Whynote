@@ -9,6 +9,7 @@
 prepare无需标签、reviewer或freeze。既有controlled_replay/self_review正式evaluate入口及其校验保持不变。
 
 来源manifest必须固定repo/revision/file/size/SHA256，以及当前使用授权、用途、受控目录、访问者、保留到期、不备份和允许记录范围。单源HOLD单列；不阻塞其他获准源。
+max_source_records/max_targets必须为正整数。显式目标数超过授权即拒绝；默认小批也逐源受max_targets限制。all扫描仍受max_source_records约束；全量目标须另有allow_all_targets授权，不用小批例外绕过较小的来源上限。
 下载只取三个指定文件；推理前完整hash核对，禁止从源选择另一版本。下载、缓存、临时文件和运行材料仅在配置的项目research根目录内；空间预检预留源文件、索引与结果，拒绝不足空间。
 
 ## 统一输入与隔离

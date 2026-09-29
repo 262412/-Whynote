@@ -1,0 +1,40 @@
+"""Cancel a real batch after progress, then resume with the same fixed fingerprints."""
+import json,sys,threading,time
+from pathlib import Path
+from whynote.explore_prepare import prepare
+from whynote.explore_run import real_run
+from whynote.explore_report import report
+
+root=Path('D:/PythonProject/jev项目/var/research/m55')
+manifest=json.loads((root/'source-manifest.json').read_text(encoding='utf-8'))
+manifest['sources']=[s for s in manifest['sources'] if s['source']=='wildfb']
+output=root/'runs/cancel-resume';prepare(manifest,output,records=100)
+config={'python':sys.executable,'base_python':'C:/Users/22826/AppData/Roaming/uv/python/cpython-3.11-windows-x86_64-none',
+        'model_dir':'D:/PythonProject/jev项目/var/models/laya/multilingual','device':'cuda','load_timeout':60,'request_timeout':60}
+def cancel():
+ deadline=time.monotonic()+180
+ while time.monotonic()<deadline:
+  journal=output/'journal.jsonl'
+  if journal.exists():
+   lines=journal.read_text(encoding='utf-8').splitlines()
+   if sum('"event": "completed"' in line or '"event": "failed"' in line for line in lines)>=5:
+    (output/'cancel.request').write_text('synthetic engineering cancellation trigger',encoding='utf-8');return
+  time.sleep(.01)
+ raise RuntimeError('cancel trigger deadline')
+thread=threading.Thread(target=cancel);thread.start()
+first=real_run(output,config);thread.join()
+assert first['status']=='STOPPED'
+prefix=(output/'journal.jsonl').read_bytes()
+# Preserve the cancellation request; renaming only our own control file is reversible.
+(output/'cancel.request').rename(output/'cancel.observed')
+second=real_run(output,config,resume=True)
+assert (output/'journal.jsonl').read_bytes().startswith(prefix)
+events=[json.loads(line) for line in (output/'journal.jsonl').read_text(encoding='utf-8').splitlines()]
+starts=[(e['input_id'],e['scheme']) for e in events if e['event']=='started']
+assert len(starts)==len(set(starts))==100
+summary=report(output)
+assert summary['buckets']['not_started']==0 and sum(summary['buckets'].values())==100
+receipt={'first':first,'second':second,'buckets':summary['buckets'],'unique_started':100,'duplicate_started':0,'prefix_preserved':True,
+         'source_sha256':json.loads((output/'runtime.json').read_text())['source_sha256']}
+(root/'cancel-resume-receipt.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
+print(json.dumps(receipt),flush=True)

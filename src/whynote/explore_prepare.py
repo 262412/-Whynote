@@ -58,6 +58,11 @@ def admission(manifest):
                 and item.get("backup") is False,
                 "source_usage_missing",
             )
+            require(
+                all(type(item.get(k)) is int and item[k] > 0 for k in ("max_source_records", "max_targets"))
+                and all(type(item.get(k, False)) is bool for k in ("allow_all_scan", "allow_all_targets")),
+                "source_scope_invalid",
+            )
             expiry = datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00"))
             require(expiry.tzinfo is not None and expiry > datetime.now(UTC), "source_retention_expired")
             path = contained(item["path"], root)
@@ -79,6 +84,7 @@ def prepare(manifest, output, *, records=100, targets=None, schemes=("C",), seed
     require(type(seed) is int and type(holdout_percent) is int and 0 <= holdout_percent < 100, "invalid_holdout")
     require(all(records is not None or s.get("allow_all_scan") is True for s in sources), "all_scan_not_admitted")
     require(all(records is None or records <= s["max_source_records"] for s in sources), "record_scope_exceeded")
+    require(all(targets is None or targets <= s["max_targets"] for s in sources), "target_scope_exceeded")
     require(
         all(targets is not None and targets <= s["max_targets"] for s in sources)
         or all(records is not None and records <= 100 for s in sources)
@@ -122,12 +128,20 @@ def prepare(manifest, output, *, records=100, targets=None, schemes=("C",), seed
     try:
         for batch in sources:
             source = batch["source"]
+            record_limit = records if records is not None else batch["max_source_records"]
+            target_limit = (
+                targets
+                if targets is not None
+                else None
+                if records is None and batch.get("allow_all_targets") is True
+                else batch["max_targets"]
+            )
             count, target_count, mapper = Counter(), 0, WildFeedbackMapper()
             previous = None
             iterator = iter(source_rows(batch["path"], source))
             row_id = -1
-            while records is None or row_id + 1 < records:
-                if targets is not None and target_count >= targets:
+            while row_id + 1 < record_limit:
+                if target_limit is not None and target_count >= target_limit:
                     break
                 try:
                     row_id, row, error = next(iterator)
@@ -176,7 +190,7 @@ def prepare(manifest, output, *, records=100, targets=None, schemes=("C",), seed
                 count[outcome] += 1
                 count["rejected_targets"] += len(errors)
                 for item in mapped:
-                    if targets is not None and target_count >= targets:
+                    if target_limit is not None and target_count >= target_limit:
                         count["targets_not_selected"] += 1
                         continue
                     context_hash = item["conversation_group_id"]

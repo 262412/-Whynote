@@ -348,3 +348,36 @@ def test_report_can_read_without_replacing_execution_index(prepared):
     before = (output / "index.sqlite3").read_bytes()
     report(output)
     assert (output / "index.sqlite3").read_bytes() == before
+
+
+def test_explicit_target_limit_cannot_bypass_scope_with_small_record_count(prepared):
+    output, manifest = prepared
+    manifest["sources"][0]["max_targets"] = 1
+    with pytest.raises(ReplayError, match="target_scope_exceeded"):
+        prepare(manifest, output.parent / "too_many", records=2, targets=2)
+    assert not (output.parent / "too_many").exists()
+
+
+def test_default_smoke_respects_smaller_source_target_cap(prepared):
+    output, manifest = prepared
+    manifest["sources"][0]["max_targets"] = 1
+    result = prepare(manifest, output.parent / "small_cap", records=2)
+    assert result["targets"] == 1
+    assert result["source_counts"]["helpsteer3"]["targets_not_selected"] == 1
+
+
+def test_all_scan_still_obeys_source_record_scope(prepared):
+    output, manifest = prepared
+    manifest["sources"][0]["max_source_records"] = 1
+    result = prepare(manifest, output.parent / "bounded_all", records=None, targets=100)
+    assert result["targets"] == 2
+    assert result["source_counts"]["helpsteer3"]["scanned"] == 1
+
+
+@pytest.mark.parametrize("limit", [0, -1, True, "100"])
+def test_invalid_source_scope_is_held_before_output_creation(prepared, limit):
+    output, manifest = prepared
+    manifest["sources"][0]["max_targets"] = limit
+    with pytest.raises(ReplayError, match="no_admitted_sources"):
+        prepare(manifest, output.parent / "invalid_scope", records=2)
+    assert not (output.parent / "invalid_scope").exists()
