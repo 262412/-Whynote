@@ -1,0 +1,10 @@
+{
+  "case": "test_retention_expiry_stops_before_next_payload[False]",
+  "expected_calls": 1,
+  "actual": {
+    "actual_calls": "102",
+    "execution_status": "COMPLETED",
+    "not_started": "0"
+  },
+  "scope": "real_run and real execute/SQLite/journal; clock predicate and hardware replaced; no real inference"
+}

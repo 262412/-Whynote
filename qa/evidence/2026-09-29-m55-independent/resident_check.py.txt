@@ -1,0 +1,72 @@
+"""Synthetic-only resident transport, isolation, recovery, and steady-state probes."""
+import contextlib,json,sys,time,uuid
+from pathlib import Path
+from whynote.explore_run import Worker,append
+from whynote.explore_worker import memory
+from whynote.replay_runtime import model_lock,plain_synthetic_process
+from whynote.replay_laya import ReplayError
+from whynote.controlled_replay import source_hash
+from whynote.isolation_probe import probe_network
+from whynote.windows_isolation import isolated_profile
+from whynote.windows_session import ResidentSession
+
+root=Path(r'C:/Users/22826/.codex/worktrees/whynote-qa-retest/jev项目/var/qa-m55')
+python=Path(sys.executable).resolve()
+base=Path('C:/Users/22826/AppData/Roaming/uv/python/cpython-3.11-windows-x86_64-none').resolve()
+model=Path('D:/PythonProject/jev项目/var/models/laya/multilingual')
+config={'python':str(python),'base_python':str(base),'model_dir':str(model),'device':'cuda','load_timeout':60,'request_timeout':60}
+scratch=root/('resident-probe-'+uuid.uuid4().hex);scratch.mkdir()
+assert source_hash()=='1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2'
+evidence={'source_sha256':source_hash(),'scope':'independently rerun synthetic resident protocol; no 30 minute claim','production_approved':False}
+
+with model_lock(),isolated_profile([python.parents[1],base,model],scratch) as box:
+ class Adapter:
+  def run(self,command,payload,timeout=60):
+   command=list(command)
+   command[6]="import sys,io,types; sys.path.insert(0,sys.argv.pop(1)); raw=sys.stdin.buffer.readline(); sys.stdin=types.SimpleNamespace(buffer=io.BytesIO(raw)); from whynote.runtime_probe import main; main()"
+   started=time.perf_counter();session=ResidentSession(box,command)
+   try:return session.request(payload,timeout), (time.perf_counter()-started)*1000
+   finally:session.close()
+ evidence['network']=probe_network(Adapter(),python)
+ assert evidence['network']['passed']
+ mutex="from whynote.replay_runtime import model_lock;from whynote.replay_laya import ReplayError\ntry:\n with model_lock(): print('bad')\nexcept ReplayError as e:print(str(e))"
+ raw,_=plain_synthetic_process([str(python),'-I','-B','-c',mutex],b'')
+ evidence['mutex_second_process_rejected']=raw.strip()==b'model_busy'
+ assert evidence['mutex_second_process_rejected']
+ code="import subprocess,sys,time;subprocess.Popen([sys.executable,'-I','-c','import time;time.sleep(60)']);print('ready',flush=True);time.sleep(60)"
+ cleanup=[]
+ for kind in ('timeout','cancel'):
+  session=ResidentSession(box,[str(python),'-I','-B','-c',code]);session.receive(10)
+  started=time.monotonic()
+  try:
+   session.receive(.4 if kind=='timeout' else 10,lambda:kind=='cancel' and time.monotonic()-started>.4)
+   raise AssertionError('did not stop')
+  except (ReplayError,KeyboardInterrupt):pass
+  finally:session.close()
+  cleanup.append({'kind':kind,'job_empty':box.cleanup_verified})
+  assert box.cleanup_verified
+ evidence['cleanup']=cleanup
+ worker=Worker(box,config,lambda r:None,lambda:False);worker.segment_id='synthetic-probe'
+ def payload(name,text):return {'input_id':__import__('hashlib').sha256(name.encode()).hexdigest(),'state':json.dumps({'request':text,'answer':'two'}),'scheme':'C','evidence_kinds':['request','answer']}
+ a,b=payload('a','SYNTHETIC: return one.'),payload('b','SYNTHETIC: describe a tree.')
+ try:
+  values=[worker.invoke(p) for p in (a,b,a)]
+  assert all(v.get('prediction',{}).get('status')=='ok' for v in values)
+  def stable(v):
+   p=v['prediction'];return {k:p[k] for k in ('route','reason_ids','outcome','available_ids','fallback_used')}
+  assert stable(values[0])==stable(values[2])
+  evidence['three_real_synthetic_calls']=[{'bucket':v['bucket'],'metrics':v['metrics'],'elapsed_ms':v['elapsed_ms']} for v in values]
+  evidence['a_b_a_same_output']=True
+  # A real timed-out request must kill the worker before the next target reloads.
+  worker.config=dict(config,request_timeout=.000001)
+  try: worker.invoke(a);raise AssertionError('timeout not observed')
+  except ReplayError as exc: assert str(exc)=='timeout'
+  assert worker.session is None and box.cleanup_verified
+  worker.config=config
+  recovered=worker.invoke(b)
+  assert recovered.get('prediction',{}).get('status')=='ok'
+  evidence['timeout_then_new_target_succeeded']=True
+ finally:worker.close()
+evidence['status']='PASSED'
+(root/'resident-qualification-final.json').write_text(json.dumps(evidence,indent=2),encoding='utf-8')
+print(json.dumps(evidence),flush=True)

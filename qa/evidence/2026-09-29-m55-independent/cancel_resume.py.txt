@@ -1,0 +1,27 @@
+from pathlib import Path
+import json,threading,time
+from whynote.explore_prepare import prepare
+from whynote.explore_run import real_run
+from whynote.explore_report import report
+base=Path('D:/PythonProject/jev项目/var/research/m55');out=base/'runs/qa-c1fc01c-cancel'
+m=json.loads((base/'source-manifest.json').read_text(encoding='utf-8'));m['sources']=[s for s in m['sources'] if s['source']=='wildfb']
+prepare(m,out,records=20,targets=20)
+config={'python':'D:/PythonProject/jev项目/var/laya-runtime/Scripts/python.exe','base_python':'C:/Users/22826/AppData/Roaming/uv/python/cpython-3.11.14-windows-x86_64-none','model_dir':'D:/PythonProject/jev项目/var/models/laya/multilingual','device':'cuda','load_timeout':60,'request_timeout':60}
+def cancel():
+ deadline=time.monotonic()+80
+ while time.monotonic()<deadline:
+  p=out/'journal.jsonl'
+  try:rows=[json.loads(x) for x in p.read_text(encoding='utf-8').splitlines()]
+  except (FileNotFoundError,json.JSONDecodeError): rows=[]
+  if sum(r['event']=='started' for r in rows)>=3:
+   (out/'cancel.request').write_text('independent QA controlled cancellation',encoding='utf-8');return
+  time.sleep(.005)
+t=threading.Thread(target=cancel);t.start()
+first=real_run(out,config);t.join();assert first['status']=='STOPPED'
+prefix=(out/'journal.jsonl').read_bytes();(out/'cancel.request').rename(out/'cancel.request.preserved')
+second=real_run(out,config,resume=True);summary=report(out)
+rows=[json.loads(x) for x in (out/'journal.jsonl').read_text(encoding='utf-8').splitlines()];starts=[r for r in rows if r['event']=='started']
+assert len(starts)==len({(r['input_id'],r['scheme']) for r in starts})==20
+assert (out/'journal.jsonl').read_bytes().startswith(prefix) and summary['buckets']['not_started']==0
+receipt={'first':first,'second':second,'summary_status':summary['status'],'buckets':summary['buckets'],'unique_started':20,'duplicate_started':0,'old_journal_prefix_preserved':True,'cancel_marker_preserved':True}
+Path('var/qa-m55/cancel-resume.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8');print(json.dumps(receipt))
