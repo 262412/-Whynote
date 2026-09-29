@@ -1,0 +1,12 @@
+{
+  "scope": "compressed byte hash independently verified; counts read from developer summary, no real body expansion",
+  "size": 5275463,
+  "sha256": "b86f71581a83f610ec5416029422f84ff1fc005e77b56c7634486ef9f6f12ceb",
+  "matches_admission": true,
+  "developer_summary": {
+    "source_rows": 200,
+    "target_projections": 400,
+    "budget_eligible": 112,
+    "model_calls": 0
+  }
+}

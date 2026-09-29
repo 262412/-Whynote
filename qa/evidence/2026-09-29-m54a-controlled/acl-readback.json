@@ -1,0 +1,22 @@
+[
+  {
+    "root": "installed_package",
+    "acl_unchanged": true
+  },
+  {
+    "root": "runtime",
+    "acl_unchanged": true
+  },
+  {
+    "root": "base_python",
+    "acl_unchanged": true
+  },
+  {
+    "root": "model",
+    "acl_unchanged": true
+  },
+  {
+    "root": "scratch",
+    "acl_unchanged": true
+  }
+]
