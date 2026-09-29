@@ -1,0 +1,46 @@
+{
+  "candidate": "5add19bab06632f40ffc0e1c6a7035f3a2624b1d",
+  "main": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "input_documents": {
+    "prd": 432,
+    "technical": 426
+  },
+  "q28": "specified technical scope independently passed",
+  "q29": "specified technical scope independently passed",
+  "q30": "open",
+  "outbound_and_concurrency_reviews": "open; mechanisms probed with synthetic local traffic and lightweight children",
+  "tests": {
+    "baseline": {
+      "tests": 756,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full": {
+      "tests": 758,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native": {
+      "tests": 80,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "production": "NO-GO",
+  "services_stopped": [
+    8140
+  ],
+  "independent_frontend_build": false,
+  "native_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "screenshot_sha256": "5dbb3cace47dd0cdc12139f5a835b924e0e9f3142931a0ea973f60e5561539c4",
+  "output_documents": {
+    "prd": 440,
+    "tech": 433
+  }
+}

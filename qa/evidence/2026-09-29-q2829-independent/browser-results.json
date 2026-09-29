@@ -1,0 +1,120 @@
+{
+  "counts": {
+    "m52_render_reported": 1,
+    "m52_response_recorded": 1,
+    "m52_suggestion_generated": 1,
+    "negative_feedback_action_recorded": 1
+  },
+  "outbox": 1,
+  "report_readonly": true,
+  "db_sha256": "8e3cdf3ee8d94b3f38d58b758112bc6311d3d98937088ee43223cd21934d8c14",
+  "suggestions": {
+    "contract": "m5-suggestion-v1",
+    "unit": "suggestion_group",
+    "scope": "synthetic_development_only",
+    "generated": 1,
+    "displayable": 1,
+    "render_reported": 1,
+    "valid_response": 1,
+    "confirmed": 1,
+    "render_rate": 1.0,
+    "response_rate": 1.0,
+    "actions_without_generation": 0,
+    "missing_render": 0,
+    "missing_response": 0,
+    "outcome_counts": {
+      "suggested": 1
+    },
+    "status_counts": {
+      "responded": 1
+    },
+    "operation_counts": {
+      "yes": 1
+    },
+    "invalidated": 0,
+    "retracted_action_count": 0,
+    "strata": [
+      {
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "generated": 1,
+        "displayable": 1,
+        "render_reported": 1,
+        "valid_response": 1
+      }
+    ],
+    "current_confirmations": {
+      "1bfebe75-39ba-4ffb-9311-c5d18141d21a": {
+        "reason_id": "code.interface_changed",
+        "source": "user",
+        "status": "confirmed",
+        "response_id": "0abd8337-6973-488a-95dc-32d2daa751da",
+        "last_response_id": "0abd8337-6973-488a-95dc-32d2daa751da"
+      }
+    },
+    "rows": [
+      {
+        "event_id": "1bfebe75-39ba-4ffb-9311-c5d18141d21a",
+        "suggestion_id": "4a8a5200-483d-46fb-9a67-398107ce8113",
+        "outcome": "suggested",
+        "render_reported": true,
+        "valid_response": true,
+        "confirmed": true,
+        "operations": {
+          "yes": 1
+        },
+        "status": "responded",
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "action_retracted": false,
+        "answer_unavailable": false,
+        "superseded": false,
+        "invalidated": false
+      }
+    ],
+    "response_timings": [
+      {
+        "active_ms": 31970.799999999814,
+        "server_total_ms": 32003.037452697754,
+        "timing_status": "client_reported"
+      }
+    ],
+    "active_ms": {
+      "n": 1,
+      "median": 31970.799999999814,
+      "p90": 31970.799999999814,
+      "percentile_method": "nearest_rank",
+      "unit": "explicit_response"
+    },
+    "server_total_ms": {
+      "n": 1,
+      "median": 32003.037452697754,
+      "p90": 32003.037452697754,
+      "percentile_method": "nearest_rank",
+      "unit": "explicit_response"
+    },
+    "timing_status_counts": {
+      "client_reported": 1
+    }
+  }
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "case": "missing_receipt",
+    "exit_code": 1,
+    "data_dir_created": false,
+    "pass": true
+  },
+  {
+    "case": "index",
+    "exit_code": 1,
+    "data_dir_created": false,
+    "pass": true
+  },
+  {
+    "case": "bundle",
+    "exit_code": 1,
+    "data_dir_created": false,
+    "pass": true
+  },
+  {
+    "case": "missing_bundle",
+    "exit_code": 1,
+    "data_dir_created": false,
+    "pass": true
+  },
+  {
+    "case": "extra",
+    "exit_code": 1,
+    "data_dir_created": false,
+    "pass": true
+  },
+  {
+    "case": "source",
+    "exit_code": 1,
+    "data_dir_created": false,
+    "pass": true
+  },
+  {
+    "case": "restored_complete_build",
+    "pass": true
+  }
+]

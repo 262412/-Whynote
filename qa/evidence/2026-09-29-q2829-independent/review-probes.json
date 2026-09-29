@@ -1,0 +1,18 @@
+{
+  "outbound": {
+    "actual_main_guard": true,
+    "sdk_loader_substituted": true,
+    "loopback_udp_received": true,
+    "external_traffic_attempted": false,
+    "worker_result": {
+      "error": "model_load_failed"
+    }
+  },
+  "concurrency": {
+    "real_os_children": 2,
+    "max_simultaneously_alive": 2,
+    "gpu_allocations": 0,
+    "worker_commands_substituted": true,
+    "all_reaped": true
+  }
+}
