@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from .explore_inputs import SOURCES, VERSION, WildFeedbackMapper, contained, file_hash, map_record, source_rows
-from .replay_laya import require
+from .replay_laya import ReplayError, require
 from .source_mapping import digest
 
 SCHEMA = "m55-explore-v1"
@@ -44,24 +44,29 @@ def admission(manifest):
         if item.get("status") != "ADMITTED_FOR_EXPLORATION":
             holds.append({"source": name, "status": "HOLD", "reason": "source_not_admitted"})
             continue
-        repo, revision, filename, size, sha = SOURCES[name]
-        require(
-            (item.get("repo"), item.get("revision"), item.get("file"), item.get("bytes"), item.get("sha256"))
-            == (repo, revision, filename, size, sha),
-            "source_identity_changed",
-        )
-        require(
-            item.get("purpose") == "local_unlabelled_exploration"
-            and item.get("approval")
-            and item.get("access") == ["project_owner", "local_codex"]
-            and item.get("backup") is False,
-            "source_usage_missing",
-        )
-        expiry = datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00"))
-        require(expiry.tzinfo is not None and expiry > datetime.now(UTC), "source_retention_expired")
-        path = contained(item["path"], root)
-        require(path.stat().st_size == size and file_hash(path) == sha, "source_file_changed")
-        accepted.append(dict(item, path=str(path)))
+        try:
+            repo, revision, filename, size, sha = SOURCES[name]
+            require(
+                (item.get("repo"), item.get("revision"), item.get("file"), item.get("bytes"), item.get("sha256"))
+                == (repo, revision, filename, size, sha),
+                "source_identity_changed",
+            )
+            require(
+                item.get("purpose") == "local_unlabelled_exploration"
+                and item.get("approval")
+                and item.get("access") == ["project_owner", "local_codex"]
+                and item.get("backup") is False,
+                "source_usage_missing",
+            )
+            expiry = datetime.fromisoformat(item["expires_at"].replace("Z", "+00:00"))
+            require(expiry.tzinfo is not None and expiry > datetime.now(UTC), "source_retention_expired")
+            path = contained(item["path"], root)
+            require(path.stat().st_size == size and file_hash(path) == sha, "source_file_changed")
+            accepted.append(dict(item, path=str(path)))
+        except ReplayError as exc:
+            holds.append({"source": name, "status": "HOLD", "reason": str(exc)})
+        except (OSError, ValueError, KeyError, TypeError):
+            holds.append({"source": name, "status": "HOLD", "reason": "source_record_invalid"})
     require(accepted, "no_admitted_sources")
     return root, accepted, holds
 
@@ -76,7 +81,8 @@ def prepare(manifest, output, *, records=100, targets=None, schemes=("C",), seed
     require(all(records is None or records <= s["max_source_records"] for s in sources), "record_scope_exceeded")
     require(
         all(targets is not None and targets <= s["max_targets"] for s in sources)
-        or all(records is not None and records <= 100 for s in sources),
+        or all(records is not None and records <= 100 for s in sources)
+        or all(targets is None and records is None and s.get("allow_all_targets") is True for s in sources),
         "target_scope_exceeded",
     )
     output = contained(output, root)
@@ -126,6 +132,15 @@ def prepare(manifest, output, *, records=100, targets=None, schemes=("C",), seed
                 try:
                     row_id, row, error = next(iterator)
                 except StopIteration:
+                    break
+                except ReplayError as exc:
+                    count["scanned"] += 1
+                    count["parse_failed"] += 1
+                    db.execute(
+                        "INSERT INTO source_records VALUES (?,?,?,?)",
+                        (source, row_id + 1, "parse_failed", json.dumps([{"error": str(exc)}])),
+                    )
+                    plan["holds"].append({"source": source, "status": "PARTIAL", "reason": str(exc)})
                     break
                 count["scanned"] += 1
                 if error:

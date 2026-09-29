@@ -18,7 +18,8 @@ def main():
     p.add_argument("--manifest", required=True, type=Path)
     p.add_argument("--output", required=True, type=Path)
     p.add_argument("--records", default="100", help="source records per source, or explicit all")
-    p.add_argument("--targets", type=int)
+    p.add_argument("--targets", help="target limit per source, or all if admitted")
+    p.add_argument("--sources", nargs="+", choices=("helpsteer3", "wildfb", "wildfeedback"))
     p.add_argument("--schemes", nargs="+", choices=("A", "B", "C"), default=["C"])
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--holdout-percent", type=int, default=0)
@@ -38,11 +39,14 @@ def main():
     args = parser.parse_args()
     try:
         if args.command == "prepare":
+            manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+            if args.sources:
+                manifest["sources"] = [s for s in manifest["sources"] if s["source"] in args.sources]
             value = prepare(
-                json.loads(args.manifest.read_text(encoding="utf-8")),
+                manifest,
                 args.output,
                 records=None if args.records == "all" else int(args.records),
-                targets=args.targets,
+                targets=None if args.targets in (None, "all") else int(args.targets),
                 schemes=args.schemes,
                 seed=args.seed,
                 holdout_percent=args.holdout_percent,

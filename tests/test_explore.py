@@ -318,3 +318,33 @@ def test_disk_and_scope_checks_happen_before_creation(prepared, monkeypatch):
     with pytest.raises(ReplayError, match="insufficient_research_disk"):
         prepare(manifest, output.parent / "full")
     assert not (output.parent / "full").exists()
+
+
+def test_one_source_hold_keeps_other_source_available(prepared):
+    output, manifest = prepared
+    manifest["sources"].append({"source": "wildfb", "status": "ADMITTED_FOR_EXPLORATION", "sha256": "wrong"})
+    result = prepare(manifest, output.parent / "partial", records=2)
+    assert result["targets"] == 4
+    assert result["holds"] == [{"source": "wildfb", "status": "HOLD", "reason": "source_identity_changed"}]
+
+
+def test_all_requires_separate_scope_then_accepts(prepared):
+    output, manifest = prepared
+    manifest["sources"][0]["allow_all_targets"] = True
+    result = prepare(manifest, output.parent / "all_allowed", records=None)
+    assert result["targets"] == 102
+
+
+def test_budget_coverage_does_not_count_unmeasured_load_failures(prepared):
+    output, _ = prepared
+    execute(output, factory_for(lambda _: {"error": "model_load_failed"}), {}, progress=lambda _: None)
+    result = report(output)
+    assert all(s["runnable"]["numerator"] == 0 for s in result["strata"])
+
+
+def test_report_can_read_without_replacing_execution_index(prepared):
+    output, _ = prepared
+    execute(output, factory_for(lambda _: {"error": "uncaught_error"}), {}, progress=lambda _: None)
+    before = (output / "index.sqlite3").read_bytes()
+    report(output)
+    assert (output / "index.sqlite3").read_bytes() == before

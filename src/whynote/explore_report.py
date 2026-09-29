@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from .explore_prepare import now, read_plan, save_json
-from .explore_run import BUCKETS, append, rebuild
+from .explore_run import BUCKETS, append, datetime_valid, rebuild
 from .replay_laya import require
 from .task_reasons import load_reasons
 
@@ -133,6 +133,18 @@ def report(output):
             )
         )
         planned = targets * len(plan["schemes"])
+        budget_eligible = db.execute(
+            "SELECT COUNT(*) FROM attempts a JOIN material.inputs i USING(input_id) "
+            "WHERE i.source=? AND i.language=? AND i.length=? "
+            "AND json_extract(a.result,'$.measurement.input_utf8_bytes')<=8192 "
+            "AND json_extract(a.result,'$.measurement.state_tokens')<=700 "
+            "AND json_extract(a.result,'$.measurement.total_tokens')<=1024 "
+            "AND json_extract(a.result,'$.measurement.head_tokens')<=256 "
+            "AND json_extract(a.result,'$.measurement.max_option_tokens')<=48 "
+            "AND json_extract(a.result,'$.measurement.option_total_tokens')<=240 "
+            "AND json_extract(a.result,'$.measurement.reserved_token')=0",
+            (source, language, length),
+        ).fetchone()[0]
         buckets["not_started"] = planned - sum(buckets.values())
         strata.append(
             {
@@ -143,10 +155,9 @@ def report(output):
                 "planned_slots": planned,
                 "buckets": buckets,
                 "runnable": {
-                    "numerator": buckets.get("suggested", 0)
-                    + buckets.get("abstained", 0)
-                    + buckets.get("technical_failure", 0),
+                    "numerator": budget_eligible,
                     "denominator": planned,
+                    "definition": "measured within pinned budget; unknown measurement never counted eligible",
                 },
             }
         )
@@ -224,6 +235,7 @@ def report(output):
 def serve(output, port=0):
     output = Path(output).resolve(strict=True)
     plan = read_plan(output)
+    require(all(datetime_valid(s["expires_at"]) for s in plan["sources"]), "source_retention_expired")
     token = secrets.token_urlsafe(32)
 
     class Handler(BaseHTTPRequestHandler):
@@ -239,6 +251,9 @@ def serve(output, port=0):
             if parsed.path == "/":
                 data, mime = (output / "report.html").read_bytes(), "text/html; charset=utf-8"
             elif parsed.path == "/case":
+                if not all(datetime_valid(s["expires_at"]) for s in plan["sources"]):
+                    self.send_error(403)
+                    return
                 key = query.get("id", [None])[0]
                 with sqlite3.connect(f"file:{(output / 'inputs.sqlite3').as_posix()}?mode=ro", uri=True) as db:
                     found = db.execute("SELECT group_id,payload FROM inputs WHERE input_id=?", (key,)).fetchone()
@@ -248,7 +263,7 @@ def serve(output, port=0):
                 append(
                     output / "exposure.jsonl",
                     {
-                        "event": "human_view",
+                        "event": "case_view",
                         "input_id": key,
                         "group_id": found[0],
                         "at": now(),
