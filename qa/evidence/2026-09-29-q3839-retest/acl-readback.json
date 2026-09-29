@@ -1,0 +1,22 @@
+[
+  {
+    "role": "package",
+    "unchanged": true
+  },
+  {
+    "role": "runtime",
+    "unchanged": true
+  },
+  {
+    "role": "base_python",
+    "unchanged": true
+  },
+  {
+    "role": "model",
+    "unchanged": true
+  },
+  {
+    "role": "scratch",
+    "unchanged": true
+  }
+]

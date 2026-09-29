@@ -1,0 +1,62 @@
+[
+  {
+    "test": "test_uncaught_error_stops_before_the_next_slot[envelope]",
+    "passed": true
+  },
+  {
+    "test": "test_uncaught_error_stops_before_the_next_slot[exception]",
+    "passed": true
+  },
+  {
+    "test": "test_uncaught_error_stops_before_the_next_slot[prediction]",
+    "passed": true
+  },
+  {
+    "test": "test_guard_rejection_preserves_exact_partial_journal[before_first]",
+    "passed": true
+  },
+  {
+    "test": "test_guard_rejection_preserves_exact_partial_journal[after_first]",
+    "passed": true
+  },
+  {
+    "test": "test_guard_rejection_preserves_exact_partial_journal[before_second]",
+    "passed": true
+  },
+  {
+    "test": "test_error_detail_is_never_copied_into_partial_journal",
+    "passed": true
+  },
+  {
+    "test": "test_worker_classifies_unexpected_failure_at_its_actual_stage[load-model_load_failed]",
+    "passed": true
+  },
+  {
+    "test": "test_worker_classifies_unexpected_failure_at_its_actual_stage[policy-uncaught_error]",
+    "passed": true
+  },
+  {
+    "test": "test_fatal_slot_is_synced_before_stop_and_cannot_be_overwritten[envelope-1]",
+    "passed": true
+  },
+  {
+    "test": "test_fatal_slot_is_synced_before_stop_and_cannot_be_overwritten[envelope-180]",
+    "passed": true
+  },
+  {
+    "test": "test_fatal_slot_is_synced_before_stop_and_cannot_be_overwritten[exception-1]",
+    "passed": true
+  },
+  {
+    "test": "test_fatal_slot_is_synced_before_stop_and_cannot_be_overwritten[exception-180]",
+    "passed": true
+  },
+  {
+    "test": "test_fatal_slot_is_synced_before_stop_and_cannot_be_overwritten[prediction-1]",
+    "passed": true
+  },
+  {
+    "test": "test_fatal_slot_is_synced_before_stop_and_cannot_be_overwritten[prediction-180]",
+    "passed": true
+  }
+]

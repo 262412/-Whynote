@@ -1,0 +1,70 @@
+{
+  "schema_version": "m54a-environment-v1",
+  "status": "VERIFIED_FOR_FREEZE",
+  "device": "cuda",
+  "source_sha256": "2ca987447c0f95d583a558a00980be78c84673f244490524245589942963a7da",
+  "runtime_sha256": "0fd2fd59eeb1df3d31ba6b00239960b07039193248b520b52842bc7b4f9a3e8f",
+  "production_approved": false,
+  "outbound": {
+    "schema_version": "m54a-network-probe-v1",
+    "passed": true,
+    "positive_delivery": {
+      "tcp_v4": true,
+      "udp_v4": true,
+      "tcp_v6": true,
+      "udp_v6": true
+    },
+    "sandbox_delivery": {
+      "tcp_v4": false,
+      "udp_v4": false,
+      "tcp_v6": false,
+      "udp_v6": false
+    },
+    "token": {
+      "appcontainer": true,
+      "capability_count": 0,
+      "network_errno": {
+        "tcp_v4": 10035,
+        "udp_v4": 0,
+        "tcp_v6": 10035,
+        "udp_v6": 0,
+        "tcp_documentation_address": 10013
+      }
+    },
+    "scope": "zero_network_capabilities_and_local_tcp_udp_delivery;external_udp_not_observed"
+  },
+  "concurrency": {
+    "passed": true,
+    "scope": "second_process_rejected_while_mutex_owned"
+  },
+  "cancel": {
+    "passed": true,
+    "timeout_job_empty": true,
+    "injected_interrupt_job_empty": true,
+    "next_process_succeeded": true
+  },
+  "synthetic_model_checks": [
+    {
+      "scheme": "A",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9544.926599999599,
+      "output_sha256": "e338180f29248c9fd004ee59a3d34d1f1096b7def1fff091e2ccf2c2a703b68a"
+    },
+    {
+      "scheme": "B",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9529.625099999976,
+      "output_sha256": "d0e4fe98617df8ad222620d73e43da9dd4dd4feec3822e4ffd02c25f07ded25b"
+    },
+    {
+      "scheme": "C",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9327.723200000037,
+      "output_sha256": "256dfd51e07a409bf3527d41b23334d1d79e244945a98af15df4125ba7ce8cd4"
+    }
+  ],
+  "scope": "independent synthetic offline environment only; not freeze approval, online host or full security certification"
+}
