@@ -1,0 +1,14 @@
+{
+  "qa_base": "369b26f9fdc6f22043971246efc6d2a1acb35907",
+  "original_independent_tests_unchanged": true,
+  "red_failures": 2,
+  "targeted_passed": 87,
+  "new_tests": 9,
+  "full_passed": 767,
+  "full_seconds": 87.83,
+  "ruff": "pass",
+  "browser_model_frontend_retest": "not_run",
+  "independent_retest": "pending",
+  "runtime_boundary_reviews": "open",
+  "production": "NO-GO"
+}

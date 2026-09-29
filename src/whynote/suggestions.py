@@ -191,7 +191,12 @@ def _current(events, suggestion_id, binding, received_at=None):
     if not generated or generated[-1]["payload"]["binding"]["suggestion_id"] != suggestion_id:
         raise ConflictError("Suggestion is stale or unavailable")
     suggestion = generated[-1]["payload"]
-    if any(suggestion["binding"].get(k) != v for k, v in binding.items()):
+    # Compare admission metadata in both directions: rollback can remove live
+    # version fields. Generation-specific fields are checked by the caller.
+    generation_fields = {"suggestion_id", "display_id", "candidate_set_id", "reason_ids", "outcome", "presentation"}
+    recorded = {k: v for k, v in suggestion["binding"].items() if k not in generation_fields}
+    current = {k: v for k, v in binding.items() if k not in generation_fields}
+    if recorded != current:
         raise ConflictError("Suggestion versions have changed")
     observed_at = time.time() if received_at is None else received_at
     if not suggestion["expires_at"] - TTL_SECONDS <= observed_at < suggestion["expires_at"]:

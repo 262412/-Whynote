@@ -24,6 +24,11 @@ UI显示“Laya模型建议，未确认；本次使用合成会话”。旧fixtu
 `model_version`和`model_source=model_inferred_unconfirmed`，生成事件source同后者。
 旧fixture不加新字段且source保持synthetic_model；确认仍仅来自yes/correct，报告保持合成开发scope。
 渲染与响应继续Q-27服务端到达时间契约，版本字段参与旧展示失效判断。
+Q-30修复：除建议/展示ID、候选集合、理由、结果及presentation这些生成快照字段外，
+生成时与当前准入绑定的全部字段须对称相等，包含字段的存在性；当前后端与生成时后端不一致时（live与fixture任一方向），
+旧建议的渲染、响应和直接库回执重试均拒绝且零追加。旧fixture无live版本字段仍按原契约合法，
+无需迁移或回填；已记录确认及生成历史保持原样，回滚后可用新ID生成fixture建议。
+既有Action同点击重放只返回此前结果、不追加回执，继续保留。Q-27到达时间不绕过最新版本复核。
 模型报错只返回固定失败码，保留动作、无用户确认并提供原manual-v1菜单；unknown/no_match单独生成拒识记录。
 新none_matched不清空旧确认，常规菜单none_matched保持原清空语义。
 
