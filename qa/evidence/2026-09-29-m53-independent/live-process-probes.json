@@ -1,0 +1,31 @@
+[
+  {
+    "case": "tokens",
+    "result": {
+      "error": "input_tokens_exceeded"
+    },
+    "elapsed_seconds": 6.891,
+    "pass": true
+  },
+  {
+    "case": "missing_code",
+    "result": {
+      "version": "m5-live-laya-v1",
+      "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+      "route": "code_rewrite",
+      "fallback_used": false,
+      "outcome": "unknown",
+      "reason_ids": []
+    },
+    "elapsed_seconds": 7.221,
+    "pass": true
+  },
+  {
+    "case": "bytes",
+    "result": {
+      "error": "input_bytes_exceeded"
+    },
+    "elapsed_seconds": 0.0,
+    "pass": true
+  }
+]
