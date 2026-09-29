@@ -1,0 +1,47 @@
+{
+  "scope": "synthetic fixed tokenizer versus all SDK question budgets; no model inference",
+  "checks": [
+    {
+      "case": "unicode_code",
+      "all_questions": 16,
+      "state_tokens": 18,
+      "head_tokens": 98,
+      "input_utf8_bytes": 69,
+      "reserved_token": false,
+      "measurement_eligible": true,
+      "sdk_error_codes": [],
+      "agreement": true,
+      "budget_evidence_sha256": "4452592ba890f81c1af7ff8c6700c0d0cd26406b5784323041eb84dc508f4604"
+    },
+    {
+      "case": "oversize_tokens",
+      "all_questions": 16,
+      "state_tokens": 900,
+      "head_tokens": 98,
+      "input_utf8_bytes": 5400,
+      "reserved_token": false,
+      "measurement_eligible": false,
+      "sdk_error_codes": [
+        "input_tokens_exceeded"
+      ],
+      "agreement": true,
+      "budget_evidence_sha256": "a8ff898e68a30a598aeeabe9423065fc27084f70132515e8af558d68fdf3ada9"
+    },
+    {
+      "case": "reserved_token",
+      "all_questions": 16,
+      "state_tokens": 5,
+      "head_tokens": 98,
+      "input_utf8_bytes": 15,
+      "reserved_token": true,
+      "measurement_eligible": false,
+      "sdk_error_codes": [
+        "reserved_token"
+      ],
+      "agreement": true,
+      "budget_evidence_sha256": "33b940e95ca5d41f08f02210875cbd6fffffecdfceee8acec03615153210748e"
+    }
+  ],
+  "elapsed_ms": 5934.692599999835,
+  "job_empty": true
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "m54a-environment-v1",
+  "status": "VERIFIED_FOR_FREEZE",
+  "device": "cuda",
+  "source_sha256": "2ca987447c0f95d583a558a00980be78c84673f244490524245589942963a7da",
+  "runtime_sha256": "0fd2fd59eeb1df3d31ba6b00239960b07039193248b520b52842bc7b4f9a3e8f",
+  "production_approved": false,
+  "outbound": {
+    "schema_version": "m54a-network-probe-v1",
+    "passed": true,
+    "positive_delivery": {
+      "tcp_v4": true,
+      "udp_v4": true,
+      "tcp_v6": true,
+      "udp_v6": true
+    },
+    "sandbox_delivery": {
+      "tcp_v4": false,
+      "udp_v4": false,
+      "tcp_v6": false,
+      "udp_v6": false
+    },
+    "token": {
+      "appcontainer": true,
+      "capability_count": 0,
+      "network_errno": {
+        "tcp_v4": 10035,
+        "udp_v4": 0,
+        "tcp_v6": 10035,
+        "udp_v6": 0,
+        "tcp_documentation_address": 10013
+      }
+    },
+    "scope": "zero_network_capabilities_and_local_tcp_udp_delivery;external_udp_not_observed"
+  },
+  "concurrency": {
+    "passed": true,
+    "scope": "second_process_rejected_while_mutex_owned"
+  },
+  "cancel": {
+    "passed": true,
+    "timeout_job_empty": true,
+    "injected_interrupt_job_empty": true,
+    "next_process_succeeded": true
+  },
+  "synthetic_model_checks": [
+    {
+      "scheme": "A",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9635.125699998753,
+      "output_sha256": "6f1c8a4282fb045528b9498bb3b6ac3152e9ed311c80fa5d51ef49d507be7900"
+    },
+    {
+      "scheme": "B",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9915.685399999347,
+      "output_sha256": "5677bb6f2610960b44dd2b7c13b4376ecee26db5f6f54654542db80056c5ebd4"
+    },
+    {
+      "scheme": "C",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9587.220999997953,
+      "output_sha256": "5f67d82666e4942793aa811f9ddf24794604ded7fbb07ffc594a878cdaed3ef4"
+    }
+  ],
+  "scope": "developer_synthetic_environment_checks_only",
+  "tested_commit": "c1aecae120c6c33eefdfc8be12346549077598fb",
+  "raw_environment_receipt_sha256": "285bb6bf47ef0d5b60081b0784a8fcb5d96aa71c835428942f53b554f34d1669"
+}

@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-29",
+  "candidate": "44deb39282aeb09f0ef9153764afc7baee7a36f8",
+  "base": "affcc6c9bb00914ceb267ca97b62e46745e07ab0",
+  "base_pr": 41,
+  "main": "1d2abd7c876de4a856c712c4fb00b558976b5eb6",
+  "documents_input": {
+    "prd": 525,
+    "tech": 509
+  },
+  "documents_readback": {
+    "prd": 528,
+    "tech": 512
+  },
+  "tests": {
+    "baseline": {
+      "passed": 954,
+      "failed": 0,
+      "failures": [],
+      "junit_sha256": "ecdc4bb3a9a5c6f15e421ec45bf60ccc062135953c98a075131d5d2cb2dd494f"
+    },
+    "independent-final": {
+      "passed": 5,
+      "failed": 4,
+      "failures": [
+        "test_uncaught_error_stops_before_the_next_slot[envelope]",
+        "test_uncaught_error_stops_before_the_next_slot[exception]",
+        "test_uncaught_error_stops_before_the_next_slot[prediction]",
+        "test_worker_classifies_unexpected_failure_at_its_actual_stage[policy-uncaught_error]"
+      ],
+      "junit_sha256": "a5bafcb6ab80b16a515ff622192200b3cad4c34efa5014b2da8d6e85ffc43b07"
+    },
+    "native": {
+      "passed": 80,
+      "failed": 0,
+      "failures": [],
+      "junit_sha256": "b420b8a8135b6334a1166199c9e9fec0fabb80b6c613492b6776f953d99cc91f"
+    }
+  },
+  "combined_local_two_invocations": {
+    "passed": 959,
+    "failed": 4
+  },
+  "probe": 58,
+  "ruff_format_files": 117,
+  "candidate_ci": 36552230087,
+  "new_defects": [
+    "Q-38/P1 uncaught_error does not immediately stop further slots",
+    "Q-39/P2 post-load policy failure misclassified as model_load_failed"
+  ],
+  "environment": "specified offline controls and three real synthetic model calls passed",
+  "real_evaluation_executed": false,
+  "browser_executed": false,
+  "frontend_build_executed": false,
+  "production": "NO-GO",
+  "pr": "DRAFT; depends on PR41; independent executor acceptance blocked"
+}

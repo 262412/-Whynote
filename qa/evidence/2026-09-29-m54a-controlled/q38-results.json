@@ -1,0 +1,41 @@
+[
+  {
+    "transport": "envelope",
+    "expected_maximum_calls": 1,
+    "actual_calls": 180,
+    "started": 180,
+    "completed": 180,
+    "stopped": 0,
+    "uncaught_completed": 180,
+    "gate_status": "HOLD",
+    "stop_required": true,
+    "bundle_written": true,
+    "real_model_calls": 0
+  },
+  {
+    "transport": "exception",
+    "expected_maximum_calls": 1,
+    "actual_calls": 180,
+    "started": 180,
+    "completed": 180,
+    "stopped": 0,
+    "uncaught_completed": 180,
+    "gate_status": "HOLD",
+    "stop_required": true,
+    "bundle_written": true,
+    "real_model_calls": 0
+  },
+  {
+    "transport": "prediction",
+    "expected_maximum_calls": 1,
+    "actual_calls": 180,
+    "started": 180,
+    "completed": 180,
+    "stopped": 0,
+    "uncaught_completed": 180,
+    "gate_status": "HOLD",
+    "stop_required": true,
+    "bundle_written": true,
+    "real_model_calls": 0
+  }
+]

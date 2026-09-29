@@ -1,0 +1,49 @@
+{
+  "candidate": "51b8ff1a3a8d2f1b77bc5c3f6e954ab65616b86d",
+  "main": "589632559221ee05579595bb6db8f055a803796e",
+  "date": "2026-09-29",
+  "original_tests_unchanged": true,
+  "tests": {
+    "full": {
+      "passed": 979,
+      "failed": 0,
+      "sha256": "4c29af5b0bd30335170d9f127d2f33f844a9045075e6fd90cb2145bbc7cce4d8"
+    },
+    "independent": {
+      "passed": 15,
+      "failed": 0,
+      "sha256": "b6ca9dc8876a2c28e4dc011df2c462241162d50b9616d30498f1f391b5f106c9"
+    },
+    "native": {
+      "passed": 80,
+      "failed": 0,
+      "sha256": "fcb14a911dfc58aecf3bcf04efdbb64422304b488adaea758e8480736c120237"
+    }
+  },
+  "note": "full979 includes original independent9; focused15 repeats those9 plus new6; total unique985 passed",
+  "new_independent": 6,
+  "native_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "ruff": {
+    "passed": true,
+    "format_files": 119
+  },
+  "candidate_ci": 36556374869,
+  "documents_input": {
+    "prd": 531,
+    "tech": 515
+  },
+  "q38": "PASS specified stop/durability/no-overwrite paths",
+  "q39": "PASS specified load versus post-load classification",
+  "real_evaluation": false,
+  "browser": false,
+  "frontend_build": false,
+  "host_deployment": false,
+  "production": "NO-GO",
+  "documents_readback": {
+    "prd": 534,
+    "tech": 518
+  }
+}

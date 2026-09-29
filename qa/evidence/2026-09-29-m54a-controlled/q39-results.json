@@ -1,0 +1,18 @@
+{
+  "scope": "real worker main exception handler; injected SDK/model and policy fault, no model/data access",
+  "cases": [
+    {
+      "stage": "load",
+      "expected": "model_load_failed",
+      "actual": "model_load_failed",
+      "pass": true
+    },
+    {
+      "stage": "policy_after_successful_load",
+      "expected": "uncaught_error",
+      "actual": "model_load_failed",
+      "pass": false
+    }
+  ],
+  "private_exception_body_not_emitted": true
+}

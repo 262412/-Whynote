@@ -1,0 +1,70 @@
+{
+  "schema_version": "m54a-environment-v1",
+  "status": "VERIFIED_FOR_FREEZE",
+  "device": "cuda",
+  "source_sha256": "1923f89a931b9b1a10d8130cd4fc1bd339d596448632290ff4763190b61cab34",
+  "runtime_sha256": "0fd2fd59eeb1df3d31ba6b00239960b07039193248b520b52842bc7b4f9a3e8f",
+  "production_approved": false,
+  "outbound": {
+    "schema_version": "m54a-network-probe-v1",
+    "passed": true,
+    "positive_delivery": {
+      "tcp_v4": true,
+      "udp_v4": true,
+      "tcp_v6": true,
+      "udp_v6": true
+    },
+    "sandbox_delivery": {
+      "tcp_v4": false,
+      "udp_v4": false,
+      "tcp_v6": false,
+      "udp_v6": false
+    },
+    "token": {
+      "appcontainer": true,
+      "capability_count": 0,
+      "network_errno": {
+        "tcp_v4": 10035,
+        "udp_v4": 0,
+        "tcp_v6": 10035,
+        "udp_v6": 0,
+        "tcp_documentation_address": 10013
+      }
+    },
+    "scope": "zero_network_capabilities_and_local_tcp_udp_delivery;external_udp_not_observed"
+  },
+  "concurrency": {
+    "passed": true,
+    "scope": "second_process_rejected_while_mutex_owned"
+  },
+  "cancel": {
+    "passed": true,
+    "timeout_job_empty": true,
+    "injected_interrupt_job_empty": true,
+    "next_process_succeeded": true
+  },
+  "synthetic_model_checks": [
+    {
+      "scheme": "A",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 10006.111200000305,
+      "output_sha256": "e5b90f438699bade8a5a48f4f6bb9cf7363fe5523db220ecc7c017672580c40f"
+    },
+    {
+      "scheme": "B",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9905.653400001029,
+      "output_sha256": "52f30dd151326008f5283b06830a6f0ca379d726c4adfb905a4282f43997385e"
+    },
+    {
+      "scheme": "C",
+      "status": "ok",
+      "error": null,
+      "elapsed_ms": 9757.59889999972,
+      "output_sha256": "52cb92b2cb14f254bb2360ff0830c3b3932708abfcadc141395d662fce06a1bc"
+    }
+  ],
+  "scope": "independent synthetic environment checks; not execution freeze or security approval"
+}
