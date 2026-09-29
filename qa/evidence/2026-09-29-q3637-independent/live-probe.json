@@ -1,0 +1,44 @@
+{
+  "candidate": "56ec110de3804b13f575c97df00e85782da2b65f",
+  "installed_source_equal_normalized": true,
+  "worker_source_sha256_lf": "1d77af4228bb48d7bd34677c1aa18ffc9cb6b3ec94e073626c55f2823ab505b0",
+  "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+  "scope": "two serial synthetic local worker calls; no HTTP or browser; not model quality evaluation",
+  "calls": [
+    {
+      "mode": "ordinary",
+      "elapsed_seconds": 7.468,
+      "result": {
+        "version": "m5-live-laya-v1",
+        "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+        "route": "code_rewrite",
+        "fallback_used": false,
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.interface_changed"
+        ]
+      },
+      "presentation_valid": true,
+      "shadow_marker_exists": false,
+      "cards": 1
+    },
+    {
+      "mode": "shadow-and-environment",
+      "elapsed_seconds": 7.5,
+      "result": {
+        "version": "m5-live-laya-v1",
+        "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+        "route": "code_rewrite",
+        "fallback_used": false,
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.interface_changed"
+        ]
+      },
+      "presentation_valid": true,
+      "shadow_marker_exists": false,
+      "cards": 1
+    }
+  ],
+  "parent_cwd_and_environment_restored": true
+}
