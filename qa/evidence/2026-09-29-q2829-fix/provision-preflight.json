@@ -1,0 +1,36 @@
+{
+  "missing_options": [
+    {
+      "missing": "--model-python",
+      "returncode": 2,
+      "host_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "research_db_created": false
+    },
+    {
+      "missing": "--model-dir",
+      "returncode": 2,
+      "host_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "research_db_created": false
+    }
+  ],
+  "corrected_retry_same_instance": {
+    "success": true,
+    "host_counts": {
+      "user": 3,
+      "function": 3,
+      "model": 1,
+      "chat": 1
+    },
+    "research_db_created": true
+  }
+}

@@ -1,8 +1,10 @@
 """Fresh, authenticated Open WebUI with synthetic saved text and live local Laya."""
 
 import argparse
+import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -13,6 +15,7 @@ from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT), str(ROOT / "qa")]
+BUILD_RECEIPT = ".whynote-m53-build.json"
 
 
 def validate_source(source):
@@ -33,7 +36,78 @@ def validate_source(source):
     ).read_bytes()
 
 
+def source_fingerprint(source):
+    names = (
+        subprocess.check_output(
+            ["git", "-C", str(source), "ls-files", "--cached", "--others", "--exclude-standard", "-z"]
+        )
+        .decode("utf-8")
+        .split("\0")
+    )
+    files = {name: hashlib.sha256((source / name).read_bytes()).hexdigest() for name in sorted(set(names) - {""})}
+    return hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
+
+
+def build_files(source):
+    directory = source / "build"
+    files = {}
+    for path in sorted(directory.rglob("*")):
+        if path.is_symlink():
+            raise ValueError("Build artifacts must not be symlinks")
+        if path.is_file() and path != directory / BUILD_RECEIPT:
+            files[path.relative_to(directory).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    if "index.html" not in files or not any(name.endswith(".js") for name in files):
+        raise ValueError("Complete frontend build is required")
+    return files
+
+
+def build(source):
+    """Only a successful build may issue a receipt; existing artifacts cannot be certified."""
+    receipt = source / "build" / BUILD_RECEIPT
+    receipt.unlink(missing_ok=True)
+    validate_source(source)
+    before = source_fingerprint(source)
+    node = subprocess.check_output(["node", "--version"], text=True).strip()
+    if not node.startswith("v22."):
+        raise ValueError("Build requires Node22 on PATH")
+    npm = shutil.which("npm")
+    if not npm:
+        raise ValueError("Build requires npm on PATH")
+    subprocess.run([npm, "run", "build"], cwd=source, check=True)
+    validate_source(source)
+    if source_fingerprint(source) != before:
+        raise ValueError("Source changed during build; rebuild from a stable checkout")
+    record = {"version": 1, "source_sha256": before, "files": build_files(source), "node": node}
+    receipt.write_text(json.dumps(record, sort_keys=True), encoding="utf-8")
+
+
+def validate_build(source):
+    validate_source(source)
+    try:
+        record = json.loads((source / "build" / BUILD_RECEIPT).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise ValueError("Missing/invalid build receipt; run the build command") from exc
+    if (
+        not isinstance(record, dict)
+        or record.get("version") != 1
+        or record.get("source_sha256") != source_fingerprint(source)
+        or record.get("files") != build_files(source)
+    ):
+        raise ValueError("Build does not match current source/artifacts; rebuild required")
+
+
+def validate_model_options(args):
+    for name, is_file in (("model_python", True), ("model_dir", False)):
+        value = getattr(args, name, None)
+        if value is None:
+            raise ValueError(f"--{name.replace('_', '-')} is required for provision")
+        path = Path(value).resolve()
+        if not (path.is_file() if is_file else path.is_dir()):
+            raise ValueError(f"Invalid --{name.replace('_', '-')} path")
+
+
 def provision(args):
+    validate_model_options(args)
     import httpx
     import s1_browser_host
 
@@ -168,16 +242,28 @@ def main():
     import s1_browser_host
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("serve", "provision"))
+    parser.add_argument("command", choices=("build", "serve", "provision"))
     parser.add_argument("--source", type=Path)
-    parser.add_argument("--data-dir", type=Path, required=True)
+    parser.add_argument("--data-dir", type=Path)
     parser.add_argument("--port", type=int, default=8134)
     parser.add_argument("--base-url", default="http://127.0.0.1:8134")
     parser.add_argument("--model-python", type=Path)
     parser.add_argument("--model-dir", type=Path)
     args = parser.parse_args()
+    if args.command in {"build", "serve"} and args.source is None:
+        parser.error("--source is required for build/serve")
+    if args.command in {"serve", "provision"} and args.data_dir is None:
+        parser.error("--data-dir is required for serve/provision")
+    if args.command == "provision":
+        try:
+            validate_model_options(args)
+        except ValueError as exc:
+            parser.error(str(exc))
+    if args.command == "build":
+        build(args.source.resolve())
+        return
     if args.command == "serve":
-        validate_source(args.source.resolve())
+        validate_build(args.source.resolve())
         args.entry_patch = "m5-v0.11.4-templates.patch"
         os.environ.update(WHYNOTE_LOCAL_CHAIN="1", WHYNOTE_TEMPLATE_SYNTHETIC="1")
         args.native_ratings = False

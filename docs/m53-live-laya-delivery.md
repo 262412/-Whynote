@@ -43,7 +43,7 @@ uv run --no-sync ruff format --check src tests integrations qa
 uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_acceptance.py -q
 ```
 
-构建固定宿主后，用具备该宿主依赖的Python运行`qa/m53_live_host.py serve --source <宿主> --data-dir <新目录> --port 8135`；
+先按锁文件安装固定宿主前端依赖，在PATH中启用Node22及npm，运行`python qa/m53_live_host.py build --source <宿主>`生成完整产物与源码绑定记录；旧npm构建目录需重建。然后用具备该宿主依赖的Python运行`qa/m53_live_host.py serve --source <宿主> --data-dir <新目录> --port 8135`；
 然后运行`provision --data-dir <同目录> --base-url http://127.0.0.1:8135 --model-python <已有Laya解释器> --model-dir <固定权重>`。
 serve强制新目录；默认建立两个虚构用户，登录alice使用源码中的公开合成测试口令。不得复用真实实例或真实数据库。
 Laya运行环境和权重沿用已安装路径，不需云凭证；原DeepSeek/Laya联调实例未修改。

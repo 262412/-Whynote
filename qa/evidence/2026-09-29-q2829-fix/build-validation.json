@@ -1,0 +1,22 @@
+{
+  "node": "v22.23.3",
+  "source_sha256": "c81eab7693d45687bb87b51920e0933b3969c5cd090596f4f7c756eaab118276",
+  "artifact_count": 5604,
+  "receipt_sha256": "df82d85a086e574a63a5d5ff28c5f36a9cc38d1399d6f17f0c4bc84950e5e0e3",
+  "fresh_build_valid": true,
+  "tamper_probes": [
+    {
+      "changed_artifact": "index.html",
+      "exit_code": 1,
+      "data_created": false,
+      "rejected_before_host": true
+    },
+    {
+      "changed_artifact": "_app/immutable/chunks/-L3eBynH.js",
+      "exit_code": 1,
+      "data_created": false,
+      "rejected_before_host": true
+    }
+  ],
+  "artifacts_restored": true
+}
