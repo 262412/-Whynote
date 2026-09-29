@@ -15,6 +15,41 @@
 
 ## 本地验证
 
+### 三源无标签本机探索（M5-5 / D-21）
+
+新增统一入口 `python -m whynote.explore`，支持 `prepare/run/resume/report/view`。
+使用获准且固定版本的 HelpSteer3、WildFB、WildFeedback 文件；不要求人工标签或正式评测封存。
+当前配置为单 CUDA worker、常驻模型、batch size 1，默认方案 C；输出为未确认诊断，质量指标为 NA。
+下载与访问范围见[三源使用记录](docs/m55-source-use.md)，字段、失败和恢复语义见[探索契约](docs/m55-exploration-contract.md)。
+
+下面是本机现有路径。先从核验过的干净候选构建并以非 editable 方式安装 Whynote；保留已可用的 Laya/GPU 依赖。
+不要从有未提交改动的原目录重装。每次新批次使用新的输出目录。
+
+```powershell
+$m55Root = 'D:/PythonProject/jev项目/var/research/m55'
+$m55Python = 'D:/PythonProject/jev项目/var/laya-runtime/Scripts/python.exe'
+$m55Base = 'C:/Users/22826/AppData/Roaming/uv/python/cpython-3.11-windows-x86_64-none'
+$m55Model = 'D:/PythonProject/jev项目/var/models/laya/multilingual'
+$m55Run = "$m55Root/runs/my-first-batch"
+$env:TEMP = "$m55Root/tmp"
+$env:TMP = $env:TEMP
+
+& $m55Python -I -B -X utf8 -m whynote.explore prepare --manifest "$m55Root/source-manifest.json" --output $m55Run --records 100
+& $m55Python -I -B -X utf8 -m whynote.explore run --output $m55Run --python $m55Python --base-python $m55Base --model-dir $m55Model
+& $m55Python -I -B -X utf8 -m whynote.explore report --output $m55Run
+& $m55Python -I -B -X utf8 -m whynote.explore view --output $m55Run
+```
+
+`view` 打印本机带随机 token 的地址；用该地址打开报告，筛选结果并主动查看单个案例。
+JSONL、汇总 JSON、HTML 默认仅包含元数据；正文和参考反馈留在受控输入库。查看会登记探索暴露。
+
+- 数量：`--records 100` 表示每源最多 100 条源记录。每源 1000 目标用 `--records all --targets 1000`；实际扫描量与解析/关联排除单列。
+- 范围：`--sources helpsteer3 wildfb` 选择来源；`--schemes A B C` 选择方案。数量必须落在使用记录的授权范围内，显式 `all` 不扩大授权。
+- 进度：终端输出进度，`journal.jsonl` 逐槽持久化。可另用 `report` 刷新汇总；加载、失败、超限、拒识和中断各自计数。
+- 取消：在该 run 目录创建 `cancel.request`。停止后保留该文件的审计副本并改名，再把上述 `run` 命令改为 `resume`。恢复只处理未开始槽；已开始但结果未知的槽不自动重试。
+- 版本：恢复要求源文件、输入、模型、理由包、源码、运行时与配置一致；变更后创建新 run。源文件到期后拒绝执行或查看正文。
+- 正式评测：原 `controlled_replay` / `self_review` 入口与标签规则保留；探索报告不产生质量 PASS，也不能直接作为盲评留出。
+
 ```powershell
 uv sync --extra dev --locked --no-editable
 .venv\Scripts\python -m pytest
