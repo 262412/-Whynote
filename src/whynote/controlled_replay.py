@@ -54,7 +54,7 @@ def prediction(sample, scheme, run, response, elapsed):
         "status": "error",
         "error": "invalid_response",
         "outcome": None,
-        "route_status": "not_attempted",
+        "route_status": "failed",
         "library_ids": allowed,
         "initial_routed_ids": [],
         "routed_ids": [],
@@ -67,7 +67,9 @@ def prediction(sample, scheme, run, response, elapsed):
     }
     if not budget_ok(sample) or not sample["material_ready"]:
         row.update(
-            status="ineligible", error="input_budget_exceeded" if not budget_ok(sample) else "material_unavailable"
+            status="ineligible",
+            error="input_budget_exceeded" if not budget_ok(sample) else "material_unavailable",
+            route_status="not_attempted",
         )
         return row
     if not isinstance(response, dict):
@@ -75,6 +77,10 @@ def prediction(sample, scheme, run, response, elapsed):
     if set(response) == {"error"}:
         error = response["error"]
         row["error"] = error if isinstance(error, str) and error in ERRORS else "invalid_response"
+        # With no completed worker response, a route is unavailable, not an
+        # observed category omission. Only a pre-load failure proves no attempt.
+        if row["error"] == "model_load_failed":
+            row["route_status"] = "not_attempted"
         return row
     if set(response) != {"prediction"} or not isinstance(response["prediction"], dict):
         return row

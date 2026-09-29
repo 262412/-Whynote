@@ -61,3 +61,7 @@ exposures按batch_id映射到 `{"schema_version":"m54a-exposed-groups-v1","group
 Windows实际运行显式设置TORCHDYNAMO_DISABLE=1，防止Transformers类定义的装饰器隐式启动编译；固定运行时和模型路径只读。取消核验是在真实进程等待处注入KeyboardInterrupt，随后查询Job活跃进程数为0；不称已实际操作控制台取消。外部UDP没有受控接收端，本轮只记录本机IPv4/IPv6 TCP/UDP交付对照与无网络capability，不冒充外网泄漏试验。
 
 源码指纹覆盖whynote下全部.py文件（包括未跟踪文件）；运行时指纹覆盖解释器/依赖树.py/.pyd/.dll/.exe/.json，模型五文件在每次加载时核验。源/环境文件若更新需重新核验并冻结；运行器不自动续跑或覆盖旧结果。
+
+### 失败阶段与不可观测路由
+
+SDK推理异常固定为worker_failed并保留infer_scheme已完成路由及失败阶段；模型尚未加载才使用model_load_failed。没有完整worker回执的超时、传输或非法响应按route_status=failed表示路由结果不可用，不能声称路由从未尝试，也不纳入条件路由遗漏分母。无法观察到的中间结果不补写为成功。预算/材料未通过及模型加载失败使用not_attempted。此为新执行器到既有v1统计的映射，旧事件和标签契约不变。

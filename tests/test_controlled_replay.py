@@ -302,3 +302,23 @@ def test_real_projection_binding_and_exposure(tmp_path, mutation, expected):
             load_projections(manifest, {"test": exposure})
     else:
         assert load_projections(manifest, {"test": exposure})[sample["input_id"]] == projection
+
+
+def test_sdk_failure_is_not_model_load_failure(monkeypatch):
+    import whynote.controlled_worker as worker
+
+    class Agent:
+        def predict(self, state, questions):
+            raise RuntimeError("SYNTHETIC PRIVATE FAILURE")
+
+    monkeypatch.setattr(worker, "check_budget", lambda *args: {})
+    with pytest.raises(ReplayError, match="^worker_failed$"):
+        worker.checked_prediction(Agent(), "synthetic", {})
+
+
+def test_timeout_is_unavailable_route_not_false_no_attempt(bundle):
+    sample = bundle["manifest"]["samples"][0]
+    assert prediction(sample, "C", bundle["run"], {"error": "timeout"}, 60001)["route_status"] == "failed"
+    assert (
+        prediction(sample, "C", bundle["run"], {"error": "model_load_failed"}, 100)["route_status"] == "not_attempted"
+    )

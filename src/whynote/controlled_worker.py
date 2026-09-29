@@ -13,6 +13,18 @@ from .replay_laya import ReplayError, check_budget, require, validate_response
 from .self_review_contract import sha
 
 
+def checked_prediction(agent, state, questions):
+    try:
+        budget = check_budget(agent, state, questions)
+        answers = validate_response(agent.predict(state, questions), questions)
+        return {"answers": answers, "budget": budget}
+    except ReplayError:
+        raise
+    except Exception:
+        # infer_scheme retains the failed stage and any already completed route.
+        raise ReplayError("worker_failed") from None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-dir", required=True)
@@ -68,9 +80,7 @@ def main():
                     metadata = {"backend": "laya_local", "model": MODEL}
 
                     def predict(self, state, questions):
-                        budget = check_budget(agent, state, questions)
-                        answers = validate_response(agent.predict(state, questions), questions)
-                        return {"answers": answers, "budget": budget}
+                        return checked_prediction(agent, state, questions)
 
                 import hashlib
 
