@@ -30,6 +30,10 @@ ERRORS = {
 }
 
 
+def error_code(value):
+    return value if isinstance(value, str) and value in ERRORS else "invalid_response"
+
+
 def live(config):
     return config.get("suggestion_backend", "fixture") == "laya_local"
 
@@ -72,7 +76,7 @@ def infer(backend, question, answer):
     )
     result = infer_scheme(backend, item, "C")
     if result["status"] != "ok":
-        raise ReplayError(result["error"] if result["error"] in ERRORS else "invalid_response")
+        raise ReplayError(error_code(result["error"]))
     return {
         "version": VERSION,
         "model": MODEL,
@@ -118,28 +122,32 @@ async def evaluate(config, question, answer):
     require(all(isinstance(t, str) and t.strip() for t in (question, answer)), "invalid_state")
     payload = json.dumps({"request": question, "answer": answer}, ensure_ascii=False, separators=(",", ":"))
     require(len(payload.encode()) <= 8192, "input_bytes_exceeded")
-    env = {**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[1]), "PYTHONUTF8": "1"}
+    package_root = str(Path(__file__).resolve().parents[1])
+    bootstrap = "import sys; sys.path.insert(0, sys.argv.pop(1)); from whynote.live_suggestions import main; main()"
     process = None
     try:
         process = await asyncio.create_subprocess_exec(
             config["suggestion_python"],
+            "-I",
+            "-B",
             "-X",
             "utf8",
-            "-m",
-            "whynote.live_suggestions",
+            "-c",
+            bootstrap,
+            package_root,
             "--model-dir",
             config["suggestion_model_dir"],
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.DEVNULL,
-            env=env,
+            env=os.environ.copy(),
             **({"creationflags": 0x08000000} if sys.platform == "win32" else {}),
         )
         stdout, _ = await asyncio.wait_for(process.communicate(payload.encode()), 60)
         require(process.returncode == 0 and len(stdout) <= 16384, "backend_unavailable")
         result = json.loads(stdout)
         if isinstance(result, dict) and set(result) == {"error"}:
-            raise ReplayError(result["error"] if result["error"] in ERRORS else "invalid_response")
+            raise ReplayError(error_code(result["error"]))
         return result
     except TimeoutError:
         raise ReplayError("timeout") from None
@@ -194,7 +202,7 @@ def main():
 
             result = infer(Backend(), fields["request"], fields["answer"])
     except ReplayError as exc:
-        result = {"error": str(exc) if str(exc) in ERRORS else "invalid_response"}
+        result = {"error": error_code(str(exc))}
     except Exception:
         result = {"error": "model_load_failed"}
     print(json.dumps(result, allow_nan=False))

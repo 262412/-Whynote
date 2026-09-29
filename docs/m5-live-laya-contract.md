@@ -77,3 +77,11 @@ Action的摘要规范为HTTP Function文本统一CRLF/CR为LF后UTF-8编码的SH
 再原子替换清单为`deployment_state=verified`，写实际`action_sha256`、`action_source`及`verified_at`。
 任一初始化/读回/模块一致性检查失败不得产生verified记录；部分初始化仍可能有宿主副作用，不能当成Q-33零写入保证。
 旧清单不回填历史成功，M5-3初始化需新工具启动的新实例；业务事件不迁移，旧S1工具语义不变。
+
+Q-36/Q-37（FR-06/13/14，TD-04/07）：worker错误信封仅接受固定集合内的字符串，
+数组、对象、null、数字、布尔和未知字符串一律归类`invalid_response`；动作/Outbox及菜单保留。
+实际worker使用所选可信解释器的`-I`隔离模式启动，忽略当前目录、用户site及PYTHON*路径配置；
+由固定bootstrap显式插入调用模块所在的绝对包根目录，再导入`whynote.live_suggestions`。
+不使用调用者当前目录或PYTHONPATH寻找worker，UTF-8通过`-X utf8`指定，`-B`禁止写pyc。
+该边界假设解释器、其系统site及显式包根受信，不是OS沙箱或出站隔离；原60秒超时、
+取消时kill/wait、输入预算、模型SDK/权重校验及生产关闭不变。事件结构不迁移。

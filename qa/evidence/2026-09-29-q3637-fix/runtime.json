@@ -1,0 +1,39 @@
+{
+  "calls": [
+    {
+      "shadow": false,
+      "marker_absent": true,
+      "result": {
+        "version": "m5-live-laya-v1",
+        "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+        "route": "code_rewrite",
+        "fallback_used": false,
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.interface_changed"
+        ]
+      },
+      "presentation_contract_valid": true
+    },
+    {
+      "shadow": true,
+      "marker_absent": true,
+      "result": {
+        "version": "m5-live-laya-v1",
+        "model": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+        "route": "code_rewrite",
+        "fallback_used": false,
+        "outcome": "suggested",
+        "reason_ids": [
+          "code.interface_changed"
+        ]
+      },
+      "presentation_contract_valid": true
+    }
+  ],
+  "scope": "Two sequential actual pinned local Laya calls on synthetic text; no browser/UI or real context",
+  "worker_parent_module": "C:\\Users\\22826\\.codex\\worktrees\\whynote-m5-source-mapping\\jev项目\\.venv\\Lib\\site-packages\\whynote\\live_suggestions.py",
+  "processes_exited": true,
+  "installed_worker_matches_source_lf": true,
+  "worker_source_sha256_lf": "1d77af4228bb48d7bd34677c1aa18ffc9cb6b3ec94e073626c55f2823ab505b0"
+}
