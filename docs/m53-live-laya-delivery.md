@@ -9,7 +9,7 @@
 真实任务路由及理由使用现有C方案，保留通用回退与证据要求，不由fixture指定最终reason_ids。
 只接受scripted登记和服务端对象版本白名单，所有mock研究开关继续保留；未开放真实聊天研究。
 
-独立进程禁网络、使用固定权重/SDK校验，8192字节/700token、不截断，总超时60秒且终止进程。
+独立进程拦截Python TCP连接（原“禁网络”表述过强，环境级隔离未验收）、使用固定权重/SDK校验，8192字节/700token、不截断，总超时60秒且终止进程。
 结果后再次验证宿主权限/版本，事务内再验动作与登记。超时、离线、非法结果保持动作并回到原菜单，
 unknown/no_match分开记录。实时生成来源为model_inferred_unconfirmed，显式yes/correct才是user。
 报告按模型来源/推断版本分层，仍为synthetic_development_only；原事件和旧fixture来源不改写。
