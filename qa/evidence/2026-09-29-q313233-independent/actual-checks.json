@@ -1,0 +1,152 @@
+{
+  "candidate": "8e73c7f66d2afe71bd35cbe4593cd5e93eb053dd",
+  "source_cases": [
+    {
+      "change": "valid",
+      "mode": "normal",
+      "returncode": 0
+    },
+    {
+      "change": "valid",
+      "mode": "-O",
+      "returncode": 0
+    },
+    {
+      "change": "valid",
+      "mode": "environment",
+      "returncode": 0
+    },
+    {
+      "change": "tracked-change",
+      "mode": "normal",
+      "returncode": 1
+    },
+    {
+      "change": "tracked-change",
+      "mode": "-O",
+      "returncode": 1
+    },
+    {
+      "change": "tracked-change",
+      "mode": "environment",
+      "returncode": 1
+    },
+    {
+      "change": "untracked-route",
+      "mode": "normal",
+      "returncode": 0
+    },
+    {
+      "change": "untracked-route",
+      "mode": "-O",
+      "returncode": 0
+    },
+    {
+      "change": "untracked-route",
+      "mode": "environment",
+      "returncode": 0
+    }
+  ],
+  "runtime_cases": [
+    {
+      "case": "ordinary-interpreter",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "missing-sdk",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "empty-model",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "bad-model-digest",
+      "returncode": 2,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "files_before": 21,
+      "files_unchanged": true
+    },
+    {
+      "case": "valid-retry",
+      "returncode": 0,
+      "before_counts": {
+        "user": 0,
+        "function": 0,
+        "model": 0,
+        "chat": 0
+      },
+      "after_counts": {
+        "user": 3,
+        "function": 3,
+        "model": 1,
+        "chat": 1
+      },
+      "files_before": 21,
+      "files_unchanged": false
+    }
+  ],
+  "source_restored": true,
+  "manifest": {
+    "action_sha256": "35fe7f74030b7b356a554043509e766cb64dcb8208e26fd6ee6718d44da8d778",
+    "s1_action_file_sha256": "35fe7f74030b7b356a554043509e766cb64dcb8208e26fd6ee6718d44da8d778",
+    "deployed_content_sha256": "cdb89cdba449592b4563b7132e8a2e942bcd88391ddc20e846bf914d0ae094da",
+    "local_chain_text_sha256": "cdb89cdba449592b4563b7132e8a2e942bcd88391ddc20e846bf914d0ae094da",
+    "deployed_is_local_chain": true
+  },
+  "host_stopped": true,
+  "dialog_restored": true
+}
