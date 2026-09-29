@@ -30,7 +30,7 @@ def serve(args):
             "apply",
             "--reverse",
             "--check",
-            str(ROOT / "integrations/openwebui/patches/s1-v0.11.4-trial.patch"),
+            str(ROOT / "integrations/openwebui/patches" / getattr(args, "entry_patch", "s1-v0.11.4-trial.patch")),
         ],
         check=True,
     )

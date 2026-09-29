@@ -13,6 +13,8 @@ import uuid
 from collections import Counter
 
 from .domain import ConflictError, NotFoundError, Principal, project
+from .live_suggestions import MODEL, live
+from .live_suggestions import VERSION as LIVE_VERSION
 from .measurement import duration_summary, timing_payload, utc
 from .research import validate_config
 from .task_reasons import CATALOG_SHA256, CRITERIA_VERSION, PACKAGE_VERSION, TEMPLATE_VERSION, validate_selection
@@ -40,7 +42,7 @@ def _versions(config):
     revision = config.get("suggestion_model_revision")
     if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}", revision):
         raise ValueError("Synthetic model revision is required")
-    return {
+    versions = {
         "model_revision": revision,
         "package_version": PACKAGE_VERSION,
         "criteria_version": CRITERIA_VERSION,
@@ -48,6 +50,9 @@ def _versions(config):
         "catalog_sha256": CATALOG_SHA256,
         "ui_version": TEMPLATE_UI_VERSION if config.get("suggestion_template_enabled") is True else UI_VERSION,
     }
+    if live(config):
+        versions.update(inference_version=LIVE_VERSION, model_version=MODEL, model_source="model_inferred_unconfirmed")
+    return versions
 
 
 def _admit(store, db, principal, event_id):
@@ -83,6 +88,11 @@ def _admit(store, db, principal, event_id):
     ):
         raise NotFoundError("Current registered research answer is required")
     source = json.loads(tracked["data"])
+    if live(config) and (
+        source["source_kind"] != "scripted"
+        or config["suggestion_synthetic_targets"].get(target["object_id"]) != target["object_version"]
+    ):
+        raise NotFoundError("Explicit synthetic target is required")
     if source["study_ref"] != config["research_study_ref"] or source["protocol_ref"] != config["research_protocol_ref"]:
         raise ConflictError("Research protocol has changed")
     accepted = events[0]["payload"]
@@ -131,7 +141,7 @@ def admit(store, principal, event_id):
 def generate(
     store, principal, event_id, request_id, suggestion_id, candidates, selection, *, display_id, presentation=None
 ):
-    """Record an operator-supplied synthetic selection, never an actual model claim."""
+    """Record a selection admitted under the configured synthetic-session backend."""
     with store._transaction() as db:
         events, binding = _admit(store, db, principal, event_id)
         _uuid(suggestion_id)
@@ -170,7 +180,7 @@ def generate(
             "m52_suggestion_generated",
             request_id,
             command,
-            "synthetic_model",
+            binding.get("model_source", "synthetic_model"),
             binding=binding,
             expires_at=time.time() + TTL_SECONDS,
         )
@@ -400,16 +410,23 @@ def report_from_connection(db, event_ids, as_of):
                     "operations": dict(Counter(responses)),
                     "status": status,
                     "versions": {
-                        k: p["binding"][k]
-                        for k in (
-                            "model_revision",
-                            "package_version",
-                            "criteria_version",
-                            "template_version",
-                            "catalog_sha256",
-                            "ui_version",
-                            "candidate_set_id",
-                        )
+                        **{
+                            k: p["binding"][k]
+                            for k in ("inference_version", "model_version", "model_source")
+                            if k in p["binding"]
+                        },
+                        **{
+                            k: p["binding"][k]
+                            for k in (
+                                "model_revision",
+                                "package_version",
+                                "criteria_version",
+                                "template_version",
+                                "catalog_sha256",
+                                "ui_version",
+                                "candidate_set_id",
+                            )
+                        },
                     },
                     "action_retracted": retracted,
                     "answer_unavailable": answer_unavailable,

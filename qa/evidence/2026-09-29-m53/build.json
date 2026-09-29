@@ -1,0 +1,11 @@
+{
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "command": "npx --yes --package=node@22 --package=npm@10 npm --prefix var/m52b-upstream run build",
+  "result": "success",
+  "frontend_index_sha256": "7b4239f9e3bf33f728ebc2bcd11b3ad4985eab0cdedcf6d7d42b03055da3a00d",
+  "dialog_sha256": "42cc55ea8393ad3944f896a0bde24268dab0de92f60e9f4c51d3979c118f3445",
+  "full_patch_stack_verified": true,
+  "initial_failure": "system Node24 rejected by upstream <=22 engines; reran using Node22",
+  "warnings": "upstream Svelte accessibility and unused exports retained",
+  "final_build": "success; after single-candidate confirmation wording adjustment"
+}

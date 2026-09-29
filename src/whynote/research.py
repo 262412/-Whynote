@@ -24,6 +24,8 @@ BROWSER_FIELDS = REGISTRATION_FIELDS | {"research", "source", "actor_role", "res
 
 
 def validate_config(config):
+    from .live_suggestions import validate_config as validate_live
+
     enabled = config.get("research_enabled", False)
     if type(enabled) is not bool or (enabled and config.get("mode") != "mock"):
         raise ValueError("S1 research is available only for explicit mock development")
@@ -33,6 +35,7 @@ def validate_config(config):
     templates = config.get("suggestion_template_enabled", False)
     if type(templates) is not bool or (templates and not suggestions):
         raise ValueError("Template suggestions require explicit mock suggestions")
+    validate_live(config)
     if enabled:
         for name in ("research_study_ref", "research_protocol_ref"):
             if not isinstance(config.get(name), str):

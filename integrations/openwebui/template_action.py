@@ -6,7 +6,7 @@ import time
 import uuid
 
 from integrations.openwebui.s1_action import Action as ManualAction
-from whynote import suggestions
+from whynote import live_suggestions, suggestions
 from whynote.domain import ConflictError, NotFoundError, Principal
 from whynote.research import validate_config
 from whynote.template_suggestions import prepare
@@ -74,12 +74,17 @@ async def run(action, body, user, call, emitter, target, event_id):
         messages = chat.chat["history"]["messages"]
         message = messages[body["id"]]
         # No text selection, fixture evaluation or provider call precedes admission.
-        candidates, selection, cards, presentation = prepare(
-            messages[message["parentId"]]["content"],
-            message["content"],
-            target["object_version"],
-            initial.get("suggestion_fixture"),
-        )
+        question, answer = messages[message["parentId"]]["content"], message["content"]
+        if live_suggestions.live(initial):
+            result = await live_suggestions.evaluate(initial, question, answer)
+            candidates, selection, cards, presentation = live_suggestions.presentation(
+                question, answer, target["object_version"], result
+            )
+            _, store = await current()
+        else:
+            candidates, selection, cards, presentation = prepare(
+                question, answer, target["object_version"], initial.get("suggestion_fixture")
+            )
         record = suggestions.generate(
             store,
             principal,
@@ -182,7 +187,10 @@ async def run(action, body, user, call, emitter, target, event_id):
         )
         await dismiss()
         try:
-            return {"result": "fallback", "manual": await manual()}
+            result = {"result": "fallback", "manual": await manual()}
+            if isinstance(exc, live_suggestions.ReplayError):
+                result["failure_code"] = str(exc) if str(exc) in live_suggestions.ERRORS else "invalid_response"
+            return result
         except (NotFoundError, ConflictError):
             return {"result": "superseded"}
     finally:
