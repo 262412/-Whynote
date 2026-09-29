@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-29",
+  "candidate": "8e73c7f66d2afe71bd35cbe4593cd5e93eb053dd",
+  "main": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "documents_input": {
+    "prd": 464,
+    "technical": 454
+  },
+  "q31_q32_q33": "specified technical scope passed; formal signoff pending",
+  "baseline_full": {
+    "passed": 802,
+    "failed": 0
+  },
+  "focused_overlapping": 37,
+  "new_q34_cases": {
+    "passed": 0,
+    "failed": 3
+  },
+  "native": 80,
+  "probe": 58,
+  "ruff_format_files": 98,
+  "original_four_case_file_unchanged_sha256": "46fb34e18f6b3b052ad08d1c552e948b97ccdca7c5dedac0dd68440bbb6695ed",
+  "candidate_ci": 36524089559,
+  "new_findings": [
+    "Q-34: untracked route accepted by actual source check in three modes; no route build or execution",
+    "Q-35: provisioned action differs from manifest; actual database content verified"
+  ],
+  "not_executed": [
+    "browser",
+    "model inference",
+    "frontend rebuild",
+    "unapproved route build/startup"
+  ],
+  "production": "NO-GO",
+  "nonauthor_approved": 0
+}

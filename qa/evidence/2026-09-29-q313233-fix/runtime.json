@@ -1,0 +1,20 @@
+{
+  "invalid_cases": [
+    {
+      "case": "ordinary-interpreter",
+      "returncode": 2,
+      "host_files_unchanged": true,
+      "file_count": 21
+    },
+    {
+      "case": "empty-model",
+      "returncode": 2,
+      "host_files_unchanged": true,
+      "file_count": 21
+    }
+  ],
+  "corrected_same_instance_returncode": 0,
+  "synthetic_case_registered": true,
+  "backend": "laya_local",
+  "scope": "Fresh actual host, SDK import and artifact hashes; no inference/browser/GPU allocation"
+}

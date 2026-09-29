@@ -1,0 +1,15 @@
+{
+  "base": "ea9bc26859285bc8ac4df14a6e7c93f367330b97",
+  "red": {
+    "passed": 13,
+    "failed": 2
+  },
+  "original_qa_after_fix": 15,
+  "new_boundary_tests": 14,
+  "full": 756,
+  "full_seconds": 87.65,
+  "ruff": "pass",
+  "qa_file_unchanged": true,
+  "independent_retest": "pending",
+  "production": "NO-GO"
+}

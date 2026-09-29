@@ -1,0 +1,29 @@
+{
+  "candidate": "f83a948790472e7d817e54459732dc5066898dfe",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "cases": [
+    {
+      "changed_source": false,
+      "optimized": false,
+      "returncode": 0
+    },
+    {
+      "changed_source": false,
+      "optimized": true,
+      "returncode": 0
+    },
+    {
+      "changed_source": true,
+      "optimized": false,
+      "returncode": 1
+    },
+    {
+      "changed_source": true,
+      "optimized": true,
+      "returncode": 0
+    }
+  ],
+  "source_restored": true,
+  "dialog_restored": true,
+  "scope": "Actual validate_source only; no npm build, receipt issuance, server startup, or model inference"
+}

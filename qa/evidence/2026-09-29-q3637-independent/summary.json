@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-29",
+  "candidate": "56ec110de3804b13f575c97df00e85782da2b65f",
+  "main": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "documents_input": {
+    "prd": 496,
+    "technical": 482
+  },
+  "documents_readback": {
+    "prd": 504,
+    "technical": 489
+  },
+  "q36_q37": "specified technical scope passed; formal signoff pending",
+  "full": {
+    "passed": 841,
+    "failed": 0
+  },
+  "original_independent_cases": {
+    "passed": 8,
+    "failed": 0,
+    "unchanged_git_blob": "1ba95e2aebb274290babb3d821949db9cf338282"
+  },
+  "developer_added_boundary_cases_rerun": 17,
+  "native": 80,
+  "probe": 58,
+  "ruff_format_files": 184,
+  "candidate_ci": 36531346743,
+  "actual_laya_calls": 2,
+  "process_cleanup": "all test child processes ended; no matching worker processes remain",
+  "new_findings": [],
+  "not_executed": [
+    "browser",
+    "HTTP host deployment",
+    "frontend rebuild",
+    "model quality evaluation",
+    "real user context",
+    "real cloud call"
+  ],
+  "remaining_gates": [
+    "environment outbound isolation",
+    "cross-process concurrency control",
+    "valid nonauthor APPROVED",
+    "applicable owner signatures"
+  ],
+  "production": "NO-GO",
+  "nonauthor_approved": 0,
+  "local_junit_sha256": {
+    "full.xml": "a1da1037e462a8e68f65d558004e297e09d4ae2b057b122e45a62c82322865b0",
+    "native.xml": "f904d7a452dd36ae22688d98000d56510ce793846812a8b441a1bd19a020098d"
+  }
+}

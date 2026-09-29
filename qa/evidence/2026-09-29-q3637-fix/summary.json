@@ -1,0 +1,34 @@
+{
+  "base": "b721374",
+  "before": {
+    "passed": 5,
+    "failed": 3
+  },
+  "independent_tests_modified": false,
+  "after": {
+    "related_passed": 36,
+    "new_boundaries_passed": 17,
+    "full_passed": 841,
+    "full_failed": 0,
+    "ruff": true
+  },
+  "actual_local_model_synthetic_calls": 2,
+  "worker_processes_exited": true,
+  "browser_build_host_rerun": false,
+  "independent_retest": "pending",
+  "production": "NO-GO",
+  "fix_commit": "5945460813c35584f9a90de79e459aaf956f647d",
+  "ci": {
+    "run": 36531141879,
+    "quality": "success",
+    "core": 801,
+    "s0": 9,
+    "manual": 31,
+    "native": 80,
+    "probe": 58
+  },
+  "feishu": {
+    "prd": 496,
+    "tech": 482
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "initial_state": "not_verified",
+  "initial_action_sha256": null,
+  "provision_returncode": 0,
+  "final_state": "verified",
+  "action_source": "integrations/openwebui/local_chain_action.py",
+  "hash_encoding": "UTF-8/LF",
+  "action_sha256": "cdb89cdba449592b4563b7132e8a2e942bcd88391ddc20e846bf914d0ae094da",
+  "http_db_source_text_equal": true,
+  "support_modules_count": 42,
+  "support_modules_match_start_and_disk": true,
+  "scope": "Actual fresh host initialization and HTTP/SQLite deployment readback; no browser, inference or rebuild"
+}

@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-29",
+  "candidate": "f83a948790472e7d817e54459732dc5066898dfe",
+  "main": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "prd_input": 448,
+  "technical_input": 440,
+  "q30": "specified technical scope passed; formal signoff pending",
+  "focused_passed": 87,
+  "new_arrival_matrix_passed": 8,
+  "full": {
+    "passed": 775,
+    "failed": 4,
+    "original_cases_passed": 767,
+    "failed_cases": [
+      "test_inconsistent_worker_selection_has_invalid_response_code[abstention-with-reason]",
+      "test_inconsistent_worker_selection_has_invalid_response_code[reason-outside-route]",
+      "test_unusable_runtime_rejected_before_host_provisioning[interpreter]",
+      "test_unusable_runtime_rejected_before_host_provisioning[model-directory]"
+    ]
+  },
+  "original_q30_test_unchanged_sha256": "ebd18f834de075d5aac28a7fa21a2189d9d4a4f5115b7ab3cf169b75ec5dc655",
+  "native": {
+    "passed": 80,
+    "failed": 0,
+    "pinned_upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d"
+  },
+  "probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "ruff": {
+    "lint": "passed",
+    "format_files": 96
+  },
+  "candidate_ci": {
+    "run": 36520139562,
+    "quality": "SUCCESS",
+    "native-regression": "SUCCESS"
+  },
+  "review_findings": {
+    "Q-31": "optimized interpreter skips source assertion; actual pinned source probe",
+    "Q-32": "invalid selection falls back without invalid_response; two failing cases",
+    "Q-33": "unusable existing runtime paths reach provisioning; two preflight failures; host entry intercepted; contract clarification needed",
+    "4129354842": "not reproduced; patch imports dialog, copied module validated successfully"
+  },
+  "not_executed": [
+    "new browser E2E",
+    "new real Laya inference",
+    "frontend rebuild",
+    "actual provisioning with unusable runtime",
+    "optimized build receipt issuance"
+  ],
+  "production": "NO-GO",
+  "nonauthor_approved": 0,
+  "business_source_changes": false
+}

@@ -1,0 +1,134 @@
+{
+  "scope": "developer_synthetic_only",
+  "as_of": "2026-09-29T03:21:09.410532+00:00",
+  "event_types_and_sources": [
+    [
+      "negative_feedback_action_recorded",
+      "user"
+    ],
+    [
+      "m52_suggestion_generated",
+      "model_inferred_unconfirmed"
+    ],
+    [
+      "m52_render_reported",
+      "client_reported"
+    ],
+    [
+      "m52_response_recorded",
+      "user"
+    ]
+  ],
+  "outbox": 1,
+  "report_read_only_repeat_identical": true,
+  "suggestions": {
+    "contract": "m5-suggestion-v1",
+    "unit": "suggestion_group",
+    "scope": "synthetic_development_only",
+    "generated": 1,
+    "displayable": 1,
+    "render_reported": 1,
+    "valid_response": 1,
+    "confirmed": 1,
+    "render_rate": 1.0,
+    "response_rate": 1.0,
+    "actions_without_generation": 0,
+    "missing_render": 0,
+    "missing_response": 0,
+    "outcome_counts": {
+      "suggested": 1
+    },
+    "status_counts": {
+      "responded": 1
+    },
+    "operation_counts": {
+      "yes": 1
+    },
+    "invalidated": 0,
+    "retracted_action_count": 0,
+    "strata": [
+      {
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "generated": 1,
+        "displayable": 1,
+        "render_reported": 1,
+        "valid_response": 1
+      }
+    ],
+    "current_confirmations": {
+      "c64f94a6-87a9-4507-b0bc-0d115004f091": {
+        "reason_id": "code.interface_changed",
+        "source": "user",
+        "status": "confirmed",
+        "response_id": "f0231f8b-62f5-4afc-a5d3-6a6188a4b15e",
+        "last_response_id": "f0231f8b-62f5-4afc-a5d3-6a6188a4b15e"
+      }
+    },
+    "rows": [
+      {
+        "event_id": "c64f94a6-87a9-4507-b0bc-0d115004f091",
+        "suggestion_id": "9a6d4d3c-3ace-4654-a8d0-722fffc0708c",
+        "outcome": "suggested",
+        "render_reported": true,
+        "valid_response": true,
+        "confirmed": true,
+        "operations": {
+          "yes": 1
+        },
+        "status": "responded",
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "action_retracted": false,
+        "answer_unavailable": false,
+        "superseded": false,
+        "invalidated": false
+      }
+    ],
+    "response_timings": [
+      {
+        "active_ms": 14513.600000000559,
+        "server_total_ms": 14539.143323898315,
+        "timing_status": "client_reported"
+      }
+    ],
+    "active_ms": {
+      "n": 1,
+      "median": 14513.600000000559,
+      "p90": 14513.600000000559,
+      "percentile_method": "nearest_rank",
+      "unit": "explicit_response"
+    },
+    "server_total_ms": {
+      "n": 1,
+      "median": 14539.143323898315,
+      "p90": 14539.143323898315,
+      "percentile_method": "nearest_rank",
+      "unit": "explicit_response"
+    },
+    "timing_status_counts": {
+      "client_reported": 1
+    }
+  },
+  "port_8139_stopped": true
+}

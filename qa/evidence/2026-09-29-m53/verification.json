@@ -1,0 +1,13 @@
+{
+  "base": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "new_tests": 28,
+  "full_local_tests": 727,
+  "full_local_duration_seconds": 82.56,
+  "ruff_lint": "pass",
+  "ruff_format_files": 90,
+  "warning": "existing Starlette/httpx deprecation",
+  "scope": "developer_synthetic_only",
+  "independent_qa": "pending",
+  "real_data": "HOLD",
+  "production": "NO-GO"
+}

@@ -1,0 +1,63 @@
+{
+  "date": "2026-09-29",
+  "scope": "metadata preparation only; no real rows downloaded",
+  "sources": [
+    {
+      "source": "THU-KEG/WildFB",
+      "revision": "0791dbc3101c6be7e0316cba1d8caf10c28917ad",
+      "declared_license": "MIT; upstream WildChat terms require separate review",
+      "card_url": "https://huggingface.co/datasets/THU-KEG/WildFB/blob/0791dbc3101c6be7e0316cba1d8caf10c28917ad/README.md",
+      "candidate_file": "test.jsonl",
+      "bytes": 86593611,
+      "remote_lfs_sha256": "aeb337ad2d23e1791c10ab5a43bb7c8a593cf367882b34beb8274151a55631ff",
+      "downloaded": false,
+      "actual_schema_verified": false,
+      "status": "HOLD",
+      "card_sha256": "3713a447f68b029d7e3696c000c29bcea79fc042c05154abdfef05e9ec920b11",
+      "missing": [
+        "project admission owner and approval",
+        "upstream/content screening",
+        "controlled directory/access/retention/deletion",
+        "selected row range and target verification"
+      ]
+    },
+    {
+      "source": "nvidia/HelpSteer3",
+      "revision": "f6d145777bcbde96137596340fab89793acd1031",
+      "declared_license": "CC-BY-4.0",
+      "card_url": "https://huggingface.co/datasets/nvidia/HelpSteer3/blob/f6d145777bcbde96137596340fab89793acd1031/README.md",
+      "candidate_file": "feedback/validation.jsonl.gz",
+      "bytes": 5275463,
+      "remote_lfs_sha256": "b86f71581a83f610ec5416029422f84ff1fc005e77b56c7634486ef9f6f12ceb",
+      "downloaded": false,
+      "actual_schema_verified": false,
+      "status": "HOLD",
+      "card_sha256": "d5d46db58e8374937ea284b33b1583a4a465b232bf74b941745d80e3c35fd8ae",
+      "missing": [
+        "project admission owner and approval",
+        "upstream/content screening",
+        "controlled directory/access/retention/deletion",
+        "selected row range and target verification"
+      ]
+    },
+    {
+      "source": "microsoft/WildFeedback",
+      "revision": "8b1a3e530b949d6aacfad6ba8912e209a05bc846",
+      "declared_license": "ODC-By",
+      "card_url": "https://huggingface.co/datasets/microsoft/WildFeedback/blob/8b1a3e530b949d6aacfad6ba8912e209a05bc846/README.md",
+      "candidate_file": "sat_dsat_annotation.json",
+      "bytes": 1615402501,
+      "remote_lfs_sha256": "2caea8361756b35a512b2ebef93245df1e81d982a3602460f75a4445fc16d305",
+      "downloaded": false,
+      "actual_schema_verified": false,
+      "status": "HOLD",
+      "card_sha256": "703961ead61ca303bc60626372bf5d8dc2b4a20519a7a11f3411fa99ed7d635e",
+      "missing": [
+        "project admission owner and approval",
+        "upstream/content screening",
+        "controlled directory/access/retention/deletion",
+        "selected row range and target verification"
+      ]
+    }
+  ]
+}

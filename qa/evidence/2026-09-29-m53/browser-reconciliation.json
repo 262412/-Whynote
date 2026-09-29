@@ -1,0 +1,260 @@
+{
+  "as_of": "2026-09-29T02:31:23.838369+00:00",
+  "events": 22,
+  "outbox": 7,
+  "report_repeat_identical": true,
+  "database_unchanged": true,
+  "event_types": [
+    "negative_feedback_action_recorded",
+    "m52_suggestion_generated",
+    "m52_render_reported",
+    "m52_response_recorded",
+    "action_retracted",
+    "negative_feedback_action_recorded",
+    "m52_suggestion_generated",
+    "m52_render_reported",
+    "m52_response_recorded",
+    "reason_displayed",
+    "reason_selected",
+    "action_retracted",
+    "negative_feedback_action_recorded",
+    "m52_suggestion_generated",
+    "m52_render_reported",
+    "reason_displayed",
+    "reason_menu_closed",
+    "action_retracted",
+    "negative_feedback_action_recorded",
+    "m52_suggestion_generated",
+    "m52_render_reported",
+    "m52_response_recorded"
+  ],
+  "suggestions": {
+    "contract": "m5-suggestion-v1",
+    "unit": "suggestion_group",
+    "scope": "synthetic_development_only",
+    "generated": 4,
+    "displayable": 4,
+    "render_reported": 4,
+    "valid_response": 3,
+    "confirmed": 2,
+    "render_rate": 1.0,
+    "response_rate": 0.75,
+    "actions_without_generation": 0,
+    "missing_render": 0,
+    "missing_response": 1,
+    "outcome_counts": {
+      "suggested": 4
+    },
+    "status_counts": {
+      "responded": 3,
+      "action_retracted": 1
+    },
+    "operation_counts": {
+      "yes": 2,
+      "none_matched": 1
+    },
+    "invalidated": 0,
+    "retracted_action_count": 3,
+    "strata": [
+      {
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "generated": 4,
+        "displayable": 4,
+        "render_reported": 4,
+        "valid_response": 3
+      }
+    ],
+    "current_confirmations": {
+      "1e8d6559-2ea1-4cbe-a2f7-777a38a67e76": {
+        "reason_id": null,
+        "source": "none",
+        "status": "action_retracted",
+        "response_id": null,
+        "last_response_id": "c4de7861-8d23-43db-94e3-00cb1dc3f19a"
+      },
+      "32cdd141-ad60-43aa-b572-985dcd73c262": {
+        "reason_id": null,
+        "source": "none",
+        "status": "action_retracted",
+        "response_id": null,
+        "last_response_id": "af37b233-ebda-41ca-b46a-90f6d506c651"
+      },
+      "7da729e7-e5c3-4901-b61a-9e25e06423bc": {
+        "reason_id": null,
+        "source": "none",
+        "status": "action_retracted",
+        "response_id": null,
+        "last_response_id": null
+      },
+      "d95b9d33-2b19-4806-b80b-1df2fcfbde12": {
+        "reason_id": "code.interface_changed",
+        "source": "user",
+        "status": "confirmed",
+        "response_id": "2c120d59-2dd3-45ab-a28a-0e03b889672c",
+        "last_response_id": "2c120d59-2dd3-45ab-a28a-0e03b889672c"
+      }
+    },
+    "rows": [
+      {
+        "event_id": "1e8d6559-2ea1-4cbe-a2f7-777a38a67e76",
+        "suggestion_id": "3beb5662-675c-4a85-9cdd-bcbacf5da009",
+        "outcome": "suggested",
+        "render_reported": true,
+        "valid_response": true,
+        "confirmed": true,
+        "operations": {
+          "yes": 1
+        },
+        "status": "responded",
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "action_retracted": true,
+        "answer_unavailable": false,
+        "superseded": false,
+        "invalidated": false
+      },
+      {
+        "event_id": "32cdd141-ad60-43aa-b572-985dcd73c262",
+        "suggestion_id": "43e297db-eca6-4e10-844a-883b1cd2d266",
+        "outcome": "suggested",
+        "render_reported": true,
+        "valid_response": true,
+        "confirmed": false,
+        "operations": {
+          "none_matched": 1
+        },
+        "status": "responded",
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "action_retracted": true,
+        "answer_unavailable": false,
+        "superseded": false,
+        "invalidated": false
+      },
+      {
+        "event_id": "7da729e7-e5c3-4901-b61a-9e25e06423bc",
+        "suggestion_id": "9584df29-0e81-4a18-9068-9d52ff07d758",
+        "outcome": "suggested",
+        "render_reported": true,
+        "valid_response": false,
+        "confirmed": false,
+        "operations": {},
+        "status": "action_retracted",
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "action_retracted": true,
+        "answer_unavailable": false,
+        "superseded": false,
+        "invalidated": false
+      },
+      {
+        "event_id": "d95b9d33-2b19-4806-b80b-1df2fcfbde12",
+        "suggestion_id": "fdefd3ca-b86b-4334-8a8c-8bbb6ed79b2f",
+        "outcome": "suggested",
+        "render_reported": true,
+        "valid_response": true,
+        "confirmed": true,
+        "operations": {
+          "yes": 1
+        },
+        "status": "responded",
+        "versions": {
+          "inference_version": "m5-live-laya-v1",
+          "model_version": "convaiinnovations/laya/multilingual@55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "model_source": "model_inferred_unconfirmed",
+          "model_revision": "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851",
+          "package_version": "m5-task-reasons-v1",
+          "criteria_version": "m5-task-criteria-v1",
+          "template_version": "m5-task-templates-v1",
+          "catalog_sha256": "ef5743a48090692e424335b4d11099f3ac9be6316c2b1c646a56f2dab65cf814",
+          "ui_version": "m5-template-mock-v1",
+          "candidate_set_id": "e1a933bdc4941030942187e8640b7a45c523a94a5c739120b706d9a0ea130684"
+        },
+        "action_retracted": false,
+        "answer_unavailable": false,
+        "superseded": false,
+        "invalidated": false
+      }
+    ],
+    "response_timings": [
+      {
+        "active_ms": 8930.09999999986,
+        "server_total_ms": 8996.179342269897,
+        "timing_status": "client_reported"
+      },
+      {
+        "active_ms": 31240.200000000186,
+        "server_total_ms": 31258.75687599182,
+        "timing_status": "client_reported"
+      },
+      {
+        "active_ms": 20343,
+        "server_total_ms": 20369.97365951538,
+        "timing_status": "client_reported"
+      }
+    ],
+    "active_ms": {
+      "n": 3,
+      "median": 20343,
+      "p90": 31240.200000000186,
+      "percentile_method": "nearest_rank",
+      "unit": "explicit_response"
+    },
+    "server_total_ms": {
+      "n": 3,
+      "median": 20369.97365951538,
+      "p90": 31258.75687599182,
+      "percentile_method": "nearest_rank",
+      "unit": "explicit_response"
+    },
+    "timing_status_counts": {
+      "client_reported": 3
+    }
+  },
+  "temporary_ports_stopped": [
+    8134,
+    8135
+  ],
+  "scope": "developer_synthetic_only"
+}

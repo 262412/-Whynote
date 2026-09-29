@@ -1,0 +1,49 @@
+[
+  {
+    "missing": "both",
+    "exit_code": 2,
+    "rows": {
+      "user": 0,
+      "function": 0,
+      "model": 0,
+      "chat": 0
+    },
+    "research_db_exists": false,
+    "pass": true
+  },
+  {
+    "missing": "--model-python",
+    "exit_code": 2,
+    "rows": {
+      "user": 0,
+      "function": 0,
+      "model": 0,
+      "chat": 0
+    },
+    "research_db_exists": false,
+    "pass": true
+  },
+  {
+    "missing": "--model-dir",
+    "exit_code": 2,
+    "rows": {
+      "user": 0,
+      "function": 0,
+      "model": 0,
+      "chat": 0
+    },
+    "research_db_exists": false,
+    "pass": true
+  },
+  {
+    "corrected_same_instance": true,
+    "exit_code": 0,
+    "rows": {
+      "user": 3,
+      "function": 3,
+      "model": 1,
+      "chat": 1
+    },
+    "pass": true
+  }
+]

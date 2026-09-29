@@ -1,0 +1,34 @@
+{
+  "base": "f453ff8be2626e46f6cdfc086ea2e733961ccc18",
+  "original_qa_tests_modified": false,
+  "before": {
+    "passed": 0,
+    "failed": 4
+  },
+  "after": {
+    "full_passed": 802,
+    "full_failed": 0,
+    "new_boundaries_passed": 23,
+    "initial_focused_passed": 70,
+    "ruff": true
+  },
+  "temporary_port_8141_closed": true,
+  "browser_inference_frontend_build_rerun": false,
+  "independent_retest": "pending",
+  "outbound_isolation_concurrency": "open",
+  "production": "NO-GO",
+  "fix_commit": "59a0f68659667da5c653a915851ff95b6488cace",
+  "ci": {
+    "run": 36523893438,
+    "quality": "success",
+    "core": 762,
+    "s0": 9,
+    "manual": 31,
+    "native": 80,
+    "probe": 58
+  },
+  "feishu": {
+    "prd": 464,
+    "tech": 454
+  }
+}

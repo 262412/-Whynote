@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-29",
+  "candidate": "3ae7f304348bea15a853eb24495df692ce13c744",
+  "main": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "documents_input": {
+    "prd": 480,
+    "technical": 468
+  },
+  "q34_q35": "specified technical scope passed; formal signoff pending",
+  "baseline_full": {
+    "passed": 816,
+    "failed": 0
+  },
+  "new_worker_cases": {
+    "passed": 5,
+    "failed": 3,
+    "failed_names": [
+      "test_worker_error_envelope_has_fixed_failure_code[error0]",
+      "test_worker_error_envelope_has_fixed_failure_code[error1]",
+      "test_worker_does_not_import_current_directory_package"
+    ]
+  },
+  "native": 80,
+  "probe": 58,
+  "ruff_format_files": 100,
+  "original_three_case_file_unchanged_sha256": "ba225818485cf966c6fd49e4bc225e97f2eef70844b602ca64669501f7b4e849",
+  "candidate_ci": 36526699508,
+  "new_findings": [
+    "Q-36: unhashable worker error code falls back without fixed failure_code",
+    "Q-37: actual worker imports current-directory synthetic package and passes synthetic input"
+  ],
+  "not_executed": [
+    "browser",
+    "real Laya inference",
+    "frontend rebuild",
+    "real user context",
+    "external transfer"
+  ],
+  "production": "NO-GO",
+  "nonauthor_approved": 0
+}

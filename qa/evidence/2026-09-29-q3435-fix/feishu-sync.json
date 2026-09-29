@@ -1,0 +1,122 @@
+[
+  {
+    "document": "prd",
+    "selector": "doxc6B9OvussCzrUJHcA2ZcH7id",
+    "revision_before": 472,
+    "revision_after": 473,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6B6RQUOF790mzzu2eJLyKVg",
+    "revision_before": 473,
+    "revision_after": 474,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6YuV0wcohfAttBDRvIDn9se",
+    "revision_before": 474,
+    "revision_after": 475,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6vi4cruQELRsfkXewbv0Hgr",
+    "revision_before": 475,
+    "revision_after": 476,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6BxOgNnJnOu8X3eIeQWXxsd",
+    "revision_before": 476,
+    "revision_after": 477,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6otujWCAKceujGS8sUYERQd",
+    "revision_before": 477,
+    "revision_after": 478,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc60vo1O1uKTCY5nbswhMmRdd",
+    "revision_before": 478,
+    "revision_after": 479,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "prd",
+    "selector": "doxc6at5TYol4i4BlNYctp9i7Qh",
+    "revision_before": 479,
+    "revision_after": 480,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6r1QyuD05VCSsoXzIEZk2gh",
+    "revision_before": 461,
+    "revision_after": 462,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc667B0MCycrJckV81NmMcZqc",
+    "revision_before": 462,
+    "revision_after": 463,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6ICmVEpoYaFWa4OSiJWJG52",
+    "revision_before": 463,
+    "revision_after": 464,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6ceNaU1FTheJw8t6CbOos8f",
+    "revision_before": 464,
+    "revision_after": 465,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6T5TH58hRrRibKJJyz363Td",
+    "revision_before": 465,
+    "revision_after": 466,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6vzkbbhQQnTASY80dUrvjgc",
+    "revision_before": 466,
+    "revision_after": 467,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  },
+  {
+    "document": "tech",
+    "selector": "doxc6cGiIuLSvhJHI4ioIIgSH2A",
+    "revision_before": 467,
+    "revision_after": 468,
+    "exact_text_readback": true,
+    "historical_links_preserved": true
+  }
+]

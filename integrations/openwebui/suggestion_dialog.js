@@ -24,7 +24,9 @@ export async function renderSuggestion(data) {
         return node;
     };
     add('h2', '核对原因');
-    add('p', '点踩已保存。合成模型建议，未确认。原文仅供核对，未运行代码。');
+    add('p', data.binding.model_source === 'model_inferred_unconfirmed'
+        ? '点踩已保存。Laya 模型建议，未确认；本次使用合成会话。未运行代码。'
+        : '点踩已保存。合成模型建议，未确认。原文仅供核对，未运行代码。');
     const status = add('p', '正在确认展示回执…');
     status.setAttribute('role', 'status');
     const buttons = [];
@@ -92,7 +94,7 @@ export function respondSuggestion(data) {
     const state = active;
     if (!state || state.id !== data.display_id || state.resolve) return { error: 'display_unavailable' };
     state.confirmed = data.confirmed;
-    state.status.textContent = data.confirmed ? '已记录你的确认。可以更正或完成。' : '请选择；没有默认确认。';
+    state.status.textContent = data.confirmed ? '已记录你的确认。' : '请选择；没有默认确认。';
     for (const item of state.buttons) {
         item.node.hidden = data.confirmed
             ? !(item.operation === 'done' || (item.operation === 'correct' && item.reasonId !== data.confirmed))

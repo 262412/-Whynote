@@ -1,6 +1,8 @@
 """Explicit local research adapter; never consumes feedback events or cloud keys."""
 
 import copy
+import hashlib
+import importlib
 import os
 from importlib.metadata import version
 from pathlib import Path
@@ -10,6 +12,7 @@ from .domain import NotFoundError, validate_jev_response
 REVISION = "55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851"
 MODEL = f"convaiinnovations/laya/multilingual@{REVISION}"
 PROMPT_VERSION = "laya-reason-local-v1"
+SDK_VERSIONS = {"laya": "0.3.21", "transformers": "4.57.6"}
 QUESTIONS = {
     "primary_reason": {
         "type": "choice",
@@ -33,6 +36,22 @@ QUESTIONS = {
 }
 
 
+def preflight(model_dir):
+    """Read-only SDK/artifact validation, without loading a model or allocating a device."""
+    from .laya_manifest import SHA256
+
+    if any(version(name) != expected for name, expected in SDK_VERSIONS.items()):
+        raise ValueError("Local SDK versions do not match the tested runtime")
+    directory = Path(model_dir).resolve(strict=True)
+    for name, expected in SHA256.items():
+        with (directory / name).open("rb") as stream:
+            digest = hashlib.file_digest(stream, "sha256").hexdigest()
+        if digest != expected:
+            raise ValueError("Local model files do not match the pinned revision")
+    for name in SDK_VERSIONS:
+        importlib.import_module(name)
+
+
 class LocalLaya:
     def __init__(self, agent):
         self.agent = agent
@@ -43,7 +62,7 @@ class LocalLaya:
             raise NotFoundError("Local model is disabled")
         from .laya_manifest import SHA256
 
-        if version("laya") != "0.3.21" or version("transformers") != "4.57.6":
+        if any(version(name) != expected for name, expected in SDK_VERSIONS.items()):
             raise ValueError("Local SDK versions do not match the tested runtime")
         model_dir = Path(model_dir).resolve(strict=True)
         for name, value in {

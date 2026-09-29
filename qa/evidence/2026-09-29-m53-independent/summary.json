@@ -1,0 +1,77 @@
+{
+  "date": "2026-09-29",
+  "candidate": "e1c4410c77ec4e4adcde89fc7e84347806d5d612",
+  "main": "5abdc580c7c510b247fa2e1db1d0fcb40f96416e",
+  "input_documents": {
+    "prd": 416,
+    "technical": 412
+  },
+  "tests": {
+    "baseline": {
+      "tests": 727,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "focused-q28-confirmed": {
+      "tests": 15,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full": {
+      "tests": 742,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "native": {
+      "tests": 80,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "open_defects": [
+    "Q-28",
+    "Q-29"
+  ],
+  "full_acceptance": false,
+  "production": "NO-GO",
+  "frontend_build": "developer artifact copied; no independent npm build",
+  "browser": "independent login + real local Laya + fresh SQLite",
+  "non_author_approval": false,
+  "native_probe": {
+    "passed": 58,
+    "failed": 0
+  },
+  "q28": {
+    "host_rows": {
+      "user": 3,
+      "function": 3,
+      "model": 1,
+      "chat": 1
+    },
+    "research_sources": 1,
+    "research_answers": 1,
+    "retry_status": 403
+  },
+  "evidence_hashes": {
+    "browser-confirmed.png": "5dbb3cace47dd0cdc12139f5a835b924e0e9f3142931a0ea973f60e5561539c4",
+    "browser-offline-fallback.png": "8b5925c74eb4734d9fe159e5eb46618d92fe21eeb2a5190a9db650372a35b902",
+    "missing-provision.log": "cccba8e84bdbe4e1219477ba545871609bcc29d4fd83916aa1bef7c4982734d5",
+    "missing-retry.log": "1a92f6650915c3b345f98a4e2832025978e94903e2ea86ab8e614610cdd9b8fc",
+    "full.log": "53ba8974dc08104cb48b9813c8bf7e98472d6c72e8b538929df44f0d4f40c5ab",
+    "native.log": "6eebc4b0c5e3e1db93599ad0bd2bcfe9372a6dfa0fc2348e53535fa5962eb4fa",
+    "probe.log": "22752c1c1c5820d04bbf6929f7b61e157afc861cda85477197043e598c9e6693"
+  },
+  "output_documents": {
+    "prd": 424,
+    "technical": 419
+  },
+  "services_stopped": [
+    8136,
+    8137,
+    8138
+  ]
+}
