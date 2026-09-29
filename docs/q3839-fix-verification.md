@@ -7,7 +7,7 @@ Q-38/P1与Q-39/P2已开发修复，待独立原样复验、非作者批准及适
 ## 复现与改动
 
 原[独立报告](qa-m54a-controlled.md)、9条独立断言和原始失败证据保持不变。
-最新失败[CI36554882934](https://github.com/262412/-Whynote/actions/runs/36554882934)与本机修复前复现一致：5通过/4失败。
+修复前失败[CI36554882934](https://github.com/262412/-Whynote/actions/runs/36554882934)与本机修复前复现一致：5通过/4失败。
 
 - Q-38：错误信封、ReplayError和完整prediction统一记录首个uncaught_error结果，fsync之后追加stopped并抛出固定错误；后续零调用、零started，不生成完整bundle/report。completed_slots包括已落盘的失败槽；不自动续跑或覆盖。普通timeout/model_load_failed/route_failed/invalid_response/worker_failed仍按计划继续。
 - Q-39：只在tokenizer/SDK/模型加载与配置核验期间使用model_load_failed；加载完成后的随机种子初始化、材料准备、策略未知异常用uncaught_error，交由监督器立即停止。tokenizer加载后的测量异常也不再冒充加载失败。SDK预测原有worker_failed语义不变，异常正文不进入JSON或journal。
@@ -17,7 +17,13 @@ Q-38/P1与Q-39/P2已开发修复，待独立原样复验、非作者批准及适
 
 重装锁定非editable包后，原9条独立用例9/9；新增16条边界通过，连同既有相关用例54/54。Ruff check/format通过（118文件）。
 新增用例覆盖第7/179次错误的三种形式、持久化顺序和不可覆盖、五种计划内错误继续、实际worker.main到监督器的策略/初始化异常联动、tokenizer加载/测量阶段区分。
-完整回归与新源码绑定的环境回执在本页收尾记录；历史954、原生80及探针58属于上一轮独立结果，不冒充本轮本机执行。
+固定修复提交 `c1aecae120c6c33eefdfc8be12346549077598fb`：本机 `uv run --no-sync pytest tests qa -q` 完整 **979/979**（129.13秒，1条既有Starlette弃用警告）。
+
+[修复CI36555733374](https://github.com/262412/-Whynote/actions/runs/36555733374)质量及原生任务通过：核心936通过/3个Windows专用跳过，保留S0 9/9，manual 31/31；原生80/80、探针58/58。后两项为本轮CI执行，不冒充本机重跑。
+
+[实际环境回执](evidence/q3839-environment.json)绑定修复后源码与固定运行时：VERIFIED_FOR_FREEZE；本机IPv4/IPv6 TCP/UDP正对照送达、沙箱均未送达、零网络capability；第二进程互斥拒绝；超时和注入取消后Job归零，下一进程可成功；三次实际Laya/CUDA合成A/B/C均ok。它是开发者重新核验的指定技术范围，不是外部UDP接收实验、在线宿主边界或完整安全认证；也不等于已批准执行冻结。旧环境回执保留，不能替代当前源码的回执。
+
+失败、聚焦和完整测试原始日志保留于工作树 `var/q3839/`，修复前CI日志在 `var/q3839-ci-before.log`；无真实上下文进入本轮调用。
 
 ## 当前基线与剩余项
 
