@@ -102,7 +102,17 @@ def classify(response, item, scheme):
     return response
 
 
-def execute(output, factory, fingerprint, *, resume=False, guard=lambda: None, cancelled=lambda: False, progress=print):
+def execute(
+    output,
+    factory,
+    fingerprint,
+    *,
+    resume=False,
+    guard=lambda: None,
+    admission_guard=lambda: None,
+    cancelled=lambda: False,
+    progress=print,
+):
     output = Path(output)
     plan = read_plan(output)
     runtime_path = output / "runtime.json"
@@ -139,8 +149,8 @@ def execute(output, factory, fingerprint, *, resume=False, guard=lambda: None, c
         db.commit()
         with factory() as worker:
             worker.segment_id = segment
-            for input_id, group_id, excluded, raw in inputs.execute(
-                "SELECT input_id,group_id,excluded,payload FROM inputs ORDER BY ordinal"
+            for input_id, group_id, excluded in inputs.execute(
+                "SELECT input_id,group_id,excluded FROM inputs ORDER BY ordinal"
             ):
                 item = None
                 for scheme in plan["schemes"]:
@@ -151,7 +161,10 @@ def execute(output, factory, fingerprint, *, resume=False, guard=lambda: None, c
                     if cancelled():
                         raise KeyboardInterrupt
                     guard()
-                    item = item or json.loads(raw)
+                    admission_guard()
+                    if item is None:
+                        raw = inputs.execute("SELECT payload FROM inputs WHERE input_id=?", (input_id,)).fetchone()[0]
+                        item = json.loads(raw)
                     attempt = uuid.uuid4().hex
                     identity = common | {"input_id": input_id, "scheme": scheme, "attempt_id": attempt}
                     append(journal, identity | {"event": "started", "at": now()})
@@ -177,14 +190,23 @@ def execute(output, factory, fingerprint, *, resume=False, guard=lambda: None, c
                             )
                             payload = {k: item[k] for k in ("input_id", "state", "evidence_kinds")} | {"scheme": scheme}
                             try:
+                                admission_guard()
                                 response = worker.invoke(payload)
                             except ReplayError as exc:
+                                if str(exc) == "source_expired":
+                                    raise
                                 require(str(exc) in ERRORS, str(exc))
                                 response = {"error": str(exc)}
                             result = classify(response, item, scheme)
                         guard()
                     except KeyboardInterrupt:
                         result = {"bucket": "interrupted", "error": "cancelled_result_unknown"}
+                    except ReplayError as exc:
+                        result = (
+                            {"bucket": "skipped", "error": "source_expired"}
+                            if str(exc) == "source_expired"
+                            else {"bucket": "technical_failure", "error": "uncaught_error"}
+                        )
                     except BaseException:
                         result = {"bucket": "technical_failure", "error": "uncaught_error"}
                     elapsed = (time.perf_counter() - before) * 1000
@@ -221,9 +243,13 @@ def execute(output, factory, fingerprint, *, resume=False, guard=lambda: None, c
                     require(result.get("error") != "uncaught_error", "uncaught_error")
                     if result["bucket"] == "interrupted":
                         raise KeyboardInterrupt
+                    require(result.get("error") != "source_expired", "source_expired")
+                    admission_guard()
             guard()
     except KeyboardInterrupt:
         error, status = "cancelled", "STOPPED"
+    except ReplayError as exc:
+        error, status = ("source_expired" if str(exc) == "source_expired" else "uncaught_error"), "STOPPED"
     except Exception:
         error, status = "uncaught_error", "STOPPED"
     finally:
@@ -247,6 +273,7 @@ class Worker:
     def __init__(self, box, config, record, cancelled):
         self.box, self.config, self.record, self.cancelled = box, config, record, cancelled
         self.session = None
+        self.admission_guard = lambda: None
 
     def close(self):
         if self.session:
@@ -257,6 +284,7 @@ class Worker:
         from .windows_session import ResidentSession
 
         try:
+            self.admission_guard()
             if self.session is None:
                 command = trusted_command(
                     self.config["python"],
@@ -285,9 +313,9 @@ class Worker:
                         "segment_id": self.segment_id,
                     }
                 )
-            raw = self.session.request(
-                json.dumps(payload, ensure_ascii=False).encode(), self.config["request_timeout"], self.cancelled
-            )
+            encoded = json.dumps(payload, ensure_ascii=False).encode()
+            self.admission_guard()
+            raw = self.session.request(encoded, self.config["request_timeout"], self.cancelled)
             result = json.loads(raw)
             if result.get("error") in ("worker_failed", "uncaught_error"):
                 self.close()
@@ -340,6 +368,9 @@ def real_run(output, config, *, resume=False):
                 "run_fingerprint_changed",
             )
 
+        def admission_guard():
+            require(all(datetime_valid(source["expires_at"]) for source in plan["sources"]), "source_expired")
+
         cancel_file = output / "cancel.request"
 
         @contextlib.contextmanager
@@ -359,12 +390,22 @@ def real_run(output, config, *, resume=False):
                     lambda row: append(output / "journal.jsonl", row | {"run_id": plan["run_id"], "at": now()}),
                     cancel_file.exists,
                 )
+                worker.admission_guard = admission_guard
                 try:
                     yield worker
                 finally:
                     worker.close()
 
-        result = execute(output, factory, fingerprint, resume=resume, guard=guard, cancelled=cancel_file.exists)
+        admission_guard()
+        result = execute(
+            output,
+            factory,
+            fingerprint,
+            resume=resume,
+            guard=guard,
+            admission_guard=admission_guard,
+            cancelled=cancel_file.exists,
+        )
         require(
             runtime_hash(config["python"], config["base_python"]) == fingerprint["runtime_sha256"],
             "runtime_changed_during_run",
