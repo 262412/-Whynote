@@ -1,0 +1,46 @@
+{
+  "scope": "developer_synthetic_accounting_only",
+  "recorded_at": "2026-09-29T07:51:27.388820+00:00",
+  "base_commit": "c153fb6db8d71fe6be46ce3b620763cd7d2521be",
+  "requirements": [
+    "FR-05",
+    "FR-06",
+    "FR-09",
+    "FR-14",
+    "FR-15",
+    "TD-02",
+    "TD-07",
+    "TD-08",
+    "TD-11",
+    "TD-14",
+    "D-20"
+  ],
+  "source_sha256": {
+    "src/whynote/self_review.py": "80871b0a7f12036afb3868781cc8d63f22d05cab52e7c65b7fd663f495eb853f",
+    "src/whynote/self_review_contract.py": "4ed3d47ee35756d6c9ec18d1c06692a508823768203368cb9835d95511a91fc8",
+    "src/whynote/self_review_metrics.py": "54e9c3a37f27ad09d09e409a53abf543b36757ddeec7e3fa377c9fc4a4de8c4f",
+    "tests/test_self_review.py": "9f5a1b543bf0950930c193bcbf1d3fb1ef73fbf0942be407ecb9d3ecbb912f2e"
+  },
+  "focused": {
+    "passed": 123,
+    "new_tests": 65,
+    "old_replay_tests": 58
+  },
+  "full": {
+    "passed": 906,
+    "failed": 0,
+    "seconds": 111.65,
+    "warnings": 1,
+    "command": "uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_acceptance.py -q",
+    "log_sha256": "c723941fe9fe07584a03691aab34d1653313cf5dfa7510544bdd4568fe96d1d3"
+  },
+  "ruff_check": "passed",
+  "ruff_format": {
+    "passed": true,
+    "files": 105
+  },
+  "real_evaluation_executed": false,
+  "local_native_or_browser_rerun": false,
+  "independent_acceptance": false,
+  "production_approved": false
+}
