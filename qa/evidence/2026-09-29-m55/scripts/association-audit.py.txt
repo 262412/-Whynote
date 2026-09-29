@@ -1,0 +1,46 @@
+"""Author cross-check of stored targets against pinned source rows, without calling the mapper."""
+import hashlib,json,sqlite3
+from pathlib import Path
+from whynote.explore_inputs import source_rows
+root=Path('D:/PythonProject/jev项目/var/research/m55');run=root/'runs/batch-1000-final'
+manifest=json.loads((run/'manifest.json').read_text(encoding='utf-8'))
+receipt={'scope':'author_exact_source_association_not_independent_labels','run_id':manifest['run_id'],'sources':{}}
+with sqlite3.connect(run/'inputs.sqlite3') as db:
+ for batch in manifest['sources']:
+  name=batch['source'];items=[json.loads(raw) for (raw,) in db.execute('SELECT payload FROM inputs WHERE source=? ORDER BY ordinal',(name,))]
+  end=manifest['source_counts'][name]['scanned'];rows={}
+  stream=source_rows(batch['path'],name)
+  try:
+   for index,row,error in stream:
+    if index>=end:break
+    rows[index]=row
+  finally:stream.close()
+  for item in items:
+   index=item['row_id'];row=rows[index]
+   assert item['revision']==batch['revision'] and item['file_sha256']==batch['sha256']
+   if name=='helpsteer3':
+    context=row['context'];answer=row[item['target_id']]
+    assert item['reference']['feedback']==row['feedback'+item['target_id'][-1]]
+    assert item['reference']['origin']=='evaluator'
+   elif name=='wildfb':
+    context=row['history']+row['messages'][:1];answer=row['messages'][1]['content']
+    assert item['target_id']=='messages/1'
+    assert item['reference']['feedback']==[row['user_feedback']['content']]
+    assert item['reference']['automated_label']==row['label']
+   else:
+    first=item['reference']['conversation_start_row'];assert rows[first]['UtterranceId']==0
+    segment=[rows[k] for k in range(first,index+1)]
+    assert all(r['UtterranceId']==k and r['TurnId']==k//2+1 for k,r in enumerate(segment))
+    assert all(r['Role']==('User' if k%2==0 else 'Agent') for k,r in enumerate(segment))
+    context=[{'role':'user' if r['Role']=='User' else 'assistant','content':r['Content']} for r in segment[:-1]]
+    answer=row['Content'];following=rows.get(index+1)
+    expected=[following['Content']] if following and following['UtterranceId']!=0 and following['Role']=='User' else []
+    assert item['reference']['feedback']==expected
+    assert all(value==row.get(key) for key,value in item['reference']['automated_annotation'].items())
+   assert item['context']==context and item['answer']==answer
+   assert json.loads(item['state'])=={'context':context,'answer':answer}
+   assert hashlib.sha256(item['state'].encode()).hexdigest()==item['state_sha256']
+  receipt['sources'][name]={'targets_checked':len(items),'exact_context_answer_reference_match':True,'state_keys':['context','answer']}
+receipt['status']='PASSED';receipt['raw_body_in_receipt']=False
+(root/'association-audit.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
+print(json.dumps(receipt),flush=True)

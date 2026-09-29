@@ -10,5 +10,25 @@
   {
     "name": "endurance.py.txt",
     "sha256": "525b3907c61de451b08a9bd00cc1dce2bc30c6c70ef62b3a34a97e9ec94495d3"
+  },
+  {
+    "name": "resident-qualification-final.py.txt",
+    "sha256": "3ae5231835c7c13e96540ecc80e6b8ee9f833f36095831fc817c7acd266a27d6",
+    "newline": "LF"
+  },
+  {
+    "name": "cancel-resume-final.py.txt",
+    "sha256": "69e47dec6f3418bc76dbfadf2a93cca2ad22e1b6cf7dc3539009f9c16cddbf2d",
+    "newline": "LF"
+  },
+  {
+    "name": "endurance-final.py.txt",
+    "sha256": "26dab1c8ff24badc688251e7adffa9d47b693d91a0713a0d4dafc0b020e79081",
+    "newline": "LF"
+  },
+  {
+    "name": "association-audit.py.txt",
+    "sha256": "bade5ac5e9800e684d2e07b1d59b50b57b1809cfe5485e04064ad4b99151e597",
+    "newline": "LF"
   }
 ]
