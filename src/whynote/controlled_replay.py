@@ -157,15 +157,16 @@ def execute_slots(setup, projections, invoke, output, *, guard=lambda: None):
                         try:
                             response = invoke(payload_for(projection, sample["input_id"], scheme))
                         except ReplayError as exc:
-                            # Only fixed per-attempt errors continue. Isolation/cleanup/hash failures stop the run.
+                            # Normalize fixed errors so the failed slot can be durably recorded before stopping.
                             require(str(exc) in ERRORS, str(exc))
                             response = {"error": str(exc)}
                     elapsed = (time.perf_counter() - started) * 1000
                     guard()
                     row = prediction(sample, scheme, run, response, elapsed)
-                    rows.append(row)
                     journal_record(journal, {**common, "event": "completed", "prediction": row})
-        except BaseException:
+                    rows.append(row)
+                    require(row["error"] != "uncaught_error", "uncaught_error")
+        except BaseException as exc:
             journal_record(
                 journal,
                 {
@@ -173,7 +174,9 @@ def execute_slots(setup, projections, invoke, output, *, guard=lambda: None):
                     "run_id": run["run_id"],
                     "completed_slots": len(rows),
                     "status": "INCONCLUSIVE",
-                    "error": "execution_stopped",
+                    "error": "uncaught_error"
+                    if isinstance(exc, ReplayError) and str(exc) == "uncaught_error"
+                    else "execution_stopped",
                 },
             )
             raise

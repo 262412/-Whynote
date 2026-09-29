@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--model-dir", required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
     args = parser.parse_args()
+    failure_code = "uncaught_error"
     try:
         raw = sys.stdin.buffer.read(1048577)
         require(len(raw) <= 1048576, "input_bytes_exceeded")
@@ -56,11 +57,15 @@ def main():
         # Suppress SDK stdout; stderr is discarded by the supervisor, never persisted.
         with contextlib.redirect_stdout(sys.stderr):
             if payload["operation"] == "measure":
-                result = {"measurement": measure_budget(load_tokenizer(args.model_dir), state)}
+                failure_code = "model_load_failed"
+                tokenizer = load_tokenizer(args.model_dir)
+                failure_code = "uncaught_error"
+                result = {"measurement": measure_budget(tokenizer, state)}
             else:
                 require(len(state.encode()) <= 8192, "input_bytes_exceeded")
                 # Validate tokenizer/runtime before loading; laya verifies all pinned
                 # artifact hashes. Path canonicalization belongs to the supervisor.
+                failure_code = "model_load_failed"
                 load_tokenizer(args.model_dir)
                 import laya
                 import torch
@@ -72,6 +77,7 @@ def main():
                     and agent.cfg.get("head_max_len") == 256,
                     "model_load_failed",
                 )
+                failure_code = "uncaught_error"
                 torch.manual_seed(42)
                 if args.device == "cuda":
                     torch.cuda.manual_seed_all(42)
@@ -101,5 +107,5 @@ def main():
     except ReplayError as exc:
         result = {"error": str(exc)}
     except Exception:
-        result = {"error": "model_load_failed"}
+        result = {"error": failure_code}
     print(json.dumps(result, ensure_ascii=False, allow_nan=False))

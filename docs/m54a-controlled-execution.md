@@ -64,4 +64,11 @@ Windows实际运行显式设置TORCHDYNAMO_DISABLE=1，防止Transformers类定�
 
 ### 失败阶段与不可观测路由
 
+Q-38/Q-39修复约定：uncaught_error通过错误信封、ReplayError或完整prediction到达监督器时，
+先追加并fsync该槽的completed失败记录，再追加stopped并抛出固定uncaught_error；不启动下一槽，
+不写完整bundle/report。completed_slots表示已持久化结果的槽数，包含失败，不表示成功数。
+停止记录仅保留固定分类，不复制异常正文。原有journal字段不变，旧审计记录不迁移。
+model_load_failed仅用于tokenizer/SDK/模型加载与模型配置核验；加载完成后的初始化或策略未知异常
+使用uncaught_error。SDK预测的既有worker_failed及其他计划内错误保持可记录、可继续。
+
 SDK推理异常固定为worker_failed并保留infer_scheme已完成路由及失败阶段；模型尚未加载才使用model_load_failed。没有完整worker回执的超时、传输或非法响应按route_status=failed表示路由结果不可用，不能声称路由从未尝试，也不纳入条件路由遗漏分母。无法观察到的中间结果不补写为成功。预算/材料未通过及模型加载失败使用not_attempted。此为新执行器到既有v1统计的映射，旧事件和标签契约不变。
