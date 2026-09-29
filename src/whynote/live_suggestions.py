@@ -11,7 +11,7 @@ from pathlib import Path
 from .laya_local import MODEL, REVISION
 from .replay import infer_scheme, sample
 from .replay_laya import ReplayError, require
-from .task_reasons import TASK_TYPES
+from .task_reasons import TASK_TYPES, ReasonContractError
 from .template_suggestions import prepare
 
 VERSION = "m5-live-laya-v1"
@@ -96,17 +96,20 @@ def presentation(question, answer, object_version, result):
     require(isinstance(result["reason_ids"], list) and len(result["reason_ids"]) <= 1, "invalid_response")
     if result["fallback_used"]:
         require(result["route"] == "general" and "original_code" in evidence(question, answer), "invalid_response")
-    return prepare(
-        question,
-        answer,
-        object_version,
-        {
-            "tasks": ["mixed" if result["fallback_used"] else result["route"]],
-            "outcome": result["outcome"],
-            "reason_ids": result["reason_ids"],
-            "citations": {},
-        },
-    )
+    try:
+        return prepare(
+            question,
+            answer,
+            object_version,
+            {
+                "tasks": ["mixed" if result["fallback_used"] else result["route"]],
+                "outcome": result["outcome"],
+                "reason_ids": result["reason_ids"],
+                "citations": {},
+            },
+        )
+    except ReasonContractError:
+        raise ReplayError("invalid_response") from None
 
 
 async def evaluate(config, question, answer):

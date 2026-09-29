@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "changed_source": false,
+      "mode": "normal",
+      "returncode": 0
+    },
+    {
+      "changed_source": false,
+      "mode": "-O",
+      "returncode": 0
+    },
+    {
+      "changed_source": false,
+      "mode": "environment",
+      "returncode": 0
+    },
+    {
+      "changed_source": true,
+      "mode": "normal",
+      "returncode": 1
+    },
+    {
+      "changed_source": true,
+      "mode": "-O",
+      "returncode": 1
+    },
+    {
+      "changed_source": true,
+      "mode": "environment",
+      "returncode": 1
+    }
+  ],
+  "source_restored": true,
+  "existing_build_verified": true,
+  "scope": "Real pinned patched source; no rebuild or inference"
+}

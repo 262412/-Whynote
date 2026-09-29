@@ -19,7 +19,8 @@ def digest(path):
 
 def serve(args):
     source, data = args.source.resolve(), args.data_dir.resolve()
-    assert subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip() == UPSTREAM
+    if subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip() != UPSTREAM:
+        raise ValueError("Unexpected upstream revision")
     patch = ROOT / "integrations/openwebui/patches/native-v0.11.4-s0.patch"
     timing_patch = ROOT / "integrations/openwebui/patches/manual-v0.11.4-timing.patch"
     subprocess.run(
@@ -34,7 +35,8 @@ def serve(args):
         ],
         check=True,
     )
-    assert (source / "build/index.html").is_file(), "Build the pinned patched frontend first"
+    if not (source / "build/index.html").is_file():
+        raise ValueError("Build the pinned patched frontend first")
     data.mkdir(parents=True, exist_ok=False)
     (data / "static").mkdir()
     private = {key: secrets.token_urlsafe(32) for key in ("secret", "version_key", "admin_password")}

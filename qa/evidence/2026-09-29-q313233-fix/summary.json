@@ -1,0 +1,20 @@
+{
+  "base": "f453ff8be2626e46f6cdfc086ea2e733961ccc18",
+  "original_qa_tests_modified": false,
+  "before": {
+    "passed": 0,
+    "failed": 4
+  },
+  "after": {
+    "full_passed": 802,
+    "full_failed": 0,
+    "new_boundaries_passed": 23,
+    "initial_focused_passed": 70,
+    "ruff": true
+  },
+  "temporary_port_8141_closed": true,
+  "browser_inference_frontend_build_rerun": false,
+  "independent_retest": "pending",
+  "outbound_isolation_concurrency": "open",
+  "production": "NO-GO"
+}

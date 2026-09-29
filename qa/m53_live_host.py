@@ -20,6 +20,11 @@ BUILD_RECEIPT = ".whynote-m53-build.json"
 
 def validate_source(source):
     """Compare the complete patch stack in a temporary index without changing the checkout."""
+    from s1_browser_host import UPSTREAM
+
+    command = ["git", "-C", str(source)]
+    if subprocess.check_output([*command, "rev-parse", "HEAD"], text=True).strip() != UPSTREAM:
+        raise ValueError("Unexpected upstream revision")
     with tempfile.TemporaryDirectory(prefix="m53-index-") as directory:
         env = {**os.environ, "GIT_INDEX_FILE": str(Path(directory) / "index")}
         command = ["git", "-C", str(source)]
@@ -30,10 +35,12 @@ def validate_source(source):
                 env=env,
                 check=True,
             )
-        assert not subprocess.check_output([*command, "diff", "--name-only"], env=env).strip(), "Patched source differs"
-    assert (source / "src/lib/whynote/suggestion_dialog.js").read_bytes() == (
+        if subprocess.check_output([*command, "diff", "--name-only"], env=env).strip():
+            raise ValueError("Patched source differs")
+    if (source / "src/lib/whynote/suggestion_dialog.js").read_bytes() != (
         ROOT / "integrations/openwebui/suggestion_dialog.js"
-    ).read_bytes()
+    ).read_bytes():
+        raise ValueError("Suggestion dialog differs")
 
 
 def source_fingerprint(source):
@@ -104,6 +111,37 @@ def validate_model_options(args):
         path = Path(value).resolve()
         if not (path.is_file() if is_file else path.is_dir()):
             raise ValueError(f"Invalid --{name.replace('_', '-')} path")
+    # This child only imports the pinned SDK and hashes local files. It never loads a model.
+    code = (
+        "import sys; sys.path.insert(0, sys.argv[1]); from whynote.laya_local import preflight; preflight(sys.argv[2])"
+    )
+    try:
+        subprocess.run(
+            [
+                str(Path(args.model_python).resolve()),
+                "-I",
+                "-B",
+                "-c",
+                code,
+                str(ROOT / "src"),
+                str(Path(args.model_dir).resolve()),
+            ],
+            check=True,
+            timeout=60,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            env={
+                **os.environ,
+                "HF_HUB_OFFLINE": "1",
+                "TRANSFORMERS_OFFLINE": "1",
+                "HF_HUB_DISABLE_TELEMETRY": "1",
+                "USE_TF": "0",
+            },
+            **({"creationflags": 0x08000000} if sys.platform == "win32" else {}),
+        )
+    except (OSError, subprocess.SubprocessError):
+        raise ValueError("Local runtime preflight failed; verify interpreter, pinned SDK and model files") from None
 
 
 def provision(args):
@@ -254,11 +292,6 @@ def main():
         parser.error("--source is required for build/serve")
     if args.command in {"serve", "provision"} and args.data_dir is None:
         parser.error("--data-dir is required for serve/provision")
-    if args.command == "provision":
-        try:
-            validate_model_options(args)
-        except ValueError as exc:
-            parser.error(str(exc))
     if args.command == "build":
         build(args.source.resolve())
         return
@@ -269,7 +302,10 @@ def main():
         args.native_ratings = False
         s1_browser_host.serve(args)
     else:
-        provision(args)
+        try:
+            provision(args)
+        except ValueError as exc:
+            parser.error(str(exc))
 
 
 if __name__ == "__main__":
