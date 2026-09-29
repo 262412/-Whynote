@@ -38,3 +38,12 @@ uv run --no-sync ruff format --check src tests integrations qa
 Q-30待独立复验；出站隔离及跨进程并发评审仍阻断，需运行环境维护者处理后由QA核验。
 非作者APPROVED、来源/兼容/回滚及结果签署仍缺，未合并，生产NO-GO。
 原主目录代码、旧数据库、失败日志和QA报告均保留；原PR分支/工作树继续用于复验。
+
+## 交付回执
+
+修复提交6aa60a4的[CI36519989314](https://github.com/262412/-Whynote/actions/runs/36519989314)通过：
+quality为727核心＋9保留S0＋31manual，共767；native为80原生及58探针。
+追加文档后仍核对最终head，不引用旧绿色代替。
+飞书按原需求/字段/当前任务局部更新并读回PRD440→448、技术433→440；
+[逐条回执](../qa/evidence/2026-09-29-q30-fix/feishu-sync.json)。原独立失败原文及链接保留。
+本轮不启动临时宿主服务；分支和工作树保留等待复验。主目录只同步当前开发计划，其他脏/未跟踪文件受hash保护。
