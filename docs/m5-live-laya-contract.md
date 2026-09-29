@@ -63,3 +63,17 @@ M5-3宿主新增build命令：先核对完整补丁栈和客户端，要求Node2
 失败构建撤销旧构建记录；无给旧目录直接补签记录的命令。旧构建需重新运行build。
 记录面向可信本地操作者的复现一致性，不能抵抗拥有本机写权限者同时伪造源码、产物与记录；
 不将它称为独立安全签署。业务事件、Q-27时间契约和生产开关均不改变。
+
+Q-34：以固定HEAD应用四补丁后的临时索引为源码集合，额外只允许显式复制的
+`src/lib/whynote/suggestion_dialog.js`；其他非忽略未跟踪文件在build/serve前拒绝。
+沿用Git忽略规则排除依赖、缓存和构建输出；不把新增源码自动认可为批准内容。
+
+Q-35（FR-13，TD-04/10）：M5-3宿主清单增加`deployment_manifest_version=2`。
+启动记录`deployment_state=not_verified`、`action_sha256=null`、`planned_action_sha256`，
+以及本仓库Whynote包和Open WebUI集成的Python/JSON文件原始字节摘要`support_modules_sha256`。
+该模块集合在初始化前后须保持不变，标识该宿主启动时的支持代码，不替代依赖锁文件或运行隔离证明。
+Action的摘要规范为HTTP Function文本统一CRLF/CR为LF后UTF-8编码的SHA-256。
+全部初始化步骤成功后，用管理员身份重新GET实际Action，核对全文、激活和非全局状态，
+再原子替换清单为`deployment_state=verified`，写实际`action_sha256`、`action_source`及`verified_at`。
+任一初始化/读回/模块一致性检查失败不得产生verified记录；部分初始化仍可能有宿主副作用，不能当成Q-33零写入保证。
+旧清单不回填历史成功，M5-3初始化需新工具启动的新实例；业务事件不迁移，旧S1工具语义不变。

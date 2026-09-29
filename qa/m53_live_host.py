@@ -37,6 +37,13 @@ def validate_source(source):
             )
         if subprocess.check_output([*command, "diff", "--name-only"], env=env).strip():
             raise ValueError("Patched source differs")
+        extra = set(
+            subprocess.check_output([*command, "ls-files", "--others", "--exclude-standard", "-z"], env=env)
+            .decode("utf-8")
+            .split("\0")
+        ) - {"", "src/lib/whynote/suggestion_dialog.js"}
+        if extra:
+            raise ValueError("Unapproved untracked source files")
     if (source / "src/lib/whynote/suggestion_dialog.js").read_bytes() != (
         ROOT / "integrations/openwebui/suggestion_dialog.js"
     ).read_bytes():
@@ -144,6 +151,60 @@ def validate_model_options(args):
         raise ValueError("Local runtime preflight failed; verify interpreter, pinned SDK and model files") from None
 
 
+ACTION_SOURCE = "integrations/openwebui/local_chain_action.py"
+
+
+def action_digest(content):
+    return hashlib.sha256(content.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")).hexdigest()
+
+
+def support_modules():
+    return {
+        path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for folder in (ROOT / "src/whynote", ROOT / "integrations/openwebui")
+        for path in sorted(folder.rglob("*"))
+        if path.is_file() and path.suffix in {".py", ".json"} and "__pycache__" not in path.parts
+    }
+
+
+def initial_manifest():
+    return {
+        "deployment_manifest_version": 2,
+        "deployment_state": "not_verified",
+        "action_sha256": None,
+        "planned_action_sha256": action_digest((ROOT / ACTION_SOURCE).read_text(encoding="utf-8")),
+        "action_source": ACTION_SOURCE,
+        "action_hash_encoding": "UTF-8/LF",
+        "support_modules_sha256": support_modules(),
+    }
+
+
+def verify_deployment(api, data, content, manifest):
+    response = api.get("/api/v1/functions/id/whynote_s1_action")
+    response.raise_for_status()
+    deployed = response.json()
+    if (
+        deployed.get("content") != content
+        or deployed.get("is_active") is not True
+        or deployed.get("is_global") is not False
+        or support_modules() != manifest["support_modules_sha256"]
+    ):
+        raise ValueError("Deployed Action or support modules differ")
+    record = {
+        **manifest,
+        "deployment_state": "verified",
+        "action_sha256": action_digest(deployed["content"]),
+        "verified_at": int(time.time()),
+    }
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=data, delete=False) as stream:
+        temporary = Path(stream.name)
+        json.dump(record, stream, indent=2)
+    try:
+        os.replace(temporary, data / "manifest.json")
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def provision(args):
     validate_model_options(args)
     import httpx
@@ -154,8 +215,12 @@ def provision(args):
     from whynote.research import register_source
     from whynote.s1 import PIPE_ID, TrialStore
 
-    s1_browser_host.provision(args)
     data = args.data_dir.resolve()
+    manifest = json.loads((data / "manifest.json").read_text(encoding="utf-8"))
+    if any(manifest.get(key) != value for key, value in initial_manifest().items()):
+        raise ValueError("Fresh M5-3 host with matching deployment manifest is required")
+    content = (ROOT / ACTION_SOURCE).read_text(encoding="utf-8")
+    s1_browser_host.provision(args)
     config_path = data / "trial.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
     private = json.loads((data / "private.json").read_text(encoding="utf-8"))
@@ -164,13 +229,14 @@ def provision(args):
             "/api/v1/auths/signin", json={"email": "s1-admin@example.invalid", "password": private["admin_password"]}
         )
         response.raise_for_status()
-        api.headers["Authorization"] = "Bearer " + response.json()["token"]
+        admin_authorization = "Bearer " + response.json()["token"]
+        api.headers["Authorization"] = admin_authorization
         response = api.post(
             "/api/v1/functions/id/whynote_s1_action/update",
             json={
                 "id": "whynote_s1_action",
                 "name": "知因点踩 / 撤销",
-                "content": (ROOT / "integrations/openwebui/local_chain_action.py").read_text(encoding="utf-8"),
+                "content": content,
                 "meta": {},
             },
         )
@@ -273,6 +339,10 @@ def provision(args):
         ),
         encoding="utf-8",
     )
+    with httpx.Client(
+        base_url=args.base_url, trust_env=False, timeout=60, headers={"Authorization": admin_authorization}
+    ) as api:
+        verify_deployment(api, data, content, manifest)
     print("Registered synthetic case:", args.base_url + "/c/" + chat.id)
 
 
@@ -300,6 +370,7 @@ def main():
         args.entry_patch = "m5-v0.11.4-templates.patch"
         os.environ.update(WHYNOTE_LOCAL_CHAIN="1", WHYNOTE_TEMPLATE_SYNTHETIC="1")
         args.native_ratings = False
+        args.manifest_fields = initial_manifest()
         s1_browser_host.serve(args)
     else:
         try:

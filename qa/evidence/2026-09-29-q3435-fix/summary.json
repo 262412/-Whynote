@@ -1,0 +1,16 @@
+{
+  "base": "2a23dd4",
+  "before_q34_failed": 3,
+  "independent_tests_modified": false,
+  "after": {
+    "related_passed": 59,
+    "new_boundaries_passed": 11,
+    "full_passed": 816,
+    "full_failed": 0,
+    "ruff": true
+  },
+  "temporary_port_8143_closed": true,
+  "browser_inference_build_rerun": false,
+  "independent_retest": "pending",
+  "production": "NO-GO"
+}

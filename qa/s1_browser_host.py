@@ -101,6 +101,7 @@ def serve(args):
         "python": sys.version,
         "scope": "synthetic loopback; flags are not network isolation",
     }
+    manifest.update(getattr(args, "manifest_fields", {}))
     (data / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     sys.path[:0] = [str(source / "backend"), str(ROOT / "src"), str(ROOT)]
     import uvicorn

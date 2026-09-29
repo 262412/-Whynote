@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "unapproved_route": false,
+      "mode": "normal",
+      "returncode": 0
+    },
+    {
+      "unapproved_route": false,
+      "mode": "-O",
+      "returncode": 0
+    },
+    {
+      "unapproved_route": false,
+      "mode": "environment",
+      "returncode": 0
+    },
+    {
+      "unapproved_route": true,
+      "mode": "normal",
+      "returncode": 1
+    },
+    {
+      "unapproved_route": true,
+      "mode": "-O",
+      "returncode": 1
+    },
+    {
+      "unapproved_route": true,
+      "mode": "environment",
+      "returncode": 1
+    }
+  ],
+  "probe_removed": true,
+  "existing_build_verified": true,
+  "scope": "Actual fixed source validation; unapproved route never compiled or served"
+}
