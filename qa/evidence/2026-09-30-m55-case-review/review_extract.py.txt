@@ -62,4 +62,3 @@ for src in counts:
    'skip_pattern_types':collections.Counter('email' if '@' in m.group() else 'private_key' if 'PRIVATE KEY' in m.group() else 'ipv4' for m in PII.finditer(p['state']))})
   (out/f'{src}-redacted.json').write_text(json.dumps(reviewed,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps({'counts':counts,'selected':len(chosen),'exposure_appends':len(chosen),'controlled_review_dir':str(out)},ensure_ascii=False))
-
