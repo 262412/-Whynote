@@ -13,6 +13,17 @@ from urllib.parse import parse_qs, urlparse
 from .explore_prepare import now, read_plan, save_json
 from .explore_run import BUCKETS, append, rebuild
 from .replay_laya import require
+from .task_reasons import load_reasons
+
+BUCKET_LABELS = {
+    "suggested": "有建议",
+    "abstained": "拒识／无匹配",
+    "technical_failure": "技术失败",
+    "ineligible": "输入超限",
+    "skipped": "明确跳过",
+    "interrupted": "中断未知",
+    "not_started": "未开始",
+}
 
 
 def quantile(db, expression, fraction):
@@ -165,6 +176,20 @@ def report(output):
     db.close()
     save_json(output / "summary.json", summary)
     body = "<h1>本机无标签诊断</h1><p>质量：NOT_EVALUATED。正确率、真实理由覆盖、路由遗漏与误导率：NA。</p>"
+    body += f"<p>运行：{summary['status']} · {plan['targets']} 个目标 · {plan['planned_slots']} 个方案槽 · 模型加载 {load_count} 次</p>"
+    body += "<table><tr><th>来源</th><th>扫描记录</th><th>目标</th><th>解析失败</th><th>关联失败</th><th>无目标轮次</th></tr>"
+    for source, count in plan["source_counts"].items():
+        body += (
+            "<tr><td>"
+            + html.escape(source)
+            + "</td>"
+            + "".join(
+                f"<td>{count.get(k, 0)}</td>"
+                for k in ("scanned", "targets", "parse_failed", "mapping_failed", "no_target")
+            )
+            + "</tr>"
+        )
+    body += "</table><p>" + " · ".join(f"{BUCKET_LABELS[k]}：{counts[k]}" for k in BUCKETS) + "</p>"
     body += "<p>此页不含正文。使用 view 入口后按案例按钮在本机查看，查看将登记探索暴露。</p>"
     body += (
         "<details open><summary>汇总与分母</summary><pre>"
@@ -172,14 +197,19 @@ def report(output):
         + "</pre></details>"
     )
     body += '<label>筛选失败／拒识／超限／任务：<input id="filter" oninput="filterRows()"></label><table><thead><tr><th>来源</th><th>结果</th><th>任务／理由</th><th>引用</th></tr></thead><tbody>'
+    reason_labels = {reason.reason_id: reason.label for reason in load_reasons()}
     for row in chosen:
         body += (
             '<tr class="case"><td>'
             + html.escape(row["source"])
             + "</td><td>"
-            + html.escape(row["bucket"] + " / " + (row["error"] or ""))
+            + html.escape(BUCKET_LABELS[row["bucket"]] + " / " + (row["error"] or ""))
         )
-        body += "</td><td>" + html.escape(str(row["task"]) + " / " + ", ".join(row["reasons"])) + "</td><td>"
+        body += (
+            "</td><td>"
+            + html.escape(str(row["task"]) + " / " + ", ".join(reason_labels.get(r, r) for r in row["reasons"]))
+            + "</td><td>"
+        )
         body += f"<button onclick=\"viewCase('{row['input_id']}')\">查看 {row['input_id'][:12]}</button></td></tr>"
     body += "</tbody></table><pre id='case'></pre><script>function filterRows(){let v=document.getElementById('filter').value.toLowerCase();document.querySelectorAll('.case').forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(v));}async function viewCase(id){let t=new URLSearchParams(location.search).get('token');if(!t){alert('请先运行 view 命令');return;}let r=await fetch('/case?id='+id+'&token='+encodeURIComponent(t));document.getElementById('case').textContent=await r.text();}</script>"
     page = (
@@ -232,6 +262,15 @@ def serve(output, port=0):
                     "目标答案": item["answer"],
                     "原反馈与自动注释（不进入模型）": item["reference"],
                 }
+                index = output / "report-index.sqlite3"
+                if index.exists():
+                    with sqlite3.connect(f"file:{index.as_posix()}?mode=ro", uri=True) as db:
+                        value["模型推测（未获用户确认）"] = [
+                            json.loads(r[0])
+                            for r in db.execute(
+                                "SELECT result FROM attempts WHERE input_id=? AND result IS NOT NULL", (key,)
+                            )
+                        ]
                 data, mime = json.dumps(value, ensure_ascii=False, indent=2).encode(), "application/json; charset=utf-8"
             else:
                 self.send_error(404)

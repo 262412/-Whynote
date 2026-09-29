@@ -80,6 +80,9 @@ class ResidentSession:
                 USE_TF="0",
                 PYTHONUNBUFFERED="1",
             )
+            # Torch calls makedirs even with compilation disabled. An absolute path
+            # probes denied ancestors; the already granted, read-only cwd suffices.
+            env["TORCHINDUCTOR_CACHE_DIR"] = "."
             block = c.create_unicode_buffer("\0".join(f"{key}={value}" for key, value in sorted(env.items())) + "\0")
             line = c.create_unicode_buffer(subprocess.list2cmdline(command))
             require(
