@@ -25,7 +25,7 @@
 
 Python 入口：`whynote.laya_local.LocalLaya.load(..., enabled=True)` 和 `evaluate_reason(state_factory, enabled=True)`。返回字段与现有 Jev 原因适配器对齐，但 provider 明确为 `laya_local`，版本是实际 checkpoint，绝不冒用 Jev 身份。页面调用 `POST /api/reason`；会话令牌从同源页面获取，请求字段是 `question`、`answer`、`feedback`。当前页面为独立手动模型测试入口，没有接入 Open WebUI 自动归因消费者。
 
-Laya 是原因分类模型，不能替代聊天生成模型。所有预测为 `model_inferred_unconfirmed`，未经本项目校准；700 模型 token / 8192 UTF-8 字节以内输入才被接受。详细边界见 [本地契约](laya-local-contract.md)。
+Laya 是原因分类模型，不能替代聊天生成模型。所有预测为 `model_inferred_unconfirmed`，未经本项目校准；700 模型 token / 8192 UTF-8 字节以内输入才被接受。详细边界见 [本地契约](https://github.com/262412/-Whynote/blob/9246dd5f143a02148a9328f79f5e188049f01563/docs/laya-local-contract.md)。
 
 ## 在新环境复现安装
 
