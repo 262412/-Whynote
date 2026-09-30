@@ -1,6 +1,7 @@
 """One bounded local research run; raw state stays in the admitted research directory."""
 
 import argparse
+import hashlib
 import json
 import sqlite3
 from collections import Counter
@@ -15,7 +16,6 @@ from whynote.replay import state_text
 from whynote.replay_laya import require
 from whynote.replay_runtime import model_lock, trusted_command
 from whynote.self_review_contract import budget_ok
-from whynote.source_mapping import digest
 from whynote.window_diagnostics import POLICY, QUESTION_VERSION, WINDOWS, fits, full_sequence, questions
 
 
@@ -212,7 +212,9 @@ def main():
         )
         cases.append(selected | {"state": item["state"], "expected": {}, "variant": "explicit"})
     schedule = [
-        {k: v for k, v in case.items() if k != "state"} | {"state_sha256": digest(case["state"])} for case in cases
+        {k: v for k, v in case.items() if k != "state"}
+        | {"state_sha256": hashlib.sha256(case["state"].encode()).hexdigest()}
+        for case in cases
     ]
     (output / "schedule.json").write_text(json.dumps(schedule, indent=2), encoding="utf-8")
     runtime = runtime_hash(args.python, args.base_python)
@@ -272,6 +274,7 @@ def main():
                     flush=True,
                 )
                 require(not response.get("error"), "diagnostic_failed")
+                require(response.get("state_sha256") == schedule[index]["state_sha256"], "worker_state_mismatch")
         finally:
             session.close()
     require(runtime_hash(args.python, args.base_python) == runtime, "runtime_changed")

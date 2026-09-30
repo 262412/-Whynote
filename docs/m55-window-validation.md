@@ -66,6 +66,8 @@
 
 ## 工程验证与复现
 
-新增13项测试覆盖三道预算、SDK/forward任一token改变即拒绝、head/选项截断、保留token、反馈/标签字段拒绝和无跨问题主要理由。tests首次1010/1010；随后新增宿主边界2项及QA40项，与新worker13项合跑53/53，合计1052个唯一用例通过；Ruff lint/format通过。本机模型已执行65次；后续只增加宿主对输入文件size/mtime指纹的逐次检查，未改变已测worker模块或问题。该宿主加固按测试验证，不冒充额外真实推理。
+新增13项测试覆盖三道预算、SDK/forward任一token改变即拒绝、head/选项截断、保留token、反馈/标签字段拒绝和无跨问题主要理由。tests首次1010/1010；随后新增宿主边界2项及QA40项，与新worker13项合跑53/53，合计1052个唯一用例通过；Ruff lint/format通过。本机模型已执行65次；后续增加宿主对输入文件size/mtime指纹和worker正文摘要的逐次检查，未改变已测worker模块或问题。该宿主加固按测试/对账验证，不冒充额外真实推理。
+
+证据核对发现首轮schedule与journal.case中名为`state_sha256`的值实际是JSON字符串编码摘要，而worker的同名字段是原始UTF-8摘要。原始证据未改写；[摘要对账](../qa/evidence/2026-09-30-m55-window/hash-reconciliation.json)从同批输入和固定合成构造重建65项，逐项确认两种摘要和实际worker输入一致。后续清单改为原始UTF-8摘要，并在宿主核对worker返回值；该修正后相关13/13再通过。没有因摘要格式问题新增模型调用。
 
 复现入口：`scripts/m55_window_validation.py theory|run --batch <原批次> --output <受控新目录> --model-dir <固定模型> --python <固定运行环境> --base-python <基Python目录>`。先theory后run，已有结果目录拒绝覆盖。实际数据/缓存到期沿用原manifest，不延长留存。普通日志/Git/飞书仅含ID、摘要和数值；原工作区和历史批次保留。
