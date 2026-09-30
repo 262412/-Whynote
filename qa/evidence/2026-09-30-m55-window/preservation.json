@@ -1,0 +1,11 @@
+{
+  "primary_files_unchanged": 92,
+  "original_inputs_hash_unchanged": true,
+  "new_measurement_records": 2916,
+  "new_real_model_call_records": 23,
+  "unique_real_model_targets": 16,
+  "exposure_ledger_sha256": "3acadaffbdb7dc209548b97005b0db45368037f3eb6545110d8672c0b9f3c988",
+  "reconciled_at": "2026-09-30T02:47:25.077386+00:00",
+  "retention": "original source expiry; no extension",
+  "sensitive_skipped": 84
+}
