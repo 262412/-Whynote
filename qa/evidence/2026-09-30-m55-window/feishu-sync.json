@@ -1,0 +1,92 @@
+{
+  "initial_revisions": {
+    "prd": 590,
+    "tech": 590
+  },
+  "final_revisions": {
+    "prd": 595,
+    "tech": 595
+  },
+  "updates": [
+    {
+      "document": "prd",
+      "item": "FR-05",
+      "revision_before": 591,
+      "revision_after": 592,
+      "block_after": "doxc6OA3IZeQbQ3e6jKD19fdWlh",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "prd",
+      "item": "M5-5c",
+      "revision_before": 592,
+      "revision_after": 593,
+      "block_after": "doxc6DZRfqOPt0XdBeuSBlmOeub",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "prd",
+      "item": "M5-5d",
+      "revision_before": 593,
+      "revision_after": 594,
+      "block_after": "doxc6EmNTe8OyP9qvImCfq9TPae",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "prd",
+      "item": "D-21",
+      "revision_before": 594,
+      "revision_after": 595,
+      "block_after": "doxc6ikj90CE7KqOkYGt9rey6Eh",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "tech",
+      "item": "TD-02",
+      "revision_before": 591,
+      "revision_after": 592,
+      "block_after": "doxc6vA6wqwoklCmdVuoMysoOof",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "tech",
+      "item": "TD-07",
+      "revision_before": 592,
+      "revision_after": 593,
+      "block_after": "doxc6hmcVyCXjankskwuRvJdeSc",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "tech",
+      "item": "M5-5c",
+      "revision_before": 593,
+      "revision_after": 594,
+      "block_after": "doxc6Kkb2x50tMW95NUW5gZYvbg",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    },
+    {
+      "document": "tech",
+      "item": "M5-5d",
+      "revision_before": 594,
+      "revision_after": 595,
+      "block_after": "doxc6IRcO7REqA9fD1EQgB0oa0f",
+      "exact_readback": true,
+      "old_block_archived": true,
+      "resources_and_links_preserved": true
+    }
+  ]
+}

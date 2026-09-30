@@ -52,7 +52,14 @@ def trusted_command(python, module, *args):
     python = Path(python).resolve(strict=True)
     package = str(Path(__file__).resolve().parents[1])
     require(
-        module in ("whynote.controlled_worker", "whynote.runtime_probe", "whynote.explore_worker"), "untrusted_worker"
+        module
+        in (
+            "whynote.controlled_worker",
+            "whynote.runtime_probe",
+            "whynote.explore_worker",
+            "whynote.window_diagnostics",
+        ),
+        "untrusted_worker",
     )
     bootstrap = f"import sys; sys.path.insert(0, sys.argv.pop(1)); from {module} import main; main()"
     return [str(python), "-I", "-B", "-X", "utf8", "-c", bootstrap, package, *map(str, args)]

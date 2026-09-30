@@ -1,0 +1,70 @@
+{
+  "planned_calls": 65,
+  "completed_calls": 65,
+  "full_encoding_verified": 65,
+  "cpu_fallbacks": 0,
+  "load_ms": 9406.150400000115,
+  "source_sha256": "51c3b8774d84d1ea8140da98399d7915e688e08aaec3ae2f394c774c65772639",
+  "runtime_sha256": "ee50fd92e3d554965c9cde4d009c51d507b45c25714681376fd9811ce532216e",
+  "cleanup_verified": true,
+  "groups": {
+    "2048-short": {
+      "calls": 12,
+      "latency_min_ms": 18.11499999894295,
+      "latency_max_ms": 20.08920000116632,
+      "latency_median_ms": 18.894649999310786,
+      "peak_gpu_mib": 1508.16064453125,
+      "max_state_tokens": 61
+    },
+    "2048-long": {
+      "calls": 5,
+      "latency_min_ms": 68.68410000060976,
+      "latency_max_ms": 157.58829999867885,
+      "latency_median_ms": 72.75429999936023,
+      "peak_gpu_mib": 1718.6533203125,
+      "max_state_tokens": 1698
+    },
+    "4096-short": {
+      "calls": 12,
+      "latency_min_ms": 18.45599999978731,
+      "latency_max_ms": 387.6761000010447,
+      "latency_median_ms": 21.56459999969229,
+      "peak_gpu_mib": 1508.16064453125,
+      "max_state_tokens": 61
+    },
+    "4096-long": {
+      "calls": 5,
+      "latency_min_ms": 228.55390000040643,
+      "latency_max_ms": 511.4590000011958,
+      "latency_median_ms": 435.3124999997817,
+      "peak_gpu_mib": 2343.25390625,
+      "max_state_tokens": 3698
+    },
+    "8192-short": {
+      "calls": 12,
+      "latency_min_ms": 18.988699999681558,
+      "latency_max_ms": 23.030500000459142,
+      "latency_median_ms": 19.625799999630544,
+      "peak_gpu_mib": 1508.16064453125,
+      "max_state_tokens": 61
+    },
+    "8192-long": {
+      "calls": 5,
+      "latency_min_ms": 567.0300999991014,
+      "latency_max_ms": 1736.6582000013295,
+      "latency_median_ms": 1392.3768000004202,
+      "peak_gpu_mib": 4690.99169921875,
+      "max_state_tokens": 7698
+    }
+  },
+  "original_short_pair_primary": {
+    "correct": 1,
+    "total": 6,
+    "formal_accuracy": null
+  },
+  "explicit_short_pair_primary": {
+    "correct": 5,
+    "total": 6,
+    "formal_accuracy": null
+  }
+}
