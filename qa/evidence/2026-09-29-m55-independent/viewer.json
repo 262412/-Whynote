@@ -1,0 +1,32 @@
+{
+  "http_checks": [
+    {
+      "case": "missing",
+      "status": 403
+    },
+    {
+      "case": "wrong",
+      "status": 403
+    },
+    {
+      "case": "host",
+      "status": 403
+    },
+    {
+      "case": "report",
+      "status": 200
+    },
+    {
+      "case": "unknown",
+      "status": 404
+    },
+    {
+      "case": "case",
+      "status": 200
+    }
+  ],
+  "case_view_exposure": 1,
+  "browser": "IAB summary and filter passed; click did not show case; Chrome connector failed; case UI unverified",
+  "synthetic_only": true,
+  "authentication_note": "fixed synthetic-only test capability; random generation not independently tested"
+}

@@ -1,0 +1,26 @@
+{
+  "first": {
+    "status": "STOPPED",
+    "quality": "NOT_EVALUATED",
+    "error": "cancelled"
+  },
+  "second": {
+    "status": "COMPLETED",
+    "quality": "NOT_EVALUATED",
+    "error": null
+  },
+  "summary_status": "PARTIAL",
+  "buckets": {
+    "suggested": 6,
+    "abstained": 0,
+    "technical_failure": 0,
+    "ineligible": 13,
+    "skipped": 0,
+    "interrupted": 1,
+    "not_started": 0
+  },
+  "unique_started": 20,
+  "duplicate_started": 0,
+  "old_journal_prefix_preserved": true,
+  "cancel_marker_preserved": true
+}

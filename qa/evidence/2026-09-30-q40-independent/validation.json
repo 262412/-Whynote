@@ -1,0 +1,113 @@
+{
+  "candidate": "382c95a18edd5d67fa79f8ee183828abddc15be3",
+  "main": "cdcfb15fec8474969d36e2955d70ba28ade01a06",
+  "source_sha256": "f41a4f28dd1bce79ceb681563723d07bcdaa00fecf9a1f52e987d949ae72d295",
+  "suites": {
+    "full": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "1039",
+        "time": "182.819",
+        "timestamp": "2026-09-30T00:12:00.317099+08:00",
+        "hostname": "DESKTOP-SI2HUQ8"
+      }
+    ],
+    "full_junit_sha256": "d1983bb589366ad9b8a28eb730dce1c771102a64c6f42c4cd71b58f4bfde5db0",
+    "native": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "80",
+        "time": "34.480",
+        "timestamp": "2026-09-30T00:12:36.652138+08:00",
+        "hostname": "DESKTOP-SI2HUQ8"
+      }
+    ],
+    "native_junit_sha256": "b744b9ba94c1132dfd4c00772d90ffb259599a269158d63e32d1ebcb0c8f07c5"
+  },
+  "q40_tests": [
+    {
+      "name": "test_expiry_during_request_preserves_terminal_and_remaining[abstained-1]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_expiry_during_request_preserves_terminal_and_remaining[abstained-102]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_expiry_during_request_preserves_terminal_and_remaining[timeout-1]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_expiry_during_request_preserves_terminal_and_remaining[timeout-102]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_expiry_during_request_preserves_terminal_and_remaining[cancelled-1]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_expiry_during_request_preserves_terminal_and_remaining[cancelled-102]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_one_of_two_sources_expiring_stops_whole_segment",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_actual_worker_checks_expiry_at_send_and_closes[False]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_actual_worker_checks_expiry_at_send_and_closes[True]",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_expiry_check_before_next_plaintext_read",
+      "properties": {},
+      "passed": true
+    },
+    {
+      "name": "test_retention_expiry_stops_before_next_payload[False]",
+      "properties": {
+        "actual_calls": "1",
+        "execution_status": "STOPPED",
+        "not_started": "101"
+      },
+      "passed": true
+    },
+    {
+      "name": "test_retention_expiry_stops_before_next_payload[True]",
+      "properties": {},
+      "passed": true
+    }
+  ],
+  "probe": {
+    "source": "C:\\Users\\22826\\.codex\\worktrees\\whynote-qa-retest\\jev\u9879\u76ee\\var\\qa-q28-q29-retest\\upstream",
+    "admin_other_status_contract": 404,
+    "route_sha256": "174e9a266bf559614acf85a5f851b0a8fd5b079172cab5e557b40c4fb9db194f",
+    "passed": 58,
+    "failed": 0
+  },
+  "ruff": {
+    "check": true,
+    "format": true,
+    "format_files": 253,
+    "command": "uv run --no-sync ruff check .; uv run --no-sync ruff format --check ."
+  },
+  "original_assertions_unchanged": true
+}

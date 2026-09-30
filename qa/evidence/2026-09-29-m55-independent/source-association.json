@@ -1,0 +1,32 @@
+{
+  "scope": "independent_readonly_source_association_with_separate_JSON_decoder_not_labels",
+  "run_id": "7a6af87b202340cdb6e96a14280476af",
+  "sources": {
+    "helpsteer3": {
+      "targets_checked": 1000,
+      "exact_context_answer_reference_match": true,
+      "state_keys": [
+        "context",
+        "answer"
+      ]
+    },
+    "wildfb": {
+      "targets_checked": 1000,
+      "exact_context_answer_reference_match": true,
+      "state_keys": [
+        "context",
+        "answer"
+      ]
+    },
+    "wildfeedback": {
+      "targets_checked": 1000,
+      "exact_context_answer_reference_match": true,
+      "state_keys": [
+        "context",
+        "answer"
+      ]
+    }
+  },
+  "status": "PASSED",
+  "raw_body_in_receipt": false
+}

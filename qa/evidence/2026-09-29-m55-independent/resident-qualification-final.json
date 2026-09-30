@@ -1,0 +1,82 @@
+{
+  "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+  "scope": "independently rerun synthetic resident protocol; no 30 minute claim",
+  "production_approved": false,
+  "network": {
+    "schema_version": "m54a-network-probe-v1",
+    "passed": true,
+    "positive_delivery": {
+      "tcp_v4": true,
+      "udp_v4": true,
+      "tcp_v6": true,
+      "udp_v6": true
+    },
+    "sandbox_delivery": {
+      "tcp_v4": false,
+      "udp_v4": false,
+      "tcp_v6": false,
+      "udp_v6": false
+    },
+    "token": {
+      "appcontainer": true,
+      "capability_count": 0,
+      "network_errno": {
+        "tcp_v4": 10035,
+        "udp_v4": 0,
+        "tcp_v6": 10035,
+        "udp_v6": 0,
+        "tcp_documentation_address": 10013
+      }
+    },
+    "scope": "zero_network_capabilities_and_local_tcp_udp_delivery;external_udp_not_observed"
+  },
+  "mutex_second_process_rejected": true,
+  "cleanup": [
+    {
+      "kind": "timeout",
+      "job_empty": true
+    },
+    {
+      "kind": "cancel",
+      "job_empty": true
+    }
+  ],
+  "three_real_synthetic_calls": [
+    {
+      "bucket": "abstained",
+      "metrics": {
+        "rss_bytes": 2179248128,
+        "rss_peak_bytes": 2803470336,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1589641216,
+        "gpu_peak_bytes": 1578935808
+      },
+      "elapsed_ms": 479.04279999784194
+    },
+    {
+      "bucket": "abstained",
+      "metrics": {
+        "rss_bytes": 2179571712,
+        "rss_peak_bytes": 2803470336,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1589641216,
+        "gpu_peak_bytes": 1579012608
+      },
+      "elapsed_ms": 77.46649999899091
+    },
+    {
+      "bucket": "abstained",
+      "metrics": {
+        "rss_bytes": 2179616768,
+        "rss_peak_bytes": 2803470336,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1589641216,
+        "gpu_peak_bytes": 1579012608
+      },
+      "elapsed_ms": 89.63209999637911
+    }
+  ],
+  "a_b_a_same_output": true,
+  "timeout_then_new_target_succeeded": true,
+  "status": "PASSED"
+}

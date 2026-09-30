@@ -1,0 +1,36 @@
+{
+  "candidate": "c1fc01c50d72b8eaea063e02427b18d1894dcdbd",
+  "main": "cdcfb15fec8474969d36e2955d70ba28ade01a06",
+  "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+  "tests": {
+    "full": {
+      "passed": 1027,
+      "failed": 0,
+      "sha256": "b9e4fc9662f567ec1732beb79fe48f380b81db5516891fe35d18d0fa09e82f60"
+    },
+    "independent-final": {
+      "passed": 1,
+      "failed": 1,
+      "sha256": "d27fc0a6be28060e47fe4bad45cb1faf1bc1dd4d6eb4c59f33c0bd04f165638e"
+    },
+    "native": {
+      "passed": 80,
+      "failed": 0,
+      "sha256": "4cddae885fe2d430fc43cd6e1e27b87348b9c1870a900b08d4c643991b19aae3"
+    }
+  },
+  "probe": 58,
+  "ruff_format_files": 129,
+  "new_defect": "Q-40/P2 source expiry during a run does not prevent later payloads",
+  "candidate_ci": 36588120701,
+  "documents_input": {
+    "prd": 561,
+    "tech": 549
+  },
+  "production": "NO-GO",
+  "quality": "NOT_EVALUATED",
+  "documents_readback": {
+    "prd": 570,
+    "tech": 562
+  }
+}

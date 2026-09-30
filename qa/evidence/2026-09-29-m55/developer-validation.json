@@ -1,0 +1,2419 @@
+{
+  "schema_version": "m55-developer-evidence-v1",
+  "candidate": "7ef5fa8",
+  "independent_acceptance": false,
+  "production_approved": false,
+  "quality": "NOT_EVALUATED",
+  "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+  "tests": {
+    "full": 1027,
+    "new": 42,
+    "ruff": "passed"
+  },
+  "sources": [
+    {
+      "source": "helpsteer3",
+      "repo": "nvidia/HelpSteer3",
+      "revision": "f6d145777bcbde96137596340fab89793acd1031",
+      "file": "feedback/validation.jsonl.gz",
+      "bytes": 5275463,
+      "sha256": "b86f71581a83f610ec5416029422f84ff1fc005e77b56c7634486ef9f6f12ceb",
+      "status": "ADMITTED_FOR_EXPLORATION",
+      "purpose": "local_unlabelled_exploration",
+      "access": [
+        "project_owner",
+        "local_codex"
+      ],
+      "backup": false,
+      "expires_at": "2026-10-29T09:00:14.607557+00:00",
+      "max_source_records": 1000000,
+      "max_targets": 1000,
+      "allow_all_scan": true
+    },
+    {
+      "source": "wildfb",
+      "repo": "THU-KEG/WildFB",
+      "revision": "0791dbc3101c6be7e0316cba1d8caf10c28917ad",
+      "file": "test.jsonl",
+      "bytes": 86593611,
+      "sha256": "aeb337ad2d23e1791c10ab5a43bb7c8a593cf367882b34beb8274151a55631ff",
+      "status": "ADMITTED_FOR_EXPLORATION",
+      "purpose": "local_unlabelled_exploration",
+      "access": [
+        "project_owner",
+        "local_codex"
+      ],
+      "backup": false,
+      "expires_at": "2026-10-29T13:24:55.927756+00:00",
+      "max_source_records": 1000000,
+      "max_targets": 1000,
+      "allow_all_scan": true
+    },
+    {
+      "source": "wildfeedback",
+      "repo": "microsoft/WildFeedback",
+      "revision": "8b1a3e530b949d6aacfad6ba8912e209a05bc846",
+      "file": "sat_dsat_annotation.json",
+      "bytes": 1615402501,
+      "sha256": "2caea8361756b35a512b2ebef93245df1e81d982a3602460f75a4445fc16d305",
+      "status": "ADMITTED_FOR_EXPLORATION",
+      "purpose": "local_unlabelled_exploration",
+      "access": [
+        "project_owner",
+        "local_codex"
+      ],
+      "backup": false,
+      "expires_at": "2026-10-29T13:25:08.215324+00:00",
+      "max_source_records": 1000000,
+      "max_targets": 1000,
+      "allow_all_scan": true
+    }
+  ],
+  "smoke_100": {
+    "schema_version": "m55-report-v1",
+    "run_id": "3fdc6f257d3d474ebf09bfbd58ba8f99",
+    "mode": "explore",
+    "quality": "NOT_EVALUATED",
+    "accuracy": null,
+    "reason_coverage": null,
+    "routing_omission_truth": null,
+    "misleading_suggestion_rate": null,
+    "source_records": {
+      "helpsteer3": {
+        "scanned": 100,
+        "retained": 100,
+        "rejected_targets": 0,
+        "targets": 200,
+        "sensitive_pattern": 13
+      },
+      "wildfb": {
+        "scanned": 100,
+        "retained": 100,
+        "rejected_targets": 0,
+        "targets": 100
+      },
+      "wildfeedback": {
+        "scanned": 100,
+        "no_target": 50,
+        "rejected_targets": 0,
+        "retained": 50,
+        "targets": 50
+      }
+    },
+    "source_holds": [],
+    "targets": 350,
+    "conversation_groups": 209,
+    "shared_context_groups": 0,
+    "upstream_near_duplicates": "unresolved",
+    "planned_slots": 350,
+    "buckets": {
+      "suggested": 95,
+      "abstained": 15,
+      "technical_failure": 0,
+      "ineligible": 227,
+      "skipped": 13,
+      "interrupted": 0,
+      "not_started": 0
+    },
+    "status": "COMPLETED",
+    "timing": {
+      "segment_wall_ms": 48641.54470000358,
+      "model_loads": 1,
+      "cold_load_ms_first_100": [
+        12627.162700002373
+      ],
+      "attempt_all_outcomes_p50_ms": 17.89900000221678,
+      "attempt_all_outcomes_p95_ms": 184.65308000049845,
+      "worker_all_outcomes_p50_ms": 9.17710000067018,
+      "worker_all_outcomes_p95_ms": 175.99199999531263,
+      "finished_slots_per_second": 7.195495171023511,
+      "scope": "includes failures/ineligible; startup separate; no quality inference"
+    },
+    "memory": {
+      "start": {
+        "rss_bytes": 1282621440,
+        "rss_peak_bytes": 2804305920,
+        "gpu_allocated_bytes": 1307833856,
+        "gpu_reserved_bytes": 1333788672,
+        "gpu_peak_bytes": 1307833856
+      },
+      "end": {
+        "rss_bytes": 2238541824,
+        "rss_peak_bytes": 2804305920,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1767899136,
+        "gpu_peak_bytes": 1658949120
+      },
+      "peak": {
+        "rss_bytes": 2238918656,
+        "rss_peak_bytes": 2804305920,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1767899136,
+        "gpu_peak_bytes": 1658949120
+      }
+    },
+    "error_codes": {
+      "none": 110,
+      "input_budget_exceeded": 227,
+      "sensitive_pattern": 13
+    },
+    "inferred_tasks": {
+      "code_rewrite": 43,
+      "unknown": 261,
+      "general": 20,
+      "other": 11,
+      "mixed": 15
+    },
+    "suggested_reasons": {
+      "general.incomplete": 14,
+      "general.unnecessary_refusal": 32,
+      "general.irrelevant": 32,
+      "general.instruction_not_followed": 12,
+      "general.style": 5
+    },
+    "strata": [
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 5,
+        "planned_slots": 5,
+        "buckets": {
+          "suggested": 5,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 5,
+          "denominator": 5,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 98,
+        "planned_slots": 98,
+        "buckets": {
+          "abstained": 4,
+          "ineligible": 45,
+          "skipped": 2,
+          "suggested": 47,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 51,
+          "denominator": 98,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 32,
+        "planned_slots": 32,
+        "buckets": {
+          "ineligible": 29,
+          "skipped": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 32,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 47,
+        "planned_slots": 47,
+        "buckets": {
+          "ineligible": 40,
+          "skipped": 7,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 47,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "suggested": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 3,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 9,
+        "planned_slots": 9,
+        "buckets": {
+          "abstained": 1,
+          "ineligible": 4,
+          "suggested": 4,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 5,
+          "denominator": 9,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 4,
+        "planned_slots": 4,
+        "buckets": {
+          "ineligible": 3,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 4,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "ineligible": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 12,
+        "planned_slots": 12,
+        "buckets": {
+          "abstained": 3,
+          "suggested": 9,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 12,
+          "denominator": 12,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 25,
+        "planned_slots": 25,
+        "buckets": {
+          "abstained": 5,
+          "ineligible": 8,
+          "suggested": 12,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 17,
+          "denominator": 25,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 20,
+        "planned_slots": 20,
+        "buckets": {
+          "ineligible": 20,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 20,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 23,
+        "planned_slots": 23,
+        "buckets": {
+          "ineligible": 23,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 23,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 1,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 8,
+        "planned_slots": 8,
+        "buckets": {
+          "abstained": 1,
+          "ineligible": 3,
+          "suggested": 4,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 5,
+          "denominator": 8,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "ineligible": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "ineligible": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "1025-4096",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "ineligible": 1,
+          "suggested": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 2,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "4097-8192",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "ineligible": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "over-8192",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "ineligible": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "abstained": 1,
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 2,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 8,
+        "planned_slots": 8,
+        "buckets": {
+          "ineligible": 2,
+          "suggested": 6,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 6,
+          "denominator": 8,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 12,
+        "planned_slots": 12,
+        "buckets": {
+          "ineligible": 12,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 12,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 26,
+        "planned_slots": 26,
+        "buckets": {
+          "ineligible": 26,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 26,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 1,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "ineligible": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      }
+    ]
+  },
+  "batch_1000": {
+    "schema_version": "m55-report-v1",
+    "run_id": "7a6af87b202340cdb6e96a14280476af",
+    "mode": "explore",
+    "quality": "NOT_EVALUATED",
+    "accuracy": null,
+    "reason_coverage": null,
+    "routing_omission_truth": null,
+    "misleading_suggestion_rate": null,
+    "source_records": {
+      "helpsteer3": {
+        "scanned": 502,
+        "retained": 501,
+        "rejected_targets": 4,
+        "targets": 1000,
+        "sensitive_pattern": 46,
+        "mapping_failed": 1
+      },
+      "wildfb": {
+        "scanned": 1011,
+        "retained": 1000,
+        "rejected_targets": 11,
+        "targets": 1000,
+        "mapping_failed": 11,
+        "sensitive_pattern": 15
+      },
+      "wildfeedback": {
+        "scanned": 2000,
+        "no_target": 1000,
+        "rejected_targets": 0,
+        "retained": 1000,
+        "targets": 1000,
+        "sensitive_pattern": 23
+      }
+    },
+    "source_holds": [],
+    "targets": 3000,
+    "conversation_groups": 1658,
+    "shared_context_groups": 0,
+    "upstream_near_duplicates": "unresolved",
+    "planned_slots": 3000,
+    "buckets": {
+      "suggested": 748,
+      "abstained": 208,
+      "technical_failure": 0,
+      "ineligible": 1960,
+      "skipped": 84,
+      "interrupted": 0,
+      "not_started": 0
+    },
+    "status": "COMPLETED",
+    "timing": {
+      "segment_wall_ms": 285468.5087999969,
+      "model_loads": 1,
+      "cold_load_ms_first_100": [
+        10011.808600000222
+      ],
+      "attempt_all_outcomes_p50_ms": 17.04214999699616,
+      "attempt_all_outcomes_p95_ms": 194.623345000582,
+      "worker_all_outcomes_p50_ms": 8.8333000021521,
+      "worker_all_outcomes_p95_ms": 185.62294999537698,
+      "finished_slots_per_second": 10.50904007804882,
+      "scope": "includes failures/ineligible; startup separate; no quality inference"
+    },
+    "memory": {
+      "start": {
+        "rss_bytes": 1283342336,
+        "rss_peak_bytes": 2804428800,
+        "gpu_allocated_bytes": 1307833856,
+        "gpu_reserved_bytes": 1333788672,
+        "gpu_peak_bytes": 1307833856
+      },
+      "end": {
+        "rss_bytes": 2240839680,
+        "rss_peak_bytes": 2804428800,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1860173824,
+        "gpu_peak_bytes": 1716963840
+      },
+      "peak": {
+        "rss_bytes": 2249437184,
+        "rss_peak_bytes": 2804428800,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1860173824,
+        "gpu_peak_bytes": 1716963840
+      }
+    },
+    "error_codes": {
+      "none": 956,
+      "input_budget_exceeded": 1960,
+      "sensitive_pattern": 84
+    },
+    "inferred_tasks": {
+      "code_rewrite": 378,
+      "unknown": 2276,
+      "general": 154,
+      "other": 82,
+      "mixed": 110
+    },
+    "suggested_reasons": {
+      "general.incomplete": 113,
+      "general.unnecessary_refusal": 268,
+      "general.irrelevant": 213,
+      "general.instruction_not_followed": 104,
+      "general.style": 48,
+      "code.interface_changed": 2
+    },
+    "strata": [
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 36,
+        "planned_slots": 36,
+        "buckets": {
+          "abstained": 6,
+          "suggested": 30,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 36,
+          "denominator": 36,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 445,
+        "planned_slots": 445,
+        "buckets": {
+          "abstained": 25,
+          "ineligible": 206,
+          "skipped": 17,
+          "suggested": 197,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 222,
+          "denominator": 445,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 230,
+        "planned_slots": 230,
+        "buckets": {
+          "ineligible": 220,
+          "skipped": 10,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 230,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 212,
+        "planned_slots": 212,
+        "buckets": {
+          "ineligible": 195,
+          "skipped": 17,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 212,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 8,
+        "planned_slots": 8,
+        "buckets": {
+          "abstained": 2,
+          "skipped": 1,
+          "suggested": 5,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 7,
+          "denominator": 8,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 20,
+        "planned_slots": 20,
+        "buckets": {
+          "abstained": 3,
+          "ineligible": 6,
+          "suggested": 11,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 14,
+          "denominator": 20,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 27,
+        "planned_slots": 27,
+        "buckets": {
+          "ineligible": 26,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 27,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 22,
+        "planned_slots": 22,
+        "buckets": {
+          "ineligible": 22,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 22,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 91,
+        "planned_slots": 91,
+        "buckets": {
+          "abstained": 30,
+          "suggested": 61,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 91,
+          "denominator": 91,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 253,
+        "planned_slots": 253,
+        "buckets": {
+          "abstained": 32,
+          "ineligible": 84,
+          "skipped": 2,
+          "suggested": 135,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 167,
+          "denominator": 253,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 178,
+        "planned_slots": 178,
+        "buckets": {
+          "ineligible": 175,
+          "skipped": 2,
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 1,
+          "denominator": 178,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 220,
+        "planned_slots": 220,
+        "buckets": {
+          "ineligible": 216,
+          "skipped": 4,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 220,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "mixed",
+        "length": "1025-4096",
+        "targets": 4,
+        "planned_slots": 4,
+        "buckets": {
+          "ineligible": 2,
+          "suggested": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 2,
+          "denominator": 4,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "mixed",
+        "length": "4097-8192",
+        "targets": 5,
+        "planned_slots": 5,
+        "buckets": {
+          "ineligible": 5,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 5,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "mixed",
+        "length": "over-8192",
+        "targets": 5,
+        "planned_slots": 5,
+        "buckets": {
+          "ineligible": 4,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 5,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 28,
+        "planned_slots": 28,
+        "buckets": {
+          "abstained": 10,
+          "suggested": 18,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 28,
+          "denominator": 28,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 68,
+        "planned_slots": 68,
+        "buckets": {
+          "abstained": 8,
+          "ineligible": 20,
+          "suggested": 40,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 48,
+          "denominator": 68,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 34,
+        "planned_slots": 34,
+        "buckets": {
+          "ineligible": 33,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 34,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 35,
+        "planned_slots": 35,
+        "buckets": {
+          "ineligible": 32,
+          "skipped": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 35,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "0-1024",
+        "targets": 10,
+        "planned_slots": 10,
+        "buckets": {
+          "abstained": 3,
+          "suggested": 7,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 10,
+          "denominator": 10,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "1025-4096",
+        "targets": 32,
+        "planned_slots": 32,
+        "buckets": {
+          "abstained": 3,
+          "ineligible": 9,
+          "skipped": 1,
+          "suggested": 19,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 22,
+          "denominator": 32,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "4097-8192",
+        "targets": 17,
+        "planned_slots": 17,
+        "buckets": {
+          "ineligible": 17,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 17,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "over-8192",
+        "targets": 20,
+        "planned_slots": 20,
+        "buckets": {
+          "ineligible": 19,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 20,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 71,
+        "planned_slots": 71,
+        "buckets": {
+          "abstained": 30,
+          "suggested": 41,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 71,
+          "denominator": 71,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 284,
+        "planned_slots": 284,
+        "buckets": {
+          "abstained": 40,
+          "ineligible": 92,
+          "skipped": 2,
+          "suggested": 150,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 190,
+          "denominator": 284,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 237,
+        "planned_slots": 237,
+        "buckets": {
+          "ineligible": 234,
+          "skipped": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 237,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 302,
+        "planned_slots": 302,
+        "buckets": {
+          "ineligible": 288,
+          "skipped": 14,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 302,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 22,
+        "planned_slots": 22,
+        "buckets": {
+          "abstained": 12,
+          "suggested": 10,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 22,
+          "denominator": 22,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 28,
+        "planned_slots": 28,
+        "buckets": {
+          "abstained": 4,
+          "ineligible": 5,
+          "suggested": 19,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 23,
+          "denominator": 28,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 25,
+        "planned_slots": 25,
+        "buckets": {
+          "ineligible": 25,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 25,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 20,
+        "planned_slots": 20,
+        "buckets": {
+          "ineligible": 19,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 20,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "zh",
+        "length": "1025-4096",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "skipped": 1,
+          "suggested": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 2,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "zh",
+        "length": "4097-8192",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "ineligible": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "zh",
+        "length": "over-8192",
+        "targets": 5,
+        "planned_slots": 5,
+        "buckets": {
+          "ineligible": 3,
+          "skipped": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 5,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      }
+    ]
+  },
+  "resident_qualification": {
+    "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+    "scope": "developer_synthetic_resident_only",
+    "production_approved": false,
+    "network": {
+      "schema_version": "m54a-network-probe-v1",
+      "passed": true,
+      "positive_delivery": {
+        "tcp_v4": true,
+        "udp_v4": true,
+        "tcp_v6": true,
+        "udp_v6": true
+      },
+      "sandbox_delivery": {
+        "tcp_v4": false,
+        "udp_v4": false,
+        "tcp_v6": false,
+        "udp_v6": false
+      },
+      "token": {
+        "appcontainer": true,
+        "capability_count": 0,
+        "network_errno": {
+          "tcp_v4": 10035,
+          "udp_v4": 0,
+          "tcp_v6": 10035,
+          "udp_v6": 0,
+          "tcp_documentation_address": 10013
+        }
+      },
+      "scope": "zero_network_capabilities_and_local_tcp_udp_delivery;external_udp_not_observed"
+    },
+    "mutex_second_process_rejected": true,
+    "cleanup": [
+      {
+        "kind": "timeout",
+        "job_empty": true
+      },
+      {
+        "kind": "cancel",
+        "job_empty": true
+      }
+    ],
+    "three_real_synthetic_calls": [
+      {
+        "bucket": "abstained",
+        "metrics": {
+          "rss_bytes": 2153525248,
+          "rss_peak_bytes": 2804899840,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1589641216,
+          "gpu_peak_bytes": 1578935808
+        },
+        "elapsed_ms": 525.8210000029067
+      },
+      {
+        "bucket": "abstained",
+        "metrics": {
+          "rss_bytes": 2153934848,
+          "rss_peak_bytes": 2804899840,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1589641216,
+          "gpu_peak_bytes": 1579012608
+        },
+        "elapsed_ms": 91.80940000078408
+      },
+      {
+        "bucket": "abstained",
+        "metrics": {
+          "rss_bytes": 2153951232,
+          "rss_peak_bytes": 2804899840,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1589641216,
+          "gpu_peak_bytes": 1579012608
+        },
+        "elapsed_ms": 91.24529999826336
+      }
+    ],
+    "a_b_a_same_output": true,
+    "timeout_then_new_target_succeeded": true,
+    "status": "PASSED"
+  },
+  "cancel_resume": {
+    "first": {
+      "status": "STOPPED",
+      "quality": "NOT_EVALUATED",
+      "error": "cancelled"
+    },
+    "second": {
+      "status": "COMPLETED",
+      "quality": "NOT_EVALUATED",
+      "error": null
+    },
+    "buckets": {
+      "suggested": 28,
+      "abstained": 9,
+      "technical_failure": 0,
+      "ineligible": 63,
+      "skipped": 0,
+      "interrupted": 0,
+      "not_started": 0
+    },
+    "unique_started": 100,
+    "duplicate_started": 0,
+    "prefix_preserved": true,
+    "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2"
+  },
+  "endurance": {
+    "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+    "scope": "synthetic_endurance_not_quality",
+    "production_approved": false,
+    "samples": [
+      {
+        "seconds": 0.11000000000058208,
+        "completed": 1,
+        "metrics": {
+          "rss_bytes": 2180599808,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1589641216,
+          "gpu_peak_bytes": 1579935232
+        }
+      },
+      {
+        "seconds": 60.14100000000326,
+        "completed": 515,
+        "metrics": {
+          "rss_bytes": 2211659776,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 120.21899999999732,
+        "completed": 1024,
+        "metrics": {
+          "rss_bytes": 2213564416,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 180.29699999999866,
+        "completed": 1520,
+        "metrics": {
+          "rss_bytes": 2213638144,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 240.34399999999732,
+        "completed": 2051,
+        "metrics": {
+          "rss_bytes": 2213728256,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 300.3600000000006,
+        "completed": 2551,
+        "metrics": {
+          "rss_bytes": 2213130240,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 360.45300000000134,
+        "completed": 3063,
+        "metrics": {
+          "rss_bytes": 2212499456,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 420.51600000000326,
+        "completed": 3582,
+        "metrics": {
+          "rss_bytes": 2212737024,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 480.5310000000027,
+        "completed": 4198,
+        "metrics": {
+          "rss_bytes": 2212335616,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 540.5939999999973,
+        "completed": 4700,
+        "metrics": {
+          "rss_bytes": 2214117376,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 600.625,
+        "completed": 5210,
+        "metrics": {
+          "rss_bytes": 2214322176,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 660.7189999999973,
+        "completed": 5719,
+        "metrics": {
+          "rss_bytes": 2213048320,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 720.7350000000006,
+        "completed": 6228,
+        "metrics": {
+          "rss_bytes": 2213224448,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 780.75,
+        "completed": 6745,
+        "metrics": {
+          "rss_bytes": 2213093376,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 840.8130000000019,
+        "completed": 7258,
+        "metrics": {
+          "rss_bytes": 2212982784,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 900.8600000000006,
+        "completed": 7821,
+        "metrics": {
+          "rss_bytes": 2213584896,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 960.9060000000027,
+        "completed": 8402,
+        "metrics": {
+          "rss_bytes": 2214371328,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1020.9380000000019,
+        "completed": 8914,
+        "metrics": {
+          "rss_bytes": 2214383616,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1081.0310000000027,
+        "completed": 9449,
+        "metrics": {
+          "rss_bytes": 2214174720,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1141.0310000000027,
+        "completed": 10057,
+        "metrics": {
+          "rss_bytes": 2213646336,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1201.0310000000027,
+        "completed": 10832,
+        "metrics": {
+          "rss_bytes": 2213122048,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1261.1100000000006,
+        "completed": 11390,
+        "metrics": {
+          "rss_bytes": 50225152,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1321.1410000000033,
+        "completed": 11902,
+        "metrics": {
+          "rss_bytes": 51662848,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1381.2030000000013,
+        "completed": 12417,
+        "metrics": {
+          "rss_bytes": 51269632,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1441.2350000000006,
+        "completed": 12936,
+        "metrics": {
+          "rss_bytes": 51736576,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1501.2969999999987,
+        "completed": 13457,
+        "metrics": {
+          "rss_bytes": 55255040,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1561.313000000002,
+        "completed": 13979,
+        "metrics": {
+          "rss_bytes": 55255040,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1621.3280000000013,
+        "completed": 14519,
+        "metrics": {
+          "rss_bytes": 54865920,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1681.3910000000033,
+        "completed": 15033,
+        "metrics": {
+          "rss_bytes": 54910976,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      },
+      {
+        "seconds": 1741.4530000000013,
+        "completed": 15547,
+        "metrics": {
+          "rss_bytes": 55504896,
+          "rss_peak_bytes": 2804412416,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1635778560,
+          "gpu_peak_bytes": 1612487168
+        }
+      }
+    ],
+    "runtime_sha256": "88e619097b64230384c77affb3347e5eb4d54156bb2ee951adb99b64df68d3f0",
+    "warmup": {
+      "elapsed_ms": 540.5997999987449,
+      "metrics": {
+        "rss_bytes": 2180296704,
+        "rss_peak_bytes": 2804412416,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1589641216,
+        "gpu_peak_bytes": 1579857408
+      }
+    },
+    "status": "COMPLETED",
+    "completed": 16050,
+    "elapsed_seconds": 1800.0310000000027,
+    "model_loads": 1,
+    "first": {
+      "rss_bytes": 2180599808,
+      "rss_peak_bytes": 2804412416,
+      "gpu_allocated_bytes": 1317402112,
+      "gpu_reserved_bytes": 1589641216,
+      "gpu_peak_bytes": 1579935232
+    },
+    "last": {
+      "rss_bytes": 55881728,
+      "rss_peak_bytes": 2804412416,
+      "gpu_allocated_bytes": 1317402112,
+      "gpu_reserved_bytes": 1635778560,
+      "gpu_peak_bytes": 1612487168
+    },
+    "peak": {
+      "rss_bytes": 2215161856,
+      "rss_peak_bytes": 2804412416,
+      "gpu_allocated_bytes": 1317402112,
+      "gpu_reserved_bytes": 1635778560,
+      "gpu_peak_bytes": 1612487168
+    },
+    "slots_per_second": 8.91651310449652,
+    "cleanup_verified": true,
+    "fingerprints_unchanged": true
+  },
+  "browser": {
+    "scope": "developer_real_browser_and_http",
+    "candidate": "7ef5fa8",
+    "run_id": "7a6af87b202340cdb6e96a14280476af",
+    "summary_visible": true,
+    "source_counts_visible": [
+      502,
+      1011,
+      2000
+    ],
+    "planned_slots_visible": 3000,
+    "quality_na_visible": true,
+    "wildfb_filter_verified": true,
+    "case_fields_separate": true,
+    "case_view_exposure": {
+      "event": "case_view",
+      "input_id": "e27f95b874c46713dedf11014985ba6f80cdbef0621a0e010dc262c6a5a189df",
+      "group_id": "fa77774a2f0a3ef53222913deb81c86043a988d248ef16c63054b0cfaf965a47",
+      "at": "2026-09-29T14:32:32.996904+00:00",
+      "run_id": "7a6af87b202340cdb6e96a14280476af"
+    },
+    "http": {
+      "missing_token": 403,
+      "wrong_token": 403,
+      "wrong_host": 403,
+      "no_store": true,
+      "restrictive_csp": true
+    },
+    "case_body_exported": false
+  },
+  "installation": {
+    "wheel_sha256": "16e1ae5b004c89a68865f3bd910b84512c12e966aa710680e7cf17830ca59bb1",
+    "dependencies_checked": 40,
+    "gpu_dependencies_changed": false,
+    "non_editable": true,
+    "clean_build_commit": "7ef5fa8"
+  },
+  "source_association_audit": {
+    "scope": "author_exact_source_association_not_independent_labels",
+    "run_id": "7a6af87b202340cdb6e96a14280476af",
+    "sources": {
+      "helpsteer3": {
+        "targets_checked": 1000,
+        "exact_context_answer_reference_match": true,
+        "state_keys": [
+          "context",
+          "answer"
+        ]
+      },
+      "wildfb": {
+        "targets_checked": 1000,
+        "exact_context_answer_reference_match": true,
+        "state_keys": [
+          "context",
+          "answer"
+        ]
+      },
+      "wildfeedback": {
+        "targets_checked": 1000,
+        "exact_context_answer_reference_match": true,
+        "state_keys": [
+          "context",
+          "answer"
+        ]
+      }
+    },
+    "status": "PASSED",
+    "raw_body_in_receipt": false
+  },
+  "endurance_journal_check": {
+    "started": 16050,
+    "completed": 16050,
+    "duplicate_or_unknown": 0,
+    "matched_summary": true
+  },
+  "host_memory_observation": [
+    {
+      "pid": 16764,
+      "working_set_bytes": 12288,
+      "private_bytes": 815104,
+      "peak_working_set_bytes": 5787648,
+      "observed_at": "2026-09-29T22:54:07.3112452+08:00"
+    },
+    {
+      "pid": 48872,
+      "working_set_bytes": 51666944,
+      "private_bytes": 5412651008,
+      "peak_working_set_bytes": 2804412416,
+      "observed_at": "2026-09-29T22:54:07.3301006+08:00"
+    }
+  ],
+  "preparation_crosscheck": [
+    {
+      "run": "smoke-100-final",
+      "candidate": "7ef5fa8",
+      "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+      "targets": 350,
+      "payloads_equal_previous": true
+    },
+    {
+      "run": "batch-1000-final",
+      "candidate": "7ef5fa8",
+      "source_sha256": "1c2d1781172ba2e5f24076839503b68ebb2f46491c896ad88ebc25d3fe4c44c2",
+      "targets": 3000,
+      "payloads_equal_previous": true
+    }
+  ],
+  "historical": {
+    "first_load_failure": {
+      "schema_version": "m55-report-v1",
+      "run_id": "086497a47c084ce4bfa83fc71467f4af",
+      "mode": "explore",
+      "quality": "NOT_EVALUATED",
+      "accuracy": null,
+      "reason_coverage": null,
+      "routing_omission_truth": null,
+      "misleading_suggestion_rate": null,
+      "source_records": {
+        "helpsteer3": {
+          "scanned": 100,
+          "retained": 100,
+          "rejected_targets": 0,
+          "targets": 200,
+          "sensitive_pattern": 13
+        },
+        "wildfb": {
+          "scanned": 100,
+          "retained": 100,
+          "rejected_targets": 0,
+          "targets": 100
+        },
+        "wildfeedback": {
+          "scanned": 100,
+          "no_target": 50,
+          "rejected_targets": 0,
+          "retained": 50,
+          "targets": 50
+        }
+      },
+      "source_holds": [],
+      "targets": 350,
+      "conversation_groups": 209,
+      "shared_context_groups": 0,
+      "upstream_near_duplicates": "unresolved",
+      "planned_slots": 350,
+      "buckets": {
+        "suggested": 0,
+        "abstained": 0,
+        "technical_failure": 13,
+        "ineligible": 0,
+        "skipped": 0,
+        "interrupted": 1,
+        "not_started": 336
+      },
+      "status": "STOPPED",
+      "timing": {
+        "segment_wall_ms": 78149.02740000252,
+        "model_loads": 0,
+        "cold_load_ms_first_100": [],
+        "attempt_all_outcomes_p50_ms": 5091.249699999025,
+        "attempt_all_outcomes_p95_ms": 5483.439840002757,
+        "worker_all_outcomes_p50_ms": null,
+        "worker_all_outcomes_p95_ms": null,
+        "finished_slots_per_second": 0.179144903855829,
+        "scope": "includes failures/ineligible; startup separate; no quality inference"
+      },
+      "memory": {
+        "start": null,
+        "end": null,
+        "peak": {}
+      },
+      "error_codes": {
+        "model_load_failed": 13,
+        "cancelled_result_unknown": 1
+      },
+      "inferred_tasks": {
+        "unknown": 14
+      },
+      "suggested_reasons": {},
+      "strata": [
+        {
+          "source": "helpsteer3",
+          "automatic_language": "en",
+          "length": "0-1024",
+          "targets": 5,
+          "planned_slots": 5,
+          "buckets": {
+            "technical_failure": 1,
+            "not_started": 4
+          },
+          "runnable": {
+            "numerator": 1,
+            "denominator": 5
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "en",
+          "length": "1025-4096",
+          "targets": 98,
+          "planned_slots": 98,
+          "buckets": {
+            "interrupted": 1,
+            "technical_failure": 6,
+            "not_started": 91
+          },
+          "runnable": {
+            "numerator": 6,
+            "denominator": 98
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "en",
+          "length": "4097-8192",
+          "targets": 32,
+          "planned_slots": 32,
+          "buckets": {
+            "not_started": 32
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 32
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "en",
+          "length": "over-8192",
+          "targets": 47,
+          "planned_slots": 47,
+          "buckets": {
+            "technical_failure": 6,
+            "not_started": 41
+          },
+          "runnable": {
+            "numerator": 6,
+            "denominator": 47
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "unknown",
+          "length": "0-1024",
+          "targets": 3,
+          "planned_slots": 3,
+          "buckets": {
+            "not_started": 3
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 3
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "unknown",
+          "length": "1025-4096",
+          "targets": 9,
+          "planned_slots": 9,
+          "buckets": {
+            "not_started": 9
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 9
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "unknown",
+          "length": "4097-8192",
+          "targets": 4,
+          "planned_slots": 4,
+          "buckets": {
+            "not_started": 4
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 4
+          }
+        },
+        {
+          "source": "helpsteer3",
+          "automatic_language": "unknown",
+          "length": "over-8192",
+          "targets": 2,
+          "planned_slots": 2,
+          "buckets": {
+            "not_started": 2
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "en",
+          "length": "0-1024",
+          "targets": 12,
+          "planned_slots": 12,
+          "buckets": {
+            "not_started": 12
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 12
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "en",
+          "length": "1025-4096",
+          "targets": 25,
+          "planned_slots": 25,
+          "buckets": {
+            "not_started": 25
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 25
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "en",
+          "length": "4097-8192",
+          "targets": 20,
+          "planned_slots": 20,
+          "buckets": {
+            "not_started": 20
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 20
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "en",
+          "length": "over-8192",
+          "targets": 23,
+          "planned_slots": 23,
+          "buckets": {
+            "not_started": 23
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 23
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "unknown",
+          "length": "0-1024",
+          "targets": 1,
+          "planned_slots": 1,
+          "buckets": {
+            "not_started": 1
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "unknown",
+          "length": "1025-4096",
+          "targets": 8,
+          "planned_slots": 8,
+          "buckets": {
+            "not_started": 8
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 8
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "unknown",
+          "length": "4097-8192",
+          "targets": 1,
+          "planned_slots": 1,
+          "buckets": {
+            "not_started": 1
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "unknown",
+          "length": "over-8192",
+          "targets": 2,
+          "planned_slots": 2,
+          "buckets": {
+            "not_started": 2
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "zh",
+          "length": "1025-4096",
+          "targets": 3,
+          "planned_slots": 3,
+          "buckets": {
+            "not_started": 3
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 3
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "zh",
+          "length": "4097-8192",
+          "targets": 2,
+          "planned_slots": 2,
+          "buckets": {
+            "not_started": 2
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "source": "wildfb",
+          "automatic_language": "zh",
+          "length": "over-8192",
+          "targets": 3,
+          "planned_slots": 3,
+          "buckets": {
+            "not_started": 3
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 3
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "automatic_language": "en",
+          "length": "0-1024",
+          "targets": 2,
+          "planned_slots": 2,
+          "buckets": {
+            "not_started": 2
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 2
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "automatic_language": "en",
+          "length": "1025-4096",
+          "targets": 8,
+          "planned_slots": 8,
+          "buckets": {
+            "not_started": 8
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 8
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "automatic_language": "en",
+          "length": "4097-8192",
+          "targets": 12,
+          "planned_slots": 12,
+          "buckets": {
+            "not_started": 12
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 12
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "automatic_language": "en",
+          "length": "over-8192",
+          "targets": 26,
+          "planned_slots": 26,
+          "buckets": {
+            "not_started": 26
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 26
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "automatic_language": "unknown",
+          "length": "1025-4096",
+          "targets": 1,
+          "planned_slots": 1,
+          "buckets": {
+            "not_started": 1
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        },
+        {
+          "source": "wildfeedback",
+          "automatic_language": "unknown",
+          "length": "4097-8192",
+          "targets": 1,
+          "planned_slots": 1,
+          "buckets": {
+            "not_started": 1
+          },
+          "runnable": {
+            "numerator": 0,
+            "denominator": 1
+          }
+        }
+      ]
+    },
+    "early_endurance": {
+      "source_sha256": "20065d6aab20500febe30c7755398c3786b22da7fd242b008157d1fe4fe22bef",
+      "scope": "synthetic_endurance_not_quality",
+      "production_approved": false,
+      "samples": [
+        {
+          "seconds": 0.11000000000058208,
+          "completed": 1,
+          "metrics": {
+            "rss_bytes": 2178711552,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1589641216,
+            "gpu_peak_bytes": 1579935232
+          }
+        },
+        {
+          "seconds": 60.125,
+          "completed": 485,
+          "metrics": {
+            "rss_bytes": 2210971648,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1635778560,
+            "gpu_peak_bytes": 1612487168
+          }
+        },
+        {
+          "seconds": 120.17199999999866,
+          "completed": 1028,
+          "metrics": {
+            "rss_bytes": 2212397056,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1635778560,
+            "gpu_peak_bytes": 1612487168
+          }
+        },
+        {
+          "seconds": 180.26600000000326,
+          "completed": 1530,
+          "metrics": {
+            "rss_bytes": 2212671488,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1635778560,
+            "gpu_peak_bytes": 1612487168
+          }
+        },
+        {
+          "seconds": 240.32800000000134,
+          "completed": 2058,
+          "metrics": {
+            "rss_bytes": 2212691968,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1635778560,
+            "gpu_peak_bytes": 1612487168
+          }
+        },
+        {
+          "seconds": 300.3439999999973,
+          "completed": 2552,
+          "metrics": {
+            "rss_bytes": 2212372480,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1635778560,
+            "gpu_peak_bytes": 1612487168
+          }
+        },
+        {
+          "seconds": 360.3600000000006,
+          "completed": 3070,
+          "metrics": {
+            "rss_bytes": 2211745792,
+            "rss_peak_bytes": 2804105216,
+            "gpu_allocated_bytes": 1317402112,
+            "gpu_reserved_bytes": 1635778560,
+            "gpu_peak_bytes": 1612487168
+          }
+        }
+      ],
+      "runtime_sha256": "d17acd507c9bac4cadfea6ee41047e3bccab050a8b81ecfae2eefe1ef98cecac",
+      "warmup": {
+        "elapsed_ms": 543.8174000009894,
+        "metrics": {
+          "rss_bytes": 2178326528,
+          "rss_peak_bytes": 2804105216,
+          "gpu_allocated_bytes": 1317402112,
+          "gpu_reserved_bytes": 1589641216,
+          "gpu_peak_bytes": 1579857408
+        }
+      },
+      "status": "STOPPED",
+      "completed": 3220,
+      "error": "KeyboardInterrupt",
+      "elapsed_seconds": 379.9060000000027,
+      "cleanup_verified": true
+    },
+    "early_endurance_stop_reason": "developer_requested_source_scope_fix; superseded by fresh final run; original retained"
+  },
+  "local_scripts_sha256": {
+    "resident-qualification.py.txt": "c5608da8b3accf23aa1f5936cb100fc83a94b7dfb210e4703dde0ec4915bee6d",
+    "cancel-resume.py.txt": "d5b288adaa4760e7ab270b9e81aa2873b7fd2b227871c406cb497afbdb76da35",
+    "endurance.py.txt": "525b3907c61de451b08a9bd00cc1dce2bc30c6c70ef62b3a34a97e9ec94495d3",
+    "resident-qualification-final.py.txt": "3ae5231835c7c13e96540ecc80e6b8ee9f833f36095831fc817c7acd266a27d6",
+    "cancel-resume-final.py.txt": "69e47dec6f3418bc76dbfadf2a93cca2ad22e1b6cf7dc3539009f9c16cddbf2d",
+    "endurance-final.py.txt": "26dab1c8ff24badc688251e7adffa9d47b693d91a0713a0d4dafc0b020e79081",
+    "association-audit.py.txt": "bade5ac5e9800e684d2e07b1d59b50b57b1809cfe5485e04064ad4b99151e597"
+  }
+}

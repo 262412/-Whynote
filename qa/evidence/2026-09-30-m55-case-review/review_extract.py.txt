@@ -1,0 +1,64 @@
+from pathlib import Path
+import collections,hashlib,json,sqlite3,re
+from datetime import datetime,timezone
+from whynote.explore_run import append
+from whynote.explore_prepare import read_plan,PII
+from whynote.explore_run import datetime_valid
+
+run=Path('D:/PythonProject/jev项目/var/research/m55/runs/batch-1000-final')
+out=Path('D:/PythonProject/jev项目/var/research/m55/review-20260930-first')
+out.mkdir(exist_ok=False)
+plan=read_plan(run);assert all(datetime_valid(s['expires_at']) for s in plan['sources'])
+db=sqlite3.connect(f'file:{(run/"inputs.sqlite3").as_posix()}?mode=ro',uri=True)
+meta={x[0]:dict(zip(('source','group_id','language','length','excluded'),x[1:])) for x in db.execute('select input_id,source,group_id,language,length,excluded from inputs')}
+results={r['input_id']:r for r in map(json.loads,(run/'journal.jsonl').read_text().splitlines()) if 'bucket' in r}
+assert len(results)==3000
+seed='m55-first-review-20260930-v1'
+chosen=[];counts=collections.defaultdict(collections.Counter)
+for src in ('helpsteer3','wildfb','wildfeedback'):
+ for bucket in ('ineligible','abstained','suggested','skipped'):
+  pool=[k for k,r in results.items() if meta[k]['source']==src and r['bucket']==bucket]
+  counts[src][bucket]=len(pool)
+  ordered=sorted(pool,key=lambda k:hashlib.sha256((seed+k).encode()).hexdigest())
+  ids=[];groups=set()
+  for k in ordered:
+   if meta[k]['group_id'] not in groups:ids.append(k);groups.add(meta[k]['group_id'])
+   if len(ids)==3:break
+  targeted=None
+  if bucket=='ineligible':targeted=min(pool,key=lambda k:results[k]['measurement']['state_tokens'])
+  if bucket=='suggested':
+   rare='code.interface_changed' if src=='helpsteer3' else 'general.unnecessary_refusal'
+   targeted=next((k for k in ordered if rare in (results[k].get('prediction') or {}).get('reason_ids',[]) and k not in ids),None)
+  if targeted is None or targeted in ids:targeted=next(k for k in ordered if k not in ids and meta[k]['group_id'] not in groups)
+  ids.append(targeted)
+  chosen.extend({'source':src,'bucket':bucket,'input_id':k,'group_id':meta[k]['group_id'],'selection':'fixed_hash' if i<3 else 'targeted_boundary_or_reason'} for i,k in enumerate(ids))
+selection={'run_id':plan['run_id'],'run_path':str(run),'seed':seed,'sample_size':len(chosen),'counts':counts,'sample':chosen,'scope':'exploratory_assistant_review_not_human_gold','at':datetime.now(timezone.utc).isoformat()}
+(out/'selection.json').write_text(json.dumps(selection,ensure_ascii=False,indent=2),encoding='utf-8')
+full=[]
+for i,row in enumerate(chosen,1):
+ assert all(datetime_valid(s['expires_at']) for s in plan['sources'])
+ append(run/'exposure.jsonl',{'event':'case_view','run_id':plan['run_id'],'input_id':row['input_id'],'group_id':row['group_id'],'at':datetime.now(timezone.utc).isoformat(),'review_id':seed,'reviewer':'local_codex','purpose':'first_report_gap_diagnosis'})
+ payload=json.loads(db.execute('select payload from inputs where input_id=?',(row['input_id'],)).fetchone()[0])
+ full.append(row|{'case':f'R{i:02}','payload':payload,'result':results[row['input_id']]})
+(out/'cases-controlled.json').write_text(json.dumps(full,ensure_ascii=False,indent=2),encoding='utf-8')
+def redact(s):
+ s=PII.sub('[MASKED_PATTERN]',s)
+ s=re.sub(r'https?://\S+','[URL]',s)
+ s=re.sub(r'\b(?:sk-[A-Za-z0-9_-]{12,}|[A-Za-z0-9_=-]{45,})\b','[LONG_LITERAL]',s)
+ return s
+def clip(s,n):
+ return redact(s) if len(s)<=n else redact(s[:n//2])+f'...[{len(s)-n} chars omitted]...'+redact(s[-n//2:])
+for src in counts:
+ reviewed=[]
+ for c in full:
+  if c['source']!=src:continue
+  p=c['payload'];r=c['result'];pred=r.get('prediction') or {}
+  reviewed.append({'case':c['case'],'id':c['input_id'][:12],'row':p['row_id'],'target':p['target_id'],'bucket':c['bucket'],
+   'measurement':r.get('measurement'),'turn_lengths':[len(m['content']) for m in p['context']],
+   'request':clip(p['context'][-1]['content'],2600),'earlier':clip(json.dumps(p['context'][:-1],ensure_ascii=False),1000),
+   'answer':clip(p['answer'],3200),'reference':clip(json.dumps(p['reference'],ensure_ascii=False),1800),
+   'evidence':p['evidence_kinds'],'route':pred.get('route'),'outcome':pred.get('outcome'),'reasons':pred.get('reason_ids'),
+   'unavailable':pred.get('unavailable_ids'),'decisions':[{k:v.get('choice') for k,v in s.get('answers',{}).items()} for s in pred.get('stages',[])],
+   'skip_pattern_types':collections.Counter('email' if '@' in m.group() else 'private_key' if 'PRIVATE KEY' in m.group() else 'ipv4' for m in PII.finditer(p['state']))})
+  (out/f'{src}-redacted.json').write_text(json.dumps(reviewed,ensure_ascii=False,indent=2),encoding='utf-8')
+print(json.dumps({'counts':counts,'selected':len(chosen),'exposure_appends':len(chosen),'controlled_review_dir':str(out)},ensure_ascii=False))

@@ -1,0 +1,530 @@
+{
+  "candidate": "c1fc01c",
+  "scope": "independent real source 100-record smoke, unlabelled",
+  "execution": {
+    "status": "COMPLETED",
+    "quality": "NOT_EVALUATED",
+    "error": null
+  },
+  "report": {
+    "schema_version": "m55-report-v1",
+    "run_id": "2fc202da51964afaa9b962428b7b7e21",
+    "mode": "explore",
+    "quality": "NOT_EVALUATED",
+    "accuracy": null,
+    "reason_coverage": null,
+    "routing_omission_truth": null,
+    "misleading_suggestion_rate": null,
+    "source_records": {
+      "helpsteer3": {
+        "scanned": 100,
+        "retained": 100,
+        "rejected_targets": 0,
+        "targets": 200,
+        "sensitive_pattern": 13
+      },
+      "wildfb": {
+        "scanned": 100,
+        "retained": 100,
+        "rejected_targets": 0,
+        "targets": 100
+      },
+      "wildfeedback": {
+        "scanned": 100,
+        "no_target": 50,
+        "rejected_targets": 0,
+        "retained": 50,
+        "targets": 50
+      }
+    },
+    "source_holds": [],
+    "targets": 350,
+    "conversation_groups": 209,
+    "shared_context_groups": 0,
+    "upstream_near_duplicates": "unresolved",
+    "planned_slots": 350,
+    "buckets": {
+      "suggested": 95,
+      "abstained": 15,
+      "technical_failure": 0,
+      "ineligible": 227,
+      "skipped": 13,
+      "interrupted": 0,
+      "not_started": 0
+    },
+    "status": "COMPLETED",
+    "timing": {
+      "segment_wall_ms": 57670.00079999707,
+      "model_loads": 1,
+      "cold_load_ms_first_100": [
+        15810.560299993085
+      ],
+      "attempt_all_outcomes_p50_ms": 20.52189999812981,
+      "attempt_all_outcomes_p95_ms": 201.11975499821713,
+      "worker_all_outcomes_p50_ms": 9.71939999726601,
+      "worker_all_outcomes_p95_ms": 188.75723999954062,
+      "finished_slots_per_second": 6.069013267640146,
+      "scope": "includes failures/ineligible; startup separate; no quality inference"
+    },
+    "memory": {
+      "start": {
+        "rss_bytes": 1284796416,
+        "rss_peak_bytes": 2806435840,
+        "gpu_allocated_bytes": 1307833856,
+        "gpu_reserved_bytes": 1333788672,
+        "gpu_peak_bytes": 1307833856
+      },
+      "end": {
+        "rss_bytes": 2237169664,
+        "rss_peak_bytes": 2806435840,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1767899136,
+        "gpu_peak_bytes": 1658949120
+      },
+      "peak": {
+        "rss_bytes": 2237689856,
+        "rss_peak_bytes": 2806435840,
+        "gpu_allocated_bytes": 1317402112,
+        "gpu_reserved_bytes": 1767899136,
+        "gpu_peak_bytes": 1658949120
+      }
+    },
+    "error_codes": {
+      "none": 110,
+      "input_budget_exceeded": 227,
+      "sensitive_pattern": 13
+    },
+    "inferred_tasks": {
+      "code_rewrite": 43,
+      "unknown": 261,
+      "general": 20,
+      "other": 11,
+      "mixed": 15
+    },
+    "suggested_reasons": {
+      "general.incomplete": 14,
+      "general.unnecessary_refusal": 32,
+      "general.irrelevant": 32,
+      "general.instruction_not_followed": 12,
+      "general.style": 5
+    },
+    "strata": [
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 5,
+        "planned_slots": 5,
+        "buckets": {
+          "suggested": 5,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 5,
+          "denominator": 5,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 98,
+        "planned_slots": 98,
+        "buckets": {
+          "abstained": 4,
+          "ineligible": 45,
+          "skipped": 2,
+          "suggested": 47,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 51,
+          "denominator": 98,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 32,
+        "planned_slots": 32,
+        "buckets": {
+          "ineligible": 29,
+          "skipped": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 32,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 47,
+        "planned_slots": 47,
+        "buckets": {
+          "ineligible": 40,
+          "skipped": 7,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 47,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "suggested": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 3,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 9,
+        "planned_slots": 9,
+        "buckets": {
+          "abstained": 1,
+          "ineligible": 4,
+          "suggested": 4,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 5,
+          "denominator": 9,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 4,
+        "planned_slots": 4,
+        "buckets": {
+          "ineligible": 3,
+          "skipped": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 4,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "helpsteer3",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "ineligible": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 12,
+        "planned_slots": 12,
+        "buckets": {
+          "abstained": 3,
+          "suggested": 9,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 12,
+          "denominator": 12,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 25,
+        "planned_slots": 25,
+        "buckets": {
+          "abstained": 5,
+          "ineligible": 8,
+          "suggested": 12,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 17,
+          "denominator": 25,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 20,
+        "planned_slots": 20,
+        "buckets": {
+          "ineligible": 20,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 20,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 23,
+        "planned_slots": 23,
+        "buckets": {
+          "ineligible": 23,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 23,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "0-1024",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 1,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 8,
+        "planned_slots": 8,
+        "buckets": {
+          "abstained": 1,
+          "ineligible": 3,
+          "suggested": 4,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 5,
+          "denominator": 8,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "ineligible": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "unknown",
+        "length": "over-8192",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "ineligible": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "1025-4096",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "ineligible": 1,
+          "suggested": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 2,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "4097-8192",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "ineligible": 2,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfb",
+        "automatic_language": "zh",
+        "length": "over-8192",
+        "targets": 3,
+        "planned_slots": 3,
+        "buckets": {
+          "ineligible": 3,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 3,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "0-1024",
+        "targets": 2,
+        "planned_slots": 2,
+        "buckets": {
+          "abstained": 1,
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 2,
+          "denominator": 2,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "1025-4096",
+        "targets": 8,
+        "planned_slots": 8,
+        "buckets": {
+          "ineligible": 2,
+          "suggested": 6,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 6,
+          "denominator": 8,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "4097-8192",
+        "targets": 12,
+        "planned_slots": 12,
+        "buckets": {
+          "ineligible": 12,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 12,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "en",
+        "length": "over-8192",
+        "targets": 26,
+        "planned_slots": 26,
+        "buckets": {
+          "ineligible": 26,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 26,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "1025-4096",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "suggested": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 1,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      },
+      {
+        "source": "wildfeedback",
+        "automatic_language": "unknown",
+        "length": "4097-8192",
+        "targets": 1,
+        "planned_slots": 1,
+        "buckets": {
+          "ineligible": 1,
+          "not_started": 0
+        },
+        "runnable": {
+          "numerator": 0,
+          "denominator": 1,
+          "definition": "measured within pinned budget; unknown measurement never counted eligible"
+        }
+      }
+    ]
+  }
+}

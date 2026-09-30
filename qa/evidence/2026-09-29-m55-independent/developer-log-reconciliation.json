@@ -1,0 +1,26 @@
+{
+  "scope": "readonly independent reconciliation of developer historical logs; not rerun3000 or 30minutes",
+  "batch3000": {
+    "started": 3000,
+    "terminal": 3000,
+    "unique_started": 3000,
+    "buckets": {
+      "suggested": 748,
+      "ineligible": 1960,
+      "skipped": 84,
+      "abstained": 208
+    },
+    "summary_agrees": true,
+    "journal_sha256": "96995e9f4deb62087baa1e4c8775400be152c6b6c1be403cab6f018dd6146f31"
+  },
+  "endurance": {
+    "events": {
+      "started": 16050,
+      "completed": 16050
+    },
+    "completed": 16050,
+    "elapsed_seconds": 1800.0310000000027,
+    "model_loads": 1,
+    "journal_sha256": "1833d81d588676a7c449ef0e55f5734ec5a27cf92b21380ceed34d0905ff16b6"
+  }
+}

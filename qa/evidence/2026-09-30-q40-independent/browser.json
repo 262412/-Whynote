@@ -1,0 +1,21 @@
+{
+  "candidate": "382c95a",
+  "scope": "synthetic_input_fake_timeout_worker_real_browser_and_HTTP",
+  "browser": "Codex IAB",
+  "summary_and_NA": true,
+  "filter_single_row": true,
+  "case_display_fields": [
+    "context",
+    "answer",
+    "reference",
+    "unconfirmed_model_result"
+  ],
+  "case_view_delta": 1,
+  "view": {
+    "event": "case_view",
+    "input_id": "8f0c529f96b814a9e6dced0f0ff523d098a386a7aa3542ca65fbb0b700435f94",
+    "group_id": "8aa0c9791da90ea807b03c731e5ab7280d4883160761232a9593ec2efc75524a",
+    "at": "2026-09-29T16:13:57.514836+00:00",
+    "run_id": "d10341e15ded4a6eaa9224dc4075d7dd"
+  }
+}

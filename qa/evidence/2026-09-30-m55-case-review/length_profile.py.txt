@@ -1,0 +1,57 @@
+import os
+os.environ['HF_HUB_OFFLINE']='1';os.environ['TRANSFORMERS_OFFLINE']='1';os.environ['TOKENIZERS_PARALLELISM']='false'
+from pathlib import Path
+import json,collections,sqlite3,hashlib,ipaddress
+from datetime import datetime,timezone
+from tokenizers import Tokenizer
+from whynote.explore_run import append,datetime_valid
+from whynote.explore_prepare import read_plan,PII
+from whynote.replay import state_text
+from whynote.laya_manifest import SHA256
+
+run=Path('D:/PythonProject/jev项目/var/research/m55/runs/batch-1000-final')
+out=Path('D:/PythonProject/jev项目/var/research/m55/review-20260930-first')
+plan=read_plan(run);assert all(datetime_valid(s['expires_at']) for s in plan['sources'])
+path=Path('D:/PythonProject/jev项目/var/models/laya/multilingual/tokenizer/tokenizer.json')
+assert hashlib.sha256(path.read_bytes()).hexdigest()==SHA256['tokenizer/tokenizer.json']
+tok=Tokenizer.from_file(str(path));count=lambda s:len(tok.encode(s,add_special_tokens=False).ids)
+db=sqlite3.connect(f'file:{(run/"inputs.sqlite3").as_posix()}?mode=ro',uri=True)
+meta={x[0]:x[1:] for x in db.execute('select input_id,source,group_id from inputs')}
+results={r['input_id']:r for r in map(json.loads,(run/'journal.jsonl').read_text().splitlines()) if 'bucket' in r}
+stats=collections.defaultdict(collections.Counter);rows=[]
+for key,r in results.items():
+ if r['bucket'] not in ('ineligible','skipped'):continue
+ src,group=meta[key]
+ assert all(datetime_valid(s['expires_at']) for s in plan['sources'])
+ append(run/'exposure.jsonl',{'event':'review_metadata','run_id':plan['run_id'],'input_id':key,'group_id':group,'at':datetime.now(timezone.utc).isoformat(),'review_id':'m55-first-review-20260930-v1','reviewer':'local_codex','purpose':'offline_length_and_pattern_measurement_no_semantic_label'})
+ p=json.loads(db.execute('select payload from inputs where input_id=?',(key,)).fetchone()[0])
+ state_tokens=count(p['state']);last=state_text({'context':p['context'][-1:],'answer':p['answer']})
+ last_tokens=count(last);last_bytes=len(last.encode());answer=count(p['answer']);request=count(p['context'][-1]['content'])
+ history=count(json.dumps(p['context'][:-1],ensure_ascii=False,separators=(',',':'))) if len(p['context'])>1 else 0
+ row={'input_id':key,'source':src,'bucket':r['bucket'],'state_tokens':state_tokens,'last_pair_tokens':last_tokens,'last_pair_bytes':last_bytes,'answer_tokens':answer,'last_request_tokens':request,'history_tokens':history,'turn_count':len(p['context'])}
+ if r['bucket']=='ineligible':
+  assert state_tokens==r['measurement']['state_tokens']
+  stats[src]['ineligible']+=1
+  stats[src]['single_turn_ineligible']+=len(p['context'])==1
+  stats[src]['last_pair_numeric_fit']+=last_tokens<=700 and last_bytes<=8192
+  stats[src]['answer_alone_gt700']+=answer>700
+  stats[src]['request_alone_gt700']+=request>700
+  stats[src]['history_more_than_half_components']+=history>answer+request
+  stats[src]['state_gt700']+=state_tokens>700
+ else:
+  stats[src]['skipped']+=1;stats[src]['skipped_also_gt700']+=state_tokens>700
+  types=set()
+  for match in PII.finditer(p['state']):
+   v=match.group()
+   if '@' in v:types.add('email')
+   elif 'PRIVATE KEY' in v:types.add('private_key_marker')
+   else:
+    try:
+     ip=ipaddress.ip_address(v);types.add('ipv4_loopback' if ip.is_loopback else 'ipv4_non_global' if not ip.is_global else 'ipv4_global')
+    except ValueError:types.add('ipv4_shaped_invalid')
+  row['pattern_types']=sorted(types)
+  for t in types:stats[src]['skipped_'+t]+=1
+ rows.append(row)
+(out/'length-metadata.json').write_text(json.dumps(rows,indent=2),encoding='utf-8')
+(out/'length-summary.json').write_text(json.dumps({'tokenizer_sha256':SHA256['tokenizer/tokenizer.json'],'ineligible_exact_token_crosscheck':1960,'metadata_review_exposures':len(rows),'note':'Last-pair numeric fit is a diagnostic upper bound, not an approved projection or measured quality improvement. Counts can overlap.','sources':stats},indent=2),encoding='utf-8')
+print(json.dumps(stats,ensure_ascii=False),flush=True)

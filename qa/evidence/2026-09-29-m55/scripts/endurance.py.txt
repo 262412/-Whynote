@@ -1,0 +1,62 @@
+"""Thirty minutes of real resident Laya inference on synthetic inputs only."""
+import hashlib,json,sys,time,uuid
+from pathlib import Path
+from whynote.explore_run import Worker,append
+from whynote.controlled_replay import source_hash
+from whynote.controlled_environment import runtime_hash
+from whynote.replay_runtime import model_lock
+from whynote.windows_isolation import isolated_profile
+
+root=Path('D:/PythonProject/jev项目/var/research/m55/endurance')
+root.mkdir(exist_ok=False)
+python=Path(sys.executable).resolve()
+base=Path('C:/Users/22826/AppData/Roaming/uv/python/cpython-3.11-windows-x86_64-none').resolve()
+model=Path('D:/PythonProject/jev项目/var/models/laya/multilingual')
+config={'python':str(python),'base_python':str(base),'model_dir':str(model),'device':'cuda','load_timeout':60,'request_timeout':60}
+scratch=root/'sandbox';scratch.mkdir()
+code_hash=source_hash()
+evidence={'source_sha256':code_hash,'scope':'synthetic_endurance_not_quality','production_approved':False,'samples':[]}
+with model_lock():
+ evidence['runtime_sha256']=runtime_hash(python,base)
+ with isolated_profile([python.parents[1],base,model],scratch) as box:
+  loads=[]
+  worker=Worker(box,config,lambda r:loads.append(r),lambda:(root/'cancel.request').exists());worker.segment_id=uuid.uuid4().hex
+  warmup={'input_id':hashlib.sha256(b'endurance:warmup').hexdigest(),'state':json.dumps({'context':[{'role':'user','content':'SYNTHETIC warmup: return one.'}],'answer':'two'}),'scheme':'C','evidence_kinds':['request','answer']}
+  warm=worker.invoke(warmup)
+  assert warm.get('prediction',{}).get('status')=='ok'
+  evidence['warmup']={'elapsed_ms':warm['elapsed_ms'],'metrics':warm['metrics']}
+  count=0;started=time.monotonic();next_sample=started
+  start_metrics=None;end_metrics=None;peaks={};error=None
+  try:
+   while time.monotonic()-started < 1800:
+    index=count%3
+    contexts=[{'context':[{'role':'user','content':'SYNTHETIC ONLY: Return exactly one.'}],'answer':'two'},
+              {'context':[{'role':'user','content':'SYNTHETIC ONLY: Rewrite this function to return its argument.\n```python\ndef f(x):\n    return 0\n```'}],'answer':'def f(x): return 0'},
+              {'context':[{'role':'user','content':'合成耐久输入：请列出两条简单说明。'+('请保留需求，不添加其他任务。'*20)}],'answer':'只有一条说明。'}]
+    payload={'input_id':hashlib.sha256(f'endurance:{count}'.encode()).hexdigest(),'state':json.dumps(contexts[index],ensure_ascii=False),
+             'scheme':'C','evidence_kinds':['request','answer']+(['original_code'] if index==1 else [])}
+    append(root/'journal.jsonl',{'event':'started','attempt_id':count,'input_id':payload['input_id']})
+    reply=worker.invoke(payload)
+    assert reply.get('prediction',{}).get('status')=='ok', reply.get('error','invalid_response')
+    append(root/'journal.jsonl',{'event':'completed','attempt_id':count,'input_id':payload['input_id'],'bucket':reply['bucket'],
+                                'elapsed_ms':reply['elapsed_ms'],'metrics':reply['metrics']})
+    count+=1;end_metrics=reply['metrics'];start_metrics=start_metrics or end_metrics
+    for key,value in end_metrics.items():peaks[key]=max(peaks.get(key,0),value or 0)
+    if time.monotonic()>=next_sample:
+     sample={'seconds':time.monotonic()-started,'completed':count,'metrics':end_metrics}
+     evidence['samples'].append(sample);next_sample=time.monotonic()+60
+     (root/'progress.json').write_text(json.dumps(sample,indent=2),encoding='utf-8')
+     print(json.dumps(sample),flush=True)
+    assert source_hash()==code_hash, 'source_changed'
+   evidence.update(status='COMPLETED',completed=count,elapsed_seconds=time.monotonic()-started,model_loads=len(loads),
+                   first=start_metrics,last=end_metrics,peak=peaks,slots_per_second=count/(time.monotonic()-started))
+  except BaseException as exc:
+   evidence.update(status='STOPPED',completed=count,error=type(exc).__name__,elapsed_seconds=time.monotonic()-started)
+   raise
+  finally:
+   worker.close();evidence['cleanup_verified']=box.cleanup_verified
+   (root/'summary.json').write_text(json.dumps(evidence,indent=2),encoding='utf-8')
+ assert runtime_hash(python,base)==evidence['runtime_sha256'] and source_hash()==code_hash
+evidence['fingerprints_unchanged']=True
+(root/'summary.json').write_text(json.dumps(evidence,indent=2),encoding='utf-8')
+print(json.dumps({k:v for k,v in evidence.items() if k!='samples'}),flush=True)

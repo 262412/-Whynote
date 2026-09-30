@@ -1,0 +1,134 @@
+[
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6cvhFsozHAfJpuxETEUx6DB",
+    "xml": "<p id=\"doxc6cvhFsozHAfJpuxETEUx6DB\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：M5-5a～d已接通三源固定真实文件→无标签explore→本机常驻Laya→JSONL/JSON/HTML及本机案例查看。已更新专用环境Whynote；完整1027/1027、Ruff通过；每源100源记录及每源1000目标已实跑，3000槽建议748/拒识208/超限1960/跳过84，技术失败/中断/未开始0；合预算956/3000。独立QA和正式质量/效用仍后置，生产、auto-attach、自由文本SLM、训练导出保持关闭。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6d3G77umKznQXSXFAgnPzGf",
+    "xml": "<p id=\"doxc6d3G77umKznQXSXFAgnPzGf\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ 三源真实投影、700state/1024总token/8192字节的真实预算测量已接explore；3000目标中956合预算、1960超限、84敏感模式跳过。拒识与超限/材料门控分别计数；没有人工gold，不宣称真实partial校准或判断错误率通过。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6RiuNyiMFVpPcPZmMOQIhvd",
+    "xml": "<p id=\"doxc6RiuNyiMFVpPcPZmMOQIhvd\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ 单CUDA/BF16常驻worker、batch1、有界IPC、互斥、Job回收和指纹绑定；指定隔离/状态前后对照/超时恢复实测。3000槽单次加载，分段285.469秒。另预热后连续1800.031秒合成耐久、16050次调用，加载1次、回收核验通过。真实取消恢复只续未开始槽且不重复；该证据不是质量验收。 既有Q-38/Q-39独立结论与在线动作/Outbox语义保留；本轮是离线常驻边界开发复测，不是在线宿主验收。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6v23wMQjIynbIjYEXTLioGf",
+    "xml": "<p id=\"doxc6v23wMQjIynbIjYEXTLioGf\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_inputs.py/explore_prepare.py接通三源固定文件和实际schema、反馈隔离、有界解析、逐源HOLD及源记录/目标/会话计数。每源100及1000目标开发实测；新源使用安排已由用户采用，仅本机项目目录、30天、不另备份；近重复仍未知。 推理载荷不含原反馈、评价员意见、自动标签、未来轮次或另一答案；输出仍为未确认模型推测。推理/查看按组登记探索暴露，不自动生成gold或训练集。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6Lsh404ScOg9BV9C0YelrLg",
+    "xml": "<p id=\"doxc6Lsh404ScOg9BV9C0YelrLg\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_report.py输出JSONL/汇总JSON/本机HTML；七桶互斥对账，分源/自动语言/长度和资源分层；tokenizer实际测量，超限不截断，未知测量不计合预算。真实浏览器筛选和案例分栏/暴露记录通过；无标签正确率/真实理由覆盖/路由遗漏真值/误导率NA，不作IPS或用户收益结论。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6McfXckb7Xd83ssjENEWsMb",
+    "xml": "<p id=\"doxc6McfXckb7Xd83ssjENEWsMb\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_inputs.py/explore_prepare.py接通三源固定文件和实际schema、反馈隔离、有界解析、逐源HOLD及源记录/目标/会话计数。每源100及1000目标开发实测；新源使用安排已由用户采用，仅本机项目目录、30天、不另备份；近重复仍未知。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6rLkfqsWlCUuYXfnrCrYAUf",
+    "xml": "<p id=\"doxc6rLkfqsWlCUuYXfnrCrYAUf\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore.py提供prepare/run/resume/report/view；可配数量/来源/A/B/C，默认C，无需labels/freeze。新增数量边界用例确保小批/all不绕过来源上限；旧正式evaluate与独立标签规则未降低。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc6bYzClTmQX5LhIAEXX1f8fg",
+    "xml": "<p id=\"doxc6bYzClTmQX5LhIAEXX1f8fg\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ 单CUDA/BF16常驻worker、batch1、有界IPC、互斥、Job回收和指纹绑定；指定隔离/状态前后对照/超时恢复实测。3000槽单次加载，分段285.469秒。另预热后连续1800.031秒合成耐久、16050次调用，加载1次、回收核验通过。真实取消恢复只续未开始槽且不重复；该证据不是质量验收。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "prd",
+    "revision": 561,
+    "id": "doxc69qtgRbzx0Ei5ZelOIY3CEd",
+    "xml": "<p id=\"doxc69qtgRbzx0Ei5ZelOIY3CEd\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_report.py输出JSONL/汇总JSON/本机HTML；七桶互斥对账，分源/自动语言/长度和资源分层；tokenizer实际测量，超限不截断，未知测量不计合预算。真实浏览器筛选和案例分栏/暴露记录通过；无标签正确率/真实理由覆盖/路由遗漏真值/误导率NA，不作IPS或用户收益结论。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6u1bdZWmi5EQhEjaz9863qg",
+    "xml": "<p id=\"doxc6u1bdZWmi5EQhEjaz9863qg\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：M5-5a～d已接通三源固定真实文件→无标签explore→本机常驻Laya→JSONL/JSON/HTML及本机案例查看。已更新专用环境Whynote；完整1027/1027、Ruff通过；每源100源记录及每源1000目标已实跑，3000槽建议748/拒识208/超限1960/跳过84，技术失败/中断/未开始0；合预算956/3000。独立QA和正式质量/效用仍后置，生产、auto-attach、自由文本SLM、训练导出保持关闭。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6q4OjyMEEY7jsuZNP0c83Ld",
+    "xml": "<p id=\"doxc6q4OjyMEEY7jsuZNP0c83Ld\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_worker.py/windows_session.py：CUDA/BF16、worker1/batch1、常驻模型；输入队列2/输出队列1，一次仅发一条投影。-I固定绝对包根，AppContainer零网络能力；超时先终止Job整树并wait，再为新目标重建。加载/请求默认各60秒，当前失败不自动重试；uncaught_error立即停止。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6FAV5COLmr6BtkfacnaCzue",
+    "xml": "<p id=\"doxc6FAV5COLmr6BtkfacnaCzue\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_report.py输出JSONL/汇总JSON/本机HTML；七桶互斥对账，分源/自动语言/长度和资源分层；tokenizer实际测量，超限不截断，未知测量不计合预算。真实浏览器筛选和案例分栏/暴露记录通过；无标签正确率/真实理由覆盖/路由遗漏真值/误导率NA，不作IPS或用户收益结论。 segment_wall_ms包含执行、加载和持久化，准备及前后大文件指纹扫描另计；吞吐包含超限/跳过，不称全部为模型推理。正文仅受控SQLite与显式回环token查看，普通报告仅ID/码/引用。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6u0oeZurL1HR4nuuWyVcm1f",
+    "xml": "<p id=\"doxc6u0oeZurL1HR4nuuWyVcm1f\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：旧run_batch/replay的synthetic入口保留。新whynote.explore独立接真实固定三源、机器敏感模式排除、小批与任意获准数量；已实跑三源3000槽。相同上下文组可对账，语义近重复仍未知；质量NOT_EVALUATED，不借synthetic标记绕过正式协议。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6ZqvvVYJOUKPdUNqaIZ60Hh",
+    "xml": "<p id=\"doxc6ZqvvVYJOUKPdUNqaIZ60Hh\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：开发完整1027/1027及真实三源小批/3000槽、取消恢复、30分钟合成耐久、指定隔离和浏览器查看已执行；独立QA待执行。explore不要求人工gold或48小时复标；无真实质量通过结论。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6mkSlinWqQyxTaWJlWxlVGi",
+    "xml": "<p id=\"doxc6mkSlinWqQyxTaWJlWxlVGi\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_inputs.py/explore_prepare.py接通三源固定文件和实际schema、反馈隔离、有界解析、逐源HOLD及源记录/目标/会话计数。每源100及1000目标开发实测；新源使用安排已由用户采用，仅本机项目目录、30天、不另备份；近重复仍未知。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6RhNpXBVPK2B3AJvuFIR8ce",
+    "xml": "<p id=\"doxc6RhNpXBVPK2B3AJvuFIR8ce\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore.py提供prepare/run/resume/report/view；可配数量/来源/A/B/C，默认C，无需labels/freeze。新增数量边界用例确保小批/all不绕过来源上限；旧正式evaluate与独立标签规则未降低。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6TifmcBGhae5ArE6Q8OJ5Ne",
+    "xml": "<p id=\"doxc6TifmcBGhae5ArE6Q8OJ5Ne\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ 单CUDA/BF16常驻worker、batch1、有界IPC、互斥、Job回收和指纹绑定；指定隔离/状态前后对照/超时恢复实测。3000槽单次加载，分段285.469秒。另预热后连续1800.031秒合成耐久、16050次调用，加载1次、回收核验通过。真实取消恢复只续未开始槽且不重复；该证据不是质量验收。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc63m3kcUXyL1tOCVXG6m55Qf",
+    "xml": "<p id=\"doxc63m3kcUXyL1tOCVXG6m55Qf\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_report.py输出JSONL/汇总JSON/本机HTML；七桶互斥对账，分源/自动语言/长度和资源分层；tokenizer实际测量，超限不截断，未知测量不计合预算。真实浏览器筛选和案例分栏/暴露记录通过；无标签正确率/真实理由覆盖/路由遗漏真值/误导率NA，不作IPS或用户收益结论。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6uey8V56N3P6tNtO2fNMU6c",
+    "xml": "<p id=\"doxc6uey8V56N3P6tNtO2fNMU6c\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore.py提供prepare/run/resume/report/view；可配数量/来源/A/B/C，默认C，无需labels/freeze。新增数量边界用例确保小批/all不绕过来源上限；旧正式evaluate与独立标签规则未降低。 自动核验固定文件、使用范围、反馈隔离、预算、运行保护与对账。 <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6GrmScOMLY6wmqxCaq8QQrf",
+    "xml": "<p id=\"doxc6GrmScOMLY6wmqxCaq8QQrf\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ 单CUDA/BF16常驻worker、batch1、有界IPC、互斥、Job回收和指纹绑定；指定隔离/状态前后对照/超时恢复实测。3000槽单次加载，分段285.469秒。另预热后连续1800.031秒合成耐久、16050次调用，加载1次、回收核验通过。真实取消恢复只续未开始槽且不重复；该证据不是质量验收。 当前agent1024/head256、state700不变；encoder8192不作为扩窗证据；材料不足/partial校准矩阵尚未完整验收。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6vTleZagOANFu816vVjEV2b",
+    "xml": "<p id=\"doxc6vTleZagOANFu816vVjEV2b\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore.py提供prepare/run/resume/report/view；可配数量/来源/A/B/C，默认C，无需labels/freeze。新增数量边界用例确保小批/all不绕过来源上限；旧正式evaluate与独立标签规则未降低。 self_reviewed_blind与独立gold来源语义保留；正式质量启动前另定新未暴露批次、理由包与标签封存。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  },
+  {
+    "document": "tech",
+    "revision": 549,
+    "id": "doxc6H55HcpKMhiQQPOTkF78lsh",
+    "xml": "<p id=\"doxc6H55HcpKMhiQQPOTkF78lsh\">2026-09-29开发验证（PR #43，运行候选7ef5fa8；独立QA/非作者批准/适用签署待补）：✔ explore_inputs.py/explore_prepare.py接通三源固定文件和实际schema、反馈隔离、有界解析、逐源HOLD及源记录/目标/会话计数。每源100及1000目标开发实测；新源使用安排已由用户采用，仅本机项目目录、30天、不另备份；近重复仍未知。 HelpSteer3评价员反馈仅作参考；WildFB按history+messages目标对，WildFeedback按连续UtterranceId/TurnId及角色交替关联。三源原评价与模型输入隔离；真实质量准入另定，不把机器敏感模式筛查当人工隐私签署。 <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/qa-q3839-retest.md\">固定版本独立工程报告</a> <a href=\"https://github.com/262412/-Whynote/blob/cdcfb15/docs/m54a-controlled-execution.md\">既有正式执行器契约</a> <a href=\"https://github.com/262412/-Whynote/blob/0d838d1565d7407a58aa670a967da0b0efe4d26c/docs/m55-delivery.md\">M5-5开发证据与剩余门槛</a></p>"
+  }
+]

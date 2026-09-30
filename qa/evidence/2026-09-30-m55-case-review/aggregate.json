@@ -1,0 +1,199 @@
+{
+  "run_id": "7a6af87b202340cdb6e96a14280476af",
+  "counts": {
+    "helpsteer3": {
+      "buckets": {
+        "suggested": 243,
+        "ineligible": 675,
+        "skipped": 46,
+        "abstained": 36
+      },
+      "reasons": {
+        "general.incomplete": 33,
+        "general.unnecessary_refusal": 90,
+        "general.irrelevant": 69,
+        "general.instruction_not_followed": 35,
+        "general.style": 14,
+        "code.interface_changed": 2
+      },
+      "choices": {
+        "suggested:yes": 212,
+        "suggested:no,yes": 21,
+        "abstained:unknown": 9,
+        "abstained:no": 25,
+        "suggested:unknown,yes": 9,
+        "abstained:no,unknown": 2,
+        "suggested:no,unknown,yes": 1
+      },
+      "abstention_detail": {
+        "has_unknown": 11,
+        "all_available_no": 25
+      },
+      "routes": {
+        "code_rewrite": 119,
+        "general": 59,
+        "other": 34,
+        "mixed": 30,
+        "unknown": 37
+      },
+      "unavailable": {
+        "code.interface_changed": 217,
+        "code.behavior_changed": 217,
+        "code.incomplete_rewrite": 217,
+        "code.scope_exceeded": 217,
+        "general.factual_error": 279,
+        "general.outdated": 279
+      }
+    },
+    "wildfb": {
+      "buckets": {
+        "ineligible": 616,
+        "suggested": 283,
+        "abstained": 86,
+        "skipped": 15
+      },
+      "reasons": {
+        "general.irrelevant": 74,
+        "general.incomplete": 53,
+        "general.instruction_not_followed": 45,
+        "general.unnecessary_refusal": 90,
+        "general.style": 21
+      },
+      "choices": {
+        "suggested:unknown,yes": 20,
+        "suggested:no,yes": 33,
+        "suggested:yes": 228,
+        "abstained:unknown": 30,
+        "abstained:no": 45,
+        "abstained:no,unknown": 11,
+        "suggested:no,unknown,yes": 2
+      },
+      "abstention_detail": {
+        "has_unknown": 41,
+        "all_available_no": 45
+      },
+      "routes": {
+        "other": 21,
+        "code_rewrite": 145,
+        "general": 53,
+        "mixed": 41,
+        "unknown": 109
+      },
+      "unavailable": {
+        "code.interface_changed": 316,
+        "code.behavior_changed": 316,
+        "code.incomplete_rewrite": 316,
+        "code.scope_exceeded": 316,
+        "general.factual_error": 369,
+        "general.outdated": 369
+      }
+    },
+    "wildfeedback": {
+      "buckets": {
+        "ineligible": 669,
+        "suggested": 222,
+        "abstained": 86,
+        "skipped": 23
+      },
+      "reasons": {
+        "general.irrelevant": 70,
+        "general.unnecessary_refusal": 88,
+        "general.instruction_not_followed": 24,
+        "general.incomplete": 27,
+        "general.style": 13
+      },
+      "choices": {
+        "suggested:no,yes": 34,
+        "suggested:unknown,yes": 17,
+        "suggested:yes": 170,
+        "abstained:unknown": 33,
+        "abstained:no,unknown": 10,
+        "abstained:no": 43,
+        "suggested:no,unknown,yes": 1
+      },
+      "abstention_detail": {
+        "has_unknown": 43,
+        "all_available_no": 43
+      },
+      "routes": {
+        "other": 27,
+        "code_rewrite": 114,
+        "unknown": 86,
+        "general": 42,
+        "mixed": 39
+      },
+      "unavailable": {
+        "code.interface_changed": 266,
+        "code.behavior_changed": 266,
+        "code.incomplete_rewrite": 266,
+        "code.scope_exceeded": 266,
+        "general.factual_error": 308,
+        "general.outdated": 308
+      }
+    }
+  },
+  "reference_presence": [
+    [
+      "helpsteer3",
+      "present",
+      1000
+    ],
+    [
+      "wildfb",
+      "present",
+      1000
+    ],
+    [
+      "wildfeedback",
+      "empty",
+      178
+    ],
+    [
+      "wildfeedback",
+      "present",
+      822
+    ]
+  ],
+  "evidence_flags": [
+    [
+      "helpsteer3",
+      "[\"request\",\"answer\",\"original_code\"]",
+      10
+    ],
+    [
+      "helpsteer3",
+      "[\"request\",\"answer\"]",
+      990
+    ],
+    [
+      "wildfb",
+      "[\"request\",\"answer\"]",
+      1000
+    ],
+    [
+      "wildfeedback",
+      "[\"request\",\"answer\"]",
+      1000
+    ]
+  ],
+  "wildfb_automated_labels": [
+    [
+      1,
+      108
+    ],
+    [
+      2,
+      623
+    ],
+    [
+      3,
+      239
+    ],
+    [
+      4,
+      30
+    ]
+  ],
+  "quality": "NOT_EVALUATED",
+  "new_model_inference_calls": 0
+}
