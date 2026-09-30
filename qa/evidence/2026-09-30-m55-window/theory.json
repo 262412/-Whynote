@@ -1,0 +1,82 @@
+{
+  "policy": "m55-full-input-windows-v1",
+  "question_version": "m55-explicit-discrimination-v1",
+  "source_sha256": "21db949025e783a36fc0c940fdb5ecf908ac6963da31f6028940e344188db26e",
+  "inputs_sha256": "a839d7045d0eb6c41af70f2061eeab75179d33f87e58875e122e52df1377ad19",
+  "counts": {
+    "helpsteer3": {
+      "total": 1000,
+      "excluded": 46,
+      "baseline": 279,
+      "w2048": 641,
+      "w4096": 884,
+      "w8192": 954
+    },
+    "wildfb": {
+      "total": 1000,
+      "excluded": 15,
+      "baseline": 369,
+      "w2048": 658,
+      "w4096": 851,
+      "w8192": 945
+    },
+    "wildfeedback": {
+      "total": 1000,
+      "excluded": 23,
+      "baseline": 308,
+      "w2048": 627,
+      "w4096": 881,
+      "w8192": 954
+    }
+  },
+  "selected_long": [
+    {
+      "case_id": "helpsteer3-2048",
+      "input_id": "c8cd45873386b75e7c6e13a05c04533a1dddaba6b3b616ee22763ab8ab692e6e",
+      "window": 2048
+    },
+    {
+      "case_id": "helpsteer3-4096",
+      "input_id": "8a0d60ae6dfaf5d0e0647ea7a5390eb6c9f2d1559f6df3ce0e1d9d711cce3aa6",
+      "window": 4096
+    },
+    {
+      "case_id": "helpsteer3-8192",
+      "input_id": "af7663d753ca48102a7467f6ba2fb3d0271b29476dc2b4ea5a267ae38e5a6d95",
+      "window": 8192
+    },
+    {
+      "case_id": "wildfb-2048",
+      "input_id": "2cd18b449be00b7f92f6374fefb42617fff4bc3934c3c1917147ffd1e2a468d9",
+      "window": 2048
+    },
+    {
+      "case_id": "wildfb-8192",
+      "input_id": "0cedacef83b50c5c87b8952a6b3912c4d1528a8dca8ebf5d7a31ad0a5f38c028",
+      "window": 8192
+    },
+    {
+      "case_id": "wildfb-4096",
+      "input_id": "0c2ad2a1151a0d1deb0b9050435aa800e443a7800fd64e60523ae67dd2eb275e",
+      "window": 4096
+    },
+    {
+      "case_id": "wildfeedback-2048",
+      "input_id": "640ed07858799ebd38fecd4c7bf1ad8f3ea18f47d817276401d046b166409231",
+      "window": 2048
+    },
+    {
+      "case_id": "wildfeedback-4096",
+      "input_id": "3cbc7375b7e9954534f6aab35d33ba61bc13ed6d396c7783ca89fb9c5970b6ac",
+      "window": 4096
+    },
+    {
+      "case_id": "wildfeedback-8192",
+      "input_id": "7457deba181c2c53eb41bec369eb81794c4a4d1be51647de2d7efa8dc1f95ee9",
+      "window": 8192
+    }
+  ],
+  "rows_file": "theory-inputs.jsonl",
+  "rows_sha256": "8629a34206c75e326ca70f0b9f4c14fb99fb26f8da57b9cf48c2fd950aec5a6e",
+  "local_full_theory_sha256": "1730de038865a79394d4776c35ab1791f0025e647abb16be930477bf1ad9a043"
+}

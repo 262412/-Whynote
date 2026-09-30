@@ -1,0 +1,20 @@
+{
+  "author_evidence_only": true,
+  "tests_first_run": {
+    "command": "PYTHONUTF8=1 python -X utf8 -m pytest -q",
+    "passed": 1010,
+    "seconds": 189.9
+  },
+  "supplement": {
+    "command": "PYTHONUTF8=1 python -X utf8 -m pytest tests/test_window_diagnostics.py qa -q",
+    "passed": 53,
+    "seconds": 11.22,
+    "overlap_with_first_run": 11
+  },
+  "unique_passed": 1052,
+  "ruff_check": "passed",
+  "ruff_format_check": "passed",
+  "native_local": "not_rerun",
+  "browser": "not_rerun",
+  "warning": "existing StarletteDeprecationWarning"
+}
