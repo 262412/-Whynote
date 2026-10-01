@@ -10,8 +10,8 @@ Python 3.11；在核实版本的开发 checkout 中按锁文件安装。Windows 
 
 ```powershell
 uv sync --extra dev --locked --no-editable
-uv run --no-sync ruff check src tests integrations qa
-uv run --no-sync ruff format --check src tests integrations qa
+uv run --no-sync ruff check src tests integrations qa scripts/m55_window_validation.py
+uv run --no-sync ruff format --check src tests integrations qa scripts/m55_window_validation.py
 uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_acceptance.py -q
 ```
 
@@ -65,3 +65,15 @@ $env:TMP = $env:TEMP
 窗口诊断固定 `a3f51f4`：完整输入三窗理论可容纳 1926/2616/2853 项，65 次本机实测无截断；一次问题修正后短例仍误判，已停止 Laya 调参。下一步 22 目标 Jev 对照仍等待 API、费用及 16 个真实目标的出站授权，目前零 Jev 调用。覆盖提升不是质量通过；应用 700/1024 token 限制保持。复现入口 `scripts/m55_window_validation.py theory|run`，完整参数与失败证据见[固定历史说明](https://github.com/262412/-Whynote/blob/9f467cfa34ba9979f3523363bc334673f0343142/docs/m55-window-validation.md)。
 
 功能说明维护本 README 和宿主 README；仅规约、合规或脚本依赖另留文件。逐提交进展、回执与比较放对话/PR。完整字段、已签协议和历史复现保存在[固定 Git 文档历史](https://github.com/262412/-Whynote/tree/9246dd5f143a02148a9328f79f5e188049f01563/docs/)；本地可用 `git show 9246dd5:docs/m5-suggestion-contract.md` 查阅，不改变历史验收结论。
+
+## 无模型诊断核验
+
+在上述开发环境运行（D-21、FR-05/06/14/15、TD-07/11/14）：
+
+```powershell
+uv run --no-sync python -X utf8 scripts/m55_window_validation.py verify
+```
+
+仅只读窗口证据目录的 `schedule.json`、`journal.jsonl`、`hash-reconciliation.json` 和 `summary.json`，可用 `--evidence <目录>` 指定待核验记录。不会加载模型、访问真实输入库或重建真实正文摘要，也不写报告或改历史证据。JSON 输出分列请求完成、历史编码核验标记、两种摘要的元数据对应、指定缺陷符合数、明确阴性误报、阳性漏报、路由不符、材料不足、未设预期和未完成项；这次元数据检查不等于重新逐 token 验证。
+
+复用既有 6 个短例与 6 个长探针，正文、ID、指定缺陷及历史问题不变；补充预期从合成内容判定，独立于预测输入，不是正式 gold。短例跨窗口按同一案例归组，逐请求字段计数不当独立样本数。原版/明确版路由映射分别保留；真实短例仅用历史探索预期，真实长例质量为 NA。退出码 `2` 表示元数据缺失/重复/不一致或非法标签，`1` 表示诊断失败或未完成，`0` 仅表示所列诊断预期全部符合；任何退出码都不代表正式质量或模型采用通过。原 65 条记录预期返回 `1`，指定短例仍可复算为原版 1/6、明确版 5/6，附加误报和路由错误不会被抵消。
