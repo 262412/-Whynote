@@ -1,0 +1,243 @@
+{
+  "route_sha256": "ab75b81cf4e84ef7bb688d7d6167bf6d82c82e7e1c3ce8f0b2e549956539b5bf",
+  "checks": [
+    {
+      "name": "snapshot-null",
+      "pass": true
+    },
+    {
+      "name": "snapshot-reject-/feedback",
+      "pass": true
+    },
+    {
+      "name": "snapshot-reject-/feedback/c70dea9b-9b03-441f-830f-e18da993538d",
+      "pass": true
+    },
+    {
+      "name": "snapshot-reject-no-write",
+      "pass": true
+    },
+    {
+      "name": "alice-own-GET",
+      "pass": true
+    },
+    {
+      "name": "alice-own-POST",
+      "pass": true
+    },
+    {
+      "name": "bob-other-GET",
+      "pass": true
+    },
+    {
+      "name": "bob-other-POST",
+      "pass": true
+    },
+    {
+      "name": "bob-other-no-write",
+      "pass": true
+    },
+    {
+      "name": "bob-other-no-disclosure",
+      "pass": true
+    },
+    {
+      "name": "admin-other-GET",
+      "pass": true
+    },
+    {
+      "name": "admin-other-POST",
+      "actual": 200,
+      "expected": 401,
+      "pass": false
+    },
+    {
+      "name": "admin-other-no-write",
+      "pass": true
+    },
+    {
+      "name": "admin-other-no-disclosure",
+      "actual": true,
+      "expected": false,
+      "pass": false
+    },
+    {
+      "name": "admin-own-GET",
+      "actual": 401,
+      "expected": 200,
+      "pass": false
+    },
+    {
+      "name": "admin-own-POST",
+      "pass": true
+    },
+    {
+      "name": "alice-other-GET",
+      "pass": true
+    },
+    {
+      "name": "alice-other-POST",
+      "pass": true
+    },
+    {
+      "name": "alice-other-no-write",
+      "pass": true
+    },
+    {
+      "name": "alice-other-no-disclosure",
+      "pass": true
+    },
+    {
+      "name": "Q12-mutation-status",
+      "actual": 200,
+      "expected": 401,
+      "pass": false
+    },
+    {
+      "name": "Q12-mutation-no-write",
+      "actual": {
+        "id": "c70dea9b-9b03-441f-830f-e18da993538d",
+        "user_id": "alice",
+        "version": 0,
+        "type": "rating",
+        "data": "{\"rating\": null, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-unauthorized-change\"}",
+        "meta": "{\"chat_id\": \"permission-chat\", \"message_id\": \"synthetic-message\"}",
+        "snapshot": "null",
+        "created_at": 1790421147,
+        "updated_at": 1790421147
+      },
+      "expected": {
+        "id": "c70dea9b-9b03-441f-830f-e18da993538d",
+        "user_id": "alice",
+        "version": 0,
+        "type": "rating",
+        "data": "{\"rating\": -1, \"model_id\": null, \"sibling_model_ids\": null, \"reason\": null, \"comment\": \"synthetic-comment\"}",
+        "meta": "{\"chat_id\": \"permission-chat\", \"message_id\": \"synthetic-message\"}",
+        "snapshot": "null",
+        "created_at": 1790421147,
+        "updated_at": 1790421147
+      },
+      "pass": false
+    },
+    {
+      "name": "admin-blocked-/feedbacks/all/export",
+      "pass": true
+    },
+    {
+      "name": "admin-blocked-/feedbacks/list",
+      "pass": true
+    },
+    {
+      "name": "admin-blocked-/feedbacks/all/ids",
+      "pass": true
+    },
+    {
+      "name": "unauthorized-single-delete",
+      "pass": true
+    },
+    {
+      "name": "unauthorized-single-no-write",
+      "pass": true
+    },
+    {
+      "name": "bulk-delete-return",
+      "pass": true
+    },
+    {
+      "name": "bulk-linked-removed",
+      "pass": true
+    },
+    {
+      "name": "Q14-bulk-orphan-preserved",
+      "actual": false,
+      "expected": true,
+      "pass": false
+    },
+    {
+      "name": "Q14-other-chat-rating-preserved",
+      "actual": false,
+      "expected": true,
+      "pass": false
+    },
+    {
+      "name": "bulk-bob-rating-preserved",
+      "pass": true
+    },
+    {
+      "name": "bulk-bob-chat-preserved",
+      "pass": true
+    },
+    {
+      "name": "empty-bulk-return",
+      "pass": true
+    },
+    {
+      "name": "Q14-no-chats-orphan-preserved",
+      "actual": false,
+      "expected": true,
+      "pass": false
+    },
+    {
+      "name": "folder-delete-return",
+      "pass": true
+    },
+    {
+      "name": "folder-linked-removed",
+      "pass": true
+    },
+    {
+      "name": "folder-other-preserved",
+      "pass": true
+    },
+    {
+      "name": "folder-orphan-preserved",
+      "pass": true
+    },
+    {
+      "name": "account-delete-return",
+      "pass": true
+    },
+    {
+      "name": "account-user-removed",
+      "pass": true
+    },
+    {
+      "name": "account-chat-removed",
+      "pass": true
+    },
+    {
+      "name": "account-linked-removed",
+      "pass": true
+    },
+    {
+      "name": "account-orphan-removed",
+      "pass": true
+    },
+    {
+      "name": "account-unrelated-preserved",
+      "pass": true
+    },
+    {
+      "name": "secure-delete",
+      "pass": true
+    },
+    {
+      "name": "journal-mode",
+      "pass": true
+    }
+  ],
+  "passed": 39,
+  "failed": 8,
+  "baseline": "86f21b72c9864e2774c635b386f06c1fb3d3595e",
+  "upstream": "8bd8b4fac5e059578ac0c74b3c18d11139f88b7d",
+  "patch_sha256": "4633b452bad2babebf8b7fc409e8eff2c7d21d1855839079d2281d67d4fda206",
+  "runtime": {
+    "python": "3.11.14",
+    "open-webui": "0.11.4",
+    "fastapi": "0.136.3",
+    "sqlalchemy": "2.0.50",
+    "aiosqlite": "0.22.1",
+    "httpx": "0.28.1",
+    "pydantic": "2.13.4"
+  }
+}
