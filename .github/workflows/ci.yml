@@ -22,9 +22,9 @@ jobs:
       - name: Install locked dependencies
         run: uv sync --extra dev --locked --no-editable
       - name: Lint
-        run: uv run --no-sync ruff check src tests integrations qa
+        run: uv run --no-sync ruff check src tests integrations qa scripts/m55_window_validation.py
       - name: Format
-        run: uv run --no-sync ruff format --check src tests integrations qa
+        run: uv run --no-sync ruff format --check src tests integrations qa scripts/m55_window_validation.py
       - name: Test
         run: uv run --no-sync pytest -q
       - name: Test preserved S0 regressions

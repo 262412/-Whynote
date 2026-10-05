@@ -1,4 +1,4 @@
-"""One bounded local research run; raw state stays in the admitted research directory."""
+"""Offline metadata verification or an explicitly authorized bounded research run."""
 
 import argparse
 import hashlib
@@ -74,15 +74,57 @@ def synthetic():
     ]
 
 
+def synthetic_long():
+    """The six original constraint probes, without tokenizer or real input access."""
+    cases = []
+    for window, repeats in ((2048, 1650), (4096, 3650), (8192, 7650)):
+        for case in synthetic()[2:4]:
+            material = json.loads(case["state"])
+            material["context"][0]["content"] += (
+                "\nBackground: " + "stone " * repeats + "\nThe original instruction remains binding."
+            )
+            cases.append(
+                case
+                | {
+                    "case_id": f"long-{window}-" + case["case_id"],
+                    "state": state_text(material),
+                    "window": window,
+                    "variant": "explicit",
+                }
+            )
+    return cases
+
+
+def prediction_input(case):
+    """Only prediction material crosses the worker boundary."""
+    return {key: case[key] for key in ("state", "variant", "window")}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("operation", choices=("theory", "run"))
-    parser.add_argument("--batch", required=True, type=Path)
-    parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--model-dir", required=True, type=Path)
-    parser.add_argument("--python", required=True, type=Path)
-    parser.add_argument("--base-python", required=True, type=Path)
+    parser.add_argument("operation", choices=("verify", "theory", "run"))
+    parser.add_argument(
+        "--evidence", type=Path, default=Path(__file__).resolve().parents[1] / "qa/evidence/2026-09-30-m55-window"
+    )
+    parser.add_argument("--batch", type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--model-dir", type=Path)
+    parser.add_argument("--python", type=Path)
+    parser.add_argument("--base-python", type=Path)
     args = parser.parse_args()
+    if args.operation == "verify":
+        from whynote.window_audit import audit_exit_code, audit_history
+
+        try:
+            report = audit_history(args.evidence, synthetic() + synthetic_long())
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            print(json.dumps({"integrity_errors": ["unreadable_or_invalid_metadata"], "quality": "NA"}))
+            raise SystemExit(2) from None
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        raise SystemExit(audit_exit_code(report))
+    for name in ("batch", "output", "model_dir", "python", "base_python"):
+        if getattr(args, name) is None:
+            parser.error(f"--{name.replace('_', '-')} is required for {args.operation}")
     plan = read_plan(args.batch)
     output = args.output.resolve()
     require(output.is_relative_to(Path(plan["research_root"]).resolve()), "invalid_research_path")
@@ -169,21 +211,7 @@ def main():
         for case in synthetic():
             for variant in ("original", "explicit"):
                 cases.append(case | {"window": window, "variant": variant})
-    for window, repeats in ((2048, 1650), (4096, 3650), (8192, 7650)):
-        for case in synthetic()[2:4]:
-            material = json.loads(case["state"])
-            material["context"][0]["content"] += (
-                "\nBackground: " + "stone " * repeats + "\nThe original instruction remains binding."
-            )
-            cases.append(
-                case
-                | {
-                    "case_id": f"long-{window}-" + case["case_id"],
-                    "state": state_text(material),
-                    "window": window,
-                    "variant": "explicit",
-                }
-            )
+    cases.extend(synthetic_long())
     review = json.loads(Path("qa/evidence/2026-09-30-m55-case-review/case-notes.json").read_text(encoding="utf-8"))
     for reviewed in review:
         if reviewed["case"] not in ("R09", "R10", "R12", "R25", "R28", "R42", "R44"):
@@ -252,7 +280,7 @@ def main():
             require(ready.get("source_sha256") == code, "worker_source_mismatch")
             for index, case in enumerate(cases):
                 guard()
-                payload = json.dumps({k: case[k] for k in ("state", "variant", "window")}, ensure_ascii=False).encode()
+                payload = json.dumps(prediction_input(case), ensure_ascii=False).encode()
                 guard()
                 append(output / "journal.jsonl", {"event": "started", "index": index, "case": schedule[index]})
                 response = json.loads(session.request(payload, timeout=120))
