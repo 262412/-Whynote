@@ -3,6 +3,7 @@
 import hashlib
 import json
 import math
+from collections import Counter
 from copy import deepcopy
 from dataclasses import asdict, dataclass
 from importlib.resources import files
@@ -11,7 +12,9 @@ from .domain import NotFoundError
 from .jev_provider import MODEL, _request_bytes
 from .provider_keys import load_provider_key
 
-VERSION = "jev-two-stage-v1"
+VERSION = "jev-two-stage-v2"
+CATALOG_VERSION = "jev-two-stage-v1"
+ASSESSMENT_VERSION = "jev-assessment-v1"
 CATALOG_SHA256 = "09207682fc351519394a15c27ab4e0f5c4bac867e7b434a08d92ce129ef728ce"
 MAX_REQUEST_BYTES = 32768
 STAGE_RECORD_VERSION = "jev-stage-record-v2"
@@ -62,7 +65,7 @@ class StageError(ValueError):
 
 def load_catalog():
     catalog = json.loads(files("whynote").joinpath("two_stage_catalog.json").read_text(encoding="utf-8"))
-    _require(catalog["version"] == VERSION, "catalog_version_mismatch")
+    _require(catalog["version"] == CATALOG_VERSION, "catalog_version_mismatch")
     _require(hashlib.sha256(_encode(catalog, canonical=True)).hexdigest() == CATALOG_SHA256, "catalog_content_mismatch")
     return catalog
 
@@ -152,6 +155,76 @@ def select_routes(answers, policy):
             "abstain_reason": None if accepted else "below_threshold_or_tied",
         }
     return routes
+
+
+def rejection_causes(answer, probability, confidence):
+    """Explain the existing acceptance rule without changing its arithmetic."""
+    selected = answer["probabilities"][answer["choice"]]
+    return [
+        name
+        for name, rejected in (
+            ("probability", selected < probability),
+            ("confidence", answer["confidence"] < confidence),
+            ("tie", sum(abs(value - selected) <= 1e-9 for value in answer["probabilities"].values()) != 1),
+        )
+        if rejected
+    ]
+
+
+def summarize_assessment(routes, rows, policy, *, technical_status="success"):
+    """Pure shared view of completed inference; coverage never changes a decision."""
+    if technical_status != "success":
+        return {"assessment_version": ASSESSMENT_VERSION, "assessment": None, "coverage": None}
+    asked = [row for row in rows if row["decision"] != "not_asked"]
+    _require(all(row["decision"] in {"yes", "no", "unknown"} for row in asked), "invalid_reason_decision")
+    assessment = (
+        "candidate_found"
+        if any(row["decision"] == "yes" for row in asked)
+        else "not_evaluated"
+        if not asked
+        else "abstained"
+        if any(row["decision"] == "unknown" for row in asked)
+        else "no_issue_detected_in_evaluated_scope"
+    )
+    missing = [row for row in rows if row["status"] == "missing_evidence"]
+    unselected = [row["reason_id"] for row in rows if row["status"] == "route_not_selected"]
+    unresolved = [axis for axis in ("task", "domain") if routes[axis]["status"] == "unresolved"]
+    abstentions = []
+    for row in asked:
+        if row["decision"] == "unknown":
+            causes = rejection_causes(
+                {"choice": row["raw_choice"], **row}, policy.reason_probability, policy.reason_confidence
+            )
+            if row["raw_choice"] == "unknown":
+                causes.insert(0, "raw_unknown")
+            abstentions.append({"reason_id": row["reason_id"], "raw_choice": row["raw_choice"], "causes": causes})
+    return {
+        "assessment_version": ASSESSMENT_VERSION,
+        "assessment": assessment,
+        "assessment_label": {
+            "candidate_found": "发现未确认候选",
+            "no_issue_detected_in_evaluated_scope": "已检查项未检出问题",
+            "abstained": "已检查项存在拒识",
+            "not_evaluated": "未检查任何原因",
+        }[assessment],
+        "scope_notice": (
+            f"仅涉及实际询问的 {len(asked)} 项；缺材料未检查 {len(missing)} 项；"
+            f"路由未选择 {len(unselected)} 项；未确定路由轴：{','.join(unresolved) or '无'}。"
+        ),
+        "coverage": {
+            "route_complete": not unresolved,
+            "unresolved_axes": unresolved,
+            "asked_reason_count": len(asked),
+            "missing_evidence_reason_count": len(missing),
+            "missing_evidence_types": dict(Counter(key for row in missing for key in row["missing_evidence"])),
+            "missing_evidence_reason_ids": [row["reason_id"] for row in missing],
+            "route_not_selected_count": len(unselected),
+            "route_not_selected_reason_ids": unselected,
+            "abstention_count": len(abstentions),
+            "abstention_causes": dict(Counter(cause for row in abstentions for cause in row["causes"])),
+            "abstentions": abstentions,
+        },
+    }
 
 
 def prepare_reasons(catalog, routes, evidence):
@@ -253,7 +326,9 @@ def _result(catalog, policy, routes, rows, answers, stages):
         "suggestions": suggestions,
         "primary_reason": None,
         "user_confirmed": False,
+        "attribution_source": "model_inferred_unconfirmed",
         "stages": stages,
+        **summarize_assessment(routes, rows, policy),
     }
 
 

@@ -32,7 +32,7 @@ uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_accept
 
 ## TypeSafe 两层分类接口
 
-研究契约 `jev-two-stage-v1` 对应 D-21、FR-05/06/14/15、TD-07/11/14。2026-10-05 只读核对飞书 PRD595 / 技术595；这里补充本地研究设计，不代表正式 taxonomy、阈值或生产验收。当前路线使用 TypeSafe/Jev；历史 Laya 代码和结果留作复现，开发环境无需 Laya、PyTorch 或 CUDA。
+研究结果契约 `jev-two-stage-v2` 对应 D-21、FR-05/06/14/15、TD-07/11/14；目录仍为 `jev-two-stage-v1`，86 项内容及 SHA-256 `09207682fc351519394a15c27ab4e0f5c4bac867e7b434a08d92ce129ef728ce` 不变。2026-10-05 只读核对飞书 PRD595 / 技术595；这里补充本地研究设计，不代表正式 taxonomy、阈值或生产验收。当前路线使用 TypeSafe/Jev；历史 Laya 代码和结果留作复现，开发环境无需 Laya、PyTorch 或 CUDA。
 
 ```mermaid
 flowchart LR
@@ -49,7 +49,18 @@ flowchart LR
 - 第二层的题目必须在第一层返回后构造；一个请求内并列的 Choice 不构成两层依赖。原因按目录顺序去重，每项独立返回 `yes/no/unknown`；不跨题比较概率选一个“主原因”。共享问题定义不复制到每个任务×领域组合中。
 - 初版目录共 86 项原因：8 项通用、46 项任务原因、32 项领域原因。15 类任务覆盖代码生成/重构/排错、解释、求解、摘要、翻译、写作、抽取、分析、比较、计划、创作、工具执行、交流；16 个领域覆盖软件、数学数据、科学工程、医学健康、法律规则、金融商业、教育、语言、艺术文化、历史社会、职场、生活、旅行、人际、安全隐私、设计多媒体。数量只表示目录覆盖，不证明分类质量。
 - `two_stage_catalog.json` 定义任务、领域、中文标签、判定条件和材料要求。`request`、`answer` 必须存在；可选字段仅为 `prior_context`、`original_code`、`source_text`、`reference`、`table`、`tool_trace`。调用者负责目标关联、脱敏、来源授权和只截取目标回答之前的材料；`feedback`、gold、事后批评和未来轮次不能进入投影。事实/专业知识核验必须有 `reference`，执行失败必须有 `tool_trace`，不能靠模型记忆或凭空假定已运行。
-- 每项状态区分：`not_asked`（路由未选择或缺材料）、`unknown`（模型未知或阈值拒识）、`yes`、`no`。`no_match` 只表示当前完整路由内可判定项目全为 no，不等于用户满意；有材料缺口或路由不完整且无 yes 时返回 `unknown`。
+- 每项状态区分：`not_asked`（路由未选择或缺材料）、`unknown`（模型未知或阈值拒识）、`yes`、`no`。v1 的 `outcome` 继续原样保留用于追溯，包括缺材料时的旧 `unknown`；新版展示使用下表的 `assessment`，不能拿旧 outcome 与新版 assessment 的数量差宣称质量改善。
+
+`summarize_assessment` 是核心分类、批摘要及历史派生共用的纯函数，汇总规则版本为 `jev-assessment-v1`：
+
+| assessment | 固定语义 |
+| --- | --- |
+| `candidate_found` | 至少一个通过策略的 yes；允许同时存在材料缺口和路由不完整 |
+| `no_issue_detected_in_evaluated_scope` | 至少问过一项，所有已问项最终均为 no；展示“已检查项未检出问题”并同时显示 `scope_notice` / coverage，不能写成“回答没有问题” |
+| `abstained` | 没有 yes，至少一个已问项为 unknown |
+| `not_evaluated` | 没有真正询问任何原因；空集合不能算全部 no |
+
+技术 error、reconcile、excluded、pending 不应用上述判断，assessment/coverage 为 null。coverage 分别列出路由完整性与未确定轴、已问题数、**已选路由范围内**的缺材料题目与类型、路由未选择题目，以及逐题拒识的 `raw_unknown` / `probability` / `confidence` / `tie` 来源；来源可重叠。逐题 raw_choice、概率、confidence、not_asked 和多候选均保留，primary_reason=null、user_confirmed=false、attribution_source=model_inferred_unconfirmed。
 
 接口为 `await whynote.two_stage.classify(state_factory, keys_file=..., policy=..., ...)`：
 
@@ -57,7 +68,7 @@ flowchart LR
 | --- | --- |
 | `enabled`、`outbound_approval_ref`、`admission_check` | 默认关闭；可信调用方提供实时准入函数，读取上下文前、每次发送前、返回后都须通过，撤销/到期不能继续第二层或展示建议 |
 | `budget_reservations` | 必须提前为 `route`、`reasons` 各提供不同的预占引用；该接口不伪造预算批准或自动预占/结算 |
-| `stage_callback` | 可选同步持久化回调，接收 `prepared/started/completed/failed` 与脱离内部对象的安全记录；`started` 回调成功返回后才发送，`completed` 在再次准入检查前保存用量。记录版本 `jev-stage-record-v2`，增加实际 UTF-8 字节数、选项顺序和安全答案；分类契约及目录仍为 v1 |
+| `stage_callback` | 可选同步持久化回调，接收 `prepared/started/completed/failed` 与脱离内部对象的安全记录；`started` 回调成功返回后才发送，`completed` 在再次准入检查前保存用量。阶段记录仍为 `jev-stage-record-v2`，响应合法性、概率和容差规则不变 |
 | `policy` | 必填带版本的路由/原因最小概率与 confidence；没有生产默认阈值，合成测试中的数值只用于验证门控行为 |
 | 原生请求 | 固定 `jev-1.13.0` 和 TypeSafe 原生 endpoint；每层最多一次、无自动重试/重定向；单请求 JSON 上限 32768 UTF-8 字节，超限拒绝，不截断 |
 | 返回 | 目录版本/hash、策略版本、两轴判断、完整逐原因状态、中文候选、逐阶段请求指纹/题目顺序/用量；不返回原始上下文、密钥或供应商原始错误正文 |
@@ -71,9 +82,13 @@ flowchart LR
 
 ## 新版三源两阶段批处理
 
-受版本管理的入口为 `scripts/start_two_stage.ps1`，执行 `src/whynote/two_stage_batch.py`（`jev-two-stage-batch-v1`）。入口以脚本位置定位 checkout，使用 `python -I` 后显式加入该 checkout 的 `src`，检查实际模块路径、代码指纹、`jev-two-stage-v1` 和目录 hash；不依赖旧 `.venv/site-packages/whynote`，不修改全局环境。默认使用 `DataRoot/.venv/Scripts/python.exe`，也可用 `-Python` 指定锁文件开发环境；不自动安装依赖。从其他工作目录启动时使用入口的绝对路径即可。
+受版本管理的入口为 `scripts/start_two_stage.ps1`，执行 `src/whynote/two_stage_batch.py`（`jev-two-stage-batch-v2`）。入口以脚本位置定位 checkout，使用 `python -I` 后显式加入该 checkout 的 `src`，检查实际模块路径、代码指纹、结果/输入版本和目录 hash；不依赖旧 `.venv/site-packages/whynote`，不修改全局环境。默认使用 `DataRoot/.venv/Scripts/python.exe`，也可用 `-Python` 指定锁文件开发环境；不自动安装依赖。从其他工作目录启动时使用入口的绝对路径即可。
 
-固定读取原 `m55-full-20261004/prep/plan.json`、受控 `outbound.sqlite3` 及其已绑定的原输入快照，保持 `batch-1000-final`、seed 42、每源 1000 个 target_id；先检查准入、期限和文件指纹，再读取正文。原有排除保留，新适配/第一阶段实际 JSON 超限另计排除。HelpSteer3 按固定 response1/response2 分支，WildFB 按 messages/1，WildFeedback 按固定奇数 utterance 关联；最后一个原 user 轮次作为 request，更早轮次序列化为 prior_context，answer 保持原目标回答。反馈、评分、gold、另一分支和未来轮次不作材料；当前快照没有可独立证明的专用材料字段，故不补造 original_code/reference/tool_trace 等。无法验证关联时排除。
+固定读取原 `m55-full-20261004/prep/plan.json`（SHA-256 `1bddf95e253a48a45531f3c5f85488f11ca10804e92a9e5bde617e5bdac7f990`）、受控 `outbound.sqlite3` 及其已绑定的原输入快照，保持 `batch-1000-final`、seed 42、每源 1000 个 target_id；先检查准入、期限和文件指纹，再读取正文。原有排除保留，新适配/第一阶段实际 JSON 超限另计排除。HelpSteer3 按固定 response1/response2 分支，WildFB 按 messages/1，WildFeedback 按固定奇数 utterance 关联；最后一个原 user 轮次作为 request，更早轮次序列化为 prior_context，answer 保持原目标回答。无法验证关联时排除。
+
+输入投影 `jev-input-materials-v2` 使用 `jev-material-spans-v1` 的有限确定性规则：明确原文标签或文本任务的围栏/冒号后末尾原文、明确修改/排错对象的单个代码块、标记的输入数据块或 Markdown 输入表格、明确“核验依据”标签。多个无法确定对象的块保留 `ambiguous`；未闭合边界为 `parse_failed`；没有材料线索为 `not_found`。当前请求明确指向“上述原文/代码/表格”且较早 user 轮次仅有一个相应候选时才关联；不把较早 assistant 内容作为独立材料。反馈、评分、gold、另一分支、目标 answer 和未来轮次不参与提取。当前固定快照没有经过认证的工具记录，因此 tool_trace 保持缺失；“测试通过”等文字不构成执行记录，也不执行数据中的代码。
+
+定位使用**未规范化的原始 Python 字符串 Unicode codepoint 偏移 `[start,end)`**，保留 CRLF 和 Unicode；元数据绑定 target_id、`context.content`、消息索引、源内容 SHA-256 和规则版本。普通计划、结果和账本只留安全定位，正文仅在获准请求构造的内存中使用。request/prior_context 不删改，因此提取字段会增加重复字节。投影及两层完整 JSON 均受 32768 UTF-8 字节限制，第二层在真实路由或 Mock 路由后再检查；不截断、不摘要、不放大上限。
 
 ```powershell
 # checkout 指向包含新版入口的当前分支；隔离工作树可复用主目录的受控数据与解释器。
@@ -88,43 +103,9 @@ $entry = Join-Path $checkout 'scripts/start_two_stage.ps1'
 
 输出在 `DataRoot/var/research/typesafe-preflight/m55-two-stage-<BatchId>/`：`plan.json` 冻结版本、输入/来源、policy、模型与预算归属；`mock.sqlite3` / `live.sqlite3` 分开保存只含安全元数据的阶段预占、追加事件和结果，`*.results.jsonl` / `*.summary.json` 可用 Report 重建。Report 不读原输入或密钥。SQLite 同步事务在每层发送前保存请求 hash、题目/选项顺序和预占引用，返回后立即保存安全结果与 usage；只将未发送的预占释放为零，未知费用继续占用，第二层失败不抹掉第一层估计费用。每目标最多各发一次，无超时/429/5xx/无效响应自动重试，也不自动单独续接第二层。进程中断后，已有发送或阶段完成记录的目标保留为待对账；纯未发送目标可恢复。操作系统文件锁拒绝同批并行执行；创建批次下的 `CANCEL` 文件可停止后续发送。
 
-计数满足 `原始 = 原有排除 + 新增排除 + 可运行`，`可运行 = 技术成功 + 技术error + 待对账 + 未执行`；成功再分为 suggested/unknown/no_match。这里“可运行”表示通过适配和第一层大小检查，第二层完整请求大小必须等实际路由后测量，超限计技术 error 并保留第一层用量。“无待自动执行目标”不等于全部成功。结果始终未确认，primary_reason=null；无 gold 时准确率/F1 为 NA，质量 NOT_EVALUATED。Mock 的 usage 和预算单位均为合成值，不代表模型效果或真实费用。
+计数满足 `原始 = 原有排除 + 新增排除 + 可运行`，`可运行 = 技术成功 + 技术error + 待对账 + 未执行`；成功分别汇总 assessment/coverage 并保留历史 outcome。这里“可运行”表示通过适配和第一层大小检查，第二层完整请求大小必须等实际路由后测量，超限计技术 error 并保留第一层用量。“无待自动执行目标”不等于全部成功。无 gold 时准确率/F1 为 NA，质量 NOT_EVALUATED。Mock 的 usage 和预算单位均为合成值，不代表模型效果或真实费用。
 
-不带配置的 Preview/Mock 只使用明确标为 `synthetic-unapproved-v1` 的测试策略；Live 拒绝该策略。真实运行需将下列 JSON 存到受控 `var/research/` 下（例如 `var/research/typesafe-preflight/two-stage-live-config.json`），由本人填写策略及批准参数。下列 null/待填值故意不能启用 Live，不能把测试阈值当作正式策略：
-
-```json
-{
-  "schema_version": "jev-two-stage-run-config-v1",
-  "policy": {
-    "version": "REPLACE_WITH_RESEARCH_POLICY_VERSION",
-    "route_probability": null,
-    "route_confidence": null,
-    "reason_probability": null,
-    "reason_confidence": null
-  },
-  "live": {
-    "enabled": false,
-    "batch_id": "live-approved-01",
-    "outbound_approval_ref": "REPLACE_WITH_NEW_OUTBOUND_APPROVAL",
-    "source_plan_sha256": "1bddf95e253a48a45531f3c5f85488f11ca10804e92a9e5bde617e5bdac7f990",
-    "contract_version": "jev-two-stage-v1",
-    "catalog_sha256": "09207682fc351519394a15c27ab4e0f5c4bac867e7b434a08d92ce129ef728ce",
-    "expires_at": "REPLACE_WITH_APPROVAL_EXPIRY_WITH_TIMEZONE",
-    "provider_cap_confirmed": false,
-    "provider_cap_usd": null,
-    "budget": {
-      "kind": "new_dedicated",
-      "pool_id": "REPLACE_WITH_NEW_DEDICATED_POOL",
-      "approval_ref": "REPLACE_WITH_NEW_BUDGET_APPROVAL",
-      "pricing_ref": "REPLACE_WITH_VERIFIED_PRICING_REFERENCE",
-      "limit_usd": null,
-      "reserve_per_stage_usd": null,
-      "input_usd_per_million": null,
-      "output_usd_per_million": null
-    }
-  }
-}
-```
+不带配置的 Preview/Mock 使用 `synthetic-unapproved-v1` 的 0.8/0.5 合成策略；Live 拒绝该策略。本次离线工作不创建启用 Live 的配置或新预算。现有已完成批次的配置保留于 `D:/PythonProject/jev项目/var/research/typesafe-preflight/two-stage-live-config.json`，其研究策略为 `exploration-uncalibrated-20261005-v1`：route/reason 的概率阈值均 0.8、confidence 均 0.5，模型 `jev-1.13.0`，记录费率为输入 $0.042/百万 token、输出 $0。密钥路径仍为 `D:/PythonProject/jev项目/var/private/provider-keys.json`；Derive/Materials 不读取该文件，也不接受 KeysFile/ConfigFile。该配置绑定旧 v1 批次，新 v2 代码会拒绝复用它发送，不能只更换目录复制一笔可用额度。
 
 四个阈值须为 `[0,1]` 数值；金额可用十进制字符串，预算/阶段预占必须大于零，费率不得为负。批准引用用非敏感 ID（字母、数字、点、下划线、冒号、连字符），不得填正文或凭据。每次发送前重读准入、取消、期限、批准配置与剩余预算；配置改变会停止，不能撤权后继续第二层或输出建议。服务商账户扣费限额需本人确认且不高于批准预算；本地用量估计及停止线不是服务商扣费硬上限，实际账单不伪造。
 
@@ -132,13 +113,26 @@ $entry = Join-Path $checkout 'scripts/start_two_stage.ps1'
 
 预算池绑定冲突在读取正文前拒绝；已绑定池缺失 Live 账本、已有账本缺失冻结计划时关闭，不能通过删除文件清空消耗或重发。两个 Live 初始化过程还受本机预算注册锁保护。
 
+### 只读历史派生与材料检查
+
+`Derive` 读取旧 Live 结果、计划、摘要和账本，核对批次/来源/输入/目录版本、冻结代码和账本一致性，并使用原策略重算确认已有逐题判断；只在全新目录写 `derived.results.jsonl`、`derive.summary.json`、`sensitivity.json` 及两份逐目标门槛/新增题目索引。`source_record` 保留完整旧字段，`derived` 单独保存新版视图。旧 v1 可读不代表可从新版向旧冻结批次继续发送；旧 Report 的精确运行指纹校验仍保留。
+
+`Materials` 在相同准入和有效期内，只检查原可运行目标；输出每源/每字段提取状态、安全定位和完整请求字节变化。第二层大小及新增题目按**历史路由**条件计算；新增材料也可能改变未来第一层路由，所以它不证明新流程预测效果。五个没有历史路由答案的目标无法计算第二层大小。没有来源依据的 reference/tool_trace 和提取不确定材料继续缺失。
+
+原因敏感度固定比较基线与单独概率 0.7/0.9、confidence 0.3/0.7；仅重算历史已问题目，原始值不变。路由敏感度按 task/domain 分别单轴比较同组候选值，在已完成的路由阶段中分别统计两轴，原排除与无路由答案单列；列出概率、confidence、tie、通过阈值后的保留类别以及可能新增题目；新增题目仅标记 `no_historical_answer`，不生成预测、不自动推荐最佳阈值，accuracy/F1 仍为 NA。
+
 ```powershell
-$config = Join-Path $data 'var/research/typesafe-preflight/two-stage-live-config.json'
-# 本人补齐真实配置后先检查同一冻结配置，再手动启动。明确指定 key 路径；不从环境或目录发现凭据。
-& $entry -DataRoot $data -BatchId live-approved-01 -ConfigFile $config
-& $entry -DataRoot $data -BatchId live-approved-01 -ConfigFile $config -Mode Live -KeysFile 'D:/PythonProject/jev项目/var/private/provider-keys.json'
-& $entry -DataRoot $data -BatchId live-approved-01 -Mode Report -ReportMode Live
+$entry = 'C:/Users/22826/.codex/worktrees/whynote-two-stage-assessment/jev项目/scripts/start_two_stage.ps1'
+$data = 'D:/PythonProject/jev项目'
+$source = "$data/var/research/typesafe-preflight/m55-two-stage-live-approved-01"
+# 每次复跑都用新目录；只产生离线程序产物，不修改旧批次或预算。
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+& $entry -Mode Derive -DataRoot $data -SourceBatch $source -OutputDir "$data/var/research/typesafe-preflight/assessment-$stamp"
+& $entry -Mode Materials -DataRoot $data -SourceBatch $source -OutputDir "$data/var/research/typesafe-preflight/materials-$stamp"
+& $entry -Mode Mock -DataRoot $data -BatchId "assessment-mock-$stamp"
 ```
+
+离线进程审计钩子阻断网络、子进程和未批准文件读取；Derive/Materials 的写入进一步限制在新输出目录。不会访问预算池注册表、恢复 Live、重试请求或清除待对账。未来真实验证仍需明确绑定新代码/投影版本的新计划、适用的数据出站依据及预算归属；阈值变更须另行决定。正式质量还需独立 gold 与冻结评测。
 
 旧 `var/research/typesafe-preflight/m55-full-20261004/start.ps1` 继续属于冻结的 `m55-original-choice-v1` 四题历史批次；其终态、预算和结果不用于新版待处理判断。新版不改生产 Outbox、宿主确认 UI、auto-attach 或训练导出。对应 D-21、FR-05/06/14/15、TD-07/11/14 的本地工程实现不等于完整 FR、正式质量或发布验收。
 

@@ -1,10 +1,12 @@
 param(
-    [ValidateSet('Preview', 'Mock', 'Live', 'Report')][string]$Mode = 'Preview',
+    [ValidateSet('Preview', 'Mock', 'Live', 'Report', 'Derive', 'Materials')][string]$Mode = 'Preview',
     [string]$BatchId = 'offline-v1',
     [string]$DataRoot = '',
     [string]$Python = '',
     [string]$ConfigFile = '',
     [string]$KeysFile = '',
+    [string]$SourceBatch = '',
+    [string]$OutputDir = '',
     [ValidateSet('Mock', 'Live')][string]$ReportMode = 'Mock'
 )
 $ErrorActionPreference = 'Stop'
@@ -39,6 +41,8 @@ sys.exit(main(project_root=root))
         '--batch-id', $BatchId, '--report-mode', $ReportMode.ToLowerInvariant())
     if ($ConfigFile) { $arguments += @('--config-file', [IO.Path]::GetFullPath($ConfigFile)) }
     if ($KeysFile) { $arguments += @('--keys-file', [IO.Path]::GetFullPath($KeysFile)) }
+    if ($SourceBatch) { $arguments += @('--source-batch', [IO.Path]::GetFullPath($SourceBatch)) }
+    if ($OutputDir) { $arguments += @('--output-dir', [IO.Path]::GetFullPath($OutputDir)) }
     & $Python @arguments
     exit $LASTEXITCODE
 } catch {
