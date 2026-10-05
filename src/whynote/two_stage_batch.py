@@ -22,10 +22,12 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 from . import two_stage as core
+from . import two_stage_materials as materials
 from .domain import NotFoundError
 from .jev_provider import MODEL
 
-VERSION = "jev-two-stage-batch-v1"
+VERSION = "jev-two-stage-batch-v2"
+INPUT_VERSION = "jev-input-materials-v2"
 CONFIG_VERSION = "jev-two-stage-run-config-v1"
 PLAN_SHA256 = "1bddf95e253a48a45531f3c5f85488f11ca10804e92a9e5bde617e5bdac7f990"
 PREP = Path("var/research/typesafe-preflight/m55-full-20261004/prep")
@@ -41,6 +43,8 @@ CODE_FILES = (
     "src/whynote/__init__.py",
     "src/whynote/two_stage.py",
     "src/whynote/two_stage_batch.py",
+    "src/whynote/two_stage_materials.py",
+    "src/whynote/two_stage_offline.py",
     "src/whynote/jev_provider.py",
     "src/whynote/provider_keys.py",
     "src/whynote/domain.py",
@@ -125,10 +129,19 @@ def research_path(root, value):
 def runtime_identity(root):
     """Check actual imports, then pin exactly the source used by this checkout."""
     root = Path(root).resolve()
-    for name in ("__init__", "two_stage", "two_stage_batch", "jev_provider", "provider_keys", "domain"):
+    for name in (
+        "__init__",
+        "two_stage",
+        "two_stage_batch",
+        "two_stage_materials",
+        "two_stage_offline",
+        "jev_provider",
+        "provider_keys",
+        "domain",
+    ):
         module = importlib.import_module("whynote" if name == "__init__" else "whynote." + name)
         require(Path(module.__file__).resolve() == root / "src/whynote" / (name + ".py"), "wrong_module_origin")
-    require(core.VERSION == "jev-two-stage-v1", "core_version_mismatch")
+    require(core.VERSION == "jev-two-stage-v2", "core_version_mismatch")
     catalog = core.load_catalog()
     pins = {name: sha(read(root / name, 2 * 1024 * 1024)) for name in CODE_FILES}
     return {
@@ -137,6 +150,9 @@ def runtime_identity(root):
         "code_sha256": sha(encode(pins)),
         "code_pins": pins,
         "contract_version": core.VERSION,
+        "input_version": INPUT_VERSION,
+        "material_rule_version": materials.VERSION,
+        "assessment_version": core.ASSESSMENT_VERSION,
         "catalog_version": catalog["version"],
         "catalog_sha256": core.CATALOG_SHA256,
         "stage_record_version": core.STAGE_RECORD_VERSION,
@@ -312,11 +328,12 @@ class OfflineGuard:
     no code path may open arbitrary credentials or reach a network socket.
     """
 
-    def __init__(self, files, code_root):
+    def __init__(self, files, code_root, *, write_root=None):
         self.files = {Path(path).resolve() for path in files}
         self.roots = {Path(sys.base_prefix).resolve(), Path(sys.prefix).resolve(), Path(code_root).resolve() / "src"}
         self.active = False
         self.network_denied = 0
+        self.write_root = Path(write_root).resolve() if write_root is not None else None
 
     def __enter__(self):
         self.active = True
@@ -337,6 +354,9 @@ class OfflineGuard:
         path = Path(os.fsdecode(args[0])).resolve()
         # Pure writes contain only this program's safe records / temporary fake key.
         mode, flags = args[1], args[2]
+        writing = (isinstance(flags, int) and flags & (os.O_WRONLY | os.O_RDWR)) or mode in {"w", "wb", "a", "ab"}
+        if writing and self.write_root is not None:
+            require(path.is_relative_to(self.write_root), "offline_write_outside_output_forbidden")
         if isinstance(flags, int) and flags & os.O_WRONLY:
             return
         if mode in {"w", "wb", "a", "ab"}:
@@ -404,6 +424,10 @@ class Inputs:
         return connection
 
     def state(self, target):
+        return core._project(self.projection(target))
+
+    def projection(self, target):
+        """Build exact input plus in-memory spans; the caller checks full wire size."""
         self.gate.check()
         self.context_reads += 1
         key = target["target_id"]
@@ -411,7 +435,9 @@ class Inputs:
         original = self.original.execute("SELECT payload FROM inputs WHERE input_id=?", (key,)).fetchone()
         require(raw is not None and original is not None, "missing_target")
         require(sha(raw[0].encode()) == target["outbound_state_sha256"], "state_fingerprint_changed")
-        return adapt(target, decode(raw[0]), decode(original[0]))
+        state = decode(raw[0])
+        projected, self.material_metadata = adapt_materials(target, state, decode(original[0]))
+        return projected
 
 
 def adapt(target, state, original):
@@ -419,8 +445,8 @@ def adapt(target, state, original):
 
     HelpSteer3 selects response1/response2, WildFB selects messages/1,
     WildFeedback selects a pinned odd utterance after exactly N earlier turns.
-    Optional evidence other than prior_context has no proven dedicated source field
-    in this snapshot, so it is deliberately absent.
+    This is the historical base projection. adapt_materials separately adds exact
+    spans from these verified user inputs; dedicated annotation fields stay absent.
     """
     require(target["eligible"] is True and target["source"] in SOURCES, "target_not_admitted")
     require(isinstance(state, dict) and set(state) == {"context", "answer"}, "invalid_input_fields")
@@ -467,6 +493,14 @@ def adapt(target, state, original):
     return core._project(projected)
 
 
+def adapt_materials(target, state, original):
+    """Validate target association before inspecting any permitted material span."""
+    projected = adapt(target, state, original)
+    extracted, metadata = materials.extract_materials(target["target_id"], state["context"])
+    merged = projected | extracted
+    return {key: merged[key] for key in core.FIELDS if key in merged}, metadata
+
+
 def make_plan(identity, source_plan, config, batch_id, inputs):
     targets = []
     catalog = core.load_catalog()
@@ -479,6 +513,7 @@ def make_plan(identity, source_plan, config, batch_id, inputs):
         else:
             try:
                 state = inputs.state(target)
+                row["materials"] = inputs.material_metadata
                 body = core.request_bytes(
                     {k: v for k, v in state.items() if k not in {"answer", "tool_trace"}}, questions
                 )
@@ -508,6 +543,7 @@ def make_plan(identity, source_plan, config, batch_id, inputs):
         targets.append(row)
     return {
         "schema_version": VERSION,
+        "input_version": INPUT_VERSION,
         "batch_id": batch_id,
         "runtime": identity,
         "source_plan_sha256": PLAN_SHA256,
@@ -826,12 +862,24 @@ async def execute(plan, source_plan, ledger, gate, inputs, keys_file, policy, tr
 def summary(plan, ledger=None):
     dispositions = Counter(t["disposition"] for t in plan["targets"])
     statuses, outcomes, requests, unknown = Counter(), Counter(), Counter(), Decimal(0)
+    assessments, coverage = Counter(), Counter()
     usage = {name: {"input_tokens": 0, "output_tokens": 0} for name in ("route", "reasons")}
     if ledger:
         for row in ledger.db.execute("SELECT status,result FROM targets"):
             statuses["reconcile" if row[0] == "running" else row[0]] += 1
             if row[0] == "success":
-                outcomes[decode(row[1])["outcome"]] += 1
+                result = decode(row[1])
+                outcomes[result["outcome"]] += 1
+                view = core.summarize_assessment(result["routes"], result["reasons"], core.Policy(**result["policy"]))
+                assessments[view["assessment"]] += 1
+                coverage["route_complete" if view["coverage"]["route_complete"] else "route_partial"] += 1
+                for field in (
+                    "asked_reason_count",
+                    "missing_evidence_reason_count",
+                    "route_not_selected_count",
+                    "abstention_count",
+                ):
+                    coverage[field] += view["coverage"][field]
         for row in ledger.db.execute("SELECT * FROM stages"):
             if row["status"] in {"started", "completed", "failed_or_unknown"}:
                 requests[row["name"]] += 1
@@ -871,6 +919,9 @@ def summary(plan, ledger=None):
         "reconcile": statuses["reconcile"],
         "not_executed": statuses["pending"],
         "success_outcomes": {key: outcomes[key] for key in ("suggested", "unknown", "no_match")},
+        "assessment_version": core.ASSESSMENT_VERSION,
+        "assessments": dict(assessments),
+        "coverage": dict(coverage),
         "stage_requests_started": {name: requests[name] for name in ("route", "reasons")},
         "known_usage": usage,
         "cost_unit": "synthetic_units" if ledger and ledger.mode == "mock" else "USD_estimate_not_bill",
@@ -925,6 +976,7 @@ def export(batch, plan, ledger):
                 encode(
                     {
                         "schema_version": VERSION,
+                        "input_version": INPUT_VERSION,
                         "batch_id": plan["batch_id"],
                         "mode": ledger.mode,
                         "synthetic": ledger.mode == "mock",
@@ -934,6 +986,8 @@ def export(batch, plan, ledger):
                         else "excluded",
                         "error_code": row["error"] if row else None,
                         "result": result,
+                        "assessment": result["assessment"] if result else None,
+                        "coverage": result["coverage"] if result else None,
                         "contract_version": core.VERSION,
                         "catalog_version": plan["runtime"]["catalog_version"],
                         "catalog_sha256": plan["runtime"]["catalog_sha256"],
@@ -976,6 +1030,10 @@ def offline_files(root, project_root, source_plan, batch, config_path, key_path)
 
 
 def run(args, project_root):
+    if args.mode in {"derive", "materials"}:
+        from .two_stage_offline import run_offline
+
+        return run_offline(args, project_root)
     identity = runtime_identity(project_root)
     root = Path(args.data_root or project_root).resolve()
     identifier(args.batch_id)
@@ -1105,12 +1163,16 @@ def run(args, project_root):
 
 def main(argv=None, *, project_root=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("preview", "mock", "live", "report"), default="preview")
+    parser.add_argument(
+        "--mode", choices=("preview", "mock", "live", "report", "derive", "materials"), default="preview"
+    )
     parser.add_argument("--data-root")
     parser.add_argument("--batch-id", default="offline-v1")
     parser.add_argument("--config-file")
     parser.add_argument("--keys-file")
     parser.add_argument("--report-mode", choices=("mock", "live"), default="mock")
+    parser.add_argument("--source-batch")
+    parser.add_argument("--output-dir")
     args = parser.parse_args(argv)
     try:
         result = run(args, Path(project_root or Path(__file__).resolve().parents[2]))

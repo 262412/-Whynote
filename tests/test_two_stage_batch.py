@@ -141,7 +141,7 @@ def bundle(tmp_path, monkeypatch):
     }
     plan_pin = write_json(prep / "plan.json", source_plan)["sha256"]
     monkeypatch.setattr(batch, "PLAN_SHA256", plan_pin)
-    runtime = {"catalog_version": core.VERSION, "catalog_sha256": core.CATALOG_SHA256, "code_sha256": "1" * 64}
+    runtime = {"catalog_version": core.CATALOG_VERSION, "catalog_sha256": core.CATALOG_SHA256, "code_sha256": "1" * 64}
     monkeypatch.setattr(batch, "runtime_identity", lambda _: runtime)
     return Namespace(
         root=data_root,
@@ -781,7 +781,7 @@ def test_actual_launcher_rejects_wrong_source_before_any_live_read(launcher, cha
             path.unlink()
         elif change == "version":
             path.write_text(
-                path.read_text(encoding="utf-8").replace('VERSION = "jev-two-stage-v1"', 'VERSION = "wrong"'),
+                path.read_text(encoding="utf-8").replace('VERSION = "jev-two-stage-v2"', 'VERSION = "wrong"'),
                 encoding="utf-8",
             )
         else:
