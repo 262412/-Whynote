@@ -65,7 +65,25 @@ async def evaluate_reason(
     if len(body) > 8192:
         raise ValueError("Jev request exceeds the reserved interface limit")
 
-    import httpx  # Optional extra; disabled entry does not initialize a client.
+    raw = await _request_bytes(body, key, transport)
+    try:
+        response = json.loads(raw)
+        if not isinstance(response, dict) or set(response.get("answers", {})) != set(questions):
+            raise ValueError
+        # The shared validator allows omitted optional signals in older inputs.
+        # Here every requested question must have a typed answer, including Noul.
+        for name, question in questions.items():
+            answer = response["answers"][name]
+            if not isinstance(answer, dict) or answer.get("type") != question["type"]:
+                raise ValueError
+        return validate_jev_response(response, MODEL)
+    except (ValueError, TypeError, AttributeError):
+        raise ValueError("Jev response does not match the pinned contract") from None
+
+
+async def _request_bytes(body, key, transport=None):
+    """Shared bounded transport; callers enforce their versioned admission contract."""
+    import httpx  # Optional extra; disabled entries do not initialize a client.
 
     try:
         async with (
@@ -88,16 +106,4 @@ async def evaluate_reason(
                         raise ValueError("Jev response exceeds the reserved interface limit")
     except (TimeoutError, httpx.HTTPError):
         raise ValueError("Jev transport failed; reconcile the reserved budget before retrying") from None
-    try:
-        response = json.loads(raw)
-        if not isinstance(response, dict) or set(response.get("answers", {})) != set(questions):
-            raise ValueError
-        # The shared validator allows omitted optional signals in older inputs.
-        # Here every requested question must have a typed answer, including Noul.
-        for name, question in questions.items():
-            answer = response["answers"][name]
-            if not isinstance(answer, dict) or answer.get("type") != question["type"]:
-                raise ValueError
-        return validate_jev_response(response, MODEL)
-    except (ValueError, TypeError, AttributeError):
-        raise ValueError("Jev response does not match the pinned contract") from None
+    return raw

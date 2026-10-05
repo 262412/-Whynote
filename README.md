@@ -6,7 +6,7 @@
 
 ## 安装与验证
 
-Python 3.11；在核实版本的开发 checkout 中按锁文件安装。Windows 中文路径使用普通安装；源码修改后加 `--reinstall-package whynote`，不要重装现有 Laya/GPU 专用环境。
+Python 3.11；在核实版本的开发 checkout 中按锁文件安装。Windows 中文路径使用普通安装；源码修改后加 `--reinstall-package whynote`。该开发环境无需 Laya、PyTorch 或 CUDA。
 
 ```powershell
 uv sync --extra dev --locked --no-editable
@@ -30,7 +30,45 @@ uv run --no-sync pytest tests qa/test_s0_regressions.py qa/test_manual_v1_accept
 
 本机 Laya 的安装、启停和固定版本见[运行指南](docs/laya-local.md)。固定模型输入上限为 8192 UTF-8 字节 / 700 token，总预算 1024 token；超限拒绝，不静默截断。新理由 ID 不写回旧八类菜单。常规菜单“都不是”清空原因；模型建议组“都不是”拒绝该组，保留既有确认。
 
-## 三源本机探索
+## TypeSafe 两层分类接口
+
+研究契约 `jev-two-stage-v1` 对应 D-21、FR-05/06/14/15、TD-07/11/14。2026-10-05 只读核对飞书 PRD595 / 技术595；这里补充本地研究设计，不代表正式 taxonomy、阈值或生产验收。当前路线使用 TypeSafe/Jev；历史 Laya 代码和结果留作复现，开发环境无需 Laya、PyTorch 或 CUDA。
+
+```mermaid
+flowchart LR
+    A[准入与两阶段预算] --> B[读取获准的输入投影]
+    B --> C[第一次请求：任务类别、问题领域]
+    C --> D[通用原因 + 任务原因 + 领域原因]
+    D --> E[证据检查；缺材料记 not_asked]
+    E --> F[再次检查准入]
+    F --> G[第二次请求：逐原因 yes / no / unknown]
+    G --> H[阈值检查与中文候选；等待用户确认]
+```
+
+- 第一层有两个独立 Choice：`task` 与 `domain`，依据目标请求及其先前材料判断，不读取目标回答来决定任务。每轴选择一个主要类别；`mixed`、`other`、`unknown` 或未达显式阈值时，该轴不展开专属原因，只保留通用原因及另一已识别轴。此时结果范围为 partial，不能把它报告为所有原因均无匹配。
+- 第二层的题目必须在第一层返回后构造；一个请求内并列的 Choice 不构成两层依赖。原因按目录顺序去重，每项独立返回 `yes/no/unknown`；不跨题比较概率选一个“主原因”。共享问题定义不复制到每个任务×领域组合中。
+- 初版目录共 86 项原因：8 项通用、46 项任务原因、32 项领域原因。15 类任务覆盖代码生成/重构/排错、解释、求解、摘要、翻译、写作、抽取、分析、比较、计划、创作、工具执行、交流；16 个领域覆盖软件、数学数据、科学工程、医学健康、法律规则、金融商业、教育、语言、艺术文化、历史社会、职场、生活、旅行、人际、安全隐私、设计多媒体。数量只表示目录覆盖，不证明分类质量。
+- `two_stage_catalog.json` 定义任务、领域、中文标签、判定条件和材料要求。`request`、`answer` 必须存在；可选字段仅为 `prior_context`、`original_code`、`source_text`、`reference`、`table`、`tool_trace`。调用者负责目标关联、脱敏、来源授权和只截取目标回答之前的材料；`feedback`、gold、事后批评和未来轮次不能进入投影。事实/专业知识核验必须有 `reference`，执行失败必须有 `tool_trace`，不能靠模型记忆或凭空假定已运行。
+- 每项状态区分：`not_asked`（路由未选择或缺材料）、`unknown`（模型未知或阈值拒识）、`yes`、`no`。`no_match` 只表示当前完整路由内可判定项目全为 no，不等于用户满意；有材料缺口或路由不完整且无 yes 时返回 `unknown`。
+
+接口为 `await whynote.two_stage.classify(state_factory, keys_file=..., policy=..., ...)`：
+
+| 输入 / 输出 | 契约 |
+| --- | --- |
+| `enabled`、`outbound_approval_ref`、`admission_check` | 默认关闭；可信调用方提供实时准入函数，读取上下文前、每次发送前、返回后都须通过，撤销/到期不能继续第二层或展示建议 |
+| `budget_reservations` | 必须提前为 `route`、`reasons` 各提供不同的预占引用；该接口不伪造预算批准或自动预占/结算 |
+| `policy` | 必填带版本的路由/原因最小概率与 confidence；没有生产默认阈值，合成测试中的数值只用于验证门控行为 |
+| 原生请求 | 固定 `jev-1.13.0` 和 TypeSafe 原生 endpoint；每层最多一次、无自动重试/重定向；单请求 JSON 上限 32768 UTF-8 字节，超限拒绝，不截断 |
+| 返回 | 目录版本/hash、策略版本、两轴判断、完整逐原因状态、中文候选、逐阶段请求指纹/题目顺序/用量；不返回原始上下文、密钥或供应商原始错误正文 |
+| 中途失败 | `StageError.stages` 保留已完成阶段的用量；`not_sent` 与 `failed_or_unknown` 分开，后者需要对账，不能按零费用自动重试；没有部分候选展示 |
+| 展示 | `suggestions` 只含通过显式阈值的 yes，标记 `model_inferred_unconfirmed`、`user_confirmed=false`；`primary_reason=null`。中文文案来自固定目录，不生成自由文本诊断 |
+| 兼容 | 新接口不改旧八类事件、`task_reasons` v1、`questions('original')` 四题及旧批次。它未接生产 Outbox 或宿主确认端点，不能把新 ID 写入旧菜单；未来接入须另验展示/确认版本绑定 |
+
+先用 `tests/test_two_stage.py` 的虚构输入、假密钥和 MockTransport 验证两次原生请求。实际模型的路由准确率、逐原因误报/漏报、校准、用户确认效用要在此接口稳定后另行测试；本轮不运行付费 API，不给无 gold 的数据计算准确率。
+
+原生 Choice 字段与响应校验依据 [TypeSafe API](https://docs.typesafe.ai/api)。生产上下文、auto-attach、自由文本 SLM 和训练导出继续关闭。
+
+## 三源本机探索（历史 Laya 路径）
 
 路线：固定来源文件 → 无标签诊断 → 查看报告 → 人工审阅 → 冻结新版理由包和新留出集 → 盲标复标 → 正式评测。访问、许可、数量和 30 天到期规则见[来源使用记录](docs/m55-source-use.md)。
 
