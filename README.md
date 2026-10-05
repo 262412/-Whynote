@@ -167,6 +167,8 @@ $reviewPython = 'D:/PythonProject/jev项目/var/laya-runtime/Scripts/python.exe'
 
 功能说明维护本 README 和宿主 README；仅规约、合规或脚本依赖另留文件。逐提交进展、回执与比较放对话/PR。完整字段、已签协议和历史复现保存在[固定 Git 文档历史](https://github.com/262412/-Whynote/tree/9246dd5f143a02148a9328f79f5e188049f01563/docs/)；本地可用 `git show 9246dd5:docs/m5-suggestion-contract.md` 查阅，不改变历史验收结论。
 
+清理前尚未推送的本地文档另保存在[恢复提交 `6d3108e`](https://github.com/262412/-Whynote/tree/6d3108e652e6bbd75e48cd6c5d4260084666e078)中；该快照随主干历史保留，内容仅代表当时版本。
+
 ## 无模型诊断核验
 
 在上述开发环境运行（D-21、FR-05/06/14/15、TD-07/11/14）：
