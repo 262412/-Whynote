@@ -86,6 +86,8 @@ $fullEntry = 'D:/PythonProject/jev项目/var/research/typesafe-preflight/m55-ful
 
 ## 双路线本机准备
 
+2026-10-05 续跑兼容契约：研究台账新增 `disposition` 事件，仅追加本人明确批准的 `skip_unknown_keep_reservation` 处置，绑定原失败事件摘要、目标、attempt 和批准引用。原失败、原概率判断及未测费用预留不改写；该预留始终占用预算，其他未处置 unknown 仍停批。新读取器兼容旧 pending/outcome；旧读取器遇到新 disposition 会关闭。未来 outcome 可带 `m55-redacted-response-diagnostic-v1` 白名单诊断，保存题号、有限数值概率及原和、usage、合法 request ID、时间与HTTP状态，不保存原问答、认证头或自由文本；诊断 usage 不计作已确认扣费。概率和门槛仍为 `1e-6`。用户已于 03:23:49 UTC 批准跳过本批 `b2fdbd93…1ae84e`，保留其 `$0.002688` 未测预留并继续其他目标；此前丢失的失败响应不补造。此兼容变更仅用于本机研究续跑。
+
 2026-10-04，本机 checkout `7661995`，D-21、FR-05/06/14/15、TD-07/11/14：产品判断后并行落实本机 Laya 合成工程试跑与 TypeSafe 用户运行入口。下列临时脚本位于本机被 Git 忽略的 `var/`，尚未纳入发布；不改变三源无标签诊断用途或生产门控。最近保存的飞书修订为 2026-09-30 的 PRD595 / 技术595；当前修订未核实，以可核验本地资料开展本轮隔离准备。
 
 TypeSafe 密钥由本人填写在 `D:/PythonProject/jev项目/var/private/provider-keys.json` 的 JSON 顶层 `typesafe` 字符串，保留已有其他字段。该文件已存在、被 Git 忽略；不要把密钥写入 README、Git 或对话。适配器 `whynote.jev_provider.evaluate_reason(keys_file=绝对路径)` 经 `provider_keys.load_provider_key` 读取 UTF-8（兼容 BOM）JSON；没有 `.env` 或 `TYPESAFE_API_KEY` 自动加载。`WHYNOTE_PROVIDER_KEYS_FILE` 仅是宿主文件路径指针，现有 `s1_pipe` 只读取 `deepseek`。
