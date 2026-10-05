@@ -3,6 +3,7 @@
 import hashlib
 import json
 import math
+from copy import deepcopy
 from dataclasses import asdict, dataclass
 from importlib.resources import files
 
@@ -13,6 +14,7 @@ from .provider_keys import load_provider_key
 VERSION = "jev-two-stage-v1"
 CATALOG_SHA256 = "09207682fc351519394a15c27ab4e0f5c4bac867e7b434a08d92ce129ef728ce"
 MAX_REQUEST_BYTES = 32768
+STAGE_RECORD_VERSION = "jev-stage-record-v2"
 FIELDS = ("request", "answer", "prior_context", "original_code", "source_text", "reference", "table", "tool_trace")
 UNRESOLVED = {"mixed", "other", "unknown"}
 DECISIONS = {
@@ -198,6 +200,11 @@ def _project(state):
     return projection
 
 
+def request_bytes(state, questions):
+    """The exact wire serialization, also used by offline planning."""
+    return _encode({"model": MODEL, "state": state, "questions": questions})
+
+
 def _result(catalog, policy, routes, rows, answers, stages):
     for row in rows:
         if row["status"] != "pending":
@@ -260,10 +267,13 @@ async def classify(
     budget_reservations=None,
     admission_check=None,
     transport=None,
+    stage_callback=None,
 ):
     """At most two serial requests; callers own real admission, reservation and settlement.
 
     admission_check must recheck consent, source expiry, scope, sampling and budget.
+    stage_callback receives a detached safe record at prepared/started/completed/failed.
+    It must synchronously persist started before returning; exceptions stop execution.
     Tests supply MockTransport and synthetic keys. No feedback events are written.
     """
     if (
@@ -278,6 +288,7 @@ async def classify(
     ):
         raise NotFoundError("Two-stage entry is disabled or admission is incomplete")
     _require(type(policy) is Policy, "invalid_policy")
+    _require(stage_callback is None or callable(stage_callback), "invalid_stage_callback")
     policy.validate()
     stages = []
 
@@ -297,28 +308,39 @@ async def classify(
     check_admission()
     projection = _project(state_factory())
 
+    def notify(event, record):
+        if stage_callback is not None:
+            stage_callback(event, deepcopy(record))
+
     async def stage(name, state, questions):
         check_admission()
-        body = _encode({"model": MODEL, "state": state, "questions": questions})
+        body = request_bytes(state, questions)
         record = {
+            "schema_version": STAGE_RECORD_VERSION,
             "stage": name,
             "budget_reservation_ref": budget_reservations[name],
             "request_sha256": hashlib.sha256(body).hexdigest(),
             "question_ids": list(questions),
+            "option_order": {key: list(value["criteria"]) for key, value in questions.items()},
+            "request_utf8_bytes": len(body),
             "status": "not_sent",
             "usage": None,
         }
         stages.append(record)
+        notify("prepared", record)
         if len(body) > MAX_REQUEST_BYTES:
             raise StageError("stage_request_too_large", stages)
         record["status"] = "started"
+        notify("started", record)
         try:
             raw = await _request_bytes(body, key, transport)
             answers, usage = validate_response(raw, questions)
         except ValueError:
             record["status"] = "failed_or_unknown"
+            notify("failed", record)
             raise StageError("stage_failed_reconcile_budget", stages) from None
-        record.update(status="completed", usage=usage)
+        record.update(status="completed", usage=usage, answers=answers)
+        notify("completed", record)
         check_admission()
         return answers
 
