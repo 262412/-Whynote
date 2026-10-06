@@ -484,6 +484,10 @@ def audit_materials(root, source_plan, records, output):
 
 
 def run_offline(args, project_root):
+    if args.mode == "groups":
+        from .two_stage_groups import run_groups
+
+        return run_groups(args, project_root)
     batch.require(args.keys_file is None and args.config_file is None, "offline_keys_and_live_config_forbidden")
     batch.require(args.source_batch and args.output_dir, "source_batch_and_new_output_dir_required")
     root = Path(args.data_root or project_root).resolve()

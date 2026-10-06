@@ -1030,7 +1030,7 @@ def offline_files(root, project_root, source_plan, batch, config_path, key_path)
 
 
 def run(args, project_root):
-    if args.mode in {"derive", "materials"}:
+    if args.mode in {"derive", "materials", "groups"}:
         from .two_stage_offline import run_offline
 
         return run_offline(args, project_root)
@@ -1164,7 +1164,7 @@ def run(args, project_root):
 def main(argv=None, *, project_root=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--mode", choices=("preview", "mock", "live", "report", "derive", "materials"), default="preview"
+        "--mode", choices=("preview", "mock", "live", "report", "derive", "materials", "groups"), default="preview"
     )
     parser.add_argument("--data-root")
     parser.add_argument("--batch-id", default="offline-v1")
@@ -1172,6 +1172,7 @@ def main(argv=None, *, project_root=None):
     parser.add_argument("--keys-file")
     parser.add_argument("--report-mode", choices=("mock", "live"), default="mock")
     parser.add_argument("--source-batch")
+    parser.add_argument("--compare-batch")
     parser.add_argument("--output-dir")
     args = parser.parse_args(argv)
     try:
