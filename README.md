@@ -134,6 +134,36 @@ $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 
 离线进程审计钩子阻断网络、子进程和未批准文件读取；Derive/Materials 的写入进一步限制在新输出目录。不会访问预算池注册表、恢复 Live、重试请求或清除待对账。未来真实验证仍需明确绑定新代码/投影版本的新计划、适用的数据出站依据及预算归属；阈值变更须另行决定。正式质量还需独立 gold 与冻结评测。
 
+### 来源反馈分组与两轮比较
+
+`Groups` 复用离线入口、来源准入和共同 assessment 汇总，独立版本为 `source-feedback-groups-v1`，推理契约不变。分组只描述来源信号，真实点踩动作、具体缺陷、模型未确认候选和人工 gold 分开保存；不新增生产门控。规则不接收模型预测，评分和回答之后的反馈不进入推理 state、材料或提示词。
+
+| 固定来源 | 分组规则及关联依据 |
+| --- | --- |
+| [HelpSteer3](https://huggingface.co/datasets/nvidia/HelpSteer3/blob/f6d145777bcbde96137596340fab89793acd1031/README.md) | response1/feedback1、response2/feedback2 独立匹配。固定发布文件须有三条完整评价，只解析结构化 helpfulness 开头；全 perfectly 为正向，全 not/slightly 为负向，perfectly 与 not/slightly 同现为混合，其他为不明确。保留逐评价等级、数量和全部 mostly/perfectly 统计，不平均或多数投票。评价者反馈不是原用户点踩。 |
+| [WildFB](https://huggingface.co/datasets/THU-KEG/WildFB/blob/0791dbc3101c6be7e0316cba1d8caf10c28917ad/README.md) | 核对发布记录中的 history、目标问答 messages、后续 user_feedback 与快照一致；1/2 为负向，3/4 为正向。原反馈来自用户，类别由自动流程产生；这里只验证发布字段的目标绑定，不宣称人工确认了反馈的语义。缺失、非法或绑定不明为不明确。 |
+| [WildFeedback](https://huggingface.co/datasets/microsoft/WildFeedback/blob/8b1a3e530b949d6aacfad6ba8912e209a05bc846/README.md) | 使用 sat_dsat_annotation.json，不等同于筛好的负向偏好对。[作者论文附录 A.1](https://aclanthology.org/2026.acl-long.1701.pdf#page=16)说明用户回合注释针对前一助手回答。派生分组使用当前目标之后的 User 注释，核验显式会话重置、完整 UtterranceId/TurnId/Role 序列、快照会话标识及 Preceeding=YES；不复用当前 Agent 行上的注释。SAT/DSAT 为 true/false→正向、false/true→负向、双 true→混合、双 false→不明确；缺失布尔值不补 false。 |
+
+只对已准入且至少一轮可运行的目标读取正文；其他 WildFeedback 行仅按需读取会话边界和关联注释字段，跳过正文解码。输入快照、原始来源和两轮计划/结果/摘要/账本均核对指纹；对历史已构建请求重建载荷，核对题目顺序、字节数和 hash。第一层失败后未构建的第二层请求保留不可比较状态。原排除不重新准入，旧文件不覆盖。
+
+输出为全新目录中的 `groups.results.jsonl` 与 `groups.summary.json`。明细保留原始 3000 个目标，排除目标的 evaluation 为 null；其余保存分组、依据、来源身份/字段位置/hash、标签来源及两轮原结果引用/hash和 assessment/coverage。完整预测仍由冻结的历史结果提供。摘要复用 manifest 来源/输入/代码指纹，列出总体、每源、每组、来源×组的技术状态、结果分母、assessment、coverage 和材料提取状态，并区分共同成功、仅某轮成功、输入/材料/题目/请求变化。旧 v1 没有材料提取元数据时保留缺失，不补造历史状态。
+
+每组的原始目标分母指分配到该组的可运行目标；原有/新增排除保持未分组，在总体和来源分母中单列。核对原始=原排除+新增排除+可运行、可运行=成功+失败+待对账+未执行、可运行=四组之和。候选产出率、拒识率和范围内未检出比例以该组技术成功目标为分母；材料题目覆盖率为已问题数/(已问题数+历史选中范围内缺材料未问题数)，不代表整个目录被覆盖。空分母为 null；accuracy/precision/recall/F1 均为 null，质量 NOT_EVALUATED。正向组候选不是已知误报，负向组无候选不是已知漏检。
+
+```powershell
+$entry = 'C:/Users/22826/.codex/worktrees/whynote-evaluation-groups/jev项目/scripts/start_two_stage.ps1'
+$python = 'C:/Users/22826/.codex/worktrees/whynote-evaluation-groups/jev项目/.venv/Scripts/python.exe'
+$data = 'D:/PythonProject/jev项目'
+$runs = "$data/var/research/typesafe-preflight"
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+& $entry -Mode Groups -Python $python -DataRoot $data `
+  -SourceBatch "$runs/m55-two-stage-live-approved-01" `
+  -CompareBatch "$runs/m55-two-stage-live-approved-02" `
+  -OutputDir "$runs/evaluation-groups-$stamp"
+```
+
+`Groups` 拒绝 KeysFile/ConfigFile，不访问预算、不发送或重试模型请求。重复运行的分组内容一致，目录已存在时报错。首次完整复核：HelpSteer3 负73/正170/混合0/不明确566（全部 mostly/perfectly 437）；WildFB 623/247/0/0；WildFeedback 28/19/0/805。WildFeedback 852 个旧 Agent 注释均与前一 User 注释相同；529 个目标能绑定后续相关用户注释，其中52个布尔值组合不同；其余150个跨会话/轮次、173个话题关联未证实。第一轮2520成功、10失败、1待对账；第二轮2524成功、7失败，并准确还原240候选/903范围内未检出/1381拒识。人工复核优先检查正向组候选、负向组全部已问项为 no、冲突等级及反馈关联未证实记录；分组和 AI 审阅均不代替人工签署。
+
 旧 `var/research/typesafe-preflight/m55-full-20261004/start.ps1` 继续属于冻结的 `m55-original-choice-v1` 四题历史批次；其终态、预算和结果不用于新版待处理判断。新版不改生产 Outbox、宿主确认 UI、auto-attach 或训练导出。对应 D-21、FR-05/06/14/15、TD-07/11/14 的本地工程实现不等于完整 FR、正式质量或发布验收。
 
 ## 三源本机探索（历史 Laya 路径）

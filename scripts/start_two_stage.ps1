@@ -1,11 +1,12 @@
 param(
-    [ValidateSet('Preview', 'Mock', 'Live', 'Report', 'Derive', 'Materials')][string]$Mode = 'Preview',
+    [ValidateSet('Preview', 'Mock', 'Live', 'Report', 'Derive', 'Materials', 'Groups')][string]$Mode = 'Preview',
     [string]$BatchId = 'offline-v1',
     [string]$DataRoot = '',
     [string]$Python = '',
     [string]$ConfigFile = '',
     [string]$KeysFile = '',
     [string]$SourceBatch = '',
+    [string]$CompareBatch = '',
     [string]$OutputDir = '',
     [ValidateSet('Mock', 'Live')][string]$ReportMode = 'Mock'
 )
@@ -42,6 +43,7 @@ sys.exit(main(project_root=root))
     if ($ConfigFile) { $arguments += @('--config-file', [IO.Path]::GetFullPath($ConfigFile)) }
     if ($KeysFile) { $arguments += @('--keys-file', [IO.Path]::GetFullPath($KeysFile)) }
     if ($SourceBatch) { $arguments += @('--source-batch', [IO.Path]::GetFullPath($SourceBatch)) }
+    if ($CompareBatch) { $arguments += @('--compare-batch', [IO.Path]::GetFullPath($CompareBatch)) }
     if ($OutputDir) { $arguments += @('--output-dir', [IO.Path]::GetFullPath($OutputDir)) }
     & $Python @arguments
     exit $LASTEXITCODE

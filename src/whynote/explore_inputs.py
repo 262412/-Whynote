@@ -57,8 +57,8 @@ def parse_record(raw):
         return None, "record_invalid_json"
 
 
-def array_records(stream, limit=MAX_RECORD):
-    """One object at a time, including oversized objects; no whole-file JSON load."""
+def array_chunks(stream, limit=MAX_RECORD):
+    """Frame bounded JSON objects without decoding their contents."""
     begun = ended = quoted = escaped = False
     depth, size, index = 0, 0, 0
     data = bytearray()
@@ -106,12 +106,18 @@ def array_records(stream, limit=MAX_RECORD):
             elif byte in (125, 93):
                 depth -= 1
             if depth == 0:
-                row, error = parse_record(data) if size <= limit else (None, "record_oversized")
-                yield index, row, error
+                yield index, bytes(data) if size <= limit else None
                 index += 1
                 expect_value = False
                 data.clear()
     require(begun and ended and depth == 0, "source_truncated_array")
+
+
+def array_records(stream, limit=MAX_RECORD):
+    """One object at a time, including oversized objects; no whole-file JSON load."""
+    for index, raw in array_chunks(stream, limit):
+        row, error = parse_record(raw) if raw is not None else (None, "record_oversized")
+        yield index, row, error
 
 
 def source_rows(path, source):
