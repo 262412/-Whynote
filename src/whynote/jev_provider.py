@@ -3,11 +3,13 @@
 import asyncio
 import json
 
-from .domain import REASON_CODES, NotFoundError, validate_jev_response
+from .domain import REASON_CODES, NotFoundError, is_jev_model_name, validate_jev_response
 from .provider_keys import load_provider_key
 
 ENDPOINT = "https://api.typesafe.ai/v1/systemone"
-MODEL = "jev-1.13.0"
+MODEL = "jev-latest"
+REQUEST_TIMEOUT_SECONDS = 180
+CONNECT_TIMEOUT_SECONDS = 10
 
 
 async def evaluate_reason(
@@ -70,13 +72,16 @@ async def evaluate_reason(
         response = json.loads(raw)
         if not isinstance(response, dict) or set(response.get("answers", {})) != set(questions):
             raise ValueError
+        response_model = response.get("model")
+        if not is_jev_model_name(response_model):
+            raise ValueError
         # The shared validator allows omitted optional signals in older inputs.
         # Here every requested question must have a typed answer, including Noul.
         for name, question in questions.items():
             answer = response["answers"][name]
             if not isinstance(answer, dict) or answer.get("type") != question["type"]:
                 raise ValueError
-        return validate_jev_response(response, MODEL)
+        return validate_jev_response(response, response_model) | {"requested_model": MODEL}
     except (ValueError, TypeError, AttributeError):
         raise ValueError("Jev response does not match the pinned contract") from None
 
@@ -87,8 +92,12 @@ async def _request_bytes(body, key, transport=None):
 
     try:
         async with (
-            asyncio.timeout(60),
-            httpx.AsyncClient(transport=transport, trust_env=False, timeout=httpx.Timeout(60, connect=10)) as client,
+            asyncio.timeout(REQUEST_TIMEOUT_SECONDS),
+            httpx.AsyncClient(
+                transport=transport,
+                trust_env=True,
+                timeout=httpx.Timeout(REQUEST_TIMEOUT_SECONDS, connect=CONNECT_TIMEOUT_SECONDS),
+            ) as client,
         ):
             async with client.stream(
                 "POST",

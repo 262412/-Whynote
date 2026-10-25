@@ -8,16 +8,16 @@ from copy import deepcopy
 from dataclasses import asdict, dataclass
 from importlib.resources import files
 
-from .domain import NotFoundError
+from .domain import NotFoundError, is_jev_model_name
 from .jev_provider import MODEL, _request_bytes
 from .provider_keys import load_provider_key
 
-VERSION = "jev-two-stage-v2"
+VERSION = "jev-two-stage-v2.2"
 CATALOG_VERSION = "jev-two-stage-v1"
 ASSESSMENT_VERSION = "jev-assessment-v1"
 CATALOG_SHA256 = "09207682fc351519394a15c27ab4e0f5c4bac867e7b434a08d92ce129ef728ce"
 MAX_REQUEST_BYTES = 32768
-STAGE_RECORD_VERSION = "jev-stage-record-v2"
+STAGE_RECORD_VERSION = "jev-stage-record-v3"
 FIELDS = ("request", "answer", "prior_context", "original_code", "source_text", "reference", "table", "tool_trace")
 UNRESOLVED = {"mixed", "other", "unknown"}
 DECISIONS = {
@@ -30,6 +30,19 @@ DECISIONS = {
 def _require(condition, code):
     if not condition:
         raise ValueError(code)
+
+
+class InvalidStageResponse(ValueError):
+    """A safe response-validation category without provider content."""
+
+    def __init__(self, code):
+        self.code = code
+        super().__init__("invalid_stage_response")
+
+
+def _require_response(condition, code):
+    if not condition:
+        raise InvalidStageResponse(code)
 
 
 def _encode(value, *, canonical=False):
@@ -97,41 +110,46 @@ def _unique_object(pairs):
     return value
 
 
-def validate_response(raw, questions):
-    """Keep only typed answers and usage; never return provider text or unknown fields."""
+def validate_response(raw, questions, *, include_model=False):
+    """Keep typed answers, usage, and optionally the resolved Jev model name."""
     try:
         response = json.loads(raw, object_pairs_hook=_unique_object)
-        _require(isinstance(response, dict) and response.get("model") == MODEL, "invalid_response")
-        answers = response.get("answers")
-        _require(isinstance(answers, dict) and set(answers) == set(questions), "invalid_response")
-        safe = {}
-        for name, question in questions.items():
-            answer = answers[name]
-            _require(isinstance(answer, dict) and answer.get("type") == "choice", "invalid_response")
-            probabilities = answer.get("probabilities")
-            _require(
-                isinstance(probabilities, dict) and set(probabilities) == set(question["criteria"]), "invalid_response"
-            )
-            _require(all(_probability(v) for v in probabilities.values()), "invalid_response")
-            _require(abs(sum(probabilities.values()) - 1) <= 0.02, "invalid_response")
-            choice = answer.get("choice")
-            _require(isinstance(choice, str) and choice in probabilities, "invalid_response")
-            _require(probabilities[choice] >= max(probabilities.values()) - 1e-9, "invalid_response")
-            _require(_probability(answer.get("confidence")), "invalid_response")
-            safe[name] = {
-                "choice": choice,
-                "probabilities": {key: probabilities[key] for key in question["criteria"]},
-                "confidence": answer["confidence"],
-            }
-        usage = response.get("usage")
-        _require(
-            isinstance(usage, dict)
-            and all(type(usage.get(k)) is int and usage[k] >= 0 for k in ("input_tokens", "output_tokens")),
-            "invalid_response",
+    except (ValueError, TypeError, AttributeError, RecursionError) as exc:
+        code = "duplicate_response_key" if str(exc) == "duplicate_response_key" else "invalid_json"
+        raise InvalidStageResponse(code) from None
+    _require_response(isinstance(response, dict), "response_not_object")
+    response_model = response.get("model")
+    _require_response(is_jev_model_name(response_model), "model_name_invalid")
+    answers = response.get("answers")
+    _require_response(isinstance(answers, dict) and set(answers) == set(questions), "answer_set_mismatch")
+    safe = {}
+    for name, question in questions.items():
+        answer = answers[name]
+        _require_response(isinstance(answer, dict) and answer.get("type") == "choice", "answer_type_invalid")
+        probabilities = answer.get("probabilities")
+        _require_response(
+            isinstance(probabilities, dict) and set(probabilities) == set(question["criteria"]),
+            "probability_set_mismatch",
         )
-        return safe, {key: usage[key] for key in ("input_tokens", "output_tokens")}
-    except (ValueError, TypeError, AttributeError, RecursionError):
-        raise ValueError("invalid_stage_response") from None
+        _require_response(all(_probability(v) for v in probabilities.values()), "probability_invalid")
+        _require_response(abs(sum(probabilities.values()) - 1) <= 0.02, "probability_sum_mismatch")
+        choice = answer.get("choice")
+        _require_response(isinstance(choice, str) and choice in probabilities, "choice_invalid")
+        _require_response(probabilities[choice] >= max(probabilities.values()) - 1e-9, "choice_probability_mismatch")
+        _require_response(_probability(answer.get("confidence")), "confidence_invalid")
+        safe[name] = {
+            "choice": choice,
+            "probabilities": {key: probabilities[key] for key in question["criteria"]},
+            "confidence": answer["confidence"],
+        }
+    usage = response.get("usage")
+    _require_response(
+        isinstance(usage, dict)
+        and all(type(usage.get(k)) is int and usage[k] >= 0 for k in ("input_tokens", "output_tokens")),
+        "usage_invalid",
+    )
+    validated_usage = {key: usage[key] for key in ("input_tokens", "output_tokens")}
+    return (safe, validated_usage, response_model) if include_model else (safe, validated_usage)
 
 
 def _accepted(answer, probability, confidence):
@@ -273,9 +291,9 @@ def _project(state):
     return projection
 
 
-def request_bytes(state, questions):
+def request_bytes(state, questions, *, model=MODEL):
     """The exact wire serialization, also used by offline planning."""
-    return _encode({"model": MODEL, "state": state, "questions": questions})
+    return _encode({"model": model, "state": state, "questions": questions})
 
 
 def _result(catalog, policy, routes, rows, answers, stages):
@@ -310,13 +328,16 @@ def _result(catalog, policy, routes, rows, answers, stages):
     ]
     partial = any(route["status"] == "unresolved" for route in routes.values())
     unknown = partial or any(row["decision"] == "unknown" or row["status"] == "missing_evidence" for row in rows)
+    response_models = sorted({stage["response_model"] for stage in stages if "response_model" in stage})
     return {
         "schema_version": VERSION,
         "catalog_version": catalog["version"],
         "catalog_sha256": CATALOG_SHA256,
         "policy": asdict(policy),
         "provider": "typesafe",
-        "model_version": MODEL,
+        "requested_model": MODEL,
+        "model_version": response_models[0] if len(response_models) == 1 else None,
+        "model_versions": response_models,
         "scope": "research_only",
         "quality_status": "NOT_EVALUATED",
         "route_scope": "partial" if partial else "selected_task_and_domain",
@@ -409,12 +430,14 @@ async def classify(
         notify("started", record)
         try:
             raw = await _request_bytes(body, key, transport)
-            answers, usage = validate_response(raw, questions)
-        except ValueError:
+            answers, usage, response_model = validate_response(raw, questions, include_model=True)
+        except ValueError as exc:
             record["status"] = "failed_or_unknown"
+            if isinstance(exc, InvalidStageResponse):
+                record.update(failure_category="response_validation", failure_validation_code=exc.code)
             notify("failed", record)
             raise StageError("stage_failed_reconcile_budget", stages) from None
-        record.update(status="completed", usage=usage, answers=answers)
+        record.update(status="completed", usage=usage, answers=answers, response_model=response_model)
         notify("completed", record)
         check_admission()
         return answers

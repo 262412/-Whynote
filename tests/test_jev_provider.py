@@ -60,11 +60,12 @@ def test_native_endpoint_and_normalized_model_result(call):
         body = json.loads(request.content)
         assert set(body) == {"state", "model", "questions"} and body["model"] == MODEL
         assert "messages" not in body
-        return httpx.Response(200, json=response())
+        return httpx.Response(200, json=response() | {"model": "jev-resolved-build"})
 
     result = call(handler)
     assert len(calls) == 1
-    assert result["provider"] == "typesafe" and result["model_version"] == MODEL
+    assert result["provider"] == "typesafe" and result["model_version"] == "jev-resolved-build"
+    assert result["requested_model"] == MODEL
     assert result["primary_reason"] == "factual_error" and "attribution_status" not in result
 
 
@@ -114,7 +115,7 @@ def test_transport_errors_do_not_expose_provider_content(call, error):
 def test_invalid_response_or_drift_is_refused(call, mutation):
     result = copy.deepcopy(response())
     if mutation == "version":
-        result["model"] = "jev-latest"
+        result["model"] = "other-provider-model"
     elif mutation == "probability":
         result["answers"]["primary_reason"]["probabilities"]["factual_error"] = 2
     elif mutation == "usage":
@@ -162,6 +163,30 @@ def test_total_deadline_is_enforced(call, monkeypatch):
 
     with pytest.raises(ValueError, match="reconcile"):
         call(slow)
+
+
+def test_proxy_request_uses_extended_bounded_timeout(call, monkeypatch):
+    from whynote import jev_provider
+
+    seen = {}
+    original_timeout = asyncio.timeout
+    original_client = httpx.AsyncClient
+
+    def capture_deadline(seconds):
+        seen["outer_seconds"] = seconds
+        return original_timeout(seconds)
+
+    def capture_client(*args, **kwargs):
+        seen["client_timeout"] = kwargs["timeout"]
+        return original_client(*args, **kwargs)
+
+    monkeypatch.setattr("whynote.jev_provider.asyncio.timeout", capture_deadline)
+    monkeypatch.setattr(httpx, "AsyncClient", capture_client)
+    call(lambda _: httpx.Response(200, json=response()))
+
+    assert seen["outer_seconds"] == jev_provider.REQUEST_TIMEOUT_SECONDS == 180
+    assert seen["client_timeout"].read == 180
+    assert seen["client_timeout"].connect == jev_provider.CONNECT_TIMEOUT_SECONDS == 10
 
 
 def test_optional_noul_uses_existing_validator(call):

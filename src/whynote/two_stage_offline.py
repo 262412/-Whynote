@@ -60,8 +60,11 @@ def validate_history(plan, records, source_plan, summary, ledger_raw):
         summary["mode"] == "live" and summary["synthetic"] is False and summary["runtime"] == runtime,
         "source_summary_identity_changed",
     )
-    batch.require(runtime["contract_version"] in {"jev-two-stage-v1", core.VERSION}, "unsupported_source_contract")
-    if runtime["contract_version"] == core.VERSION:
+    batch.require(
+        runtime["contract_version"] in {"jev-two-stage-v1", "jev-two-stage-v2", core.VERSION},
+        "unsupported_source_contract",
+    )
+    if runtime["contract_version"] in {"jev-two-stage-v2", core.VERSION}:
         batch.require(
             plan.get("input_version") == runtime.get("input_version") == batch.INPUT_VERSION
             and runtime.get("material_rule_version") == materials.VERSION,
@@ -75,7 +78,7 @@ def validate_history(plan, records, source_plan, summary, ledger_raw):
     batch.require(
         runtime["catalog_version"] == core.CATALOG_VERSION
         and runtime["catalog_sha256"] == core.CATALOG_SHA256
-        and runtime["model"] == batch.MODEL,
+        and runtime["model"] in {"jev-1.13.0", batch.MODEL},
         "source_catalog_or_model_changed",
     )
     batch.require(

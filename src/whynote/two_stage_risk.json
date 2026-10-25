@@ -1,0 +1,25 @@
+{
+  "version": "jev-research-risk-v1",
+  "scope": "research_only_not_production_approval",
+  "family_alpha": 0.05,
+  "simultaneous_risks": 3,
+  "risks": {
+    "route": {"limit": 0.05, "planning_error_rate": 0.025},
+    "yes": {"limit": 0.1, "planning_error_rate": 0.05},
+    "no": {"limit": 0.1, "planning_error_rate": 0.05}
+  },
+  "power": 0.8,
+  "calibration_initial_groups": 400,
+  "grid_quantiles": [0, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 1],
+  "confidence_comparisons": ["probability_only", "probability_and_confidence"],
+  "search_order": ["route", "yes", "no"],
+  "cv_folds": 5,
+  "seed": "jev-review-20261006-v1",
+  "confirmation_design": "equal_group_weight_one_preselected_target",
+  "minimum_delayed_review_hours": 48,
+  "calibration_other_review_fraction": 0.2,
+  "references": [
+    "https://www.stat.ethz.ch/R-manual/R-devel/library/stats/html/binom.test.html",
+    "https://itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbino.htm"
+  ]
+}

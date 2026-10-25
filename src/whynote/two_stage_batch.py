@@ -696,10 +696,14 @@ class Ledger:
     def pending(self):
         return {row[0] for row in self.db.execute("SELECT id FROM targets WHERE status='pending'")}
 
-    def claim(self, target):
-        require(self.committed + 2 * self.reserve <= self.limit, "budget_insufficient")
+    def claim(self, target, *, stages=("route", "reasons")):
+        require(
+            stages in (("route", "reasons"), ("route",), ("route", "reasons.1"), ("route", "reasons.1", "reasons.2")),
+            "invalid_stage_reservations",
+        )
+        require(self.committed + len(stages) * self.reserve <= self.limit, "budget_insufficient")
         key = target["target_id"]
-        refs = {stage: f"{self.plan['batch_id']}:{self.mode}:{key}:{stage}" for stage in ("route", "reasons")}
+        refs = {stage: f"{self.plan['batch_id']}:{self.mode}:{key}:{stage}" for stage in stages}
         with self.db:
             require(
                 self.db.execute("SELECT status FROM targets WHERE id=?", (key,)).fetchone()[0] == "pending",
@@ -716,7 +720,7 @@ class Ledger:
                 "claim",
                 {"target_id": key, "source": target["source"], "input_sha256": target["input_sha256"], "refs": refs},
             )
-        self.held += 2 * self.reserve
+        self.held += len(stages) * self.reserve
         return refs
 
     def stage(self, key, event, record):

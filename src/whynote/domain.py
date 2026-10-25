@@ -269,6 +269,15 @@ def project(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     return state
 
 
+def is_jev_model_name(value: Any) -> bool:
+    return (
+        type(value) is str
+        and value.startswith("jev-")
+        and len(value) <= 128
+        and all(char.isascii() and (char.isalnum() or char in ".:_-") for char in value)
+    )
+
+
 def validate_jev_response(response: Mapping[str, Any], pinned_model: str) -> dict[str, Any]:
     """Validate TypeSafe Choice/Noul output before any calibration or routing."""
 
