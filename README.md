@@ -207,22 +207,24 @@ $env:TMP = $env:TEMP
 
 本轮冻结历史 `questions('original')`：五类 route 和三个原理由 Choice，保留原文案与 `yes/no/unknown` 选项、每题完整概率，`primary_reason=null`；`no` 的原义是“证据不支持该缺陷”，不是人工确认无缺陷。原题 canonical SHA 为 `4d7a8c9fad77b5dc391181f7563fb824ce5b7bdd3b88c66d191b70d6e1ac464b`，已逐 stage 重构核对历史 1912 个 stage 的题目和选项。909 个共同输入中，历史 route、指令不遵循、不必要拒绝各问过 909 次，接口改动仅问过 3 次，其余 906 项为 `not_asked`，不生成 `no` 或概率。历史未归一化概率保留原值并标为不能进行严格概率比较。未请求、失败和材料不足分别计数；无 gold，准确率/F1 和正式质量保持 NA，不用于训练或开启生产。
 
-固定 `jev-1.13.0`；[官方模型限制与单价](https://docs.typesafe.ai/models)为总输入 64k token、state 加最长问题 32k token、输入每百万 token 0.042 美元、输出免费。离线规划使用 UTF-8 字节加 4096 包裹余量，未测得服务端 tokenizer 长度，超限停止、不截断。按最大 64k 每次预留 0.002688 美元，原题预算核验后 2531 项一次尝试规划 **6.803328 美元**，每项最多两次规划 **13.606656 美元**。执行时使用本人已同意的费用上限，不追加充值；这些公开费率估计及本地停止线不代替有效账户扣费硬上限。完整入口只供本人手动执行，超时或未知费用不自动重发。
+固定 `jev-1.13.0`；[官方模型限制与单价](https://docs.typesafe.ai/models)为总输入 64k token、state 加最长问题 32k token、输入每百万 token 0.042 美元、输出免费。离线规划使用 UTF-8 字节加 4096 包裹余量，未测得服务端 tokenizer 长度，超限停止、不截断。按最大 64k 每次预留 0.002688 美元，2531 项各一次尝试规划 **6.803328 美元**。新版 benchmark 不自动重发任何目标，包括429/529；未知费用保留全额预留并持续计入原25美元预算。公开费率估计及本地停止线不代替有效账户扣费硬上限；收费入口只供本人手动执行。
 
 ```powershell
 $fullEntry = 'D:/PythonProject/jev项目/var/research/typesafe-preflight/m55-full-20261004/start.ps1'
-& $fullEntry                  # Preview：检查固定原题批次，不读取 key
+& $fullEntry                  # Preview：检查 live 台账及待发目标，不读取 key
 & $fullEntry -Mode Mock       # fake key；审计钩子拦截网络和真实 key
 # 本人填写 key，并核实服务方有效账户扣费上限不高于本轮已同意预算后，手动执行：
 & $fullEntry -Mode Live -ProviderCapConfirmed
 & $fullEntry -Mode Compare    # 本地读取本轮 live 结果，无 API 请求
 ```
 
-不用填写 SHA 或传递 key；入口从 `var/private/provider-keys.json` 的 `typesafe` 字符串读取。`-BudgetUsd` 可调低预算。`-ProviderCapConfirmed` 是本人对账户硬上限的确认，脚本不验证服务方账户，余额不等于扣费硬上限。原题使用独立 `runner/original.*` 冻结描述、request pins 和 mock/live 台账；完成目标不重发，429/529 明确拒绝最多重试一次，超时或未知费用先停止。全量 Mock **2531/2531 完成**，再次执行跳过 2531 项，新增请求和正文读取均为 0；live 本地比较显示 0 真实配对。Mock 对照见 `runner/verification-original-final-20261005/original.mock-comparison.json`。原题全量输入独立核验见 `var/research/dual-route-coordination/m55-original-snapshot-independent-verification.json`：2531 项原文、84 项原敏感排除、0 真实 key 读取、0 认证请求。相关最终回归为 **235 passed、1 skipped**（Windows 无符号链接权限），Ruff 通过；这些工程检查不构成正式质量验收。
+不用填写 SHA 或传递 key；入口从 `var/private/provider-keys.json` 的 `typesafe` 字符串读取。`-BudgetUsd` 可调低预算；`-ProviderCapConfirmed` 是本人对账户硬上限的确认，脚本不验证服务方账户，余额不等于扣费硬上限。新版 `start.ps1` 使用严格单次 benchmark：读取固定本机数据，返回原五类 `task_type` 以及 `code.interface_changed`、`general.instruction_not_followed`、`general.unnecessary_refusal` 三个已有原因的 `yes/no/unknown`，并输出支持为yes的 `reason_ids`；不跨题选主因，`primary_reason=null`。单条无效响应记error，保留原台账和未知费用预留后继续下一条；鉴权失败、预算不足、连续3次服务异常或用户取消停批。重新启动跳过成功、error及已批准跳过的目标，不读取这些目标的正文、不重复请求；尚未形成outcome的pending仍先关闭以防不确定的重复收费。
+
+每次正常结束或上述停批自动生成 `runner/original.live.benchmark-results.jsonl`（逐行分类/状态/有限诊断，无原问答或key）及 `runner/original.live.benchmark-summary.json`（成功/error/待发数量、分类分布、延迟、usage估计和未知费用预留）；Mock使用同名 `original.mock.*` 文件。没有人工标签也可以预测，准确率/F1为NA，不把预测当gold。原题全量输入独立核验及历史2531项Mock保留在 `var/research/dual-route-coordination/m55-original-snapshot-independent-verification.json` 和 `runner/verification-original-final-20261005/original.mock-comparison.json`。本次相关离线回归 **249 passed、1 skipped**（Windows符号链接权限），Ruff通过；不构成正式质量验收。
 
 ## 双路线本机准备
 
-2026-10-05 续跑兼容契约：研究台账新增 `disposition` 事件，仅追加本人明确批准的 `skip_unknown_keep_reservation` 处置，绑定原失败事件摘要、目标、attempt 和批准引用。原失败、原概率判断及未测费用预留不改写；该预留始终占用预算，其他未处置 unknown 仍停批。新读取器兼容旧 pending/outcome；旧读取器遇到新 disposition 会关闭。未来 outcome 可带 `m55-redacted-response-diagnostic-v1` 白名单诊断，保存题号、有限数值概率及原和、usage、合法 request ID、时间与HTTP状态，不保存原问答、认证头或自由文本；诊断 usage 不计作已确认扣费。概率和门槛仍为 `1e-6`。用户已于 03:23:49 UTC 批准跳过本批 `b2fdbd93…1ae84e`，保留其 `$0.002688` 未测预留并继续其他目标；此前丢失的失败响应不补造。此兼容变更仅用于本机研究续跑。
+2026-10-05 本机研究兼容契约：既有 `disposition` 及原失败事件保持不变，旧批准与备份见 `runner/recovery-20261005/approved-disposition-receipt.json`、`backup/`。新版 `m55-one-pass-benchmark-v1` 仅将已有失败outcome投影为终态error，不追加或改写台账；仍保留所有未知费用预留。冻结描述升级为v4，旧v3描述和源码分别保存在 `runner/original.frozen.pre-benchmark-20261005.json`、`runner/benchmark-backup-20261005/`；旧冻结描述与新源码不匹配时继续关闭。新诊断 `m55-redacted-response-diagnostic-v2` 增加受限 `type/confidence` 字段，兼容v1；仅保存选项、有限概率及原和、usage、合法request ID、时间和HTTP状态，不保存原问答、认证头或自由文本。概率和门槛仍为 `1e-6`，不增加容差或归一化。当前HTTP200的route概率和为0.99，只能说与两位小数舍入相容，不能证明；旧诊断没有confidence/type，继续error，不能补造成功结果。台账现有123事件、61claim、59成功及1旧授权跳过，新失败在benchmark视图中为1error，待发2470；两个未测费用预留合计 `$0.005376`，已知成功usage估计 `$0.004617270` 均非实际账单。本轮实现与验证不读取真实key，不发起收费API请求。
 
 2026-10-04，本机 checkout `7661995`，D-21、FR-05/06/14/15、TD-07/11/14：产品判断后并行落实本机 Laya 合成工程试跑与 TypeSafe 用户运行入口。下列临时脚本位于本机被 Git 忽略的 `var/`，尚未纳入发布；不改变三源无标签诊断用途或生产门控。最近保存的飞书修订为 2026-09-30 的 PRD595 / 技术595；当前修订未核实，以可核验本地资料开展本轮隔离准备。
 
