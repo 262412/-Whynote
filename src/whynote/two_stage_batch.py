@@ -141,7 +141,7 @@ def runtime_identity(root):
     ):
         module = importlib.import_module("whynote" if name == "__init__" else "whynote." + name)
         require(Path(module.__file__).resolve() == root / "src/whynote" / (name + ".py"), "wrong_module_origin")
-    require(core.VERSION == "jev-two-stage-v2", "core_version_mismatch")
+    require(core.VERSION == "jev-two-stage-v2.2", "core_version_mismatch")
     catalog = core.load_catalog()
     pins = {name: sha(read(root / name, 2 * 1024 * 1024)) for name in CODE_FILES}
     return {

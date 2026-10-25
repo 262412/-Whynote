@@ -781,7 +781,7 @@ def test_actual_launcher_rejects_wrong_source_before_any_live_read(launcher, cha
             path.unlink()
         elif change == "version":
             path.write_text(
-                path.read_text(encoding="utf-8").replace('VERSION = "jev-two-stage-v2"', 'VERSION = "wrong"'),
+                path.read_text(encoding="utf-8").replace('VERSION = "jev-two-stage-v2.2"', 'VERSION = "wrong"'),
                 encoding="utf-8",
             )
         else:
