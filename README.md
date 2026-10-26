@@ -172,6 +172,63 @@ $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 
 旧 `var/research/typesafe-preflight/m55-full-20261004/start.ps1` 继续属于冻结的 `m55-original-choice-v1` 四题历史批次；其终态、预算和结果不用于新版待处理判断。新版不改生产 Outbox、宿主确认 UI、auto-attach 或训练导出。对应 D-21、FR-05/06/14/15、TD-07/11/14 的本地工程实现不等于完整 FR、正式质量或发布验收。
 
+## Jev v3 人工复核、基础信息与阈值研究
+
+本地入口为 `scripts/start_jev_research.ps1`，对应 D-21、FR-05/06/14/15、TD-07/11/14；2026-10-06 核对飞书 PRD595 / 技术595。当前研究协议为 `jev-two-stage-v3`，输入 `jev-evidence-input-v4`、目录 `jev-evidence-catalog-v4`、提示词 `jev-evidence-prompts-v2` 与请求 `jev-linked-request-v1`。旧模块、目录和三轮结果继续按原版本解释；旧概率不能作为新协议的校准证据。点踩与 Outbox 路径不依赖此研究入口，生产上下文、auto-attach 和自由文本 SLM 仍由原门控关闭。
+
+`two_stage_inputs.py` 只从获准的回答前输入作本地提取，或接收有文本位置的显式填写；不增加模型抽取调用。基础信息保存值引用、来源、Unicode `[start,end)` 位置及 known/unknown/conflict/inferred 状态；版本不默认最新，材料正文与回答中观察到的技术栈不冒充用户要求。`two_stage_catalog_v3.json` 为全部 86 个原因列出少量明确的最低证据组合：改接口需要保持接口的要求、原代码或接口契约及新实现；版本错误需要明确版本和可靠依据；翻译失真需要原文；工具完成声明需要对应执行记录。缺可选背景不关闭其他可判断原因，推测不能满足必需证据。
+
+材料状态区分 `provided_bound`、`not_provided`、`extraction_failed`、`ambiguous_or_conflicting`、`association_unconfirmed`、`source_ineligible`、`omitted_for_budget`；`not_identified` 仅表示规则未识别，不能解释为用户没提供。普通参考文本或助手自称已执行不自动成为可靠 reference/tool_trace。缺失原因保存为 `not_asked` 并给出最多三个具体补充项；`unknown`、已接受 `no` 和未确认多候选各自保留，不按不同问题的分数选“主原因”。
+
+输入 v4 补充有明确边界的当前用户行内译文／润色原文，排除这些正文中的技术栈、版本等伪要求；不猜测未指明的前文关联。目录 v4 将功能／输入情况／API 检查扩至代码改写、排错及软件领域，形式约束覆盖实用写作，引用与作品归属核对不再由主任务或领域阻断。用户的明确报错可用于核对归因，但不证明执行成功。仍保留缺可靠 reference、原代码、运行记录及无法明确绑定材料的限制；路由外发现可以标注，不能为消除诊断差异而改写人工意见。
+
+请求计量覆盖最终 UTF-8 JSON 的 model、state、问题、选项、转义和结构。24 KiB 是本轮工程发送预算，32 KiB 是本地硬边界，预留 8 KiB，不宣称是供应商限制。正文在文档表中仅存一次，材料用可解析的文本范围关联。第二层保留完整准入上下文和回答；第一层仅在预算不足时显式省略已绑定材料正文，并要求依赖省略内容的路由拒识。第二层最多两个确定顺序的分包，每题一次、逐包预占/指纹/状态/用量；上下文本身不能容纳时返回预算限制，不截头尾、不继续增加调用。运行前遍历可能路由规划，实际路由后再次精确计量，超预算零发送。部分失败保留已完成分包，费用未知不自动重发。
+
+人工入口以会话、原案例、HelpSteer3 双回答和近重复组分区；每组预先选一个代表目标，重复运行不能增加分母。诊断集覆盖 15 个正向组候选、55 个候选变化及预定问题样本，用于排错。校准先按来源分层抽取约 400 个会话；其余预定会话等权用于内部确认。三轮暴露历史写入 manifest，因此当前留出不能称为正式独立新分布验证。
+
+复核页面隐藏预测、分数、阈值与来源正负标签，展示全部原因并支持文本选区引用。每项填写 present / absent / insufficient_evidence / out_of_scope，未审核独立保存为 not_reviewed；另填领域熟悉程度、缺失材料和理由。先保存，再锁定；锁定意见不可覆盖，导出/导入校验目标、组、版本、输入及目录指纹。校准复核全部正例和证据不足项、固定随机 20% 的其他项；单人复标间隔至少 48 小时，仍只记单人证据。确认需要两名人工独立完成，裁决保留原意见；AI 不充当第二名人工。后续用户反馈只能作另阶段诊断或经用户授权的新评估，不能改写历史盲审输入。
+
+审核人指作出决定的人，允许“人工决策、AI 辅助录入”。来源更正以绑定原文件摘要的说明追加，保留原锁定意见和回执；人工曝光来自本人陈述，与代录／诊断助手的曝光分开。更正不改变抽样分区，也不将诊断意见自动准入校准或确认。页面展示每题路由范围，区分新增功能遗漏、原实现丢失与明确拒绝；同一缺陷可满足多个原因，但统计仍以独立目标为单位。
+
+研究风险配置见 `src/whynote/two_stage_risk.json`：错误推荐与错误否定各 10%，错误具体路由 5%，总体 alpha=0.05，三项各分配 0.05/3。风险按“一个有效独立目标内至少一项错误”计数；材料不足的肯定推荐计错误，未审核按缺失处理并报告最坏情况。确认使用单侧 Clopper–Pearson 上界；方法依据 [R 精确二项检验](https://www.stat.ethz.ch/R-manual/R-devel/library/stats/html/binom.test.html)和 [NIST 精确二项区间](https://itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbino.htm)。零错误数学下限分别为 39、80；实际错误率假设 5%/2.5%、80% 功效的规划分别为 252、533 个相应有效目标，不是总入批数。规划器输出独立会话数、有效事件数与缺口，不能据零错误下限边看结果边停止。
+
+搜索按路由→yes→no，使用实际分数的固定分位点及 0.8/0.5 基线，比较仅概率与概率加 confidence，输出五折分组交叉验证、来源分层、可靠性分箱及风险—覆盖率 JSON/SVG。分层校准不把权重或分层总数代入普通二项区间，使用逐来源保守筛选；小来源层可能不足。原始 unknown、并列最高分始终拒识；反事实缺题保持未评估并阻止选定未完整评估的策略。搜索结果不是确认结论，分数也不是已校准的正确率。`Freeze` 固定参数、代码、协议、目录、模型、提示词、风险配置、样本及新的确认预测批次；确认预测必须在该策略下重新收集，不能直接拿初始路由策略的概率证明最终策略。确认注册表记录已占用案例组，检验只消费一次，失败后需要新的预定确认批次。
+
+本机操作（先完成诊断规范与校准盲标；另一个 PowerShell 窗口可执行后续命令）：
+
+```powershell
+$checkout = 'C:/Users/22826/.codex/worktrees/whynote-review-calibration/jev项目'
+$entry = "$checkout/scripts/start_jev_research.ps1"
+$python = "$checkout/.venv/Scripts/python.exe"
+$data = 'D:/PythonProject/jev项目'
+$runs = "$data/var/research/typesafe-preflight"
+$workflow = "$runs/jev-research-20261007-calibration-v4"
+& $entry -Mode Serve -Python $python -DataRoot $data -Workflow $workflow
+# 打开输出中的本机 URL（加 ?partition=calibration 可默认选校准），填写本人代号及审核轮次。
+& $entry -Mode Import -Python $python -DataRoot $data -Workflow $workflow -LabelsFile '<导出 JSON 的绝对路径>'
+& $entry -Mode Sample-Size -Python $python -DataRoot $data -Workflow $workflow
+& $entry -Mode Preview -Python $python -DataRoot $data -Workflow $workflow
+& $entry -Mode Mock -Python $python -DataRoot $data -Workflow $workflow
+```
+
+`Prepare` 仅接受新输出目录，完整核验 2531 个既有可运行目标、469 个原排除、历史账本/结果与旧工作树代码指纹，输出抽样 manifest、大小计划、33588 字节回归、风险样本量计划和关闭 Live 的配置。复现时传 `-SourceBatch "$runs/m55-two-stage-live-approved-03" -CompareBatch "$runs/m55-two-stage-live-approved-02" -GroupsFile "$runs/evaluation-groups-20261006-ready/groups.results.jsonl" -OutputDir '<新目录>'`。所有读取继续执行既有来源准入及到期门控；本批到期为 2026-10-29 09:00:14 UTC。输入或冻结代码改变时创建新工作流，不覆盖旧文件。
+
+**新增预测只由本人运行 Live。** 主批次从 `workflow.lock.json` 的 `binding.required_prediction_run` 读取，只覆盖预选的 400 项校准代表目标，不收集诊断、同组变体或预留确认目标。本次其中 6 项路由预算受限、零发送，394 项最多规划 791 次请求；受限项仍留在校准分母。全量 2531 项的大小规划只是输入审计，不是主批次收集范围。复制 `collection.disabled.json` 为自己的批准配置，填写 enabled、期限、外发批准引用、经本人核实的供应商限额及全部 budget 字段；专用新预算池不得继承历史额度。按每目标的规划最大包数一次预占（最多三包），整批保守预算为 `791 × reserve_per_stage_usd`；未发送阶段释放预占，实际已知估计按 usage 与填写费率计算，未知费用保留预占，额度不足时安全停止。具体美元额度尚未批准。Preview 不创建或占用 Live 批次；Mock 有独立目录、假密钥及禁止网络/非白名单文件读取的审计门控。两个模式都不证明供应商扣费或模型质量。
+
+```powershell
+$batchId = (Get-Content -Raw -LiteralPath "$workflow/workflow.lock.json" | ConvertFrom-Json).binding.required_prediction_run
+$approved = "$workflow/collection.approved.json" # 本人填写的新授权配置
+& $entry -Mode Preview -Python $python -DataRoot $data -Workflow $workflow -ConfigFile $approved
+# 仅本人在核实授权和账户限额后执行：
+& $entry -Mode Live -Python $python -DataRoot $data -Workflow $workflow -ConfigFile $approved -KeysFile '<本人明确指定的密钥文件绝对路径>'
+& $entry -Mode Search -Python $python -DataRoot $data -Workflow $workflow -PredictionDir "$runs/m55-two-stage-v3-$batchId"
+& $entry -Mode Freeze -Python $python -DataRoot $data -Workflow $workflow -SearchFile '<Search 返回的 JSON 路径>'
+```
+
+无合格标签或匹配预测时 Search 返回 `INSUFFICIENT_EVIDENCE`，Freeze 拒绝执行。Freeze 成功后生成 `confirmation.freeze.json` 和 `confirmation.collection.disabled.json`；先冻结，再由两名审核者在“冻结确认”中标注。本人另填确认批次的专用批准配置，使用 manifest 中的 `primary_run` 作为 `-BatchId`，按同样 Preview/Live 命令只收集固定确认目标；其最大请求预算从该批 Preview 读取。最后执行 `-Mode Confirm -PredictionDir '<确认预测目录>'`，按锁定策略检验；`Report -BatchId ...` 可从账本重建导出。确认结果始终区分内部确认与新分布验证，不产生生产批准。
+
+信息补充使用 `-Mode Supplement -TargetId '<入选目标 ID>' -SupplementFile '<JSON 绝对路径>'`，JSON 最小为 `{"text":"用户明确补充的要求或材料","source":"user_explicit_followup"}`。可选 `explicit_facts` / `explicit_materials` 采用 `two_stage_inputs.build_input` 的源位置契约：事实值必须解析到证据，可靠 reference/tool_trace 还需明确核验来源。命令保存新的 `evaluation_revision`、父输入 hash 和完整新输入，并重新规划大小；旧输入与旧结果不变。它不把新材料写回历史校准，也不发起预测。程序调用方可将该新输入传给 `two_stage_v3.classify`，仍需新的准入、逐包持久预占与本人 Live 授权；用户跳过时继续保留旧结果。
+
 ## 三源本机探索（历史 Laya 路径）
 
 路线：固定来源文件 → 无标签诊断 → 查看报告 → AI 与人类独立并行审阅 → 冻结新版理由包和新留出集 → 盲标复标 → 正式评测。访问、许可、数量和 30 天到期规则见[来源使用记录](docs/m55-source-use.md)。

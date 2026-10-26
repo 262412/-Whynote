@@ -108,6 +108,8 @@ def test_native_requests_are_serial_and_second_questions_follow_route(invoke):
     result = invoke(handler)
     assert len(requests) == 2
     assert result["schema_version"] == VERSION and result["route_scope"] == "selected_task_and_domain"
+    assert result["requested_model"] == MODEL and result["model_version"] == MODEL
+    assert result["model_versions"] == [MODEL]
     assert result["outcome"] == "suggested" and result["primary_reason"] is None
     assert result["suggestions"] == [
         {
@@ -123,6 +125,7 @@ def test_native_requests_are_serial_and_second_questions_follow_route(invoke):
         assert stage["request_sha256"] == hashlib.sha256(request.content).hexdigest()
         assert stage["question_ids"] == list(json.loads(request.content)["questions"])
         assert stage["usage"] == {"input_tokens": 100, "output_tokens": 20}
+        assert stage["response_model"] == MODEL
     assert all(value not in json.dumps(result) for value in ["synthetic-key-only", *STATE.values()])
 
 
@@ -324,7 +327,7 @@ def test_bad_responses_stop_without_a_later_request_or_suggestion(invoke, bad_st
             name = next(iter(reply["answers"]))
             answer = reply["answers"][name]
             if mutation == "model":
-                reply["model"] = "jev-latest"
+                reply["model"] = "other-provider-model"
             elif mutation == "missing":
                 del reply["answers"][name]
             elif mutation == "extra":
@@ -349,6 +352,22 @@ def test_bad_responses_stop_without_a_later_request_or_suggestion(invoke, bad_st
     assert exc.value.stages[-1]["status"] == "failed_or_unknown"
     if bad_stage == 2:
         assert exc.value.stages[0]["usage"] == {"input_tokens": 100, "output_tokens": 20}
+    assert (
+        exc.value.stages[-1]["failure_validation_code"]
+        == {
+            "model": "model_name_invalid",
+            "missing": "answer_set_mismatch",
+            "extra": "answer_set_mismatch",
+            "null": "answer_type_invalid",
+            "probability": "probability_invalid",
+            "nan": "probability_invalid",
+            "sum": "probability_sum_mismatch",
+            "inconsistent": "choice_probability_mismatch",
+            "confidence": "confidence_invalid",
+            "usage": "usage_invalid",
+            "scalar": "response_not_object",
+        }[mutation]
+    )
 
 
 @pytest.mark.parametrize("status", [307, 401, 429, 529])
